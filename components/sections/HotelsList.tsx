@@ -6,9 +6,12 @@ import RevealImage from "@/components/reveal/RevealImage";
 import SectionTitle from "./SectionTitle";
 
 export type Hotel = { name: string; type: string; photo: string; card: { w: number; h: number } };
-export type HotelsData = { tag: string; title: string; body: string; items: Hotel[] };
+export type HotelsData = { tag: string; title: string; body: string; items: Hotel[]; cols?: string };
 
-/** Hotels list (Figma 10921:10498): the staggered three-column flow; a card opens the detail drawer from the right. */
+/**
+ * Card grid that opens a detail drawer from the right. Hotels list (Figma 10921:10498) uses the staggered
+ * three-column flow; Unit types (Figma 10921:9816) pass `cols` for three equal columns.
+ */
 export default function HotelsList({ data: D }: { data: HotelsData }) {
   const [open, setOpen] = useState<number | null>(null);
   const h = open === null ? null : D.items[open];
@@ -22,7 +25,7 @@ export default function HotelsList({ data: D }: { data: HotelsData }) {
   return (
     <section className="flex flex-col items-center gap-14 bg-white py-20 container-x">
       <SectionTitle tag={D.tag} title={D.title} body={D.body} className="max-w-[870px]" />
-      <div className="grid w-full gap-x-3 gap-y-14 sm:grid-cols-2 lg:grid-cols-[492fr_380fr_496fr]">
+      <div className={`grid w-full gap-x-3 gap-y-14 sm:grid-cols-2 ${D.cols ?? "lg:grid-cols-[492fr_380fr_496fr]"}`}>
         {D.items.map((it, k) => (
           <button key={it.name} onClick={() => setOpen(k)} className="group flex flex-col gap-[10px] self-start text-left">
             <div className="overflow-hidden" style={{ aspectRatio: `${it.card.w} / ${it.card.h}` }}>
