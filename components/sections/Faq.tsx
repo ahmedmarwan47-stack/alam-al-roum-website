@@ -3,10 +3,13 @@ import { useState } from "react";
 import Button from "@/components/ui/Button";
 import Icon from "@/components/ui/Icon";
 import RevealText from "@/components/reveal/RevealText";
-import { faq as F } from "@/lib/content";
+import { faq } from "@/lib/content";
+
+type FaqData = { title: string; body: string; cta: string; href?: string; items: string[][] | [string, string][] };
 
 /** FAQ accordion: the Figma FAQ Item Open transition, 0.35 s ease-in-out, the plus turns 45° into a cross. */
-export default function Faq() {
+export default function Faq({ data = faq }: { data?: FaqData }) {
+  const F = data;
   const [open, setOpen] = useState(0);
   return (
     <section className="flex flex-col gap-10 bg-limestone-50 py-20 container-x lg:flex-row">
@@ -15,7 +18,7 @@ export default function Faq() {
           <RevealText as="h2" text={F.title} className="t-heading hd-48" />
           <RevealText text={F.body} className="t-body b-18 text-limestone-800" delay={0.08} />
         </div>
-        <div><Button label={F.cta} variant="outline" /></div>
+        <div><Button label={F.cta} href={F.href ?? "/faq"} variant="outline" /></div>
       </div>
       <div className="flex flex-1 flex-col lg:pl-10">
         {F.items.map(([q, a], k) => {

@@ -4,10 +4,13 @@ import { gsap } from "@/lib/gsap";
 import Icon from "@/components/ui/Icon";
 import RevealText from "@/components/reveal/RevealText";
 import RevealMask from "@/components/reveal/RevealMask";
-import { landmarks as L } from "@/lib/content";
+import { landmarks } from "@/lib/content";
+
+export type LandmarksData = { title: string; body: string; rows: { title: string; body: string; large: string; inset: string }[] };
 
 /** Ayana-style list, click-triggered like the Figma prototype: the active row turns dark; the large photo wipes up while the inset wipes down (1 s, cubic .165,.84,.44,1). */
-export default function Landmarks() {
+export default function Landmarks({ data = landmarks }: { data?: LandmarksData }) {
+  const L = data;
   const [a, setA] = useState(0); const prev = useRef(0);
   const big = useRef<(HTMLDivElement | null)[]>([]), ins = useRef<(HTMLDivElement | null)[]>([]);
   useEffect(() => {
