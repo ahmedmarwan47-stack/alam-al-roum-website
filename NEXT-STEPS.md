@@ -16,7 +16,7 @@
 3. **Job detail** `/careers/[slug]`: template from Marine works engineer (position details, responsibilities 01–03,
    requirements, what we offer).
 4. **Contact** `/contact`: "Let's talk about what's next" contacts + form on contact olive image
-   (contact-faded.jpg, in the session scratchpad hero folder), Book a Call mock, Locations on `images/contact/map.jpg`.
+   (`public/images/contact/contact-faded.jpg`), Book a Call mock, Locations on `images/contact/map.jpg`.
 5. Wire Navbar menu + Footer links (currently `#`) to the routes.
 6. `npm run build`, lint, and a browser pass over every page.
 7. Commit `public/video/footer-lagoon.mp4` and `grandeur-skyfall-v2.mp4` once the background upscale finishes
