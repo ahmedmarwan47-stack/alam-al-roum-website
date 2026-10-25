@@ -2,6 +2,7 @@
 
 ## Done
 - Destination, Experiences (+ 9 detail pages), Communities (+ 6 neighbourhood pages), Sustainability
+- FAQ (`/faq`, home + destination questions merged)
 - Events (`/events`) and Media Center (`/media-center`), using the shared `ListingHero` and `TabbedGrid`
 - 33 photos upscaled with Real-ESRGAN; Imagery originals from Figma 11127:8055 used where they exist
 - Arch-sea loop (from the Instagram footage) and shore loop videos
@@ -14,12 +15,11 @@
    Landscape architect, Marine works engineer, Project controls lead).
 3. **Job detail** `/careers/[slug]`: template from Marine works engineer (position details, responsibilities 01–03,
    requirements, what we offer).
-4. **FAQ** `/faq`: ListingHero "Frequently Asked Questions" + `Faq` accordion.
-5. **Contact** `/contact`: "Let's talk about what's next" contacts + form on contact olive image
+4. **Contact** `/contact`: "Let's talk about what's next" contacts + form on contact olive image
    (contact-faded.jpg, in the session scratchpad hero folder), Book a Call mock, Locations on `images/contact/map.jpg`.
-6. Wire Navbar menu + Footer links (currently `#`) to the routes.
-7. `npm run build`, lint, and a browser pass over every page.
-8. Commit `public/video/footer-lagoon.mp4` and `grandeur-skyfall-v2.mp4` once the background upscale finishes
+5. Wire Navbar menu + Footer links (currently `#`) to the routes.
+6. `npm run build`, lint, and a browser pass over every page.
+7. Commit `public/video/footer-lagoon.mp4` and `grandeur-skyfall-v2.mp4` once the background upscale finishes
    (if the session ended first, re-run `upscale_site.sh` for those two).
 
 ## Copy written by Claude (not in Figma), to review
