@@ -1,0 +1,455 @@
+{
+ "size": [
+  696,
+  720
+ ],
+ "basePos": [
+  0,
+  0,
+  696,
+  720
+ ],
+ "nodes": [
+  {
+   "name": "Ring / 1000 km",
+   "type": "ELLIPSE",
+   "x": 209.1,
+   "y": 329.1,
+   "w": 182,
+   "h": 182,
+   "text": "",
+   "op": 1,
+   "stroke": {
+    "r": 1,
+    "g": 1,
+    "b": 1
+   },
+   "sw": 1,
+   "dash": [
+    4,
+    6
+   ]
+  },
+  {
+   "name": "Ring / 2000 km",
+   "type": "ELLIPSE",
+   "x": 118.2,
+   "y": 238.2,
+   "w": 364,
+   "h": 364,
+   "text": "",
+   "op": 1,
+   "stroke": {
+    "r": 1,
+    "g": 1,
+    "b": 1
+   },
+   "sw": 1,
+   "dash": [
+    4,
+    6
+   ]
+  },
+  {
+   "name": "Ring / 3000 km",
+   "type": "ELLIPSE",
+   "x": 27.3,
+   "y": 147.3,
+   "w": 545,
+   "h": 545,
+   "text": "",
+   "op": 1,
+   "stroke": {
+    "r": 1,
+    "g": 1,
+    "b": 1
+   },
+   "sw": 1,
+   "dash": [
+    4,
+    6
+   ]
+  },
+  {
+   "name": "Centre halo",
+   "type": "ELLIPSE",
+   "x": 276,
+   "y": 396,
+   "w": 48,
+   "h": 48,
+   "text": "",
+   "op": 0.6000000238418579,
+   "sw": 1,
+   "dash": []
+  },
+  {
+   "name": "Centre dot",
+   "type": "ELLIPSE",
+   "x": 293,
+   "y": 413,
+   "w": 14,
+   "h": 14,
+   "text": "",
+   "op": 1,
+   "sw": 1,
+   "dash": []
+  },
+  {
+   "name": "Draw / Doha",
+   "type": "LINE",
+   "x": 515,
+   "y": 457.9,
+   "w": 0,
+   "h": 0,
+   "text": "",
+   "op": 0,
+   "stroke": {
+    "r": 1,
+    "g": 1,
+    "b": 1
+   },
+   "sw": 1.5,
+   "dash": []
+  },
+  {
+   "name": "Pin / Doha",
+   "type": "ELLIPSE",
+   "x": 510,
+   "y": 452.9,
+   "w": 10,
+   "h": 10,
+   "text": "",
+   "op": 1,
+   "sw": 1,
+   "dash": []
+  },
+  {
+   "name": "Draw / Dubai",
+   "type": "LINE",
+   "x": 548.6,
+   "y": 451,
+   "w": 0,
+   "h": 0,
+   "text": "",
+   "op": 0,
+   "stroke": {
+    "r": 1,
+    "g": 1,
+    "b": 1
+   },
+   "sw": 1.5,
+   "dash": []
+  },
+  {
+   "name": "Pin / Dubai",
+   "type": "ELLIPSE",
+   "x": 543.6,
+   "y": 446,
+   "w": 10,
+   "h": 10,
+   "text": "",
+   "op": 1,
+   "sw": 1,
+   "dash": []
+  },
+  {
+   "name": "Draw / Riyadh",
+   "type": "LINE",
+   "x": 472.1,
+   "y": 471.6,
+   "w": 0,
+   "h": 0,
+   "text": "",
+   "op": 0,
+   "stroke": {
+    "r": 1,
+    "g": 1,
+    "b": 1
+   },
+   "sw": 1.5,
+   "dash": []
+  },
+  {
+   "name": "Pin / Riyadh",
+   "type": "ELLIPSE",
+   "x": 467.1,
+   "y": 466.6,
+   "w": 10,
+   "h": 10,
+   "text": "",
+   "op": 1,
+   "sw": 1,
+   "dash": []
+  },
+  {
+   "name": "Draw / Rome",
+   "type": "LINE",
+   "x": 184,
+   "y": 302.8,
+   "w": 0,
+   "h": 0,
+   "text": "",
+   "op": 0,
+   "stroke": {
+    "r": 1,
+    "g": 1,
+    "b": 1
+   },
+   "sw": 1.5,
+   "dash": []
+  },
+  {
+   "name": "Pin / Rome",
+   "type": "ELLIPSE",
+   "x": 179,
+   "y": 297.8,
+   "w": 10,
+   "h": 10,
+   "text": "",
+   "op": 1,
+   "sw": 1,
+   "dash": []
+  },
+  {
+   "name": "Draw / Paris",
+   "type": "LINE",
+   "x": 129.9,
+   "y": 218,
+   "w": 0,
+   "h": 0,
+   "text": "",
+   "op": 0,
+   "stroke": {
+    "r": 1,
+    "g": 1,
+    "b": 1
+   },
+   "sw": 1.5,
+   "dash": []
+  },
+  {
+   "name": "Pin / Paris",
+   "type": "ELLIPSE",
+   "x": 124.9,
+   "y": 213,
+   "w": 10,
+   "h": 10,
+   "text": "",
+   "op": 1,
+   "sw": 1,
+   "dash": []
+  },
+  {
+   "name": "Draw / London",
+   "type": "LINE",
+   "x": 123.3,
+   "y": 187.2,
+   "w": 0,
+   "h": 0,
+   "text": "",
+   "op": 0,
+   "stroke": {
+    "r": 1,
+    "g": 1,
+    "b": 1
+   },
+   "sw": 1.5,
+   "dash": []
+  },
+  {
+   "name": "Pin / London",
+   "type": "ELLIPSE",
+   "x": 118.3,
+   "y": 182.2,
+   "w": 10,
+   "h": 10,
+   "text": "",
+   "op": 1,
+   "sw": 1,
+   "dash": []
+  },
+  {
+   "name": "Label / Doha",
+   "type": "FRAME",
+   "x": 489,
+   "y": 407.9,
+   "w": 46,
+   "h": 46,
+   "text": "Doha | 2.5 hrs",
+   "op": 0.3499999940395355,
+   "sw": 1,
+   "dash": []
+  },
+  {
+   "name": "Label / Dubai",
+   "type": "FRAME",
+   "x": 562.6,
+   "y": 439,
+   "w": 44,
+   "h": 46,
+   "text": "Dubai | 4 hrs",
+   "op": 0.3499999940395355,
+   "sw": 1,
+   "dash": []
+  },
+  {
+   "name": "Label / Riyadh",
+   "type": "FRAME",
+   "x": 438.1,
+   "y": 485.6,
+   "w": 52,
+   "h": 46,
+   "text": "Riyadh | 4 hrs",
+   "op": 0.3499999940395355,
+   "sw": 1,
+   "dash": []
+  },
+  {
+   "name": "Label / Rome",
+   "type": "FRAME",
+   "x": 198,
+   "y": 280.8,
+   "w": 46,
+   "h": 46,
+   "text": "Rome | 3.5 hrs",
+   "op": 0.3499999940395355,
+   "sw": 1,
+   "dash": []
+  },
+  {
+   "name": "Label / Paris",
+   "type": "FRAME",
+   "x": 71.9,
+   "y": 212,
+   "w": 38,
+   "h": 46,
+   "text": "Paris | 5 hrs",
+   "op": 0.3499999940395355,
+   "sw": 1,
+   "dash": []
+  },
+  {
+   "name": "Label / London",
+   "type": "FRAME",
+   "x": 137.3,
+   "y": 145.2,
+   "w": 58,
+   "h": 46,
+   "text": "London | 5 hrs",
+   "op": 0.3499999940395355,
+   "sw": 1,
+   "dash": []
+  },
+  {
+   "name": "Label / Alam Al Roum",
+   "type": "FRAME",
+   "x": 250,
+   "y": 454,
+   "w": 115,
+   "h": 42,
+   "text": "Alam Al Roum | Egypt's North Coast",
+   "op": 1,
+   "sw": 1,
+   "dash": []
+  },
+  {
+   "name": "Sea label",
+   "type": "TEXT",
+   "x": 312,
+   "y": 366,
+   "w": 109,
+   "h": 16,
+   "text": "Mediterranean Sea",
+   "op": 1,
+   "sw": 1,
+   "dash": []
+  },
+  {
+   "name": "Ring label / 1000",
+   "type": "TEXT",
+   "x": 344.8,
+   "y": 329.8,
+   "w": 50,
+   "h": 16,
+   "text": "1000 km",
+   "op": 1,
+   "sw": 1,
+   "dash": []
+  },
+  {
+   "name": "Ring label / 2000",
+   "type": "TEXT",
+   "x": 383.6,
+   "y": 247.6,
+   "w": 53,
+   "h": 16,
+   "text": "2000 km",
+   "op": 1,
+   "sw": 1,
+   "dash": []
+  },
+  {
+   "name": "Ring label / 3000",
+   "type": "TEXT",
+   "x": 422.4,
+   "y": 165.3,
+   "w": 53,
+   "h": 16,
+   "text": "3000 km",
+   "op": 1,
+   "sw": 1,
+   "dash": []
+  }
+ ],
+ "lines6": [
+  {
+   "name": "Draw / Doha",
+   "x": 514.9566650390625,
+   "y": 457.90264892578125,
+   "w": 210.27272033691406,
+   "rot": 170.00000283232805
+  },
+  {
+   "name": "Draw / Dubai",
+   "x": 548.624267578125,
+   "y": 450.9677734375,
+   "w": 242.5454559326172,
+   "rot": 172.90000343861632
+  },
+  {
+   "name": "Draw / Riyadh",
+   "x": 472.1468200683594,
+   "y": 471.6465148925781,
+   "w": 171.72726440429688,
+   "rot": 163.3000017849782
+  },
+  {
+   "name": "Draw / Rome",
+   "x": 184.00381469726562,
+   "y": 302.78271484375,
+   "w": 156.90908813476562,
+   "rot": -45.2999965036027
+  },
+  {
+   "name": "Draw / Paris",
+   "x": 129.89280700683594,
+   "y": 217.9912109375,
+   "w": 256.0909118652344,
+   "rot": -49.90000165220925
+  },
+  {
+   "name": "Draw / London",
+   "x": 123.29216766357422,
+   "y": 187.19602966308594,
+   "w": 284.272705078125,
+   "rot": -52.79999818899421
+  }
+ ],
+ "title": [
+  [
+   "Within a 5-hour flight radius",
+   32,
+   32
+  ]
+ ]
+}
