@@ -3,14 +3,18 @@ import { useEffect, useRef } from "react";
 import { gsap, reducedMotion } from "@/lib/gsap";
 import RevealImage from "@/components/reveal/RevealImage";
 import RevealText from "@/components/reveal/RevealText";
-import { gallery as G } from "@/lib/content";
+import { gallery } from "@/lib/content";
+import type { Seg } from "@/components/reveal/RevealText";
+
+export type GalleryData = { tag: string; title: Seg[]; rows: string[][] };
 
 /**
  * Sienna-style tile wall, as in the Figma "Gallery Marquee" prototype: rows drift one tile
  * (310px) every 12 s, linear, rows 1 and 3 to the left and row 2 to the right, endlessly.
  * Each row is rendered twice, so the loop is seamless. Tiles still wipe in on entry.
  */
-export default function Gallery() {
+export default function Gallery({ data = gallery }: { data?: GalleryData }) {
+  const G = data;
   const root = useRef<HTMLElement>(null);
   useEffect(() => {
     if (reducedMotion()) return;

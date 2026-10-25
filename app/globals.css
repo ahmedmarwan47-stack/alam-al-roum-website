@@ -40,6 +40,7 @@ img, video, canvas { display: block; }
 .x-28 { font-size: clamp(22px, 1.85vw, 28px); line-height: 1.286; }
 .x-20 { font-size: 20px; line-height: 28px; }
 .x-16 { font-size: 16px; line-height: 24px; }
+.x-14 { font-size: 14px; line-height: 20px; }
 .x-12 { font-size: 12px; line-height: 16px; }
 .t-label { font-family: var(--font-haas); font-weight: 500; }
 .l-18 { font-size: 18px; line-height: 28px; } .l-16 { font-size: 16px; line-height: 24px; }
