@@ -19,8 +19,8 @@
    (`public/images/contact/contact-faded.jpg`), Book a Call mock, Locations on `images/contact/map.jpg`.
 5. Wire Navbar menu + Footer links (currently `#`) to the routes.
 6. `npm run build`, lint, and a browser pass over every page.
-7. Commit `public/video/footer-lagoon.mp4` and `grandeur-skyfall-v2.mp4` once the background upscale finishes
-   (if the session ended first, re-run `tools/upscale/upscale_site.sh` for those two; it needs a PyTorch venv with spandrel and the RealESRGAN_x4plus.pth weights).
+7. Upscale `public/video/grandeur-skyfall-v2.mp4` to 1920×1080 (289 frames, ~1.6 h; footer-lagoon is already done):
+   re-run `tools/upscale/upscale_site.sh` for those two; it needs a PyTorch venv with spandrel and the RealESRGAN_x4plus.pth weights).
 
 ## Copy written by Claude (not in Figma), to review
 - In-town modes 2 and 3 bodies, last destination FAQ answer
