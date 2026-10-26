@@ -43,6 +43,9 @@
     waits until they have gathered
   - Since the Romans stacks the title above the mosaic; the water panels get a deeper shade behind their copy
   - the flight-radius map sizes its labels to the map; the Contact map uses dot pins; the Cal.com booker stacks
+  - masterplan pins open the side drawer on phones (the shared `components/ui/Drawer.tsx`, as on the hotel and
+    unit cards); the pin rings no longer catch taps meant for a neighbouring pin
+  - Milestones keeps the year in focus centred where only one fits (phones, tablets)
   - a text-overlap check (every page scrolled at 390 and 768) finds no colliding or off-screen text
 - Responsive: no horizontal overflow at 390 / 768 / 1024; phone fixes for the Grandeur film, Ways to live rows,
   the masterplan pin card (shown under the map), the Romans panel and the Water strategy decor; the hotel drawer

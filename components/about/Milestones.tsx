@@ -55,8 +55,9 @@ export default function Milestones() {
     const state = { f: 0 };   // the milestone in focus, as a float 0 … n-1
     const paint = () => {
       const f = state.f, fx = f * CARD + CARD / 2;
-      // the rail starts as in Figma (2025 at the 60 px gutter) and travels left until 2030 sits in the centre
-      const W = frame.current!.clientWidth, x0 = GUTTER, x1 = W / 2 - ((n - 1) * CARD + CARD / 2);
+      // the rail starts as in Figma (2025 at the 60 px gutter) and travels left until 2030 sits in the centre;
+      // where only one milestone fits (phones, tablets) the one in focus stays centred the whole way
+      const W = frame.current!.clientWidth, x0 = W < 2.5 * CARD ? W / 2 - CARD / 2 : GUTTER, x1 = W / 2 - ((n - 1) * CARD + CARD / 2);
       r.style.transform = `translate3d(${x0 + (x1 - x0) * (f / (n - 1))}px,0,0)`;
       cards.forEach((c, i) => {
         const near = Math.max(0, 1 - Math.abs(i - f));                 // 1 in focus → 0 one step away
