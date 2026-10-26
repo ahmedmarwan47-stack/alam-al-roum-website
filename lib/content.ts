@@ -12,29 +12,32 @@ export const hero = {
   cta: "Register interest", proof: "Backed by Qatari Diar",
 };
 
+export type GrandeurCard = { kind: "image" | "stat" | "chip"; src?: string; label?: string; value?: string; note?: string; dark?: boolean;
+  x: number; y: number; sx: number; sy: number; w: number; h: number };
+
 export const grandeur = {
   tag: "GRANDEUR RESTORED",
   title: "A year-round city, not a seasonal resort",
   body: "Alam Al Roum is built for those who return. A place of permanence, rooted in the history of a coastline that once guided sailors home.",
-  // Positions from Figma (section 1512 × 1080): x, y, w, h
-  images: [
-    { src: ph("ui-expcenter-facade"), x: 150, y: 110, w: 210, h: 270 },
-    { src: ph("ui-v-lounge"), x: 990, y: 80, w: 240, h: 230 },
-    { src: ph("ui-g-pool"), x: 1240, y: 470, w: 180, h: 180 },
-    { src: ph("ui-v-lounger"), x: 110, y: 520, w: 160, h: 160 },
-    { src: ph("ui-expcenter-court"), x: 260, y: 800, w: 230, h: 200 },
-    { src: ph("ui-g-colonnade"), x: 1010, y: 790, w: 210, h: 210 },
-  ],
-  stats: [
-    { label: "INVESTMENT", value: "$29.7Bn", note: "Total investment in the city", x: 395, y: 190, w: 249 },
-    { label: "LAGOONS", value: "22 km", note: "Seawater-connected lagoons", x: 1250, y: 210, w: 216 },
-    { label: "TO THE AIRPORT", value: "Minutes", note: "Ras El Hekma International", x: 590, y: 860, w: 210 },
-    { label: "FLIGHT RADIUS", value: "2–5 hrs", note: "From Europe and the GCC", x: 1250, y: 730, w: 200 },
-  ],
-  chips: [
-    { label: "Year-round · 365 days", x: 1170, y: 410, dark: true },
-    { label: "Since the Romans", x: 150, y: 720, dark: false },
-  ],
+  cta: "About us",
+  /**
+   * UI / Grandeur Constellation (Figma 10921:28032), section 1512 × 1080, in Figma's layer order.
+   * x, y = Scattered; sx, sy = Stacked (behind the headline); w, h = size.
+   */
+  cards: [
+    { kind: "image", src: ph("ui-expcenter-facade"), x: 150, y: 110, sx: 481, sy: 95, w: 210, h: 270 },
+    { kind: "stat", label: "CITY AREA", value: "20.58M", note: "Square metres of masterplanned coast", x: 395, y: 190, sx: 572, sy: 120, w: 249, h: 120 },
+    { kind: "image", src: ph("ui-v-lounge"), x: 990, y: 80, sx: 746, sy: 85, w: 240, h: 230 },
+    { kind: "stat", label: "SHORELINE", value: "7.2 km", note: "A rare natural Mediterranean bay", x: 1250, y: 210, sx: 838, sy: 190, w: 216, h: 120 },
+    { kind: "image", src: ph("ui-g-pool"), x: 1240, y: 470, sx: 816, sy: 220, w: 180, h: 180 },
+    { kind: "image", src: ph("ui-v-lounger"), x: 110, y: 520, sx: 486, sy: 240, w: 160, h: 160 },
+    { kind: "chip", label: "Year-round · 365 days", dark: true, x: 1170, y: 410, sx: 753, sy: 144, w: 167, h: 32 },
+    { kind: "image", src: ph("ui-expcenter-court"), x: 260, y: 800, sx: 521, sy: 250, w: 230, h: 200 },
+    { kind: "stat", label: "TO THE AIRPORT", value: "Minutes", note: "Ras El Hekma International", x: 590, y: 860, sx: 671, sy: 300, w: 210, h: 120 },
+    { kind: "image", src: ph("ui-g-colonnade"), x: 1010, y: 790, sx: 741, sy: 235, w: 210, h: 210 },
+    { kind: "stat", label: "FLIGHT RADIUS", value: "2–5 hrs", note: "From Europe and the GCC", x: 1250, y: 730, sx: 866, sy: 270, w: 200, h: 120 },
+    { kind: "chip", label: "Since the Romans", dark: false, x: 150, y: 720, sx: 463, sy: 154, w: 146, h: 32 },
+  ] as GrandeurCard[],
 };
 
 export const lighthouse = { title: [{ t: "The lighthouse still" }, { t: "marks the way home", br: true }], cta: "About Us" };

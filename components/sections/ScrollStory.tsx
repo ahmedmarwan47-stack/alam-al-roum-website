@@ -1,8 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 import Button from "@/components/ui/Button";
-import RevealImage from "@/components/reveal/RevealImage";
 import RevealText from "@/components/reveal/RevealText";
 import { grandeur, lighthouse } from "@/lib/content";
 
@@ -10,16 +9,21 @@ const FRAMES = 185;
 const src = (i: number) => `/seq/marina-hd/${String(i + 1).padStart(4, "0")}.webp`;
 const pct = (v: number, of: number) => `${(v / of) * 100}%`;
 const Bars = () => (
-  <span className="flex h-7 items-end gap-[3px]">{[9, 15, 12, 20, 27].map((h, k) => <i key={k} className="block w-[6px] rounded-[1px] bg-deepsea-300" style={{ height: h }} />)}</span>
+  <span className="flex h-7 items-end gap-[3px]">{[9, 15, 12, 20, 27].map((h, k) => <i key={k} className="block w-[6px] rounded-[1px] bg-white/60" style={{ height: h }} />)}</span>
 );
+/** Parallax speed per card (px of drift over the section's pass): each card rises at its own pace. */
+const SPEED = [140, 90, 170, 110, 60, 150, 80, 190, 70, 130, 100, 160];
 
 /**
  * Grandeur + Lighthouse as one tall section over a single scroll-scrubbed film:
  * the camera tilts down and descends, so the picture rises with the scroll.
  * The film is drawn from a frame sequence on a sticky canvas (smooth in every browser).
+ * Grandeur is the Figma "UI / Grandeur Constellation" (10921:28032): the cards start stacked behind the headline,
+ * scatter outward as the section comes in (Smart animate 1.4 s, cubic-bezier(.16,1,.3,1)), then drift upward
+ * at different speeds with the scroll.
  */
 export default function ScrollStory() {
-  const wrap = useRef<HTMLElement>(null), canvas = useRef<HTMLCanvasElement>(null);
+  const wrap = useRef<HTMLElement>(null), canvas = useRef<HTMLCanvasElement>(null), stageRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const c = canvas.current!, ctx = c.getContext("2d")!; const imgs: HTMLImageElement[] = []; let cur = 0;
     const draw = (i: number) => {
@@ -34,10 +38,22 @@ export default function ScrollStory() {
       trigger: wrap.current, start: "top top", end: "bottom bottom",
       onUpdate: (self) => { const i = Math.round(self.progress * (FRAMES - 1)); if (i !== cur) { cur = i; draw(i); } },
     });
-    // stat cards and chips drift up slightly faster than the page, like the reference's floating constellation
-    const drift = gsap.utils.toArray<HTMLElement>("[data-drift]", wrap.current).map((el) =>
-      gsap.fromTo(el, { y: 60 }, { y: -60, ease: "none", scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: 1 } }));
-    return () => { st.kill(); drift.forEach((t) => { t.scrollTrigger?.kill(); t.kill(); }); window.removeEventListener("resize", size); };
+    // constellation: stacked behind the headline → scattered (once, as it comes in) → parallax drift (scrubbed)
+    const stage = stageRef.current!;
+    const cards = gsap.utils.toArray<HTMLElement>("[data-card]", stage);
+    const tweens: gsap.core.Animation[] = [];
+    if (!reducedMotion()) {
+      const unit = () => stage.offsetWidth / 1512;
+      cards.forEach((el, k) => {
+        const c = grandeur.cards[k];
+        gsap.set(el.firstElementChild, { x: () => (c.sx - c.x) * unit(), y: () => (c.sy - c.y) * unit() });
+        tweens.push(gsap.fromTo(el, { y: 0 }, { y: () => -SPEED[k] * unit() * 1.5, ease: "none",
+          scrollTrigger: { trigger: stage, start: "top bottom", end: "bottom top", scrub: 1, invalidateOnRefresh: true } }));
+      });
+      tweens.push(gsap.to(cards.map((el) => el.firstElementChild), { x: 0, y: 0, duration: 1.4, ease: "siteOut", stagger: 0.03,
+        scrollTrigger: { trigger: stage, start: "top 50%", toggleActions: "play none none none" } }));
+    }
+    return () => { st.kill(); tweens.forEach((t) => { t.scrollTrigger?.kill(); t.kill(); }); window.removeEventListener("resize", size); };
   }, []);
 
   return (
@@ -48,29 +64,34 @@ export default function ScrollStory() {
         </div>
       </div>
 
-      {/* Grandeur · numbers over the sky */}
-      <div className="relative w-full" style={{ aspectRatio: "1512 / 1080" }}>
-        {grandeur.images.map((im, k) => (
-          <div key={k} className="absolute hidden overflow-hidden rounded-lg md:block" style={{ left: pct(im.x, 1512), top: pct(im.y, 1080), width: pct(im.w, 1512), aspectRatio: `${im.w} / ${im.h}` }}>
-            <RevealImage src={im.src} delay={k * 0.06} from={k % 2 ? "left" : "right"} className="h-full w-full" />
+      {/* Grandeur · the constellation over the sky */}
+      <div ref={stageRef} className="relative w-full" style={{ aspectRatio: "1512 / 1080" }}>
+        {grandeur.cards.map((c, k) => (
+          // outer: scattered slot + parallax; inner: offset to the stacked slot, released on scroll-in
+          <div key={k} data-card className="absolute hidden md:block" style={{ left: pct(c.x, 1512), top: pct(c.y, 1080), width: pct(c.w, 1512) }}>
+            {c.kind === "image" ? (
+              <div className="overflow-hidden rounded-lg" style={{ aspectRatio: `${c.w} / ${c.h}` }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={c.src} alt="" className="h-full w-full object-cover" />
+              </div>
+            ) : c.kind === "stat" ? (
+              <div className="flex flex-col gap-3 rounded-lg bg-[#141414] px-4 py-[14px]">
+                <span className="t-label l-12 text-white/60">{c.label}</span>
+                <span className="flex items-end justify-between"><span className="t-text x-28 text-white">{c.value}</span><Bars /></span>
+                <span className="t-text x-12 text-white/60">{c.note}</span>
+              </div>
+            ) : (
+              <span className={`inline-flex items-center gap-2 whitespace-nowrap rounded-md px-[14px] py-2 t-label l-12 ${c.dark ? "bg-[#141414] text-white" : "bg-[#ededed] text-[#141414]"}`}>
+                <i className={`block h-2 w-2 rounded-full ${c.dark ? "bg-white" : "bg-[#141414]"}`} />{c.label}
+              </span>
+            )}
           </div>
         ))}
-        {grandeur.stats.map((s, k) => (
-          <div key={k} data-drift className="absolute hidden flex-col gap-3 rounded-lg bg-deepsea-500 px-4 py-[14px] md:flex" style={{ left: pct(s.x, 1512), top: pct(s.y, 1080), width: s.w }}>
-            <span className="t-label l-12 text-deepsea-200">{s.label}</span>
-            <span className="flex items-end justify-between"><span className="t-text x-28 text-limestone-50">{s.value}</span><Bars /></span>
-            <span className="t-text x-12 text-deepsea-200">{s.note}</span>
-          </div>
-        ))}
-        {grandeur.chips.map((c, k) => (
-          <span key={k} data-drift className={`absolute hidden items-center gap-2 rounded-md px-[14px] py-2 t-label l-12 md:inline-flex ${c.dark ? "bg-deepsea-500 text-limestone-50" : "bg-limestone-100 text-deepsea-500"}`} style={{ left: pct(c.x, 1512), top: pct(c.y, 1080) }}>
-            <i className={`block h-2 w-2 rounded-full ${c.dark ? "bg-limestone-50" : "bg-deepsea-600"}`} />{c.label}
-          </span>
-        ))}
-        <div className="absolute left-1/2 top-[34.8%] flex w-[min(760px,90%)] -translate-x-1/2 flex-col items-center gap-6 text-center">
+        <div className="relative z-10 mx-auto flex w-[min(760px,90%)] flex-col items-center gap-6 pt-16 text-center md:absolute md:left-1/2 md:top-[34.8%] md:-translate-x-1/2 md:pt-0">
           <span className="rounded bg-limestone-100 px-[10px] py-1 t-label l-12">{grandeur.tag}</span>
           <RevealText as="h2" text={grandeur.title} className="t-heading hd-56 text-deepsea-500" />
           <RevealText text={grandeur.body} className="t-body b-18 max-w-[620px] text-limestone-800" delay={0.15} />
+          <Button label={grandeur.cta} href="/about" variant="light" />
         </div>
       </div>
 
