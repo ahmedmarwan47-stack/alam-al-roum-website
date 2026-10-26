@@ -15,10 +15,10 @@ const contactHref = (icon: string, t: string) =>
 
 /**
  * Footer (Figma "Footer" 10921:11186 · Home 10970:12490): newsletter row, links, legal row, wordmark.
- * Home shows the lagoon film behind the lower part and a 200 px legal row (1035 tall); the other pages are
- * plain Limestone with a 50 px legal row (885 tall).
+ * Every page uses Home's version, the lagoon film behind the lower part and a 200 px legal row (1035 tall),
+ * so the footer is the same site-wide; `video={false}` gives Figma's plain Limestone variant (885 tall).
  */
-export default function Footer({ video = false }: { video?: boolean }) {
+export default function Footer({ video = true }: { video?: boolean }) {
   return (
     <footer className="relative overflow-hidden bg-limestone-50 text-deepsea-500">
       {video && <video className="absolute inset-x-0 bottom-0 top-[185px] h-[calc(100%-185px)] w-full object-cover" src={F.video} autoPlay muted loop playsInline />}

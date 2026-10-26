@@ -31,7 +31,7 @@ export default function Home() {
       <News />
       <Faq />
       <Cta />
-      <Footer video />
+      <Footer />
     </main>
   );
 }

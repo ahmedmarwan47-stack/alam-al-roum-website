@@ -6,10 +6,10 @@ export type OverviewData = { tag: string; title: string | Seg[]; body: string; f
 /** Overview · key facts (Sustainability, Marina, Hotels, Neighbourhood): tag, heading, a paragraph and an optional row of facts. */
 export default function Overview({ data: O }: { data: OverviewData }) {
   return (
-    <section className="flex flex-col gap-12 bg-limestone-50 py-20 container-x">
+    <section className="flex flex-col gap-12 bg-white py-20 container-x">
       <div className="flex max-w-[917px] flex-col gap-4">
         <RevealText text={O.tag} className="t-label l-16" />
-        <RevealText as="h2" {...(typeof O.title === "string" ? { text: O.title } : { segs: O.title })} className="t-heading hd-48" delay={0.05} />
+        <RevealText as="h2" {...(typeof O.title === "string" ? { text: O.title } : { segs: O.title })} className="t-heading hd-48 [text-wrap:balance]" delay={0.05} />
         <RevealText text={O.body} className="t-body b-18 text-limestone-800" delay={0.12} />
       </div>
       {O.facts && (

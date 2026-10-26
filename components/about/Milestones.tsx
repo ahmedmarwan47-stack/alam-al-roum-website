@@ -74,7 +74,7 @@ export default function Milestones() {
     if (reducedMotion()) { paint(); return; }
     const tw = gsap.to(state, { f: n - 1, ease: "none", onUpdate: paint,
       scrollTrigger: { trigger: el, start: "top top", end: () => `+=${window.innerHeight * (n - 1) * 0.9}`, pin: true, scrub: 1.2,
-        snap: { snapTo: 1 / (n - 1), duration: { min: 0.3, max: 0.8 }, ease: "power2.inOut" }, invalidateOnRefresh: true, onRefresh: paint } });
+        invalidateOnRefresh: true, onRefresh: paint } });   // no snap: it would pull the page after the reader stops
     paint();
     return () => { tw.scrollTrigger?.kill(); tw.kill(); };
   }, []);

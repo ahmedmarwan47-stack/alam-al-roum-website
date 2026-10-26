@@ -2,7 +2,6 @@
 import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 import { story as S } from "@/lib/about/b-content";
-import { splitChars, LETTER_FROM, LETTER_TO } from "@/components/reveal/letters";
 
 const FW = 1512, FH = 1024;                 // the motion-study frame
 const fy = (y: number) => `${(y / FH) * 100}%`;
@@ -51,8 +50,8 @@ export default function TheStory() {
     const dy = (el?: HTMLElement) => (el?.dataset?.y ? (+el.dataset.y / FH) * H() - off(el, st).y : 0);
     // the Greatness word flies from the dome to its place above the headline (a measured FLIP)
     const gw = $("[data-g-word]"), slot = $("[data-g-slot]");
-    // each dome's word writes itself in, letter by letter, while its dome rises
-    const cChars = splitChars($("[data-c-word]")), gChars = splitChars(gw);
+    // each dome's word blurs in as one block while its dome rises (opacity and blur only: its position is the dome's)
+    const WORD_FROM = { opacity: 0, filter: "blur(12px)" }, WORD_TO = { opacity: 1, filter: "blur(0px)" };
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { duration: D, ease } });
@@ -70,7 +69,7 @@ export default function TheStory() {
       // 1 → 2 · Culture rises
       tl.to($("[data-dome=culture]"), DOME.risen, t)
         .to($("[data-c-word]"), { top: fy(640) }, t)
-        .fromTo(cChars, LETTER_FROM, { ...LETTER_TO, duration: D * 0.5, stagger: (D * 0.5) / cChars.length }, t + D * 0.3)
+        .fromTo($("[data-c-word]"), WORD_FROM, { ...WORD_TO, duration: D * 0.5 }, t + D * 0.3)
         .to($("[data-h-text]"), { y: -60, autoAlpha: 0.4 }, t);
       // 2 → 3 · Culture covers, the words float in
       t += STEP;
@@ -87,7 +86,7 @@ export default function TheStory() {
       t += STEP;
       tl.to($("[data-dome=greatness]"), DOME.risen, t)
         .to(gw, { top: fy(640) }, t)
-        .fromTo(gChars, LETTER_FROM, { ...LETTER_TO, duration: D * 0.5, stagger: (D * 0.5) / gChars.length }, t + D * 0.3);
+        .fromTo(gw, WORD_FROM, { ...WORD_TO, duration: D * 0.5 }, t + D * 0.3);
       // 5 → 6 · Greatness covers; the word settles over the headline
       t += STEP;
       tl.to($("[data-dome=greatness]"), DOME.cover, t)

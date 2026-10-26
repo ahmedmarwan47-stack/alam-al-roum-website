@@ -56,8 +56,8 @@ export const coin = {
     { title: "Living legacy", body: "A city designed for generations, not for a single summer." },
   ],
   caption: "Once a beacon for Roman ships, soon the city’s point of arrival.",
-  // Higgsfield sky-fall v2 (the marina lighthouse film used in Figma 11012:16013): clouds → crescent marina → the tower
-  video: "/video/grandeur-skyfall-v2.mp4",
+  // Higgsfield sky-fall v2 (the marina lighthouse film used in Figma 11012:16013): clouds → crescent marina → the tower.
+  // Played as the /seq/skyfall frame sequence (every 2nd frame of /video/grandeur-skyfall-v2.mp4, kept as its source).
   poster: "/images/photo/grandeur-skyfall-v2-poster.jpg",
   render: "/images/about/a-coin.webp",
   mask: "/images/about/a-coin-mask.svg",

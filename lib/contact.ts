@@ -1,12 +1,12 @@
 /** Contact copy, from Figma "Contact • Desktop": Say hello 10921:9490, Book a Call 10921:9540, Locations 10921:9743. */
 export const sayHello = {
-  title: "Let’s talk about what’s next",
+  title: "Let’s talk about what’s next.",
   body: "Tell us what you’re looking for, and we’ll help you find the right next step at Alam Al Roum.",
-  image: "/images/contact/contact-faded.jpg",
+  image: "/images/contact/say-hello.jpg",
   email: "info@alamalroumegypt.com",
   rows: [
-    [["call", "Hotline", "16922", "tel:16922"], ["whatsapp", "WhatsApp", "+20 120 001 6922", "https://wa.me/201200016922"], ["mail-01", "Email", "info@alamalroumegypt.com", "mailto:info@alamalroumegypt.com"]],
-    [["building-03", "Sales Office", "Qatari Diar Egypt, New Cairo"], ["location-01", "Site Office", "Alam Al Roum, North Coast, Egypt"]],
+    [["call", "HOTLINE", "16922", "tel:16922"], ["whatsapp", "WHATSAPP", "+20 120 001 6922", "https://wa.me/201200016922"], ["mail-01", "Email", "info@alamalroumegypt.com", "mailto:info@alamalroumegypt.com"]],
+    [["building-03", "SALES OFFICE", "Qatari Diar Egypt, New Cairo"], ["location-01", "SITE OFFICE", "Alam Al Roum, North Coast, Egypt"]],
   ] as [string, string, string, string?][][],
   form: {
     title: "Send us a message",

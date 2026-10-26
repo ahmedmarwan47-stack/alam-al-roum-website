@@ -32,14 +32,6 @@ export const mediaPage = {
   title: "Media Center",
   body: "A record of progress, announcements, and the ideas shaping a permanent city on the Mediterranean. Here is the narrative as it is written.",
   tabs: ["Blog", "News"] as const,
-  blog: [
-    story("Heritage", "6 min read", "The lighthouse that guided Rome home", "m01"),
-    story("Design", "4 min read", "Building with limestone and light", "m02"),
-    story("Living", "5 min read", "A city that does not close", "m03"),
-    story("Innovation", "5 min read", "Smart infrastructure integration begins", "m07"),
-    story("Sustainability", "6 min read", "Green energy initiatives launched", "m08"),
-    story("Community", "3 min read", "Public spaces and cultural centers planned", "m09"),
-  ],
   news: [
     story("Milestone", "2 min read", "Phase 1 construction begins August 2026", "m04"),
     story("Partnership", "3 min read", "Agreement signed for a new coastal city", "m05"),
@@ -48,9 +40,20 @@ export const mediaPage = {
     story("Health", "5 min read", "Smart healthcare facilities established", "m11"),
     story("Education", "4 min read", "Innovative learning environments created", "m12"),
   ],
+  features: [
+    story("Heritage", "6 min read", "The lighthouse that guided Rome home", "m01"),
+    story("Design", "4 min read", "Building with limestone and light", "m02"),
+    story("Living", "5 min read", "A city that does not close", "m03"),
+    story("Innovation", "5 min read", "Smart infrastructure integration begins", "m07"),
+    story("Sustainability", "6 min read", "Green energy initiatives launched", "m08"),
+    story("Community", "3 min read", "Public spaces and cultural centers planned", "m09"),
+  ],
 };
+/** The Blog tab lists all twelve stories in the Figma order (three features, three news, then alternating threes); News filters to the news. */
+const [F, N] = [mediaPage.features, mediaPage.news];
+export const mediaBlog = [...F.slice(0, 3), ...N.slice(0, 3), ...F.slice(3), ...N.slice(3)];
 
-export const stories = [...mediaPage.news, ...mediaPage.blog];
+export const stories = [...mediaPage.news, ...mediaPage.features];
 
 type Block = { h?: string; p?: string; list?: string[]; img?: string; caption?: string };
 export type Article = { slug: string; tag: string; date: string; title: string; sub: string; byline: [string, string]; hero: string; takeaways?: string[]; body: Block[] };
@@ -83,4 +86,4 @@ export const articleFor = (slug: string): Article | undefined => {
   return s && { slug, tag: s.tag, date: s.meta, title: s.title, sub: "", byline: ["Alam Al Roum Newsroom", ""], hero: s.photo, body: [] };
 };
 
-export const related = { tag: "KEEP READING", title: "More from the Media Center.", items: mediaPage.blog.slice(0, 3) };
+export const related = { title: "Keep reading", body: "More from the Media Center.", cta: "View All", items: mediaPage.features.slice(0, 3) };

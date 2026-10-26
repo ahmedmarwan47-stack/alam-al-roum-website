@@ -2,7 +2,7 @@
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
-import { useEffect, useMemo, useRef, type MutableRefObject } from "react";
+import { useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 
@@ -76,9 +76,16 @@ export const COIN_FILL = 2.2 / (2 * CAM_Z * Math.tan((FOV / 2) * Math.PI / 180))
 /** A transparent canvas with the coin; size it with the wrapper (see COIN_FILL). */
 export default function Coin3D({ pose, active = true, className = "" }: { pose: MutableRefObject<CoinPose>; active?: boolean; className?: string }) {
   const phone = typeof window !== "undefined" && window.matchMedia("(max-width: 1023px)").matches;
+  // render only while the coin is on screen: an off-screen loop would compete with the page's scroll animations
+  const box = useRef<HTMLDivElement>(null), [seen, setSeen] = useState(false);
+  useEffect(() => {
+    const el = box.current; if (!el) return;
+    const io = new IntersectionObserver(([e]) => setSeen(e.isIntersecting), { rootMargin: "100px" });
+    io.observe(el); return () => io.disconnect();
+  }, []);
   return (
-    <div className={`pointer-events-none ${className}`} aria-hidden>
-      <Canvas frameloop={active ? "always" : "never"} dpr={phone ? [1, 1.5] : [1, 1.75]} camera={{ position: [0, 0, CAM_Z], fov: FOV }}
+    <div ref={box} className={`pointer-events-none ${className}`} aria-hidden>
+      <Canvas frameloop={active && seen ? "always" : "never"} dpr={phone ? [1, 1.5] : [1, 1.75]} camera={{ position: [0, 0, CAM_Z], fov: FOV }}
         gl={{ alpha: true, antialias: !phone, powerPreference: phone ? "default" : "high-performance" }} style={{ background: "transparent" }}>
         <Studio />
         <directionalLight position={[3, 4, 5]} intensity={1.4} />

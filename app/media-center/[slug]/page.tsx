@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Navbar from "@/components/sections/Navbar";
+import Button from "@/components/ui/Button";
 import RevealImage from "@/components/reveal/RevealImage";
 import RevealText from "@/components/reveal/RevealText";
 import SectionTitle from "@/components/sections/SectionTitle";
@@ -40,11 +41,14 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       <section className="px-[var(--gutter)] py-[60px]">
         {a.body.length ? <ArticleBody a={a} /> : <p className="mx-auto max-w-[768px] t-body b-18 text-limestone-800">The full story will be published here soon.</p>}
       </section>
-      <section className="flex flex-col gap-10 border-t border-black/10 py-20 container-x">
-        <SectionTitle tag={related.tag} title={related.title} />
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {related.items.filter((s) => s.slug !== a.slug).slice(0, 3).map((c, k) => <StoryCard key={c.slug} {...c} delay={k * 0.08} />)}
+      {/* Related Articles (Figma 10921:10181): Keep Reading on Limestone, three story cards, View All */}
+      <section className="flex flex-col items-center gap-10 bg-limestone-50 py-20 container-x">
+        <SectionTitle title={related.title} body={related.body} />
+        <div className="grid w-full gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {[...related.items, ...stories].filter((s, k, all) => s.slug !== a.slug && all.findIndex((x) => x.slug === s.slug) === k).slice(0, 3)
+            .map((c, k) => <StoryCard key={c.slug} {...c} delay={k * 0.08} />)}
         </div>
+        <Button label={related.cta} href="/media-center" variant="outline" />
       </section>
       <Cta />
       <Footer />

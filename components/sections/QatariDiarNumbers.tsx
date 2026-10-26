@@ -13,8 +13,8 @@ const JUMP = 3;                  // Möbius spins each digit ~3 places before it
 /**
  * Qatari Diar in numbers. One sticky stage, a viewport of scroll per stat. Left: exactly the Figma copy block
  * (UI / Qatari Diar · Numbers: Qatari Diar logo 80, Heading/48 title, Body/18 body, centred vertically at x 60),
- * the stat's title and body swapping in place. Right: the Möbius numerals — a giant two-digit number (left digit
- * set lower); when the stat changes both digits spin ~3 places (left down, right up) and settle over 1.6 s
+ * the stat's title and body swapping in place. Right: the Möbius numerals — a giant two-digit number filling the
+ * 890 × 580 Numerals frame; when the stat changes both digits spin ~3 places (left down, right up) and settle over 1.6 s
  * (power3.out), with the photo showing through the digits (Limestone sheet + mix-blend-lighten).
  */
 export default function QatariDiarNumbers() {
@@ -60,19 +60,19 @@ export default function QatariDiarNumbers() {
         </div>
         <div className="pointer-events-none absolute inset-y-0 right-[var(--gutter)] hidden w-[min(58.9vw,890px)] items-center lg:flex">
           <div className="flex w-full items-center justify-end">
-            <div className="relative w-full" style={{ aspectRatio: "962 / 662" }}>
+            <div className="relative w-full" style={{ aspectRatio: "890 / 580" }}>
               {STATS.map((x, k) => (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img key={x.photo} src={x.photo} alt="" className="absolute inset-[3px] h-[calc(100%-6px)] w-[calc(100%-6px)] object-cover transition-opacity duration-700" style={{ opacity: k === s ? 1 : 0 }} />))}
               {/* Limestone sheet with black digits; lighten keeps the photo only where the digits are */}
               <div className="absolute inset-0 flex justify-between bg-limestone-50 mix-blend-lighten">
                 {[0, 1].map((k) => (
-                  <div key={k} className="relative overflow-hidden" style={{ width: "50%", height: "84.9%", marginTop: k === 0 ? "15.1%" : 0, containerType: "size" }}>
+                  <div key={k} className="relative h-full w-1/2 overflow-hidden" style={{ containerType: "size" }}>
                     <div ref={(el) => { cols.current[k] = el; }} className="absolute inset-x-0 top-0"
                       style={{ height: `${10 * REPS * 100}%` }}>
                       {Array.from({ length: 10 * REPS }, (_, d) => (
                         <span key={d} className="flex items-center justify-center font-bold text-black"
-                          style={{ height: `${100 / (10 * REPS)}%`, fontFamily: "var(--font-haas)", fontSize: "116cqh", lineHeight: 1, letterSpacing: "-0.04em" }}>{d % 10}</span>))}
+                          style={{ height: `${100 / (10 * REPS)}%`, fontFamily: "var(--font-haas)", fontSize: "123cqh", lineHeight: 1 }}>{d % 10}</span>))}
                     </div>
                   </div>))}
               </div>

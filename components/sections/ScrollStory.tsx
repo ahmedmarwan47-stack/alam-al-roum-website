@@ -32,7 +32,8 @@ export default function ScrollStory() {
       ctx.drawImage(img, (c.width - w) / 2, (c.height - h) / 2, w, h);
     };
     const size = () => { const r = c.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2); c.width = r.width * d; c.height = r.height * d; draw(cur); };
-    for (let i = 0; i < FRAMES; i++) { const im = new Image(); im.decoding = "async"; im.src = src(i); im.onload = () => { if (i === cur) draw(i); }; imgs.push(im); }
+    // frames are decoded ahead as they arrive, so the first pass through the film never waits on a decode
+    for (let i = 0; i < FRAMES; i++) { const im = new Image(); im.decoding = "async"; im.src = src(i); im.onload = () => { im.decode?.().catch(() => {}); if (i === cur) draw(i); }; imgs.push(im); }
     size(); window.addEventListener("resize", size);
     const st = ScrollTrigger.create({
       trigger: wrap.current, start: "top top", end: "bottom bottom",
@@ -58,17 +59,20 @@ export default function ScrollStory() {
 
   return (
     <section ref={wrap} className="relative">
-      <div className="pointer-events-none absolute inset-0">
+      {/* clip (not hidden) so the sticky film still sticks, yet never spills past the section on short screens */}
+      <div className="pointer-events-none absolute inset-0 overflow-clip">
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           <canvas ref={canvas} className="h-full w-full" />
         </div>
       </div>
 
-      {/* Grandeur · the constellation over the sky */}
-      <div ref={stageRef} className="relative w-full" style={{ aspectRatio: "1512 / 1080" }}>
+      {/* Grandeur · the constellation over the sky (the cards need laptop width to clear the headline; below lg it is the copy alone) */}
+      <div ref={stageRef} className="relative flex min-h-svh w-full items-center lg:block lg:min-h-0 lg:aspect-[1512/1080]">
+        {/* Figma fill over the paused film: Limestone/50 solid to halfway, clearing to the sunrise at the bottom */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-limestone-50 via-limestone-50 via-50% to-limestone-50/0" />
         {grandeur.cards.map((c, k) => (
           // outer: scattered slot + parallax; inner: offset to the stacked slot, released on scroll-in
-          <div key={k} data-card className="absolute hidden md:block" style={{ left: pct(c.x, 1512), top: pct(c.y, 1080), width: pct(c.w, 1512) }}>
+          <div key={k} data-card className="absolute hidden lg:block" style={{ left: pct(c.x, 1512), top: pct(c.y, 1080), width: pct(c.w, 1512) }}>
             {c.kind === "image" ? (
               <div className="overflow-hidden rounded-lg" style={{ aspectRatio: `${c.w} / ${c.h}` }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -87,7 +91,7 @@ export default function ScrollStory() {
             )}
           </div>
         ))}
-        <div className="relative z-10 mx-auto flex w-[min(760px,90%)] flex-col items-center gap-6 pt-16 text-center md:absolute md:left-1/2 md:top-[34.8%] md:-translate-x-1/2 md:pt-0">
+        <div className="relative z-10 mx-auto flex w-[min(760px,90%)] flex-col items-center gap-6 pt-16 text-center lg:absolute lg:left-1/2 lg:top-[34.8%] lg:-translate-x-1/2 lg:pt-0">
           <span className="rounded bg-limestone-100 px-[10px] py-1 t-label l-12">{grandeur.tag}</span>
           <RevealText as="h2" text={grandeur.title} className="t-heading hd-56 text-deepsea-500" />
           <RevealText text={grandeur.body} className="t-body b-18 max-w-[620px] text-limestone-800" delay={0.15} />
@@ -95,7 +99,7 @@ export default function ScrollStory() {
       </div>
 
       {/* Lighthouse · the film arrives at the boardwalk */}
-      <div className="relative flex w-full flex-col items-center justify-end gap-8 pb-20 text-center" style={{ aspectRatio: "1512 / 1185" }}>
+      <div className="relative flex min-h-svh w-full flex-col items-center justify-end gap-8 px-[var(--gutter)] pb-20 text-center lg:min-h-0 lg:aspect-[1512/1185]">
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-b from-transparent to-[#010F1A]/60" />
         <RevealText as="h2" segs={lighthouse.title} className="relative t-heading hd-56 max-w-[1100px] text-limestone-50" />
         <Button label={lighthouse.cta} href="/about" size={54} variant="outline-light" className="relative" />

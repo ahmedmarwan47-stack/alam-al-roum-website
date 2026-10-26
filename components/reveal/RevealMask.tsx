@@ -1,18 +1,19 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
+import { photoIn, PHOTO_FROM } from "./letters";
 
-/** Hassan Allam's counter-sliding mask around any block (used where the content is more than one image). */
-export default function RevealMask({ children, className = "", from = "right", delay = 0 }:
-  { children: React.ReactNode; className?: string; from?: "right" | "left" | "bottom"; delay?: number }) {
-  const outer = useRef<HTMLDivElement>(null), inner = useRef<HTMLDivElement>(null);
+/** The photo entrance (`photoIn`) around any block, for media made of more than one image (a map, a slideshow). */
+export default function RevealMask({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
+  const frame = useRef<HTMLDivElement>(null), zoom = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (reducedMotion()) return;
-    const axis = from === "bottom" ? "yPercent" : "xPercent", s = from === "left" ? -100 : 100;
-    gsap.set(outer.current, { [axis]: s }); gsap.set(inner.current, { [axis]: -s });
-    const st = ScrollTrigger.create({ trigger: outer.current!.parentElement, start: "top 85%", once: true,
-      onEnter: () => gsap.to([outer.current, inner.current], { [axis]: 0, duration: 1.15, ease: "maskInOut", delay }) });
-    return () => st.kill();
-  }, [from, delay]);
-  return <div className={`overflow-hidden ${className}`}><div ref={outer} className="ri-outer"><div ref={inner} className="ri-inner relative">{children}</div></div></div>;
+    const f = frame.current; if (!f || reducedMotion()) return;
+    gsap.set(f, { ...PHOTO_FROM, visibility: "visible" });
+    let done = false;
+    const play = () => { if (!done) { done = true; photoIn(f, zoom.current, { delay }); } };
+    const st = ScrollTrigger.create({ trigger: f, start: "top 88%", once: true, onEnter: play });
+    const id = requestAnimationFrame(() => { if (st.scroll() >= st.start) play(); });
+    return () => { cancelAnimationFrame(id); st.kill(); };
+  }, [delay]);
+  return <div ref={frame} data-reveal-img className={`overflow-hidden ${className}`}><div ref={zoom} className="ri-inner relative">{children}</div></div>;
 }

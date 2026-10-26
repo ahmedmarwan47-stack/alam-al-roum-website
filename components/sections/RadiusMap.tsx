@@ -28,7 +28,7 @@ export default function RadiusMap() {
         .to(labels[k], { opacity: 1, duration: 0.4 }, k * 0.45 + 0.1);
     });
     tl.to(el.querySelector("[data-halo]"), { attr: { r: 34 }, opacity: 0.35, duration: 0.6, ease: "power2.out" }, ">-0.2");
-    const st = ScrollTrigger.create({ trigger: el, start: "top 70%", onEnter: () => tl.restart(), onLeaveBack: () => tl.pause(0) });
+    const st = ScrollTrigger.create({ trigger: el, start: "top 70%", once: true, onEnter: () => tl.play(0) });   // draws once and stays
     return () => { st.kill(); tl.kill(); };
   }, []);
   return (

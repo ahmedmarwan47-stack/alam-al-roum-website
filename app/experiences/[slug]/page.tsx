@@ -34,7 +34,7 @@ export default async function ExperienceDetailPage({ params }: { params: Promise
       {x.hotels && <HotelsList data={x.hotels} />}
       <Gallery data={x.gallery} />
       {x.events && <EventsHere data={x.events} />}
-      <ExperienceTrack exclude={x.slug} />
+      <ExperienceTrack slider />
       <Cta />
       <Footer />
     </main>

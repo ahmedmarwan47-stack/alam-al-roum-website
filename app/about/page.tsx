@@ -8,9 +8,10 @@ import TheStory from "@/components/about/TheStory";
 import Milestones from "@/components/about/Milestones";
 import Masterplan from "@/components/sections/Masterplan";
 import Nearby from "@/components/about/Nearby";
-import VisaFaq from "@/components/about/VisaFaq";
+import Faq from "@/components/sections/Faq";
 import Cta from "@/components/sections/Cta";
 import Footer from "@/components/sections/Footer";
+import { visaFaq } from "@/lib/about/b-content";
 
 export const metadata = { title: "About — Alam Al Roum" };
 
@@ -28,7 +29,7 @@ export default function About() {
       <Masterplan />
       <Milestones />
       <Nearby />
-      <VisaFaq />
+      <Faq data={visaFaq} />
       <Cta />
       <Footer />
     </main>

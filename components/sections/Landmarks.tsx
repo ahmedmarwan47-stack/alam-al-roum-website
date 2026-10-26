@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
-import Icon from "@/components/ui/Icon";
 import RevealText from "@/components/reveal/RevealText";
 import RevealMask from "@/components/reveal/RevealMask";
 import { landmarks } from "@/lib/content";
@@ -46,20 +45,19 @@ export default function Landmarks({ data = landmarks }: { data?: LandmarksData }
       <div className="flex flex-col justify-center gap-[60px] py-20 pl-[var(--gutter)] pr-[var(--gutter)] lg:w-1/2 lg:pr-24">
         <div className="flex flex-col gap-2">
           <RevealText as="h2" text={L.title} className="t-heading hd-40" />
-          <RevealText text={L.body} className="t-body b-16 max-w-[460px] text-limestone-800" delay={0.08} />
+          <RevealText text={L.body} className="t-body b-16 max-w-[460px] text-deepsea-500/70" delay={0.08} />
         </div>
         <div className="flex flex-col">
           {L.rows.map((r, k) => {
             const on = k === a;
             return (
               <button key={r.title} onClick={() => go(k)}
-                className={`flex items-center gap-6 border-b px-6 py-6 text-left transition-colors duration-500 ${on ? "border-deepsea-500 bg-deepsea-500 text-limestone-50" : "border-limestone-600"}`}>
+                className={`flex items-center gap-10 border-b p-6 text-left transition-colors duration-500 ${on ? "border-deepsea-500 bg-deepsea-500 text-limestone-50" : "border-limestone-600"}`}>
                 <span className={`t-label l-12 ${on ? "text-deepsea-200" : ""}`}>({String(k + 1).padStart(2, "0")})</span>
-                <span className="flex flex-1 flex-col gap-1">
+                <span className="flex flex-1 flex-col gap-2">
                   <RevealText text={r.title} className="t-heading hd-24" />
-                  <span className={`t-body b-14 ${on ? "text-deepsea-200" : "text-limestone-800"}`}>{r.body}</span>
+                  <span className={`t-body b-14 ${on ? "text-deepsea-200" : "text-deepsea-500/60"}`}>{r.body}</span>
                 </span>
-                <Icon name="arrow-right-01-sharp" size={18} className={`transition-transform duration-500 ${on ? "translate-x-0" : "-translate-x-2 opacity-0"}`} />
               </button>);
           })}
         </div>

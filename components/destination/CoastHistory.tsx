@@ -44,7 +44,7 @@ export default function CoastHistory({ path }: { path: string }) {
         scrollTrigger: { trigger: el, containerAnimation: track.track, start: "left 80%", end: "left 5%", scrub: 1,
           onUpdate: (s) => { pose.current.rotY = s.progress * Math.PI * 2; } } })
         .to(p, { strokeDashoffset: 0, duration: 1 }, 0);
-      stops.forEach((s) => tl!.to(s, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out" }, Math.max(0, at(+s.dataset.x!) - 0.02)));
+      stops.forEach((s) => tl!.to(s, { opacity: 1, y: 0, duration: 0.16, ease: "power2.out" }, Math.max(0, at(+s.dataset.x!) - 0.04)));
     };
     const track = el.closest("[data-track]");
     build();

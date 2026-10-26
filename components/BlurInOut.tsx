@@ -2,14 +2,16 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
+import { blurIn, BLOCK_FROM, photoIn, PHOTO_FROM } from "@/components/reveal/letters";
 
 const SEL = "main :is(h1, h2, h3, h4, p, img, video, [data-blur])";
 
 /**
- * Site-wide blur in: text and media sharpen from a 12px blur as they rise into view from the bottom, scrubbed
- * (smoothed) with the scroll. Nothing blurs on the way out at the top. Pinned sections run their own choreography,
- * so anything inside a pin is left alone, as are the header and elements nested in an already-blurred one.
- * Mounted after the page, so the pins already exist when it looks.
+ * Site-wide entrances for every text block and photo that has none of its own, the first time each comes into view:
+ * text blurs in as one block (RevealText's blur-in), photos and films open with the photo wipe (RevealImage's). Anything that already
+ * animates is left alone — RevealText / RevealImage blocks ([data-reveal], [data-reveal-img]), pinned sections,
+ * the header, photos shown through a blend or mask — and so is everything already on screen when the page opens,
+ * so nothing that is visible ever flashes out and back in.
  */
 export default function BlurInOut() {
   const path = usePathname();
@@ -19,18 +21,18 @@ export default function BlurInOut() {
     const id = requestAnimationFrame(() => {
       const picked: HTMLElement[] = [];
       for (const el of gsap.utils.toArray<HTMLElement>(SEL)) {
-        if (el.closest(".pin-spacer, header, [data-no-blur]")) continue;
-        // photos shown through a blend / mask (e.g. the Qatari Diar digits) would bleed their blurred edges: skip them
+        if (el.closest(".pin-spacer, header, [data-no-blur], [data-reveal], [data-reveal-img], [aria-hidden=true]")) continue;
         if (el.closest("[class*=mix-blend], [style*=mask]")) continue;
-        if (el.getBoundingClientRect().height < 12) continue;
+        const r = el.getBoundingClientRect();
+        if (r.height < 12 || r.top < innerHeight) continue;
         if (picked.some((p) => p.contains(el))) continue;
         picked.push(el);
       }
-      const tweens = picked.map((el) =>
-        gsap.fromTo(el, { filter: "blur(12px)", opacity: 0.35 }, { filter: "blur(0px)", opacity: 1, ease: "none",
-          scrollTrigger: { trigger: el, start: "top 100%", end: "top 90%", scrub: 1 } }));
-      ScrollTrigger.refresh();
-      kill = () => tweens.forEach((t) => { t.scrollTrigger?.kill(); t.kill(); gsap.set(t.targets(), { clearProps: "filter,opacity" }); });
+      const media = (el: HTMLElement) => el.tagName === "IMG" || el.tagName === "VIDEO";
+      picked.forEach((el) => gsap.set(el, media(el) ? PHOTO_FROM : BLOCK_FROM));
+      const sts = picked.map((el) => ScrollTrigger.create({ trigger: el, start: "top 92%", once: true,
+        onEnter: () => (media(el) ? photoIn(el) : blurIn(el)) }));
+      kill = () => { sts.forEach((s) => s.kill()); gsap.set(picked, { clearProps: "opacity,filter,transform,clipPath" }); };
     });
     return () => { cancelAnimationFrame(id); kill?.(); };
   }, [path]);

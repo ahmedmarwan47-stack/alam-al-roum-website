@@ -1,49 +1,26 @@
 import { gsap } from "@/lib/gsap";
 
 /**
- * The ERA Residence letter reveal (the reference behind the Motion Studies): each character comes up from a pale,
- * softly blurred ghost to full ink, one after another from left to right, so a headline "writes" itself in.
+ * The site's one text entrance: a block of text blurs in as a whole (never split into lines, words or letters).
+ * BLOCK_FROM is its resting state before it plays; RevealText, the inner-page heroes and the About / Destination
+ * choreographies all use the same values, so every text block on the site appears the same way.
  */
+export const BLOCK_FROM = { opacity: 0, filter: "blur(12px)", y: 16 };
+export const BLOCK_TO = { opacity: 1, filter: "blur(0px)", y: 0 };
+
+/** Plays the blur-in on one or more blocks (staggered 0.12 s when several), 1.1 s on the long ease-out. */
+export const blurIn = (els: gsap.TweenTarget, { delay = 0, duration = 1.1, stagger = 0.12 } = {}) =>
+  gsap.fromTo(els, BLOCK_FROM, { ...BLOCK_TO, duration, delay, stagger, ease: "siteOut", clearProps: "filter,transform" });
 
 /**
- * Wraps every character of `el`'s text in a span (spaces stay text, words never break). Idempotent.
- * A `capitalize` text-transform is applied to the text itself first: once each letter sits in its own box,
- * CSS would otherwise capitalise every letter.
+ * The site's one photo entrance: the frame opens upward from its bottom edge while the picture inside settles
+ * back from a 1.12 zoom, 1.3 s on the mask in-out. `zoom` is the element to settle (the frame's inner layer);
+ * leave it out for a bare <img>, which only wipes.
  */
-export function splitChars(el: HTMLElement): HTMLElement[] {
-  if (el.dataset.split) return Array.from(el.querySelectorAll<HTMLElement>("[data-ch]"));
-  el.dataset.split = "1";
-  const walk = (node: Node) => {
-    for (const child of Array.from(node.childNodes)) {
-      if (child.nodeType === Node.TEXT_NODE) {
-        const frag = document.createDocumentFragment();
-        const cap = getComputedStyle(child.parentElement ?? el).textTransform === "capitalize";
-        for (let word of (child.textContent ?? "").split(/(\s+)/)) {
-          if (!word) continue;
-          if (/^\s+$/.test(word)) { frag.append(word); continue; }
-          if (cap) word = word.charAt(0).toUpperCase() + word.slice(1);
-          const w = document.createElement("span");
-          w.style.display = "inline-block"; w.style.whiteSpace = "nowrap";
-          if (cap) w.style.textTransform = "none";
-          for (const c of word) {
-            const s = document.createElement("span");
-            s.dataset.ch = ""; s.style.display = "inline-block"; s.textContent = c;
-            w.append(s);
-          }
-          frag.append(w);
-        }
-        child.replaceWith(frag);
-      } else if (child.nodeType === Node.ELEMENT_NODE) walk(child);
-    }
-  };
-  walk(el);
-  return Array.from(el.querySelectorAll<HTMLElement>("[data-ch]"));
-}
-
-/** Ghost state of a letter before it is written in. */
-export const LETTER_FROM = { opacity: 0.08, filter: "blur(6px)" };
-export const LETTER_TO = { opacity: 1, filter: "blur(0px)" };
-
-/** A timeline-ready tween writing `chars` in, left to right. `each` is the gap between letters (s). */
-export const writeIn = (chars: HTMLElement[], each = 0.035, duration = 0.6) =>
-  gsap.fromTo(chars, LETTER_FROM, { ...LETTER_TO, duration, ease: "power2.out", stagger: each });
+export const PHOTO_FROM = { clipPath: "inset(100% 0% 0% 0%)" };
+export const photoIn = (frame: Element, zoom?: Element | null, { delay = 0 } = {}) => {
+  const tl = gsap.timeline({ delay, defaults: { duration: 1.3, ease: "maskInOut" } })
+    .fromTo(frame, PHOTO_FROM, { clipPath: "inset(0% 0% 0% 0%)", clearProps: "clipPath" }, 0);
+  if (zoom) tl.fromTo(zoom, { scale: 1.12 }, { scale: 1, ease: "siteOut", duration: 1.6, clearProps: "scale" }, 0);
+  return tl;
+};

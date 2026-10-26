@@ -11,7 +11,7 @@ const label = "t-label l-12 uppercase text-white";
 const input = "w-full bg-transparent t-text x-20 text-white outline-none placeholder:text-white/80";
 
 /**
- * "Send us a message" (Figma 10921:9522): a frosted panel of dark underline fields. There is no form backend yet,
+ * "Send us a message" (Figma 11134:15413): a frosted panel of dark underline fields. There is no form backend yet,
  * so sending opens the visitor's mail app with the message addressed to the sales inbox. `?role=` prefills a job application.
  */
 export default function ContactForm() {
@@ -24,7 +24,7 @@ export default function ContactForm() {
     window.location.href = `mailto:${sayHello.email}?subject=${encodeURIComponent(`${interest} — website enquiry`)}&body=${encodeURIComponent(body)}`;
   };
   return (
-    <form onSubmit={send} className="flex w-full flex-col gap-10 rounded-lg bg-[rgba(10,10,10,0.5)] p-7 backdrop-blur-[16px] lg:w-[588px] lg:flex-none">
+    <form onSubmit={send} className="flex w-full flex-col gap-10 rounded-[30px] bg-[rgba(10,10,10,0.4)] p-5 backdrop-blur-[16px] sm:p-7 lg:w-[588px] lg:flex-none">
       <span className="t-label capitalize text-white [font-size:32px] leading-[40px]">{F.title}</span>
       <div className="flex flex-col gap-7">
         <label className={line}><span className={label}>{F.fields.name[0]}</span><input name="name" required autoComplete="name" placeholder={F.fields.name[1]} className={input} /></label>

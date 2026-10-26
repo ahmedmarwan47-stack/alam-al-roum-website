@@ -2,23 +2,28 @@
 import { useEffect, useRef } from "react";
 import { gsap, reducedMotion } from "@/lib/gsap";
 import RevealText from "@/components/reveal/RevealText";
+import { photoIn, PHOTO_FROM } from "@/components/reveal/letters";
 
 export type SingleHeroData = { eyebrow: string; name: string; line: string; photo: string; alt?: string; video?: string; facts?: [string, string][] };
 
 /**
  * UI / Hero / Single page (Figma 11053:7718): full-bleed photo, the place name huge, a one-line
- * descriptor and (optionally) a 3-fact card. The photo drifts slower than the page on scroll.
+ * descriptor and (optionally) a 3-fact card. The photo opens with the site's photo entrance as the page loads,
+ * then drifts slower than the page on scroll.
  */
 export default function SingleHero({ data: H }: { data: SingleHeroData }) {
   const media = useRef<HTMLDivElement>(null), wrap = useRef<HTMLElement>(null);
   useEffect(() => {
     if (reducedMotion()) return;
-    const t = gsap.to(media.current, { yPercent: 12, scale: 1.06, ease: "none", scrollTrigger: { trigger: wrap.current, start: "top 76px", end: "bottom top", scrub: true } });
-    return () => { t.scrollTrigger?.kill(); t.kill(); };
+    const m = media.current!;
+    gsap.set(m, { ...PHOTO_FROM, visibility: "visible" });
+    const intro = photoIn(m, m.firstElementChild, { delay: 0.1 });
+    const t = gsap.to(m, { yPercent: 12, scale: 1.06, ease: "none", scrollTrigger: { trigger: wrap.current, start: "top 76px", end: "bottom top", scrub: true } });
+    return () => { intro.kill(); t.scrollTrigger?.kill(); t.kill(); };
   }, []);
   return (
     <section ref={wrap} className="relative mt-[76px] h-[min(calc(100svh-76px),900px)] min-h-[600px] overflow-hidden bg-deepsea-900 text-limestone-50">
-      <div ref={media} className="absolute inset-0 origin-top">
+      <div ref={media} data-reveal-img className="absolute inset-0 origin-top">
         {H.video
           ? <video className="h-full w-full object-cover" src={H.video} poster={H.photo} autoPlay muted loop playsInline aria-hidden />
           // eslint-disable-next-line @next/next/no-img-element

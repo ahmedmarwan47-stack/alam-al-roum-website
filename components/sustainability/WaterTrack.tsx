@@ -29,11 +29,12 @@ export default function WaterTrack() {
         <p className="max-w-[1100px] t-heading hd-56">{s1.text} <span className="text-deepsea-200">{s1.accent}</span></p>
       </div>
       <Panel photo={W.living.photo} title={W.living.title} features={W.living.features} from="top" />
-      <div className="relative flex flex-col items-center justify-center gap-6 py-24 text-center lg:h-[760px] lg:w-[1392px] lg:flex-none">
-        <img src={s2.cups} alt="" className="pointer-events-none absolute left-0 top-0 w-[clamp(140px,19vw,293px)]" />
+      <div className="relative flex flex-col items-center justify-center gap-6 py-40 text-center lg:h-[760px] lg:w-[1392px] lg:flex-none lg:py-24">
+        {/* below lg the glasses sit in the panel's padding, above and below the copy */}
+        <img src={s2.cups} alt="" className="pointer-events-none absolute left-0 top-0 w-[clamp(120px,19vw,293px)]" />
         <p className="relative max-w-[1100px] t-heading hd-56">{s2.text} <span className="text-deepsea-200">{s2.accent}</span></p>
         <RevealText text={s2.body} className="relative t-body b-18 max-w-[720px]" />
-        <img src={s2.martini} alt="" className="pointer-events-none absolute bottom-0 right-0 w-[clamp(110px,17vw,256px)]" />
+        <img src={s2.martini} alt="" className="pointer-events-none absolute bottom-0 right-0 w-[clamp(96px,17vw,256px)]" />
       </div>
       <Panel photo={W.systems.photo} title={W.systems.title} features={W.systems.features} from="bottom" />
     </PinnedTrack>

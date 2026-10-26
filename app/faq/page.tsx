@@ -1,23 +1,19 @@
 import Navbar from "@/components/sections/Navbar";
 import ListingHero from "@/components/sections/ListingHero";
-import Faq from "@/components/sections/Faq";
+import FaqAccordion from "@/components/sections/FaqAccordion";
 import Cta from "@/components/sections/Cta";
 import Footer from "@/components/sections/Footer";
-import { faq } from "@/lib/content";
-import { destFaq } from "@/lib/destination";
+import { faqPage } from "@/lib/faq";
 
 export const metadata = { title: "FAQ — Alam Al Roum" };
 
-const items = [...faq.items, ...destFaq.items].filter(([q], k, all) => all.findIndex(([x]) => x === q) === k);
-
-/** FAQ (Figma "FAQ • Desktop"): listing hero, then every question from the home and destination FAQs. */
+/** FAQ (Figma "FAQ • Desktop", 10921:9428): listing hero, then the category chips over the accordion. */
 export default function FaqPage() {
   return (
     <main>
       <Navbar />
-      <ListingHero title="Frequently Asked Questions"
-        body="Find clear answers about Alam Al Roum. We have gathered the questions most often asked by residents, investors, and visitors." />
-      <Faq data={{ title: "All questions", body: "Still curious? Our team is one call away.", cta: "Contact Us", href: "/contact", items }} />
+      <ListingHero title={faqPage.title} body={faqPage.body} />
+      <FaqAccordion />
       <Cta />
       <Footer />
     </main>

@@ -5,6 +5,7 @@ import { idlePose, COIN_FILL, type CoinPose } from "@/components/ui/Coin3D";
 import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 import "@/lib/about/a-motion";
 import { coin as C } from "@/lib/about/a-content";
+import { BLOCK_FROM, BLOCK_TO } from "@/components/reveal/letters";
 
 /** Figma frame (UI / Section / Landmark Reveal): 1512 × 1024. */
 const FW = 1512, FH = 1024;
@@ -14,6 +15,9 @@ const Coin3D = dynamic(() => import("@/components/ui/Coin3D"), { ssr: false });
 const COIN_GONE = 2.0;
 /** Coin centre at rest: Figma's 379.5 raised by 20 so the turning coin keeps ~40 px clear of GRANDEUR. */
 const COIN_CY = 359.5;
+/** The sky-fall film as a frame sequence (every 2nd frame of grandeur-skyfall-v2, 1920 × 1080 WebP), drawn on a canvas. */
+const FRAMES = 145;
+const frameSrc = (i: number) => `/seq/skyfall/${String(i + 1).padStart(4, "0")}.webp`;
 
 /**
  * UI / Section / Landmark Reveal (10979:18395), pinned and scrubbed as ONE continuous move (linear with the scroll,
@@ -22,16 +26,18 @@ const COIN_CY = 359.5;
  * 2 Reveal: the same 3D coin grows with the coin-shaped window (260 → 900) and dissolves into the film behind it,
  *   so there is no hand-over to a flat coin image.
  *   GRANDEUR fades and blurs out as the window's edge approaches it, so the two never overlap.
- * 3 Fill: the window grows past the screen (3000). 4 Restored: a soft Deep Sea shade, the headline and subline rise
- *   through their masks, the history points rise into place. The progress tick steps with it.
+ * 3 Fill: the window grows past the screen (3000). 4 Restored: a soft Deep Sea shade, the headline, the subline and
+ *   the history points blur in, block by block. The progress tick steps with it.
  * The film is scrubbed by the scroll from the reveal on (forwards down, backwards up); never blurred, no clouds.
+ * It is a frame sequence painted on a canvas rather than a seeking <video>: the source has two keyframes in 12 s,
+ * so every seek re-decoded from the start and the film stuttered; frames on a canvas follow the scroll smoothly.
  */
 export default function CoinStage({ poster }: { poster?: string }) {
   const [coinLive, setCoinLive] = useState(true);   // stop rendering the 3D coin once it has dissolved
-  const root = useRef<HTMLElement>(null), win = useRef<HTMLDivElement>(null), video = useRef<HTMLVideoElement>(null), canvas = useRef<HTMLDivElement>(null), word = useRef<HTMLParagraphElement>(null);
+  const root = useRef<HTMLElement>(null), win = useRef<HTMLDivElement>(null), filmRef = useRef<HTMLCanvasElement>(null), canvas = useRef<HTMLDivElement>(null), word = useRef<HTMLParagraphElement>(null);
   const pose = useRef<CoinPose>(idlePose());
   useEffect(() => {
-    const el = root.current!, w = win.current!, v = video.current!, cv = canvas.current!, wd = word.current!, q = gsap.utils.selector(el);
+    const el = root.current!, w = win.current!, v = filmRef.current!, cv = canvas.current!, wd = word.current!, q = gsap.utils.selector(el);
 
     // geometry in Figma frame units: positions scale with the height, sizes with the frame's contain / cover scale
     const fit = () => Math.min(el.offsetWidth / FW, el.offsetHeight / FH);
@@ -52,18 +58,25 @@ export default function CoinStage({ poster }: { poster?: string }) {
     };
 
     // the film is scrubbed by the scroll: it starts as the coin opens (OPEN) and reaches its last frame at the end
-    // of the pin; one seek at a time so the decoder keeps up, and scrolling up plays it backwards
-    const OPEN = 1.0;
-    let want = 0;
-    const film = (t: number) => { want = Math.min(Math.max((t - OPEN) / (tl.duration() - OPEN), 0), 1); };
-    const seek = () => {
-      if (!v.duration || v.seeking) return;
-      const at = want * (v.duration - 0.05);
-      if (Math.abs(v.currentTime - at) > 1 / 30) v.currentTime = at;
+    // of the pin; scrolling up plays it backwards. A frame is painted only when the frame index changes.
+    const OPEN = 1.0, ctx = v.getContext("2d")!, imgs: HTMLImageElement[] = [];
+    let cur = -1, want = 0;
+    const paint = (i: number) => {
+      const img = imgs[i]; if (!img?.complete || !img.naturalWidth) return false;
+      const k = Math.max(v.width / img.naturalWidth, v.height / img.naturalHeight), iw = img.naturalWidth * k, ih = img.naturalHeight * k;
+      ctx.drawImage(img, (v.width - iw) / 2, (v.height - ih) / 2, iw, ih); cur = i; return true;
     };
-    gsap.ticker.add(seek);
-    const prime = () => { v.play().then(() => v.pause()).catch(() => {}); };   // iOS paints seeks only after a play
-    v.addEventListener("loadedmetadata", prime, { once: true });
+    const film = (t: number) => {
+      want = Math.round(Math.min(Math.max((t - OPEN) / (tl.duration() - OPEN), 0), 1) * (FRAMES - 1));
+      if (want !== cur) paint(want);
+    };
+    const size = () => { const d = Math.min(window.devicePixelRatio || 1, 2); v.width = v.offsetWidth * d; v.height = v.offsetHeight * d; cur = -1; paint(want); };
+    for (let i = 0; i < FRAMES; i++) {
+      const im = new Image(); im.decoding = "async"; im.src = frameSrc(i);
+      // decode ahead, so the first pass through the film never waits on a frame
+      im.onload = () => { im.decode?.().catch(() => {}); if (i === want) paint(i); }; imgs.push(im);
+    }
+    size(); window.addEventListener("resize", size);
     const tl = gsap.timeline({ paused: true, defaults: { ease: "none" }, onUpdate: () => {
       pose.current.spin = tl.time() < 0.02 ? idlePose().spin : 0;   // idle turn at rest, the scroll drives it after
       pose.current.bob = tl.time() < 0.02 ? idlePose().bob : 0;
@@ -84,15 +97,15 @@ export default function CoinStage({ poster }: { poster?: string }) {
       .to(q("[data-tick]"), { y: 96, duration: 1.3 }, 2.4)
       // 4 · Restored
       .to(q("[data-shade]"), { opacity: 1, duration: 1.5 }, 3.7)
-      .fromTo(q("[data-rise]"), { yPercent: 115 }, { yPercent: 0, duration: 1.3, stagger: 0.15 }, 3.9)
-      .fromTo(q("[data-points]"), { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2 }, 4.3)
+      .fromTo(q("[data-rise]"), BLOCK_FROM, { ...BLOCK_TO, duration: 1.0, stagger: 0.15 }, 3.9)
+      .fromTo(q("[data-points]"), BLOCK_FROM, { ...BLOCK_TO, duration: 1.0 }, 4.3)
       .to(q("[data-tick]"), { y: 192, duration: 1.5 }, 3.7);
     let st: ScrollTrigger | undefined;
     if (reducedMotion()) { tl.progress(1); film(tl.time()); }
     else st = ScrollTrigger.create({ trigger: el, start: "top top", end: "+=450%", pin: true, scrub: 1, animation: tl, invalidateOnRefresh: true, onRefresh: draw });
     draw();
     window.addEventListener("resize", draw);
-    return () => { st?.kill(); tl.kill(); gsap.ticker.remove(seek); v.removeEventListener("loadedmetadata", prime); window.removeEventListener("resize", draw); };
+    return () => { st?.kill(); tl.kill(); window.removeEventListener("resize", draw); window.removeEventListener("resize", size); };
   }, []);
 
   return (
@@ -105,7 +118,7 @@ export default function CoinStage({ poster }: { poster?: string }) {
 
       {/* coin window: the film, cut to the coin's silhouette */}
       <div ref={win} className="absolute inset-0" style={{ mask: MASK, WebkitMask: MASK, opacity: 0 }}>
-        <video ref={video} src={C.video} poster={poster} className="absolute inset-0 h-full w-full object-cover" muted playsInline preload="auto" aria-hidden />
+        <canvas ref={filmRef} className="absolute inset-0 h-full w-full bg-cover bg-center" style={poster ? { backgroundImage: `url(${poster})` } : undefined} aria-hidden />
       </div>
 
       {/* the landing page's 3D coin: idles at rest, turns with the scroll, then grows with the window and dissolves */}
@@ -119,9 +132,9 @@ export default function CoinStage({ poster }: { poster?: string }) {
 
       {/* Beat 5 copy · Heading/80 (600 wide), Body/20 at 85% (520 wide), history points 260 + 32 + 260 */}
       <div className="absolute left-[var(--gutter)] right-[var(--gutter)] top-[16%] flex max-w-[600px] flex-col gap-7 lg:top-[29.3%]">
-        <h2 className="overflow-hidden t-heading hd-80"><span data-rise className="block">{C.title}</span></h2>
-        <p className="max-w-[520px] overflow-hidden t-body b-20"><span data-rise className="block opacity-85">{C.body}</span></p>
-        <div data-points className="mt-5 grid max-w-[552px] grid-cols-2 gap-8 opacity-0">
+        <h2 data-rise className="t-heading hd-80">{C.title}</h2>
+        <p data-rise className="max-w-[520px] t-body b-20 text-limestone-50/85">{C.body}</p>
+        <div data-points className="mt-5 grid max-w-[552px] grid-cols-2 gap-8">
           {C.points.map((x) => (
             <div key={x.title} className="flex flex-col gap-2 border-t border-deepsea-400 pt-4">
               <h3 className="t-heading hd-20">{x.title}</h3>

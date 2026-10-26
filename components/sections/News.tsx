@@ -11,7 +11,8 @@ export default function News() {
       <SectionTitle tag={N.tag} title={N.title} body={N.body} />
       <div className="grid w-full gap-6 lg:grid-cols-2">
         <StoryCard {...card(N.items[0])} big ratio="aspect-[684/456]" />
-        <div className="grid grid-cols-2 gap-6">{N.items.slice(1).map((it, k) => <StoryCard key={it.title} {...card(it)} ratio="aspect-[330/220]" delay={0.12 + k * 0.1} />)}</div>
+        {/* Figma "Small cards": bottom-aligned to the lead story, each title in a 57 px block */}
+        <div className="grid grid-cols-2 items-end gap-6 lg:pb-[13px]">{N.items.slice(1).map((it, k) => <StoryCard key={it.title} {...card(it)} ratio="aspect-[330/220]" delay={0.12 + k * 0.1} />)}</div>
       </div>
       <Button label={N.cta} href="/media-center" variant="outline" />
     </section>

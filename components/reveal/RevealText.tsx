@@ -1,66 +1,39 @@
 "use client";
-import { createElement, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, type ElementType } from "react";
+import { blurIn, BLOCK_FROM } from "./letters";
 import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 
 /** A run of text; `i` marks the Immortel italic accent word, `br` forces a new line before it. */
 export type Seg = { t: string; i?: boolean; br?: boolean };
-type Word = { t: string; i?: boolean; br?: boolean };
-
-const toWords = (segs: Seg[]): Word[] => {
-  const out: Word[] = [];
-  segs.forEach((s) => s.t.split(/\s+/).filter(Boolean).forEach((w, k) => out.push({ t: w, i: s.i, br: s.br && k === 0 })));
-  return out;
-};
 
 /**
- * Hassan Allam's text reveal: the copy is measured into its real rendered lines, each
- * line sits in its own mask, and the lines rise into place one after another.
+ * Text reveal: the whole block blurs in at once (opacity, a 12 px blur and a 16 px rise clearing together,
+ * 1.1 s on the site's long ease-out), when it comes into view or, with `onLoad`, as the page opens.
+ * No line, word or letter splitting, so the text never re-flows or jumps as it appears.
  */
-export default function RevealText({ as = "p", segs, text, className = "", onLoad = false, delay = 0, stagger = 0.09 }:
+export default function RevealText({ as = "p", segs, text, className = "", onLoad = false, delay = 0 }:
   { as?: string; segs?: Seg[]; text?: string; className?: string; onLoad?: boolean; delay?: number; stagger?: number }) {
-  const words = toWords(segs ?? [{ t: text ?? "" }]);
   const root = useRef<HTMLElement>(null);
-  const [lines, setLines] = useState<number[][] | null>(null);
-  const revealed = useRef(false);
-
-  const measure = useCallback(() => {
-    const el = root.current; if (!el) return;
-    const spans = el.querySelectorAll<HTMLElement>("[data-w]");
-    const groups: number[][] = []; let top = -1;
-    spans.forEach((s, idx) => {
-      const y = s.offsetTop;
-      if (groups.length === 0 || Math.abs(y - top) > 4 || words[idx].br) { groups.push([idx]); top = y; } else groups[groups.length - 1].push(idx);
-    });
-    setLines(groups);
-  }, [words]);
-
-  useLayoutEffect(() => { if (!lines) measure(); }, [lines, measure]);
   useEffect(() => {
-    let w = window.innerWidth;
-    const onResize = () => { if (window.innerWidth !== w) { w = window.innerWidth; setLines(null); } };
-    window.addEventListener("resize", onResize);
-    document.fonts?.ready.then(() => setLines(null));
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
-
-  useEffect(() => {
-    const el = root.current; if (!el || !lines) return;
-    const inners = el.querySelectorAll(".rt-inner");
-    if (revealed.current || reducedMotion()) { gsap.set(inners, { yPercent: 0 }); return; }
-    gsap.set(inners, { yPercent: 115 });
-    const play = () => { revealed.current = true; gsap.to(inners, { yPercent: 0, duration: 1.15, ease: "siteOut", stagger, delay }); };
-    if (onLoad) { play(); return; }
-    const st = ScrollTrigger.create({ trigger: el, start: "top 90%", once: true, onEnter: play });
-    return () => st.kill();
-  }, [lines, onLoad, delay, stagger]);
-
-  const word = (w: Word, idx: number, last: boolean) => (
-    <span key={idx} data-w className={w.i ? "t-accent" : undefined}>{w.t}{last ? "" : " "}</span>
-  );
-  const body = !lines
-    ? words.map((w, idx) => [w.br && idx > 0 ? <br key={`b${idx}`} /> : null, word(w, idx, idx === words.length - 1)])
-    : lines.map((g, li) => (
-        <span key={li} className="rt-line"><span className="rt-inner">{g.map((idx, k) => word(words[idx], idx, k === g.length - 1))}</span></span>
-      ));
-  return createElement(as, { ref: root, className, style: !lines ? { visibility: "hidden" } : undefined }, body);
+    const el = root.current; if (!el || reducedMotion()) return;
+    gsap.set(el, BLOCK_FROM);
+    if (onLoad) { const t = blurIn(el, { delay }); return () => { t.kill(); }; }
+    let done = false;
+    const play = () => { if (!done) { done = true; blurIn(el, { delay }); } };
+    const st = ScrollTrigger.create({ trigger: el, start: "top 92%", once: true, onEnter: play });
+    // a block already above that line (page opened mid-way, a tab switched in) plays straight away
+    const id = requestAnimationFrame(() => { if (st.scroll() >= st.start) play(); });
+    return () => { cancelAnimationFrame(id); st.kill(); };
+  }, [onLoad, delay]);
+  // no orphans: the block's last two words never part (a no-break space), whether they share a run or not
+  const list = segs ?? [{ t: text ?? "" }], last = list.length - 1;
+  const words = list.reduce((n, x) => n + x.t.trim().split(/\s+/).length, 0);
+  const lastRun = list[last]?.t.trim() ?? "", single = !/\s/.test(lastRun);
+  const body = list.map((s, k) => {
+    const t = k === last && words > 2 && !single ? s.t.trim().replace(/\s+(\S+)$/, "\u00a0$1") : s.t;
+    const gap = k === 0 ? null : s.br ? <br key={`b${k}`} /> : k === last && words > 2 && single ? "\u00a0" : " ";
+    return [gap, s.i ? <span key={k} className="t-accent">{t}</span> : <span key={k}>{t}</span>];
+  });
+  const Tag = as as ElementType;
+  return <Tag ref={root} className={className} data-reveal="">{body}</Tag>;
 }

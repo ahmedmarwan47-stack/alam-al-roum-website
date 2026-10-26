@@ -20,6 +20,31 @@ export function SegmentedToggle({ options, value, onChange }: { options: readonl
   );
 }
 
+type Community = (typeof communities)[number];
+
+/**
+ * The staggered three-column community grid (Figma Communities · Grid). Card sizes belong to the grid slots,
+ * so a shorter list (Other communities, the current one hidden) keeps the same rhythm.
+ */
+export function CommunityGrid({ items, className = "" }: { items: Community[]; className?: string }) {
+  return (
+    <div className={`grid w-full gap-x-3 gap-y-14 sm:grid-cols-2 lg:grid-cols-[492fr_380fr_496fr] ${className}`}>
+      {items.map((c, k) => {
+        const slot = communities[k % communities.length].card;
+        return (
+          <Link key={c.slug} href={`/communities/${c.slug}`} className="group flex flex-col gap-[10px] self-start">
+            <div className="overflow-hidden" style={{ aspectRatio: `${slot.w} / ${slot.h}` }}>
+              <RevealImage src={c.photo} alt={c.name} delay={(k % 3) * 0.08} className="h-full w-full"
+                imgClassName="transition-transform duration-[1.2s] [transition-timing-function:var(--ease-site)] group-hover:scale-[1.05]" />
+            </div>
+            <span className="t-heading hd-24 text-black">{c.name}</span>
+            <span className="t-body b-14 text-black/60">{c.body}</span>
+          </Link>);
+      })}
+    </div>
+  );
+}
+
 /**
  * Section / Communities (Map · Grid), Figma 10921:12509: one viewport with a Map / Grid toggle.
  * Map = the masterplan with pins (Beachfront open), Grid = the six community cards in a staggered flow.
@@ -31,20 +56,7 @@ export default function CommunitiesExplorer() {
     <section className="flex flex-col items-center gap-10 bg-white pt-20">
       <SectionTitle tag={S.tag} title={S.title} body={S.body} className="container-x" />
       <SegmentedToggle options={S.toggle} value={view} onChange={setView} />
-      {view === 0
-        ? <MasterplanMap image={S.masterplan} pins={pins} />
-        : (
-          <div className="grid w-full gap-x-3 gap-y-14 pb-20 container-x sm:grid-cols-2 lg:grid-cols-[492fr_380fr_496fr]">
-            {communities.map((c, k) => (
-              <Link key={c.slug} href={`/communities/${c.slug}`} className="group flex flex-col gap-[10px] self-start">
-                <div className="overflow-hidden" style={{ aspectRatio: `${c.card.w} / ${c.card.h}` }}>
-                  <RevealImage src={c.photo} alt={c.name} delay={(k % 3) * 0.08} className="h-full w-full"
-                    imgClassName="transition-transform duration-[1.2s] [transition-timing-function:var(--ease-site)] group-hover:scale-[1.05]" />
-                </div>
-                <span className="t-heading hd-24 text-black">{c.name}</span>
-                <span className="t-body b-14 text-black/60">{c.body}</span>
-              </Link>))}
-          </div>)}
+      {view === 0 ? <MasterplanMap image={S.masterplan} pins={pins} /> : <CommunityGrid items={communities} className="pb-20 container-x" />}
     </section>
   );
 }

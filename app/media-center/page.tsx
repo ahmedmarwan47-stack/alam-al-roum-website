@@ -3,7 +3,7 @@ import ListingHero from "@/components/sections/ListingHero";
 import TabbedGrid from "@/components/sections/TabbedGrid";
 import Cta from "@/components/sections/Cta";
 import Footer from "@/components/sections/Footer";
-import { mediaPage } from "@/lib/listings";
+import { mediaPage, mediaBlog } from "@/lib/listings";
 
 export const metadata = { title: "Media Center — Alam Al Roum" };
 
@@ -13,7 +13,7 @@ export default function MediaCenterPage() {
     <main>
       <Navbar />
       <ListingHero title={mediaPage.title} body={mediaPage.body} />
-      <TabbedGrid tabs={mediaPage.tabs} lists={[mediaPage.blog, mediaPage.news]} kind="story" />
+      <TabbedGrid tabs={mediaPage.tabs} lists={[mediaBlog, mediaPage.news]} kind="story" />
       <Cta />
       <Footer />
     </main>

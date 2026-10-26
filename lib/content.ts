@@ -86,9 +86,9 @@ export const connectivity = {
   body: "The city moves at its own pace, yet the world remains close. Six capitals sit within a five-hour flight, and the coastal road, two airports and a marina link it to the rest of Egypt.",
   listLabel: "Connected to Egypt",
   items: [
-    ["International Coastal Road", "Direct access from Cairo and the wider Egyptian network.", "road-01"],
-    ["Ras El Hekma Airport", "The nearest international gateway, minutes away.", "airplane-01"],
-    ["Marsa Matrouh International Airport", "Established regional air access.", "airplane-01"],
+    ["International Coastal Road", "Direct access from Cairo and the wider Egyptian network.", "road"],
+    ["Ras El Hekma Airport", "The nearest international gateway, minutes away.", "airplane-landing-01"],
+    ["Marsa Matrouh International Airport", "Established regional air access.", "airplane-take-off-01"],
     ["Future High-Speed Rail", "Integration into the national rail network under development.", "train-01"],
     ["Integrated Marina", "International yachting access connecting the Mediterranean network.", "sailboat-offshore"],
   ].map(([title, body, icon]) => ({ title, body, icon })),
@@ -144,7 +144,7 @@ export const news = {
   tag: "News & Blogs", title: "Media Center", body: "Updates from Alam Al Roum and its progress", cta: "View all",
   items: [
     ["News", "3 min read", "Phase one construction begins on the coast", "ui-pm-visit", "/media-center/phase-1-construction-begins-august-2026"],
-    ["Blog", "5 min read", "Lighthouse that guided the romans", "ui-g-boardwalk", "/media-center/the-lighthouse-that-guided-rome-home"],
+    ["Blog", "5 min read", "Lighthouse that guided the romans", "ui-lighthouse-aerial", "/media-center/the-lighthouse-that-guided-rome-home"],
     ["News", "4 min read", "Drawing a city from the coastline", "ui-g-coast", "/media-center/masterplan-unveiled-with-som"],
   ].map(([tag, read, title, p, href]) => ({ tag, read, title, photo: ph(p), href })),
 };

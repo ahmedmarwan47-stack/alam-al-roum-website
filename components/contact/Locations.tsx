@@ -17,7 +17,7 @@ export default function Locations() {
             className="absolute flex -translate-y-1/2 items-center gap-1.5 rounded-full bg-white px-3 py-1.5 t-label l-12 text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)]">
             <Icon name="location-01" size={14} />{name}
           </span>))}
-        <span className="absolute inset-x-0 bottom-0 hidden bg-white/70 px-2 py-1 t-text text-[10px] leading-3 text-black/80 md:block">{L.credit}</span>
+        <span className="absolute inset-x-0 bottom-0 hidden bg-white/70 px-2 py-1 t-text text-[10px] leading-3 truncate text-black/80 md:block">{L.credit}</span>
       </div>
       <div className="grid gap-10 md:grid-cols-3 md:gap-6">
         {L.offices.map((o) => (

@@ -12,7 +12,7 @@ const hrefFor = (title: string) => {
 export default function Masterplan() {
   return (
     <section className="flex flex-col gap-10 bg-limestone-50 pt-20">
-      <SectionTitle tag={masterplan.tag} title={masterplan.title} body={masterplan.body} className="container-x" />
+      <SectionTitle tag={masterplan.tag} title={masterplan.title} body={masterplan.body} bodyWidth={704} className="container-x" />
       <MasterplanMap image={masterplan.image} pins={masterplan.pins.map((p) => ({ ...p, href: hrefFor(p.title) }))} />
     </section>
   );

@@ -14,17 +14,17 @@ type R = { title: string; body: string; photo: string };
 function Row({ i, r, ghost }: { i: number; r: R; ghost?: boolean }) {
   const num = String(i + 1).padStart(2, "0");
   if (ghost) return (
-    <div className="flex items-center px-8 py-8" aria-hidden>
-      <span className="w-[120px] t-label l-14">{num}</span>
-      <span className="flex-[0_0_42%] t-heading hd-32">{r.title}</span>
-      <span className="flex-1 pl-10 t-body b-16">{r.body}</span>
+    <div className="flex flex-wrap items-center gap-y-2 py-6 md:flex-nowrap md:px-8 md:py-8" aria-hidden>
+      <span className="w-12 t-label l-14 md:w-[120px]">{num}</span>
+      <span className="flex-1 t-heading hd-32 md:flex-[0_0_42%]">{r.title}</span>
+      <span className="order-last basis-full pl-12 t-body b-16 md:order-none md:flex-1 md:basis-auto md:pl-10">{r.body}</span>
       <span className="h-11 w-11" />
     </div>);
   return (
-    <Link href={`/experiences/${slugify(r.title)}`} data-row={i} className="group relative flex items-center border-b border-limestone-600 px-8 py-8">
-      <span className="w-[120px] t-label l-14 text-limestone-800 transition-colors duration-300 group-hover:text-teal-600">{num}</span>
-      <span className="flex-[0_0_42%]"><RevealText as="h3" text={r.title} className="t-heading hd-32" /></span>
-      <span className="flex-1 pl-10 text-limestone-800"><RevealText text={r.body} className="t-body b-16" delay={0.08} /></span>
+    <Link href={`/experiences/${slugify(r.title)}`} data-row={i} className="group relative flex flex-wrap items-center gap-y-2 border-b border-limestone-600 py-6 md:flex-nowrap md:px-8 md:py-8">
+      <span className="w-12 t-label l-14 text-limestone-800 transition-colors duration-300 group-hover:text-teal-600 md:w-[120px]">{num}</span>
+      <span className="flex-1 md:flex-[0_0_42%]"><RevealText as="h3" text={r.title} className="t-heading hd-32" /></span>
+      <span className="order-last basis-full pl-12 text-limestone-800 md:order-none md:flex-1 md:basis-auto md:pl-10"><RevealText text={r.body} className="t-body b-16" delay={0.08} /></span>
       <span className="grid h-11 w-11 place-items-center rounded-full border border-limestone-600 transition-[background-color,border-color,color,transform] duration-500 [transition-timing-function:var(--ease-btn)] group-hover:border-deepsea-500 group-hover:bg-deepsea-500 group-hover:text-limestone-50 group-hover:-rotate-45">
         <Icon name="arrow-right-01-sharp" size={18} /></span>
     </Link>);

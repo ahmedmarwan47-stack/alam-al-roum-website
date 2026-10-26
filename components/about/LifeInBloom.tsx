@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 import "@/lib/about/a-motion";
-import { splitChars, writeIn } from "@/components/reveal/letters";
+import { blurIn } from "@/components/reveal/letters";
 import { bloom as B } from "@/lib/about/a-content";
 
 const pct = (v: number) => `${v}%`;
@@ -13,18 +13,16 @@ const pct = (v: number) => `${v}%`;
  * bleed (dim 25 → 30 %), while the scallop-shell and Ionic-capital cut-outs drift out past the corners, growing
  * 300 → 360 → 420px, turning further and fading on the last leg.
  * The cut-outs sit a touch smaller than Figma's 300 px (265) and blur as they drift outward with the scroll.
- * Once the section lands, the title and the quote write themselves in, letter by letter from a pale blur.
+ * Once the section lands, the title and then the quote blur in, each as one block.
  */
 export default function LifeInBloom() {
   const root = useRef<HTMLElement>(null);
   useEffect(() => {
     if (reducedMotion()) return;
     const el = root.current!, q = gsap.utils.selector(el);
-    // entrance: the copy writes itself in once the section lands
-    const copy = gsap.timeline({ paused: true })
-      .add(writeIn(splitChars(q("[data-title]")[0] as HTMLElement), 0.045, 0.7))
-      .add(writeIn(splitChars(q("[data-body]")[0] as HTMLElement), 0.008, 0.6), "-=0.4");
-    const copyST = ScrollTrigger.create({ trigger: el, start: "top 35%", onEnter: () => copy.play(), onLeaveBack: () => copy.reverse() });
+    // entrance: the copy blurs in once the section lands
+    const copy = gsap.timeline({ paused: true }).add(blurIn(q("[data-title], [data-body]"), { stagger: 0.2 }));
+    const copyST = ScrollTrigger.create({ trigger: el, start: "top 35%", once: true, onEnter: () => copy.play() });
     const mm = gsap.matchMedia();
     mm.add({ lg: "(min-width: 1024px)", sm: "(max-width: 1023px)" }, (ctx) => {
       const lg = ctx.conditions!.lg;
@@ -67,8 +65,8 @@ export default function LifeInBloom() {
         </div>
       ))}
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 text-center text-limestone-50 container-x">
-        <h2 data-title data-no-blur className="t-heading hd-56">{B.title}</h2>
-        <p data-body data-no-blur className="t-body b-14 max-w-[520px]">{B.body}</p>
+        <h2 data-title data-reveal className="t-heading hd-56">{B.title}</h2>
+        <p data-body data-reveal className="t-body b-14 max-w-[520px]">{B.body}</p>
       </div>
     </section>
   );

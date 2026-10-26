@@ -11,7 +11,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${haas.variable} ${immortel.variable}`}>
+    <html lang="en" className={`${haas.variable} ${immortel.variable}`} suppressHydrationWarning>
+      {/* marks a scripted page before first paint, so text that blurs in starts hidden instead of flashing */}
+      <head><script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} /></head>
       <body>
         <SmoothScroll />
         {children}
