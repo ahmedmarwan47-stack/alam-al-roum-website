@@ -26,7 +26,7 @@ export default function Connectivity({ tag, compact = false }: { tag?: string; c
         </div>
         <RevealText text={c.body} className="t-body b-18 max-w-[607px] text-limestone-50/80" delay={0.1} />
         <div className="flex flex-col gap-4">
-          <span className="t-text x-16 text-limestone-50/70">{c.listLabel}</span>
+          <span className="t-label l-16 uppercase text-limestone-50/70">{c.listLabel}</span>
           <div className="flex flex-col">
             {c.items.map((it, k) => (
               <div key={it.title} className="flex gap-6 border-b border-limestone-50/15 py-5">

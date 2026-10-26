@@ -19,16 +19,15 @@ export const grandeur = {
   tag: "GRANDEUR RESTORED",
   title: "A year-round city, not a seasonal resort",
   body: "Alam Al Roum is built for those who return. A place of permanence, rooted in the history of a coastline that once guided sailors home.",
-  cta: "About us",
   /**
-   * UI / Grandeur Constellation (Figma 10921:28032), section 1512 × 1080, in Figma's layer order.
+   * UI / Grandeur Constellation (Figma 10921:28032; copy as overridden on the Home instance 10921:8525), 1512 × 1080.
    * x, y = Scattered; sx, sy = Stacked (behind the headline); w, h = size.
    */
   cards: [
     { kind: "image", src: ph("ui-expcenter-facade"), x: 150, y: 110, sx: 481, sy: 95, w: 210, h: 270 },
-    { kind: "stat", label: "CITY AREA", value: "20.58M", note: "Square metres of masterplanned coast", x: 395, y: 190, sx: 572, sy: 120, w: 249, h: 120 },
+    { kind: "stat", label: "INVESTMENT", value: "$29.7Bn", note: "Total investment in the city", x: 395, y: 190, sx: 572, sy: 120, w: 249, h: 120 },
     { kind: "image", src: ph("ui-v-lounge"), x: 990, y: 80, sx: 746, sy: 85, w: 240, h: 230 },
-    { kind: "stat", label: "SHORELINE", value: "7.2 km", note: "A rare natural Mediterranean bay", x: 1250, y: 210, sx: 838, sy: 190, w: 216, h: 120 },
+    { kind: "stat", label: "LAGOONS", value: "22 km", note: "Seawater-connected lagoons", x: 1250, y: 210, sx: 838, sy: 190, w: 216, h: 120 },
     { kind: "image", src: ph("ui-g-pool"), x: 1240, y: 470, sx: 816, sy: 220, w: 180, h: 180 },
     { kind: "image", src: ph("ui-v-lounger"), x: 110, y: 520, sx: 486, sy: 240, w: 160, h: 160 },
     { kind: "chip", label: "Year-round · 365 days", dark: true, x: 1170, y: 410, sx: 753, sy: 144, w: 167, h: 32 },

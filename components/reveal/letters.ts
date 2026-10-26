@@ -5,7 +5,11 @@ import { gsap } from "@/lib/gsap";
  * softly blurred ghost to full ink, one after another from left to right, so a headline "writes" itself in.
  */
 
-/** Wraps every character of `el`'s text in a span (spaces stay text, words never break). Idempotent. */
+/**
+ * Wraps every character of `el`'s text in a span (spaces stay text, words never break). Idempotent.
+ * A `capitalize` text-transform is applied to the text itself first: once each letter sits in its own box,
+ * CSS would otherwise capitalise every letter.
+ */
 export function splitChars(el: HTMLElement): HTMLElement[] {
   if (el.dataset.split) return Array.from(el.querySelectorAll<HTMLElement>("[data-ch]"));
   el.dataset.split = "1";
@@ -13,11 +17,14 @@ export function splitChars(el: HTMLElement): HTMLElement[] {
     for (const child of Array.from(node.childNodes)) {
       if (child.nodeType === Node.TEXT_NODE) {
         const frag = document.createDocumentFragment();
-        for (const word of (child.textContent ?? "").split(/(\s+)/)) {
+        const cap = getComputedStyle(child.parentElement ?? el).textTransform === "capitalize";
+        for (let word of (child.textContent ?? "").split(/(\s+)/)) {
           if (!word) continue;
           if (/^\s+$/.test(word)) { frag.append(word); continue; }
+          if (cap) word = word.charAt(0).toUpperCase() + word.slice(1);
           const w = document.createElement("span");
           w.style.display = "inline-block"; w.style.whiteSpace = "nowrap";
+          if (cap) w.style.textTransform = "none";
           for (const c of word) {
             const s = document.createElement("span");
             s.dataset.ch = ""; s.style.display = "inline-block"; s.textContent = c;

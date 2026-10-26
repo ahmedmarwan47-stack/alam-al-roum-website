@@ -29,7 +29,7 @@ export default function MasterplanMap({ image, pins, initial = 0 }: { image: str
               <div className={`absolute top-0 flex w-[300px] max-w-[70vw] -translate-y-[45%] flex-col gap-3 rounded-xl bg-limestone-50 p-3 pb-4 shadow-[0_24px_60px_rgb(1_15_26/.18)] animate-[pinCard_.3s_var(--ease-fig-out)_both] ${right ? "left-7 origin-left" : "right-7 origin-right"}`}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={p.photo} alt="" className="h-[150px] w-full rounded-lg object-cover" />
-                <span className="px-1 t-heading hd-20">{p.title}</span>
+                <span className="px-1 t-label l-14">{p.title}</span>
                 <span className="px-1 t-body b-14 text-limestone-800">{p.body}</span>
                 <span className="px-1"><Button label="Explore" href={p.href ?? "/communities"} variant="outline" /></span>
               </div>

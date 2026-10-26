@@ -6,7 +6,7 @@ type Variant = "primary" | "light" | "outline" | "outline-light";
  *  Renders a link by default, or a form submit button with `submit`. */
 export default function Button({ label, href = "#", variant = "primary", size = 48, icon = "arrow-up-right", className = "", submit = false }:
   { label: string; href?: string; variant?: Variant; size?: 48 | 54 | 64; icon?: string; className?: string; submit?: boolean }) {
-  const text = size === 64 ? "x-20" : "x-16";
+  const text = size === 64 ? "x-18" : "x-16";   // Figma Button/18 on 64, Button/16 on 48 and 54
   const cls = `btn btn-${variant} btn-${size} t-text ${text} ${className}`;
   const inner = (
     <>

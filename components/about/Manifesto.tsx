@@ -34,7 +34,7 @@ export default function Manifesto() {
       };
       const tl = gsap.timeline({
         defaults: { ease: "none" },
-        scrollTrigger: { trigger: el, start: "top top", end: "+=80%", pin: true, scrub: 1, invalidateOnRefresh: true },
+        scrollTrigger: { trigger: el, start: "top 76px", end: "+=80%", pin: true, scrub: 1, invalidateOnRefresh: true },   // starts with the first pixel of scroll
       })
         .fromTo(q("[data-clip]"), { clipPath: box }, { clipPath: "inset(0px 0px 0px 0px)", duration: 1 }, 0)
         .fromTo(q("[data-clip] img"), { scale: 1.15 }, { scale: 1, duration: 1 }, 0)
@@ -49,7 +49,7 @@ export default function Manifesto() {
   return (
     <section ref={root} className="relative mt-[76px] overflow-hidden bg-limestone-50 lg:h-[calc(100svh-76px)] lg:min-h-[640px]">
       <div data-copy className="relative z-10 flex flex-col gap-3 py-16 text-deepsea-500 container-x lg:absolute lg:inset-0 lg:justify-center lg:py-0">
-        <h1 data-no-blur className="t-heading hd-56" style={{ textTransform: "capitalize" }}>
+        <h1 data-no-blur className="t-heading hd-56 leading-none!" style={{ textTransform: "capitalize" }}>
           <span className="block">
             <span className="rt-line align-top" style={{ display: "inline-block" }}><span data-l1 className="rt-inner">{M.line1}</span></span>{" "}
             <span data-accent className="t-accent inline-block" style={{ textTransform: "capitalize" }}>{M.accent}</span>

@@ -3,12 +3,14 @@ import RevealImage from "@/components/reveal/RevealImage";
 import RevealText from "@/components/reveal/RevealText";
 import { cta as C } from "@/lib/content";
 
-/** Live Greatness: the portal film fades to white; left-aligned copy (Figma CTA · 720 px, fixed). */
+/** CTA / Live Greatness (Figma 10921:12607): the portal film under a white radial vignette; left-aligned copy, 720 px. */
 export default function Cta() {
   return (
     <section className="relative h-[720px] overflow-hidden bg-limestone-50">
       <RevealImage src={C.video} video className="absolute inset-0" />
-      <div className="pointer-events-none absolute inset-0 opacity-35" style={{ background: "radial-gradient(ellipse at center, transparent 30%, #FBFAF8 85%)" }} />
+      {/* Figma "White vignette": 60 % of a radial fade to Limestone 50 (0 → 5 % at half → 80 % → solid) */}
+      <div className="pointer-events-none absolute inset-0 opacity-60"
+        style={{ background: "radial-gradient(farthest-side, rgb(251 250 248 / 0) 0%, rgb(251 250 248 / .05) 50%, rgb(251 250 248 / .8) 75%, #FBFAF8 90%)" }} />
       <div className="relative flex h-full flex-col justify-center gap-10 container-x">
         <div className="flex max-w-[768px] flex-col gap-6">
           <RevealText as="h2" segs={C.title} className="t-heading hd-48" />

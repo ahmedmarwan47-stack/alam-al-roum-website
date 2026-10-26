@@ -114,7 +114,7 @@ export default function TheStory() {
           <span className="t-label l-14">{S.history.label}</span>
           <h2 className="flex flex-col">
             <span className="t-heading hd-56 normal-case!">{S.history.line}</span>
-            <span className="t-accent hd-56">{S.history.accent}</span>
+            <span className="t-accent hd-56 leading-[1.071]!">{S.history.accent}</span>
           </h2>
         </div>
 

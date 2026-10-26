@@ -28,7 +28,7 @@ export default function BlurInOut() {
       }
       const tweens = picked.map((el) =>
         gsap.fromTo(el, { filter: "blur(12px)", opacity: 0.35 }, { filter: "blur(0px)", opacity: 1, ease: "none",
-          scrollTrigger: { trigger: el, start: "top 98%", end: "top 74%", scrub: 1 } }));
+          scrollTrigger: { trigger: el, start: "top 100%", end: "top 90%", scrub: 1 } }));
       ScrollTrigger.refresh();
       kill = () => tweens.forEach((t) => { t.scrollTrigger?.kill(); t.kill(); gsap.set(t.targets(), { clearProps: "filter,opacity" }); });
     });

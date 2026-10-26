@@ -9,7 +9,7 @@ const FRAMES = 185;
 const src = (i: number) => `/seq/marina-hd/${String(i + 1).padStart(4, "0")}.webp`;
 const pct = (v: number, of: number) => `${(v / of) * 100}%`;
 const Bars = () => (
-  <span className="flex h-7 items-end gap-[3px]">{[9, 15, 12, 20, 27].map((h, k) => <i key={k} className="block w-[6px] rounded-[1px] bg-white/60" style={{ height: h }} />)}</span>
+  <span className="flex h-7 items-end gap-[3px]">{[9, 15, 12, 20, 27].map((h, k) => <i key={k} className="block w-[6px] rounded-[1px] bg-deepsea-300" style={{ height: h }} />)}</span>
 );
 /** Parallax speed per card (px of drift over the section's pass): each card rises at its own pace. */
 const SPEED = [140, 90, 170, 110, 60, 150, 80, 190, 70, 130, 100, 160];
@@ -75,14 +75,14 @@ export default function ScrollStory() {
                 <img src={c.src} alt="" className="h-full w-full object-cover" />
               </div>
             ) : c.kind === "stat" ? (
-              <div className="flex flex-col gap-3 rounded-lg bg-[#141414] px-4 py-[14px]">
-                <span className="t-label l-12 text-white/60">{c.label}</span>
-                <span className="flex items-end justify-between"><span className="t-text x-28 text-white">{c.value}</span><Bars /></span>
-                <span className="t-text x-12 text-white/60">{c.note}</span>
+              <div className="flex flex-col gap-3 rounded-lg bg-deepsea-500 px-4 py-[14px]">
+                <span className="t-label l-12 text-deepsea-200">{c.label}</span>
+                <span className="flex items-end justify-between"><span className="t-text x-28 text-limestone-50">{c.value}</span><Bars /></span>
+                <span className="t-text x-12 text-deepsea-200">{c.note}</span>
               </div>
             ) : (
-              <span className={`inline-flex items-center gap-2 whitespace-nowrap rounded-md px-[14px] py-2 t-label l-12 ${c.dark ? "bg-[#141414] text-white" : "bg-[#ededed] text-[#141414]"}`}>
-                <i className={`block h-2 w-2 rounded-full ${c.dark ? "bg-white" : "bg-[#141414]"}`} />{c.label}
+              <span className={`inline-flex items-center gap-2 whitespace-nowrap rounded-md px-[14px] py-2 t-label l-12 ${c.dark ? "bg-deepsea-500 text-limestone-50" : "bg-limestone-100 text-deepsea-500"}`}>
+                <i className={`block h-2 w-2 rounded-full ${c.dark ? "bg-limestone-50" : "bg-deepsea-600"}`} />{c.label}
               </span>
             )}
           </div>
@@ -91,7 +91,6 @@ export default function ScrollStory() {
           <span className="rounded bg-limestone-100 px-[10px] py-1 t-label l-12">{grandeur.tag}</span>
           <RevealText as="h2" text={grandeur.title} className="t-heading hd-56 text-deepsea-500" />
           <RevealText text={grandeur.body} className="t-body b-18 max-w-[620px] text-limestone-800" delay={0.15} />
-          <Button label={grandeur.cta} href="/about" variant="light" />
         </div>
       </div>
 

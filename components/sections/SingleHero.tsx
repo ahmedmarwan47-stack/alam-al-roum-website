@@ -13,7 +13,7 @@ export default function SingleHero({ data: H }: { data: SingleHeroData }) {
   const media = useRef<HTMLDivElement>(null), wrap = useRef<HTMLElement>(null);
   useEffect(() => {
     if (reducedMotion()) return;
-    const t = gsap.to(media.current, { yPercent: 12, scale: 1.06, ease: "none", scrollTrigger: { trigger: wrap.current, start: "top top", end: "bottom top", scrub: true } });
+    const t = gsap.to(media.current, { yPercent: 12, scale: 1.06, ease: "none", scrollTrigger: { trigger: wrap.current, start: "top 76px", end: "bottom top", scrub: true } });
     return () => { t.scrollTrigger?.kill(); t.kill(); };
   }, []);
   return (

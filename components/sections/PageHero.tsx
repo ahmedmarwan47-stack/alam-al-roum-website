@@ -24,9 +24,9 @@ export default function PageHero({ data: H }: { data: PageHeroData }) {
       .fromTo(el, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 1.1, ease: "power3.out" }, 0)
       .fromTo(rule.current, { scaleX: 0 }, { scaleX: 1, duration: 1.1, ease: "power3.out" }, 0);
     if (!window.matchMedia("(min-width: 1024px)").matches) return () => { intro.kill(); };
-    // Shown → Full, scrubbed (Figma: 1.4 s cubic-bezier(.76,0,.24,1))
-    const tl = gsap.timeline({ defaults: { ease: "power2.inOut" },
-      scrollTrigger: { trigger: wrap.current, start: "top top", end: "+=110%", scrub: 1, pin: true } });
+    // Shown → Full, scrubbed
+    const tl = gsap.timeline({ defaults: { ease: "none" },   // linear: it visibly moves from the very first pixel of scroll
+      scrollTrigger: { trigger: wrap.current, start: "top 76px", end: "+=110%", scrub: 1, pin: true } });   // 76 = under the bar: grows from the first pixel of scroll
     tl.to(el, { left: "0%", top: "0%", width: "100%", height: "100%", borderRadius: 0 }, 0)
       .to(dim.current, { opacity: 0.75 }, 0)
       .to(rule.current, { opacity: 0 }, 0)
