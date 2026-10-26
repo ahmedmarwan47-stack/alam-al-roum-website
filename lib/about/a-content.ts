@@ -15,20 +15,21 @@ export const bloom = {
   alt: { title: "Life in bloom", body: "Shaded courtyards, olive trees and bougainvillea: the gardens are planted for the coast, green in every season." },
   image: "/images/about/a-botanical.jpg",
   /**
-   * Cut-outs per state, as centres in % of the 1512 × 1000 frame, width in % of 1512 and CSS rotation
-   * (Figma's rotation is counter-clockwise, so the sign is flipped). Rest → Scrolled → Full.
+   * Cut-outs (Figma UI / Section / Botanical Frame 10979:18297): scallop shells on the left, Ionic capital fragments
+   * on the right. Per state, the centre in % of the 1512 × 1000 frame and the CSS rotation (Figma's rotation is
+   * counter-clockwise, so the sign is flipped); `flip` mirrors the image as Figma does. Rest → Scrolled → Full.
    */
   cutouts: [
-    { src: "/images/about/a-bougainvillea.webp", rest: [19.16, 23.03, 20], scrolled: [11.26, 12, 32], full: [-21.16, -26.01, 50] },
-    { src: "/images/about/a-olive.webp", rest: [80.84, 23.97, -160], scrolled: [88.74, 12.97, -172], full: [121.15, -26.03, -170] },
-    { src: "/images/about/a-bougainvillea.webp", rest: [17.87, 78.97, -20], scrolled: [9.92, 89.03, -32], full: [-21.17, 126.01, -50] },
-    { src: "/images/about/a-olive.webp", rest: [82.13, 78.03, 160], scrolled: [90.06, 87.98, 172], full: [121.14, 125.97, 190] },
-  ] as { src: string; rest: number[]; scrolled: number[]; full: number[] }[],
+    { src: "/images/about/a-scallop.webp", flip: true, rest: [17.35, 19.99, -35], scrolled: [3.95, 9.94, -35], full: [-29.5, -50.37, -35] },
+    { src: "/images/about/a-ionic.webp", flip: true, rest: [78.03, 16.22, 180], scrolled: [96.03, 7.2, 180], full: [111.03, -34.33, 180] },
+    { src: "/images/about/a-scallop.webp", flip: false, rest: [16.93, 76.74, 25], scrolled: [4.51, 91.97, 25], full: [-29.83, 125.86, 25] },
+    { src: "/images/about/a-ionic.webp", flip: true, rest: [78.04, 76.65, 180], scrolled: [96.03, 96.5, 180], full: [111.03, 117.67, 180] },
+  ] as { src: string; flip: boolean; rest: number[]; scrolled: number[]; full: number[] }[],
 };
 
 /** UI / Section / Split Merge (10979:18325) */
 export const facts = {
-  title: "A fully integrated coastal city",
+  title: "A fully integrated coastal city",   // set as "A Fully Integrated / Coastal City"
   body: "Developed by Qatari Diar, Alam Al Roum brings together residential, hospitality, commercial, cultural and recreational destinations within a future-ready urban environment designed to evolve.",
   image: "/images/about/a-courtyard.jpg",
   items: [

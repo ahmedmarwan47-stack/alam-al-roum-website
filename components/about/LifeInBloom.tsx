@@ -10,7 +10,7 @@ const pct = (v: number) => `${v}%`;
 /**
  * UI / Section / Botanical Frame, scroll-scrubbed while pinned: Rest → Scrolled (Figma 1.2 s) → Full (1.3 s,
  * after 0.2 s), all on the 0.76/0/0.24/1 in-out. The framed photo opens from 1000 × 620 to 1200 × 740 to full
- * bleed (dim 25 → 30 %), while the bougainvillea and olive cut-outs drift out past the corners, growing
+ * bleed (dim 25 → 30 %), while the scallop-shell and Ionic-capital cut-outs drift out past the corners, growing
  * 300 → 360 → 420px, turning further and fading on the last leg.
  * Before the pin, as the section scrolls up into place (the ERA Residence entrance): the flowers and olives ride
  * in from their corners — the top pair down from above, the bottom pair up from below — and once it lands the
@@ -62,9 +62,11 @@ export default function LifeInBloom() {
       {B.cutouts.map((c, k) => (
         // the outer layer rides in (entrance), the inner one drifts out (pinned states)
         <div key={k} data-cut-in className="pointer-events-none absolute inset-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img data-cut src={c.src} alt="" aria-hidden className="absolute w-[36%] lg:w-[19.84%]"
-            style={{ left: pct(c.rest[0]), top: pct(c.rest[1]), transform: `translate(-50%, -50%) rotate(${c.rest[2]}deg)` }} />
+          <div data-cut className="absolute w-[36%] lg:w-[19.84%]"
+            style={{ left: pct(c.rest[0]), top: pct(c.rest[1]), transform: `translate(-50%, -50%) rotate(${c.rest[2]}deg)` }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={c.src} alt="" aria-hidden className="w-full" style={c.flip ? { transform: "scaleX(-1)" } : undefined} />
+          </div>
         </div>
       ))}
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 text-center text-limestone-50 container-x">

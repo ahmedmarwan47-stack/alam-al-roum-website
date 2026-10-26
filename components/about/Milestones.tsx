@@ -7,7 +7,7 @@ import { milestones as M } from "@/lib/about/b-content";
 /** Figma "UI / Milestone" (10979:18571…): 400 wide, 15 ticks 24 apart from x 24, ticks 56 at rest → 136 at the focus. */
 const CARD = 400, TICKS = 15, TICK_X0 = 24, TICK_GAP = 25, LOW = 56, HIGH = 136;
 /** Half-width of the tick wave (px) and the section's natural height in Figma (1076, minus nothing: it is scaled to fit). */
-const SPREAD = 190, NATURAL_H = 1076;
+const SPREAD = 190, NATURAL_H = 1076, GUTTER = 60;
 
 /** One milestone: the year, the tick rhythm, then (when it is the one in focus) its long line, description and photo. */
 function Milestone({ i }: { i: number }) {
@@ -33,9 +33,9 @@ function Milestone({ i }: { i: number }) {
 
 /**
  * Milestones · phase one (Figma 10921:8293). The section is exactly one viewport: it pins, and its Figma layout
- * is scaled to fit the screen's height. The scroll moves the rail so the milestones pass through the centre one
- * at a time (snapping to each); the one in focus is fully shown with its long line, description and photo, and
- * the others fade away. The ticks form one wave centred on the focus, computed from the scroll position itself
+ * is scaled to fit the screen's height. It opens as in Figma, with 2025 at the left gutter, and the scroll moves
+ * the rail left until 2030 sits in the centre; the milestones take the focus one at a time (snapping to each) —
+ * the one in focus is fully shown with its long line, description and photo, and the others fade away. The ticks form one wave centred on the focus, computed from the scroll position itself
  * (not from per-frame layout reads), so it glides with the smoothed scroll.
  */
 export default function Milestones() {
@@ -55,7 +55,9 @@ export default function Milestones() {
     const state = { f: 0 };   // the milestone in focus, as a float 0 … n-1
     const paint = () => {
       const f = state.f, fx = f * CARD + CARD / 2;
-      r.style.transform = `translate3d(${frame.current!.clientWidth / 2 - fx}px,0,0)`;
+      // the rail starts as in Figma (2025 at the 60 px gutter) and travels left until 2030 sits in the centre
+      const W = frame.current!.clientWidth, x0 = GUTTER, x1 = W / 2 - ((n - 1) * CARD + CARD / 2);
+      r.style.transform = `translate3d(${x0 + (x1 - x0) * (f / (n - 1))}px,0,0)`;
       cards.forEach((c, i) => {
         const near = Math.max(0, 1 - Math.abs(i - f));                 // 1 in focus → 0 one step away
         c.style.opacity = String(0.08 + 0.92 * near);
@@ -80,7 +82,7 @@ export default function Milestones() {
   return (
     <section ref={root} className="relative h-svh overflow-hidden bg-limestone-50">
       {/* the Figma frame (1076 tall) scaled to the viewport's height */}
-      <div ref={frame} className="flex h-full flex-col gap-20 pt-20" style={{ zoom, width: `${100 / zoom}%`, height: `${100 / zoom}%` }}>
+      <div ref={frame} className="flex h-full flex-col gap-20 pt-20" style={{ zoom, height: `${100 / zoom}%` }}>
         <SectionTitle tag={M.tag} title={M.title} body={M.body} className="mx-auto max-w-[920px] container-x" />
         <div ref={rail} className="flex w-max items-start will-change-transform">
           {M.items.map((m, i) => <Milestone key={m.year} i={i} />)}

@@ -18,6 +18,9 @@ const boxes = (s: State) => {
   return { l: win(l), r: win(r), il: pic(l, il), ir: pic(r, ir) };
 };
 
+/** "A Fully Integrated / Coastal City": "Coastal City" always on its own line. */
+const TITLE = [{ t: "A fully integrated" }, { t: "coastal city", br: true }];
+
 /**
  * UI / Section / Split Merge, scroll-scrubbed while pinned (lg up). Split → Merged (Figma 1.2 s): the two
  * offset halves slide together into one 880 × 560 picture. Merged → Full (1.4 s, after 0.35 s): the halves
@@ -66,7 +69,7 @@ export default function CoastalFacts() {
         ))}
         <div data-dim className="pointer-events-none absolute inset-0 bg-deepsea-600 opacity-0" />
         <div data-ink className="absolute left-[var(--gutter)] top-[9.375%] max-w-[780px] text-deepsea-500">
-          <RevealText as="h2" text={F.title} className="t-heading hd-56" />
+          <RevealText as="h2" segs={TITLE} className="t-heading hd-56" />
         </div>
         <p data-para className="absolute left-[72.22%] top-[78.125%] w-[300px] t-body b-14 text-deepsea-500">{F.body}</p>
         <div data-facts className="absolute inset-x-[var(--gutter)] top-[77.34%] grid grid-cols-4 gap-6 opacity-0">
@@ -81,7 +84,7 @@ export default function CoastalFacts() {
 
       {/* below lg: stacked */}
       <div className="flex flex-col gap-8 py-20 container-x lg:hidden">
-        <RevealText as="h2" text={F.title} className="t-heading hd-56 text-deepsea-500" />
+        <RevealText as="h2" segs={TITLE} className="t-heading hd-56 text-deepsea-500" />
         <RevealText text={F.body} className="t-body b-14 max-w-[420px] text-deepsea-500" delay={0.1} />
         <RevealImage src={F.image} alt="The Experience Centre courtyard" className="aspect-[3/2] w-full" />
         <div className="grid grid-cols-2 gap-x-6 gap-y-8">

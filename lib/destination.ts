@@ -21,7 +21,7 @@ export const inTown = {
 };
 
 export const waterStrategy = {
-  tag: "Environment", title: [{ t: "A city shaped by" }, { t: "water", i: true }],
+  tag: "Environment", title: [{ t: "A city shaped by" }, { t: "Water", i: true }],
   body: "A comprehensive water network manages resources across the destination, supporting the landscape and public spaces while enhancing environmental performance.",
   facts: [
     ["7.2 km", "Mediterranean shoreline"], ["22 km", "Total water frontage, incl. lagoons"],
