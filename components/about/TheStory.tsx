@@ -148,7 +148,7 @@ export default function TheStory() {
           <span data-g-slot aria-hidden className="invisible self-start t-accent hd-56">{G.word}</span>
           <h2 className="mt-[30px] flex flex-col">
             <span data-g-text className="t-heading hd-80 normal-case!">{G.line}</span>
-            <span data-g-text className="t-accent hd-56">{G.accent}</span>
+            {G.accent && <span data-g-text className="t-accent hd-56">{G.accent}</span>}
           </h2>
           <p data-g-text className="mt-8 max-w-[520px] t-body b-18">{G.body}</p>
         </div>

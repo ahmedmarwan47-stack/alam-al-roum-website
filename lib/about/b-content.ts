@@ -13,7 +13,7 @@ export const story = {
     line: "This Shoreline Guided Sailors Home",
     accent: "For Two Thousand Years.",
   },
-  // "A place taking shape" (UI / Motion Study · The Story, 11027:19127): the Experience Centre, in their real photos
+  // UI / Motion Study · The Story (11027:19127), as placed on About (11027:19600): copy and photos from the instance
   culture: {
     word: "Architecture",
     // headline lines, each word with its state-3 scatter position (frame x, y)
@@ -24,16 +24,16 @@ export const story = {
     ],
     body: "The Experience Centre is the first part of the city to stand: limestone walls, shaded courtyards and rooms that open onto the sea, built to be lived in every month of the year.",
     photos: [
-      { src: img("b-place-lounge.jpg"), alt: "The Experience Centre lounge, sea paintings above white sofas", x: 60, y: 300, w: 300, h: 400 },
-      { src: img("b-place-courtyard.jpg"), alt: "The Experience Centre courtyard with its stone sculpture and reflecting pool", x: 1152, y: 200, w: 300, h: 400 },
-      { src: img("b-place-lobby.jpg"), alt: "The Experience Centre lobby, glazed onto the sea", x: 1092, y: 640, w: 360, h: 200 },
+      { src: img("b-story-table.jpg"), alt: "A woman in a white dress walking barefoot on stone", x: 60, y: 300, w: 300, h: 400 },
+      { src: img("b-story-craft.jpg"), alt: "A man in a linen shirt aboard a boat", x: 1152, y: 200, w: 300, h: 400 },
+      { src: img("b-story-music.jpg"), alt: "A woman at the bow of a sailboat", x: 1092, y: 640, w: 360, h: 200 },
     ],
   },
   greatness: {
-    photo: img("b-story-greatness.jpg"),
-    word: "Greatness",
-    line: "Greatness Is What",
-    accent: "Remains",
+    photo: img("b-story-sea.jpg"),
+    word: "The Sea",
+    line: "Greatness Is What Remains",
+    accent: "",
     body: "Great cities are not measured by their launch but by what they still mean a century later. Alam Al Roum is built on that standard: permanence, scale, and craft.",
   },
 };
