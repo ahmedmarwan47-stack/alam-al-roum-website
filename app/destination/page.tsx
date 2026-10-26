@@ -27,7 +27,7 @@ export default function Destination() {
       <Landmarks />
       <Faq data={destFaq} />
       <Cta />
-      <Footer />
+      <Footer video />
     </main>
   );
 }
