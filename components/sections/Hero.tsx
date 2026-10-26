@@ -12,7 +12,7 @@ export default function Hero() {
         <div className="flex max-w-[716px] flex-col gap-5">
           <RevealText as="h1" segs={hero.title} onLoad delay={0.75} className="t-text x-80 capitalize" />
           <RevealText text={hero.body} onLoad delay={1.05} className="t-body b-16 max-w-[400px]" />
-          <div className="pt-1"><Button label={hero.cta} size={64} variant="primary" /></div>
+          <div className="pt-1"><Button label={hero.cta} href="/contact" size={64} variant="primary" /></div>
         </div>
         <div className="hidden flex-col items-end gap-[10px] md:flex">
           {/* eslint-disable-next-line @next/next/no-img-element */}

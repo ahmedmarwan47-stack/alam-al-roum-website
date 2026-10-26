@@ -14,7 +14,7 @@ export default function Cta() {
           <RevealText as="h2" segs={C.title} className="t-heading hd-48" />
           <RevealText text={C.body} className="t-body b-20 max-w-[420px] text-limestone-800" delay={0.1} />
         </div>
-        <div><Button label={C.cta} size={64} variant="light" /></div>
+        <div><Button label={C.cta} href="/contact" size={64} variant="light" /></div>
       </div>
     </section>
   );

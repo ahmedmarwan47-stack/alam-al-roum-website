@@ -10,7 +10,7 @@ export default function Communities() {
       <SectionTitle tag={communities.tag} title={communities.title} />
       <div className="grid w-full grid-cols-2 gap-6 lg:grid-cols-4">
         {communities.items.map((c) => (
-          <a key={c.name} href="#" className="group flex flex-col gap-5">
+          <a key={c.name} href={`/communities/${c.slug}`} className="group flex flex-col gap-5">
             <div className="relative aspect-square w-full overflow-hidden transition-transform duration-[.8s] [transition-timing-function:var(--ease-coin-spring)] group-hover:-rotate-[10deg]"
               style={{ WebkitMask: "url(/images/coin-silhouette.svg) center / contain no-repeat", mask: "url(/images/coin-silhouette.svg) center / contain no-repeat" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -23,7 +23,7 @@ export default function Communities() {
           </a>
         ))}
       </div>
-      <Button label={communities.cta} variant="outline" />
+      <Button label={communities.cta} href="/communities" variant="outline" />
     </section>
   );
 }

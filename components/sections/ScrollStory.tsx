@@ -78,7 +78,7 @@ export default function ScrollStory() {
       <div className="relative flex w-full flex-col items-center justify-end gap-8 pb-20 text-center" style={{ aspectRatio: "1512 / 1185" }}>
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-b from-transparent to-[#010F1A]/60" />
         <RevealText as="h2" segs={lighthouse.title} className="relative t-heading hd-56 max-w-[1100px] text-limestone-50" />
-        <Button label={lighthouse.cta} size={54} variant="outline-light" className="relative" />
+        <Button label={lighthouse.cta} href="/about" size={54} variant="outline-light" className="relative" />
       </div>
     </section>
   );

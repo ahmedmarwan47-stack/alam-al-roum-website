@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { gsap, reducedMotion } from "@/lib/gsap";
+import { slugify } from "@/lib/routes";
 import Icon from "@/components/ui/Icon";
 import RevealText from "@/components/reveal/RevealText";
 import SectionTitle from "./SectionTitle";
@@ -19,7 +20,7 @@ function Row({ i, r, ghost }: { i: number; r: R; ghost?: boolean }) {
       <span className="h-11 w-11" />
     </div>);
   return (
-    <a href="#" data-row={i} className="group relative flex items-center border-b border-limestone-600 px-8 py-8">
+    <a href={`/experiences/${slugify(r.title)}`} data-row={i} className="group relative flex items-center border-b border-limestone-600 px-8 py-8">
       <span className="w-[120px] t-label l-14 text-limestone-800 transition-colors duration-300 group-hover:text-teal-600">{num}</span>
       <span className="flex-[0_0_42%]"><RevealText as="h3" text={r.title} className="t-heading hd-32" /></span>
       <span className="flex-1 pl-10 text-limestone-800"><RevealText text={r.body} className="t-body b-16" delay={0.08} /></span>

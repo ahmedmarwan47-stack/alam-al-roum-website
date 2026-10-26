@@ -21,13 +21,13 @@ export default function Events() {
       </div>
       <div className="grid w-full grid-cols-2 gap-4 lg:grid-cols-4">
         {list.map(([cat, date, title, p], k) => (
-          <a key={`${past}-${k}`} href="#" className="group flex flex-col gap-4">
+          <a key={`${past}-${k}`} href="/events" className="group flex flex-col gap-4">
             <RevealImage src={`/images/photo/${p}.jpg`} delay={k * 0.08} className="aspect-[336/376] w-full" imgClassName="transition-transform duration-[1.2s] [transition-timing-function:var(--ease-site)] group-hover:scale-105" />
             <span className="flex items-center gap-3 t-label l-14 text-limestone-50/70"><span>{cat}</span><i className="h-3 w-px bg-limestone-50/30" /><span>{date}</span></span>
             <RevealText text={title} className="t-text x-20" delay={0.1 + k * 0.05} />
           </a>))}
       </div>
-      <Button label={E.cta} variant="outline-light" />
+      <Button label={E.cta} href="/events" variant="outline-light" />
     </section>
   );
 }

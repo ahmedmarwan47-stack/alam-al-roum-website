@@ -2,10 +2,14 @@ import Button from "@/components/ui/Button";
 import Icon from "@/components/ui/Icon";
 import RevealText from "@/components/reveal/RevealText";
 import { footer as F } from "@/lib/content";
+import { routes } from "@/lib/routes";
 
 const Col = ({ title, items }: { title: string; items: string[] }) => (
-  <div className="flex flex-col gap-6"><span className="t-label l-14">{title}</span>{items.map((i) => <a key={i} href="#" className="t-text x-16 hover:opacity-60">{i}</a>)}</div>
+  <div className="flex flex-col gap-6"><span className="t-label l-14">{title}</span>{items.map((i) => <a key={i} href={routes[i] ?? "#"} className="t-text x-16 hover:opacity-60">{i}</a>)}</div>
 );
+
+const contactHref = (icon: string, t: string) =>
+  icon === "call" ? `tel:${t}` : icon === "whatsapp" ? `https://wa.me/${t.replace(/\D/g, "")}` : icon === "mail-01" ? `mailto:${t}` : routes[t] ?? "#";
 
 export default function Footer() {
   return (
@@ -32,7 +36,7 @@ export default function Footer() {
           <div className="flex gap-[120px]">
             <Col title="Discover" items={F.discover} /><Col title="More" items={F.more} />
             <div className="flex flex-col gap-6"><span className="t-label l-14">Contact</span>
-              {F.contact.map(([ic, t]) => <a key={t} href="#" className="flex items-center gap-2 t-text x-16">{ic && <Icon name={ic} size={18} />}{t}</a>)}
+              {F.contact.map(([ic, t]) => <a key={t} href={contactHref(ic, t)} className="flex items-center gap-2 t-text x-16">{ic && <Icon name={ic} size={18} />}{t}</a>)}
               <div className="flex gap-2">{["whatsapp", "facebook-01", "instagram", "tiktok"].map((i) => <a key={i} href="#"><Icon name={i} size={20} /></a>)}</div>
             </div>
           </div>

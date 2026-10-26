@@ -42,10 +42,10 @@ export const lighthouse = { title: [{ t: "The lighthouse still" }, { t: "marks t
 export const communities = {
   tag: "Featured communities", title: "Places to call home", cta: "View All Communities",
   items: [
-    { name: "Beachfront community", line: "Shoreline · 7.2 km of Mediterranean sand", photo: ph("ui-g-beach") },
-    { name: "Lagoon neighbourhood", line: "Waterways · 22 km of waterfront and lagoons", photo: ph("ui-lagoon-clear") },
-    { name: "Marina boulevard", line: "Waterfront · The social heart of the city", photo: ph("ui-g-boardwalk") },
-    { name: "Golf community", line: "Greens · An 18-hole course by the sea", photo: ph("ui-g-terraces") },
+    { slug: "beachfront", name: "Beachfront community", line: "Shoreline · 7.2 km of Mediterranean sand", photo: ph("ui-g-beach") },
+    { slug: "lagoon", name: "Lagoon neighbourhood", line: "Waterways · 22 km of waterfront and lagoons", photo: ph("ui-lagoon-clear") },
+    { slug: "marina-boulevard", name: "Marina boulevard", line: "Waterfront · The social heart of the city", photo: ph("ui-g-boardwalk") },
+    { slug: "golf", name: "Golf community", line: "Greens · An 18-hole course by the sea", photo: ph("ui-g-terraces") },
   ],
 };
 
@@ -141,10 +141,10 @@ export const gallery = {
 export const news = {
   tag: "News & Blogs", title: "Media Center", body: "Updates from Alam Al Roum and its progress", cta: "View all",
   items: [
-    ["News", "3 min read", "Phase one construction begins on the coast", "ui-pm-visit"],
-    ["Blog", "5 min read", "Lighthouse that guided the romans", "ui-g-boardwalk"],
-    ["News", "4 min read", "Drawing a city from the coastline", "ui-g-coast"],
-  ].map(([tag, read, title, p]) => ({ tag, read, title, photo: ph(p) })),
+    ["News", "3 min read", "Phase one construction begins on the coast", "ui-pm-visit", "/media-center/phase-1-construction-begins-august-2026"],
+    ["Blog", "5 min read", "Lighthouse that guided the romans", "ui-g-boardwalk", "/media-center/the-lighthouse-that-guided-rome-home"],
+    ["News", "4 min read", "Drawing a city from the coastline", "ui-g-coast", "/media-center/masterplan-unveiled-with-som"],
+  ].map(([tag, read, title, p, href]) => ({ tag, read, title, photo: ph(p), href })),
 };
 
 export const faq = {

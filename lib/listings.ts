@@ -49,3 +49,38 @@ export const mediaPage = {
     story("Education", "4 min read", "Innovative learning environments created", "m12"),
   ],
 };
+
+export const stories = [...mediaPage.news, ...mediaPage.blog];
+
+type Block = { h?: string; p?: string; list?: string[]; img?: string; caption?: string };
+export type Article = { slug: string; tag: string; date: string; title: string; sub: string; byline: [string, string]; hero: string; takeaways?: string[]; body: Block[] };
+
+/** The written story (Figma "Article Detail • Desktop": header 10921:10139, body 10921:10164). */
+const phaseOne: Article = {
+  slug: stories[0].slug!, tag: "Construction", date: "Sun 9 Aug 2026",
+  title: "Phase one construction begins on the coast",
+  sub: "The first foundations are laid as the city moves from plan to permanence.",
+  byline: ["Alam Al Roum Newsroom", "9 August 2026"], hero: md("m04"),
+  takeaways: ["Phase one construction started in August 2026.", "First handovers are planned for 2030.", "Phase one covers the beachfront and first lagoon districts."],
+  body: [
+    { img: md("m05") },
+    { p: "Qatari Diar and the Egyptian government have marked the start of phase one at Alam Al Roum, a 20.58 million square metre city on Egypt's North Coast. Site works began in August 2026 along the western edge of the bay." },
+    { p: "The milestone moves the project from masterplan to ground. Over the coming months, roads, utilities and the first lagoon basins will take shape, laying the foundations for homes that will welcome their first residents in 2030." },
+    { h: "What phase one includes" },
+    { p: "Phase one focuses on the beachfront, where the city meets its 7.2 kilometre shoreline. It brings together the first neighbourhoods, the infrastructure that serves them, and the public spaces that will make the coast feel lived in from day one." },
+    { list: ["Beachfront homes and the first lagoon districts", "Core roads, utilities and the coastal promenade", "The first swimmable lagoons", "A town centre with everyday retail and dining"] },
+    { img: md("m04"), caption: "Illustrative coastal imagery from the brand collection." },
+    { h: "What happens next" },
+    { p: "Infrastructure and lagoon works continue through 2027, followed by the marina and the 18-hole golf course by the sea in 2028. The first neighbourhoods are planned to near completion in 2029, with handovers beginning in 2030." },
+    { p: "Registered buyers will be the first to hear about new launches, site visits and progress updates. To register your interest, use the form on this site or call 16922." },
+  ],
+};
+
+/** Only the phase-one story is written in Figma; the others open on their card copy until their text exists. */
+export const articleFor = (slug: string): Article | undefined => {
+  if (slug === phaseOne.slug) return phaseOne;
+  const s = stories.find((x) => x.slug === slug);
+  return s && { slug, tag: s.tag, date: s.meta, title: s.title, sub: "", byline: ["Alam Al Roum Newsroom", ""], hero: s.photo, body: [] };
+};
+
+export const related = { tag: "KEEP READING", title: "More from the Media Center.", items: mediaPage.blog.slice(0, 3) };
