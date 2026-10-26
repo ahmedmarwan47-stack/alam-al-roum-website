@@ -68,12 +68,17 @@ function Model({ pose }: { pose: MutableRefObject<CoinPose> }) {
 
 useGLTF.preload(COIN_URL);
 
-/** A transparent canvas with the coin; size it with the wrapper (the coin fills ~74% of the box). */
+/** Camera: far and narrow (fov 14 at 12 units) so a turning coin barely swells toward the viewer at its near rim. */
+const CAM_Z = 12, FOV = 14;
+/** Share of the canvas the coin's 2.2-unit face fills; size the wrapper as coin size / COIN_FILL. */
+export const COIN_FILL = 2.2 / (2 * CAM_Z * Math.tan((FOV / 2) * Math.PI / 180));
+
+/** A transparent canvas with the coin; size it with the wrapper (see COIN_FILL). */
 export default function Coin3D({ pose, active = true, className = "" }: { pose: MutableRefObject<CoinPose>; active?: boolean; className?: string }) {
   const phone = typeof window !== "undefined" && window.matchMedia("(max-width: 1023px)").matches;
   return (
     <div className={`pointer-events-none ${className}`} aria-hidden>
-      <Canvas frameloop={active ? "always" : "never"} dpr={phone ? [1, 1.5] : [1, 1.75]} camera={{ position: [0, 0, 5.2], fov: 32 }}
+      <Canvas frameloop={active ? "always" : "never"} dpr={phone ? [1, 1.5] : [1, 1.75]} camera={{ position: [0, 0, CAM_Z], fov: FOV }}
         gl={{ alpha: true, antialias: !phone, powerPreference: phone ? "default" : "high-performance" }} style={{ background: "transparent" }}>
         <Studio />
         <directionalLight position={[3, 4, 5]} intensity={1.4} />
