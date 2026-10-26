@@ -1,6 +1,6 @@
 "use client";
 import { Fragment, useEffect, useRef } from "react";
-import { gsap, reducedMotion } from "@/lib/gsap";
+import { gsap, ScrollTrigger, reducedMotion, withHold } from "@/lib/gsap";
 import "@/lib/about/a-motion";
 import { blurIn } from "@/components/reveal/letters";
 import type { Seg } from "@/components/reveal/RevealText";
@@ -12,8 +12,9 @@ export type PageHeroData = { pre: string; title: Seg[]; body: string; photo: str
  * (Manifesto, "UI / Headline / Accent"), since both are one concept:
  * on load, after 0.3 s, the pre-headline, the headline and the paragraph blur in, block by block; the photo rises 60 px into its 360 × 240 slot and the rule draws across (0.22/1/0.36/1 settle).
  * On scroll (pinned, linear from the first pixel, one viewport long) the photo grows to full bleed easing back from
- * a 1.15 zoom, the dim comes up to 75 %, the copy turns Limestone and the rule fades. The box itself grows, so the
- * photo is re-framed at every size and its subject stays in view.
+ * a 1.15 zoom and the rule fades; the dim comes up and the copy turns Limestone only as the photo reaches the copy,
+ * so the headline stays legible the whole way. The pin then rests on the full-bleed state (a reading hold) before
+ * the page moves on. The box itself grows, so the photo is re-framed at every size and its subject stays in view.
  */
 export default function PageHero({ data: H }: { data: PageHeroData }) {
   const wrap = useRef<HTMLDivElement>(null), photo = useRef<HTMLDivElement>(null), dim = useRef<HTMLDivElement>(null),
@@ -27,15 +28,17 @@ export default function PageHero({ data: H }: { data: PageHeroData }) {
       .fromTo(el, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1 }, "shown")
       .fromTo(rule.current, { scaleX: 0 }, { scaleX: 1, duration: 1.1 }, "shown");
     if (!window.matchMedia("(min-width: 1024px)").matches) return () => { intro.kill(); };
-    const tl = gsap.timeline({ defaults: { ease: "none" },
-      scrollTrigger: { trigger: wrap.current, start: "top 76px", end: "+=100%", scrub: 1, pin: true } });   // 76 = under the bar
-    tl.to(el, { left: "0%", top: "0%", width: "100%", height: "100%", borderRadius: 0 }, 0)
-      .fromTo(el.querySelector("img"), { scale: 1.15 }, { scale: 1 }, 0)
-      .to(dim.current, { opacity: 0.75 }, 0)
-      .to(rule.current, { opacity: 0 }, 0)
-      .to(copy.current, { color: "#FBFAF8" }, 0)
-      .to(body.current, { color: "rgba(251, 250, 248, 0.85)" }, 0);
-    return () => { intro.kill(); tl.scrollTrigger?.kill(); tl.kill(); };
+    const tl = gsap.timeline({ paused: true, defaults: { ease: "none" } })
+      .to(el, { left: "0%", top: "0%", width: "100%", height: "100%", borderRadius: 0, duration: 1 }, 0)
+      .fromTo(el.querySelector("img"), { scale: 1.15 }, { scale: 1, duration: 1 }, 0)
+      .to(rule.current, { opacity: 0, duration: 0.3 }, 0)
+      // the photo only covers the copy over the last few percent of its growth: the dim and the light copy follow then
+      .to(dim.current, { opacity: 0.75, duration: 0.3 }, 0.7)
+      .to(copy.current, { color: "#FBFAF8", duration: 0.1 }, 0.9)
+      .to(body.current, { color: "rgba(251, 250, 248, 0.85)", duration: 0.1 }, 0.9);
+    const vh = withHold(tl, 1);
+    const st = ScrollTrigger.create({ trigger: wrap.current, start: "top 76px", end: `+=${vh * 100}%`, scrub: 1, pin: true, animation: tl });   // 76 = under the bar
+    return () => { intro.kill(); st.kill(); tl.kill(); };
   }, []);
   return (
     // the pinned node is the inner div, so GSAP's pin-spacer never wraps the element React owns

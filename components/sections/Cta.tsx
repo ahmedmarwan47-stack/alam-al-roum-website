@@ -12,7 +12,7 @@ import { cta as C } from "@/lib/content";
 export default function Cta({ form }: { form?: string }) {
   return (
     <section className={`relative overflow-hidden bg-limestone-50 ${form ? "py-20" : "h-[720px]"}`}>
-      <RevealImage src={C.video} video className="absolute inset-0" />
+      <RevealImage src={C.video} video blur className="absolute inset-0" />
       {/* Figma "White vignette": 60 % of a radial fade to Limestone 50 (0 → 5 % at half → 80 % → solid) */}
       <div className="pointer-events-none absolute inset-0 opacity-60"
         style={{ background: "radial-gradient(farthest-side, rgb(251 250 248 / 0) 0%, rgb(251 250 248 / .05) 50%, rgb(251 250 248 / .8) 75%, #FBFAF8 90%)" }} />

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { gsap, reducedMotion } from "@/lib/gsap";
+import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 import SectionTitle from "@/components/sections/SectionTitle";
 import { milestones as M } from "@/lib/about/b-content";
 
@@ -72,11 +72,14 @@ export default function Milestones() {
       });
     };
     if (reducedMotion()) { paint(); return; }
-    const tw = gsap.to(state, { f: n - 1, ease: "none", onUpdate: paint,
-      scrollTrigger: { trigger: el, start: "top top", end: () => `+=${window.innerHeight * (n - 1) * 0.9}`, pin: true, scrub: 1.2,
-        invalidateOnRefresh: true, onRefresh: paint } });   // no snap: it would pull the page after the reader stops
+    // each milestone rests in focus for a stretch of scroll (a reading plateau) before the rail moves on to the next,
+    // so its detail can be read without stopping at one exact point; no snap, which would pull the page by itself
+    const tl = gsap.timeline({ paused: true, onUpdate: paint }).to({}, { duration: 0.4 });
+    for (let i = 1; i < n; i++) tl.to(state, { f: i, duration: 1, ease: "power1.inOut" }).to({}, { duration: 0.6 });
+    const st = ScrollTrigger.create({ trigger: el, start: "top top", end: () => `+=${window.innerHeight * tl.duration() * 0.6}`, pin: true, scrub: 1,
+      animation: tl, invalidateOnRefresh: true, onRefresh: paint });
     paint();
-    return () => { tw.scrollTrigger?.kill(); tw.kill(); };
+    return () => { st.kill(); tl.kill(); };
   }, []);
 
   return (

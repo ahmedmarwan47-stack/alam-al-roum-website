@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { gsap, reducedMotion } from "@/lib/gsap";
+import { gsap, ScrollTrigger, reducedMotion, withHold } from "@/lib/gsap";
 import { token } from "@/lib/about/a-motion";
 import { blurIn } from "@/components/reveal/letters";
 import { manifesto as M } from "@/lib/about/a-content";
@@ -8,8 +8,8 @@ import { manifesto as M } from "@/lib/about/a-content";
 /**
  * UI / Headline / Accent. On load it plays the Figma states in order: Hidden → Line 1 (after 0.3 s) → Shown:
  * the headline blurs in as one block, then the paragraph (the same blur-in), the small photo (60px up) and the rule. From lg up, Shown → Full is
- * scroll-scrubbed while the section is pinned: the photo opens to full bleed, the dim comes up to 75 %
- * and the copy turns Limestone (Figma 1.3 s in-out, here spread over 80 % of a viewport).
+ * scroll-scrubbed while the section is pinned: the photo opens to full bleed, the dim comes up to 75 % and the
+ * copy turns Limestone as the photo reaches it (Figma 1.3 s in-out, here one viewport), then a reading hold.
  */
 export default function Manifesto() {
   const root = useRef<HTMLElement>(null);
@@ -30,16 +30,15 @@ export default function Manifesto() {
         const W = el.offsetWidth, H = el.offsetHeight, w = W * (360 / 1512), h = w * (240 / 360), g = W * (60 / 1512), b = 40;
         return `inset(${H - b - h}px ${g}px ${b}px ${W - g - w}px)`;
       };
-      const tl = gsap.timeline({
-        defaults: { ease: "none" },
-        scrollTrigger: { trigger: el, start: "top 76px", end: "+=100%", pin: true, scrub: 1, invalidateOnRefresh: true },   // same length as the inner-page heroes
-      })
+      const tl = gsap.timeline({ paused: true, defaults: { ease: "none" } })
         .fromTo(q("[data-clip]"), { clipPath: box }, { clipPath: "inset(0px 0px 0px 0px)", duration: 1 }, 0)
         .fromTo(q("[data-clip] img"), { scale: 1.15 }, { scale: 1, duration: 1 }, 0)
-        .fromTo(q("[data-dim]"), { opacity: 0 }, { opacity: 0.75, duration: 1 }, 0)
-        .fromTo(q("[data-copy]"), { color: token("deepsea-500") }, { color: token("limestone-50"), duration: 0.6 }, 0.3)
-        .to(q("[data-rule-wrap]"), { opacity: 0, duration: 0.4 }, 0);
-      return () => { tl.scrollTrigger?.kill(); tl.kill(); };
+        .fromTo(q("[data-dim]"), { opacity: 0 }, { opacity: 0.75, duration: 0.3 }, 0.7)
+        .fromTo(q("[data-copy]"), { color: token("deepsea-500") }, { color: token("limestone-50"), duration: 0.1 }, 0.9)
+        .to(q("[data-rule-wrap]"), { opacity: 0, duration: 0.3 }, 0);
+      const vh = withHold(tl, 1);   // same length as the inner-page heroes
+      const st = ScrollTrigger.create({ trigger: el, start: "top 76px", end: `+=${vh * 100}%`, pin: true, scrub: 1, invalidateOnRefresh: true, animation: tl });
+      return () => { st.kill(); tl.kill(); };
     });
     return () => { intro.kill(); mm.revert(); };
   }, []);

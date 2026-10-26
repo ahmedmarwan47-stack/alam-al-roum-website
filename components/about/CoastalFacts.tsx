@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
+import { gsap, ScrollTrigger, reducedMotion, withHold } from "@/lib/gsap";
 import { token } from "@/lib/about/a-motion";
 import RevealImage from "@/components/reveal/RevealImage";
 import RevealText from "@/components/reveal/RevealText";
@@ -36,7 +36,7 @@ export default function CoastalFacts() {
     mm.add("(min-width: 1024px)", () => {
       const m = boxes("merged"), f = boxes("full");
       const [L, R, IL, IR] = ["[data-l]", "[data-r]", "[data-l] img", "[data-r] img"].map((s) => q(s));
-      const tl = gsap.timeline({ paused: true, defaults: { ease: "none" } })   // linear with the scroll, no holds
+      const tl = gsap.timeline({ paused: true, defaults: { ease: "none" } })   // linear with the scroll; a reading hold at the end
         .to(L, { ...m.l, duration: 1.2 }, 0).to(R, { ...m.r, duration: 1.2 }, 0)
         .to(IL, { ...m.il, duration: 1.2 }, 0).to(IR, { ...m.ir, duration: 1.2 }, 0)
         .addLabel("full", 1.2)
@@ -49,8 +49,9 @@ export default function CoastalFacts() {
         .fromTo(q("[data-fv]"), { color: token("deepsea-500") }, { color: token("limestone-50"), duration: 1 }, "full+=0.4")
         .fromTo(q("[data-fl]"), { color: token("limestone-800") }, { color: token("deepsea-200"), duration: 1 }, "full+=0.4")
         .fromTo(q("[data-fb]"), { borderColor: token("limestone-600") }, { borderColor: token("deepsea-400"), duration: 1 }, "full+=0.4");
+      const vh = withHold(tl, 2, 0.6);
       if (reducedMotion()) { tl.progress(1); return () => tl.kill(); }
-      const st = ScrollTrigger.create({ trigger: el, start: "top top", end: "+=200%", pin: true, scrub: 1, animation: tl });
+      const st = ScrollTrigger.create({ trigger: el, start: "top top", end: `+=${vh * 100}%`, pin: true, scrub: 1, animation: tl });
       return () => { st.kill(); tl.kill(); };
     });
     return () => mm.revert();

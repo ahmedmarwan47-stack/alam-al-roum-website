@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { gsap } from "@/lib/gsap";
+import { whenSectionEnters } from "@/components/reveal/letters";
 
 const C = { x: 300, y: 420 };
 const CITIES = [ // pin centre, label top-left, flight order
@@ -28,8 +29,8 @@ export default function RadiusMap() {
         .to(labels[k], { opacity: 1, duration: 0.4 }, k * 0.45 + 0.1);
     });
     tl.to(el.querySelector("[data-halo]"), { attr: { r: 34 }, opacity: 0.35, duration: 0.6, ease: "power2.out" }, ">-0.2");
-    const st = ScrollTrigger.create({ trigger: el, start: "top 70%", once: true, onEnter: () => tl.play(0) });   // draws once and stays
-    return () => { st.kill(); tl.kill(); };
+    const off = whenSectionEnters(el, () => tl.play(0));   // draws once, as its section arrives, and stays
+    return () => { off(); tl.kill(); };
   }, []);
   return (
     <div ref={root} className="relative overflow-hidden rounded-[20px] bg-deepsea-800" style={{ aspectRatio: "696 / 720" }}>

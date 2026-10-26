@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import type { CSSProperties } from "react";
-import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
+import { gsap, ScrollTrigger, reducedMotion, withHold } from "@/lib/gsap";
 import RevealText from "@/components/reveal/RevealText";
 import { nearby as N } from "@/lib/about/b-content";
 import { COAST_EAST, COAST_WEST } from "@/lib/about/b-nearby-geo";
@@ -57,12 +57,12 @@ export default function Nearby() {
         .to(p.tick, { scaleY: 1, duration: 0.3, ease: "power2.out" }, t + 0.05)
         .to(p.label, { autoAlpha: 1, y: 0, duration: 0.4, ease: "power2.out" }, t + 0.15);
     });
-    tl.to({}, { duration: 0.4 });   // a short hold on the finished map before the pin releases
+    const vh = withHold(tl, 2.6);   // a reading hold on the finished map before the pin releases
 
     const mm = gsap.matchMedia();
     mm.add({ desk: "(min-width: 1024px)", mob: "(max-width: 1023.98px)" }, (ctx) => {
       const st = ctx.conditions!.desk
-        ? ScrollTrigger.create({ trigger: el, start: "top top", end: "+=260%", pin: true, scrub: 1, animation: tl })
+        ? ScrollTrigger.create({ trigger: el, start: "top top", end: `+=${vh * 100}%`, pin: true, scrub: 1, animation: tl })
         : ScrollTrigger.create({ trigger: el.querySelector("[data-map]"), start: "top 75%", end: "bottom 35%", scrub: 1, animation: tl });
       return () => st.kill();
     });

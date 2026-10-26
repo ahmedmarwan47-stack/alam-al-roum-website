@@ -21,7 +21,7 @@ const contactHref = (icon: string, t: string) =>
 export default function Footer({ video = true }: { video?: boolean }) {
   return (
     <footer className="relative overflow-hidden bg-limestone-50 text-deepsea-500">
-      {video && <video className="absolute inset-x-0 bottom-0 top-[185px] h-[calc(100%-185px)] w-full object-cover" src={F.video} autoPlay muted loop playsInline />}
+      {video && <video data-media-blur className="absolute inset-x-0 bottom-0 top-[185px] h-[calc(100%-185px)] w-full object-cover" src={F.video} autoPlay muted loop playsInline />}
       <div className="relative flex flex-col pt-10 container-x">
         <div className="flex flex-col justify-between gap-8 py-10 lg:flex-row lg:items-center">
           <div className="flex flex-col gap-2"><RevealText text={F.newsTitle} className="t-text x-28" /><span className="t-text x-16">{F.newsBody}</span></div>

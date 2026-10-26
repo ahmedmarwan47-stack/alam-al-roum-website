@@ -52,7 +52,7 @@ export default function ScrollStory() {
           scrollTrigger: { trigger: stage, start: "top bottom", end: "bottom top", scrub: 1, invalidateOnRefresh: true } }));
       });
       tweens.push(gsap.to(cards.map((el) => el.firstElementChild), { x: 0, y: 0, duration: 1.4, ease: "siteOut", stagger: 0.03,
-        scrollTrigger: { trigger: stage, start: "top 50%", toggleActions: "play none none none" } }));
+        scrollTrigger: { trigger: stage, start: "top 80%", toggleActions: "play none none none" } }));
     }
     return () => { st.kill(); tweens.forEach((t) => { t.scrollTrigger?.kill(); t.kill(); }); window.removeEventListener("resize", size); };
   }, []);

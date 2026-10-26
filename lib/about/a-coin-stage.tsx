@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { idlePose, COIN_FILL, type CoinPose } from "@/components/ui/Coin3D";
-import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
+import { gsap, ScrollTrigger, reducedMotion, withHold } from "@/lib/gsap";
 import "@/lib/about/a-motion";
 import { coin as C } from "@/lib/about/a-content";
 import { BLOCK_FROM, BLOCK_TO } from "@/components/reveal/letters";
@@ -60,14 +60,14 @@ export default function CoinStage({ poster }: { poster?: string }) {
     // the film is scrubbed by the scroll: it starts as the coin opens (OPEN) and reaches its last frame at the end
     // of the pin; scrolling up plays it backwards. A frame is painted only when the frame index changes.
     const OPEN = 1.0, ctx = v.getContext("2d")!, imgs: HTMLImageElement[] = [];
-    let cur = -1, want = 0;
+    let cur = -1, want = 0, motionEnd = 1;
     const paint = (i: number) => {
       const img = imgs[i]; if (!img?.complete || !img.naturalWidth) return false;
       const k = Math.max(v.width / img.naturalWidth, v.height / img.naturalHeight), iw = img.naturalWidth * k, ih = img.naturalHeight * k;
       ctx.drawImage(img, (v.width - iw) / 2, (v.height - ih) / 2, iw, ih); cur = i; return true;
     };
     const film = (t: number) => {
-      want = Math.round(Math.min(Math.max((t - OPEN) / (tl.duration() - OPEN), 0), 1) * (FRAMES - 1));
+      want = Math.round(Math.min(Math.max((t - OPEN) / (motionEnd - OPEN), 0), 1) * (FRAMES - 1));
       if (want !== cur) paint(want);
     };
     const size = () => { const d = Math.min(window.devicePixelRatio || 1, 2); v.width = v.offsetWidth * d; v.height = v.offsetHeight * d; cur = -1; paint(want); };
@@ -100,9 +100,12 @@ export default function CoinStage({ poster }: { poster?: string }) {
       .fromTo(q("[data-rise]"), BLOCK_FROM, { ...BLOCK_TO, duration: 1.0, stagger: 0.15 }, 3.9)
       .fromTo(q("[data-points]"), BLOCK_FROM, { ...BLOCK_TO, duration: 1.0 }, 4.3)
       .to(q("[data-tick]"), { y: 192, duration: 1.5 }, 3.7);
+    // the film reaches its last frame with the motion; then a reading hold on the finished copy before the pin lets go
+    motionEnd = tl.duration();
+    const vh = withHold(tl, 4.5, 0.8);
     let st: ScrollTrigger | undefined;
     if (reducedMotion()) { tl.progress(1); film(tl.time()); }
-    else st = ScrollTrigger.create({ trigger: el, start: "top top", end: "+=450%", pin: true, scrub: 1, animation: tl, invalidateOnRefresh: true, onRefresh: draw });
+    else st = ScrollTrigger.create({ trigger: el, start: "top top", end: `+=${vh * 100}%`, pin: true, scrub: 1, animation: tl, invalidateOnRefresh: true, onRefresh: draw });
     draw();
     window.addEventListener("resize", draw);
     return () => { st?.kill(); tl.kill(); window.removeEventListener("resize", draw); window.removeEventListener("resize", size); };

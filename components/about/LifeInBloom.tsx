@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
+import { gsap, ScrollTrigger, reducedMotion, withHold } from "@/lib/gsap";
 import "@/lib/about/a-motion";
 import { blurIn } from "@/components/reveal/letters";
 import { bloom as B } from "@/lib/about/a-content";
@@ -13,7 +13,7 @@ const pct = (v: number) => `${v}%`;
  * bleed (dim 25 → 30 %), while the scallop-shell and Ionic-capital cut-outs drift out past the corners, growing
  * 300 → 360 → 420px, turning further and fading on the last leg.
  * The cut-outs sit a touch smaller than Figma's 300 px (265) and blur as they drift outward with the scroll.
- * Once the section lands, the title and then the quote blur in, each as one block.
+ * As the section arrives, the title and then the quote blur in, each as one block; at the end a reading hold.
  */
 export default function LifeInBloom() {
   const root = useRef<HTMLElement>(null);
@@ -22,17 +22,14 @@ export default function LifeInBloom() {
     const el = root.current!, q = gsap.utils.selector(el);
     // entrance: the copy blurs in once the section lands
     const copy = gsap.timeline({ paused: true }).add(blurIn(q("[data-title], [data-body]"), { stagger: 0.2 }));
-    const copyST = ScrollTrigger.create({ trigger: el, start: "top 35%", once: true, onEnter: () => copy.play() });
+    const copyST = ScrollTrigger.create({ trigger: el, start: "top 80%", once: true, onEnter: () => copy.play() });
     const mm = gsap.matchMedia();
     mm.add({ lg: "(min-width: 1024px)", sm: "(max-width: 1023px)" }, (ctx) => {
       const lg = ctx.conditions!.lg;
       // frame insets [top, side] per state; narrower sides below lg so the photo keeps some width
       const rest = lg ? [20, 16.93] : [22, 8], mid = lg ? [13, 10.32] : [14, 4];
       const cuts = q("[data-cut]");
-      const tl = gsap.timeline({
-        defaults: { ease: "none" },   // linear with the scroll + a smoothed scrub: one continuous move, no stops
-        scrollTrigger: { trigger: el, start: "top top", end: lg ? "+=150%" : "+=100%", pin: true, scrub: 1 },
-      })
+      const tl = gsap.timeline({ paused: true, defaults: { ease: "none" } })   // linear with the scroll + a smoothed scrub
         .fromTo(q("[data-clip]"), { clipPath: `inset(${rest[0]}% ${rest[1]}%)` }, { clipPath: `inset(${mid[0]}% ${mid[1]}%)`, duration: 1.2 }, 0)
         .to(q("[data-clip]"), { clipPath: "inset(0% 0%)", duration: 1.3 }, 1.2)
         .fromTo(q("[data-clip] img"), { scale: 1.12 }, { scale: 1, duration: 2.5, ease: "none" }, 0)
@@ -43,7 +40,9 @@ export default function LifeInBloom() {
           { left: pct(c.scrolled[0]), top: pct(c.scrolled[1]), rotation: c.scrolled[2], scale: 1.2, filter: "blur(6px)", duration: 1.2 }, 0)
           .to(cuts[k], { left: pct(c.full[0]), top: pct(c.full[1]), rotation: c.full[2], scale: 1.4, opacity: 0, filter: "blur(16px)", duration: 1.3 }, 1.2);
       });
-      return () => { tl.scrollTrigger?.kill(); tl.kill(); };
+      const vh = withHold(tl, lg ? 1.5 : 1);
+      const st = ScrollTrigger.create({ trigger: el, start: "top top", end: `+=${vh * 100}%`, pin: true, scrub: 1, animation: tl });
+      return () => { st.kill(); tl.kill(); };
     });
     return () => { mm.revert(); copyST.kill(); copy.kill(); };
   }, []);

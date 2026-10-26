@@ -25,6 +25,15 @@
   - removed the scroll snap on Milestones and the reversing entrances (they read as jumps)
   - the About film is a frame sequence on a canvas (`public/seq/skyfall`, from `grandeur-skyfall-v2.mp4`, whose
     two keyframes made scroll seeking stutter); the 3D coins only render while on screen
+- Review round 2:
+  - Since the Romans: Figma columns (1041 / 30 / 321), so the statement no longer runs into the mosaic; the terracotta
+    frame opens from a centre seam, then its photo rises in and sharpens
+  - Photo sweep now clears a blur as it opens; the CTA film, footer film, Home coins and the Gallery wall blur in only
+  - Entrances play as a section starts coming into view (85 %), so a whole section is in place when you reach it
+  - Reading holds (`withHold` / `HOLD_VH` in lib/gsap.ts) on every pinned section: heroes, Life in Bloom, the coin
+    stage, Coastal Facts, The Story (on both copy states), Nearby, the horizontal tracks; Milestones rests on each year
+  - Hero copy turns light only once the photo covers it; in-town modes keep their text visible and activate earlier
+  - Story and event cards are row subgrids, so a row stays in line when one title wraps
 - No orphans: `text-wrap: pretty` on all text, and RevealText ties each block's last two words
 - Responsive: no horizontal overflow at 390 / 768 / 1024; phone fixes for the Grandeur film, Ways to live rows,
   the masterplan pin card (shown under the map), the Romans panel and the Water strategy decor

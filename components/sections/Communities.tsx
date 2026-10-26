@@ -5,7 +5,7 @@ import RevealMask from "@/components/reveal/RevealMask";
 import SectionTitle from "./SectionTitle";
 import { communities } from "@/lib/content";
 
-/** Coin-shaped photos, opening with the site's photo entrance. Hover = the Figma Coin Crop spring: the coin tilts −10° and the photo grows 12%. */
+/** Coin-shaped photos, appearing with the blur-only entrance (no sweep). Hover = the Figma Coin Crop spring: the coin tilts −10° and the photo grows 12%. */
 export default function Communities() {
   return (
     <section className="flex flex-col items-center gap-10 bg-limestone-50 py-20 container-x">
@@ -13,7 +13,7 @@ export default function Communities() {
       <div className="grid w-full grid-cols-2 gap-6 lg:grid-cols-4">
         {communities.items.map((c, k) => (
           <Link key={c.name} href={`/communities/${c.slug}`} className="group flex flex-col gap-5">
-            <RevealMask className="w-full" delay={k * 0.08}>
+            <RevealMask blur className="w-full" delay={k * 0.08}>
               <div className="relative aspect-square w-full overflow-hidden transition-transform duration-[.8s] [transition-timing-function:var(--ease-coin-spring)] group-hover:-rotate-[10deg]"
                 style={{ WebkitMask: "url(/images/coin-silhouette.svg) center / contain no-repeat", mask: "url(/images/coin-silhouette.svg) center / contain no-repeat" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}

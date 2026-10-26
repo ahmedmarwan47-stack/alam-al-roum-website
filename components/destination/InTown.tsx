@@ -7,15 +7,16 @@ import { inTown as T } from "@/lib/destination";
 
 /**
  * Transport · In town (Figma 11053:7173): one coin per mode. The coin stays on screen while three
- * 720 px scroll zones pass; the active mode is full strength, the others sit at 35 %, and the coin's
- * photo swaps (with a slow quarter turn) as each mode becomes active.
+ * 720 px scroll zones pass; the coin's photo swaps (with a slow quarter turn) as each mode becomes active.
+ * Every mode's tag, title and paragraph are always there to read: a mode turns active (full strength) as soon as
+ * its zone is well into view, the others sit at 35 %, so nothing waits for the screen's centre to appear.
  */
 export default function InTown() {
   const [active, setActive] = useState(0);
   const zones = useRef<(HTMLDivElement | null)[]>([]), coin = useRef<HTMLDivElement>(null), wrap = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const sts = zones.current.map((z, k) => ScrollTrigger.create({
-      trigger: z, start: "top 55%", end: "bottom 55%", onToggle: (s) => { if (s.isActive) setActive(k); },
+      trigger: z, start: "top 75%", end: "bottom 75%", onToggle: (s) => { if (s.isActive) setActive(k); },
     }));
     const spin = reducedMotion() ? null : gsap.fromTo(coin.current, { rotate: 4 }, {
       rotate: -14, ease: "none", scrollTrigger: { trigger: wrap.current, start: "top bottom", end: "bottom top", scrub: 1 },
@@ -45,9 +46,9 @@ export default function InTown() {
             return (
               <div key={m.title} ref={(el) => { zones.current[k] = el; }}
                 className={`flex flex-col justify-center gap-3 py-10 transition-opacity duration-500 lg:h-[720px] lg:py-0 ${k ? "border-t border-limestone-300" : ""} ${on ? "opacity-100" : "lg:opacity-35"}`}>
-                <span className={`t-label l-16 transition-opacity duration-500 ${on ? "opacity-100" : "lg:opacity-0"}`}>{m.tag}</span>
+                <span className="t-label l-16">{m.tag}</span>
                 <RevealText as="h3" text={m.title} className="t-heading hd-40" />
-                <p className={`max-w-[560px] t-body b-16 text-limestone-800 transition-opacity duration-500 ${on ? "opacity-100" : "lg:opacity-0"}`}>{m.body}</p>
+                <p className="max-w-[560px] t-body b-16 text-limestone-800">{m.body}</p>
               </div>);
           })}
         </div>

@@ -1,14 +1,14 @@
 "use client";
 import { useEffect, useRef, type ElementType } from "react";
-import { blurIn, BLOCK_FROM } from "./letters";
-import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
+import { blurIn, BLOCK_FROM, whenSectionEnters } from "./letters";
+import { gsap, reducedMotion } from "@/lib/gsap";
 
 /** A run of text; `i` marks the Immortel italic accent word, `br` forces a new line before it. */
 export type Seg = { t: string; i?: boolean; br?: boolean };
 
 /**
  * Text reveal: the whole block blurs in at once (opacity, a 12 px blur and a 16 px rise clearing together,
- * 1.1 s on the site's long ease-out), when it comes into view or, with `onLoad`, as the page opens.
+ * 1.1 s on the site's long ease-out), as its section comes into view or, with `onLoad`, as the page opens.
  * No line, word or letter splitting, so the text never re-flows or jumps as it appears.
  */
 export default function RevealText({ as = "p", segs, text, className = "", onLoad = false, delay = 0 }:
@@ -18,12 +18,7 @@ export default function RevealText({ as = "p", segs, text, className = "", onLoa
     const el = root.current; if (!el || reducedMotion()) return;
     gsap.set(el, BLOCK_FROM);
     if (onLoad) { const t = blurIn(el, { delay }); return () => { t.kill(); }; }
-    let done = false;
-    const play = () => { if (!done) { done = true; blurIn(el, { delay }); } };
-    const st = ScrollTrigger.create({ trigger: el, start: "top 92%", once: true, onEnter: play });
-    // a block already above that line (page opened mid-way, a tab switched in) plays straight away
-    const id = requestAnimationFrame(() => { if (st.scroll() >= st.start) play(); });
-    return () => { cancelAnimationFrame(id); st.kill(); };
+    return whenSectionEnters(el, () => blurIn(el, { delay }));
   }, [onLoad, delay]);
   // no orphans: the block's last two words never part (a no-break space), whether they share a run or not
   const list = segs ?? [{ t: text ?? "" }], last = list.length - 1;

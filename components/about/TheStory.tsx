@@ -15,8 +15,9 @@ const fy = (y: number) => `${(y / FH) * 100}%`;
 const DOME = { below: { "--t": fy(1060), "--r": "14vmax" }, risen: { "--t": fy(560), "--r": "79.37vmax" }, cover: { "--t": fy(-1700), "--r": "145.5vmax" } };
 const domeStyle = { ...DOME.below, clipPath: "circle(var(--r) at 50% calc(var(--t) + var(--r)))" } as React.CSSProperties;
 /** Each state change in the Figma prototype: Smart Animate 1.2 s on the slideWipe curve. */
-// continuous scroll: each move overlaps the next a little (STEP < MOVE) and runs linear with the scroll — no holds
-const STEP = 1.0, MOVE = 1.2;
+// each move overlaps the next a little (STEP < MOVE) and runs linear with the scroll; HOLD is a reading rest
+// (timeline seconds ≈ viewports of scroll) on the two states that carry copy
+const STEP = 1.0, MOVE = 1.2, HOLD = 0.6;
 
 /** Offset of `el` inside `stop`, ignoring transforms (offsetLeft/Top chain). */
 const off = (el: HTMLElement, stop: HTMLElement) => {
@@ -82,8 +83,9 @@ export default function TheStory() {
       tl.to(words, { x: 0, y: 0, autoAlpha: 1 }, t)
         .to($("[data-c-body]"), { y: 0, autoAlpha: 1 }, t + (rm ? 0 : 0.15))
         .to(photos, { y: 0, autoAlpha: 1, stagger: rm ? 0 : 0.08 }, t);
+      // reading hold: the headline, paragraph and photos rest, fully in place, before Greatness rises
+      t += D + (rm ? 0 : HOLD);
       // 4 → 5 · Greatness rises
-      t += STEP;
       tl.to($("[data-dome=greatness]"), DOME.risen, t)
         .to(gw, { top: fy(640) }, t)
         .fromTo(gw, WORD_FROM, { ...WORD_TO, duration: D * 0.5 }, t + D * 0.3);
@@ -93,9 +95,10 @@ export default function TheStory() {
         .to($("[data-g-dim]"), { autoAlpha: 1 }, t)
         .to(gw, { x: () => off(slot, st).x - off(gw, st).x + gw.offsetWidth / 2, y: () => off(slot, st).y - off(gw, st).y }, t)
         .to($$("[data-g-text]"), { y: 0, autoAlpha: 1, stagger: rm ? 0 : 0.08 }, t + (rm ? 0 : 0.1))
-        .to({}, { duration: 0.15 }, t + D);     // a breath before the pin releases
+        .to({}, { duration: rm ? 0.15 : HOLD }, t + D);     // reading hold on the closing copy before the pin releases
 
-      ScrollTrigger.create({ trigger: st, start: "top top", end: () => `+=${H() * 5.5}`, pin: true, scrub: rm ? true : 1,
+      // about one viewport of scroll per timeline second
+      ScrollTrigger.create({ trigger: st, start: "top top", end: () => `+=${H() * tl.duration()}`, pin: true, scrub: rm ? true : 1,
         animation: tl, invalidateOnRefresh: true });
     }, st);
     return () => ctx.revert();

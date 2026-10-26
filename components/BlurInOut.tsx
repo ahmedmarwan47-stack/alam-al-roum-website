@@ -2,12 +2,12 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
-import { blurIn, BLOCK_FROM, photoIn, PHOTO_FROM } from "@/components/reveal/letters";
+import { blurIn, BLOCK_FROM, photoIn, PHOTO_FROM, mediaBlurIn, MEDIA_BLUR_FROM, whenSectionEnters } from "@/components/reveal/letters";
 
 const SEL = "main :is(h1, h2, h3, h4, p, img, video, [data-blur])";
 
 /**
- * Site-wide entrances for every text block and photo that has none of its own, the first time each comes into view:
+ * Site-wide entrances for every text block and photo that has none of its own, as its section comes into view:
  * text blurs in as one block (RevealText's blur-in), photos and films open with the photo wipe (RevealImage's). Anything that already
  * animates is left alone — RevealText / RevealImage blocks ([data-reveal], [data-reveal-img]), pinned sections,
  * the header, photos shown through a blend or mask — and so is everything already on screen when the page opens,
@@ -28,11 +28,12 @@ export default function BlurInOut() {
         if (picked.some((p) => p.contains(el))) continue;
         picked.push(el);
       }
-      const media = (el: HTMLElement) => el.tagName === "IMG" || el.tagName === "VIDEO";
-      picked.forEach((el) => gsap.set(el, media(el) ? PHOTO_FROM : BLOCK_FROM));
-      const sts = picked.map((el) => ScrollTrigger.create({ trigger: el, start: "top 92%", once: true,
-        onEnter: () => (media(el) ? photoIn(el) : blurIn(el)) }));
-      kill = () => { sts.forEach((s) => s.kill()); gsap.set(picked, { clearProps: "opacity,filter,transform,clipPath" }); };
+      // films marked data-media-blur (the footer's) only blur in; other photos sweep; text blurs in
+      const kind = (el: HTMLElement) => (el.hasAttribute("data-media-blur") ? "soft" : el.tagName === "IMG" || el.tagName === "VIDEO" ? "photo" : "text");
+      picked.forEach((el) => gsap.set(el, { soft: MEDIA_BLUR_FROM, photo: PHOTO_FROM, text: BLOCK_FROM }[kind(el)]));
+      const offs = picked.map((el) => whenSectionEnters(el, () => { ({ soft: mediaBlurIn, photo: photoIn, text: blurIn }[kind(el)](el)); }));
+      ScrollTrigger.refresh();
+      kill = () => { offs.forEach((off) => off()); gsap.set(picked, { clearProps: "opacity,filter,transform,clipPath" }); };
     });
     return () => { cancelAnimationFrame(id); kill?.(); };
   }, [path]);

@@ -25,7 +25,7 @@ export default function RomansIntro() {
       .fromTo(img, { scale: 1.25, yPercent: 8 }, { scale: 1, yPercent: 0 }, 0)
       .fromTo(q("[data-flower]"), { scale: 0.6, rotation: -24, yPercent: 30, opacity: 0 }, { scale: 1, rotation: 0, yPercent: 0, opacity: 1, ease: "power2.out" }, 0.15);
     const title = blurIn(q("[data-title]"), { duration: 1.2 }).pause();
-    const titleST = ScrollTrigger.create({ trigger: sec, start: "top 45%", once: true, onEnter: () => title.play() });
+    const titleST = ScrollTrigger.create({ trigger: sec, start: "top 85%", once: true, onEnter: () => title.play() });
     // while the track slides, the flower turns and lifts a little more (on the outer layer; the sway is CSS)
     let drift: gsap.core.Tween | undefined;
     const build = () => {
@@ -43,7 +43,8 @@ export default function RomansIntro() {
   // below lg the flower sits on the mosaic's lower corner, clear of the copy under it
   return (
     <div ref={root} className="relative flex flex-col gap-8 lg:h-[min(844px,calc(100svh-160px))] lg:w-[1392px] lg:flex-row lg:items-end lg:gap-[30px]">
-      <div className="relative h-[70svh] max-h-[640px] flex-none lg:h-full lg:max-h-none lg:flex-1">
+      {/* Figma columns: 1041 for the title over the mosaic (the mosaic at 419–1041), 30 gap, 321 for the statement */}
+      <div className="relative h-[70svh] max-h-[640px] flex-none lg:h-full lg:max-h-none lg:w-[1041px]">
         <div data-mosaic className="absolute left-[16%] top-0 h-full w-[68%] overflow-hidden lg:left-[419px] lg:w-[622px]">
           <img src={R.photo} alt="A Roman mosaic of a ship" className="h-full w-full object-cover" />
         </div>
@@ -51,7 +52,7 @@ export default function RomansIntro() {
           <span>{R.title[0]}</span><span>{R.title[1]}</span><span className="text-center">{R.title[2]}</span>
         </h2>
       </div>
-      <div className="flex max-w-[360px] flex-col gap-3 t-body">
+      <div className="flex max-w-[360px] flex-col gap-3 t-body lg:w-[321px] lg:flex-none">
         <RevealText text={R.side.title} className="text-[36px] leading-none" />
         <RevealText text={R.side.body} className="text-[20px] leading-[1.5]" delay={0.08} />
       </div>

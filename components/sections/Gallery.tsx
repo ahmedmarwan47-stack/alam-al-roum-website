@@ -19,7 +19,7 @@ const COPIES = 3;              // each row repeats its tiles so the loop never s
  *  · the scroll — the rows slide apart with the page scroll (a parallax of ±12 % of the width over the section's
  *    pass) and the scroll speed pushes them along, forwards when scrolling down, backwards when scrolling up,
  *    easing back to the loop speed once the page stops.
- * The wall opens with the site's photo entrance; the tiles themselves don't animate in one by one.
+ * The whole wall blurs in as one block (no sweep); the tiles themselves don't animate in one by one.
  */
 export default function Gallery({ data = gallery }: { data?: GalleryData }) {
   const G = data;
@@ -54,7 +54,7 @@ export default function Gallery({ data = gallery }: { data?: GalleryData }) {
   }, []);
   return (
     <section ref={root} data-no-blur className="relative h-svh min-h-[600px] overflow-hidden bg-deepsea-600 lg:max-h-[1100px]">
-      <RevealMask className="absolute inset-0">
+      <RevealMask blur className="absolute inset-0">
         <div className="absolute inset-x-0 top-0 bottom-[2%] flex flex-col gap-[10px]">
           {G.rows.map((row, r) => (
             <div key={r} data-row className="flex min-h-0 flex-1 gap-[10px] will-change-transform">
