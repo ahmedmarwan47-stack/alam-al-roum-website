@@ -47,7 +47,10 @@ export default function TheStory() {
     const rm = reducedMotion(), D = rm ? 0.001 : MOVE, ease = "none";
     const W = () => st.clientWidth, H = () => st.clientHeight;
     // where each headline word floats in state 3, relative to its resting place in the headline
-    const dx = (el?: HTMLElement) => (el?.dataset?.x ? (+el.dataset.x / FW) * W() - off(el, st).x : 0);
+    // (kept inside the gutters, so on a phone a word on the right edge never runs off the screen)
+    const gut = () => Math.min(60, Math.max(20, window.innerWidth * 0.0397));   // --gutter
+    const dx = (el?: HTMLElement) => (el?.dataset?.x
+      ? Math.min(Math.max(gut(), (+el.dataset.x / FW) * W()), W() - gut() - el.offsetWidth) - off(el, st).x : 0);
     const dy = (el?: HTMLElement) => (el?.dataset?.y ? (+el.dataset.y / FH) * H() - off(el, st).y : 0);
     // the Greatness word flies from the dome to its place above the headline (a measured FLIP)
     const gw = $("[data-g-word]"), slot = $("[data-g-slot]");
@@ -81,7 +84,7 @@ export default function TheStory() {
       // 3 → 4 · the words gather into the headline; paragraph and photos rise
       t += STEP;
       tl.to(words, { x: 0, y: 0, autoAlpha: 1 }, t)
-        .to($("[data-c-body]"), { y: 0, autoAlpha: 1 }, t + (rm ? 0 : 0.15))
+        .to($("[data-c-body]"), { y: 0, autoAlpha: 1 }, t + (rm ? 0 : W() < 768 ? 0.6 : 0.15))   // on a phone, once the words have gathered
         .to(photos, { y: 0, autoAlpha: 1, stagger: rm ? 0 : 0.08 }, t);
       // reading hold: the headline, paragraph and photos rest, fully in place, before Greatness rises
       t += D + (rm ? 0 : HOLD);

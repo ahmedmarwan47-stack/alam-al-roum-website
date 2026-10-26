@@ -13,6 +13,8 @@ const CITIES = [ // pin centre, label top-left, flight order
   { n: "Paris", t: "5 hrs", x: 130, y: 218, lx: 72, ly: 212 },
 ];
 const pct = (v: number, of: number) => `${(v / of) * 100}%`;
+/** Type sized to the map (Figma px at its 696 width), with a floor so a phone-width map stays legible without crowding. */
+const fs = (px: number, min: number) => ({ fontSize: `max(${min}px, ${(px / 696) * 100}cqw)`, lineHeight: px === 16 ? 1.5 : px === 14 ? 1.43 : 1.33 });
 
 /** Within a 5-hour flight radius: routes draw city → Alam Al Roum in flight-time order, a traveller rides each leg. */
 export default function RadiusMap() {
@@ -33,7 +35,7 @@ export default function RadiusMap() {
     return () => { off(); tl.kill(); };
   }, []);
   return (
-    <div ref={root} className="relative overflow-hidden rounded-[20px] bg-deepsea-800" style={{ aspectRatio: "696 / 720" }}>
+    <div ref={root} className="relative overflow-hidden rounded-[20px] bg-deepsea-800" style={{ aspectRatio: "696 / 720", containerType: "inline-size" }}>
       {/* Semi-real basemap: Sentinel-2 cloudless 2016 by EOX (CC BY 4.0), azimuthal equidistant on 27.90E 31.20N, 300 px = 3,300 km */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src="/images/basemap-semireal-v2.jpg" alt="" className="absolute inset-0 h-full w-full" />
@@ -53,15 +55,15 @@ export default function RadiusMap() {
         style={{ left: pct(C.x - 30, 696), top: pct(C.y - 15, 720), width: pct(60, 696), height: pct(30, 720) }}>
         <span aria-hidden className="block w-[76.7%] bg-limestone-50" style={{ aspectRatio: "591 / 271", mask: "url(/images/icon-pair.svg) center / contain no-repeat", WebkitMask: "url(/images/icon-pair.svg) center / contain no-repeat" }} />
       </span>
-      <span className="absolute t-heading hd-16 text-limestone-50/90 text-shadow-[0_1px_8px_rgb(1_15_26/0.6)]" style={{ left: pct(32, 696), top: pct(32, 720) }}>Within a 5-hour flight radius</span>
+      <span className="absolute t-heading text-limestone-50/90 text-shadow-[0_1px_8px_rgb(1_15_26/0.6)]" style={{ left: pct(32, 696), top: pct(32, 720), ...fs(16, 12) }}>Within a 5-hour flight radius</span>
       {[["1000 km", 345, 330], ["2000 km", 384, 248], ["3000 km", 422, 165]].map(([t, x, y]) => (
-        <span key={t as string} className="absolute t-label l-12 text-limestone-50/85 text-shadow-[0_1px_3px_rgb(1_15_26/0.9),0_1px_10px_rgb(1_15_26/0.6)]" style={{ left: pct(x as number, 696), top: pct(y as number, 720) }}>{t}</span>))}
-      <span className="absolute t-label l-12 text-limestone-300/60 text-shadow-[0_1px_4px_rgb(1_15_26/0.4)]" style={{ left: pct(312, 696), top: pct(366, 720) }}>Mediterranean Sea</span>
+        <span key={t as string} className="absolute t-label text-limestone-50/85 text-shadow-[0_1px_3px_rgb(1_15_26/0.9),0_1px_10px_rgb(1_15_26/0.6)]" style={{ left: pct(x as number, 696), top: pct(y as number, 720), ...fs(12, 9) }}>{t}</span>))}
+      <span className="absolute t-label text-limestone-300/60 text-shadow-[0_1px_4px_rgb(1_15_26/0.4)]" style={{ left: pct(312, 696), top: pct(366, 720), ...fs(12, 9) }}>Mediterranean Sea</span>
       {CITIES.map((c) => (
         <span key={c.n} data-label className="absolute flex flex-col text-limestone-50 opacity-35 text-shadow-[0_1px_3px_rgb(1_15_26/0.9),0_1px_10px_rgb(1_15_26/0.6)]" style={{ left: pct(c.lx, 696), top: pct(c.ly, 720) }}>
-          <span className="t-label l-16">{c.n}</span><span className="t-label l-14 text-limestone-300/95">{c.t}</span></span>))}
+          <span className="t-label" style={fs(16, 11)}>{c.n}</span><span className="t-label text-limestone-300/95" style={fs(14, 10)}>{c.t}</span></span>))}
       <span className="absolute flex flex-col text-limestone-50 text-shadow-[0_1px_3px_rgb(1_15_26/0.9),0_1px_10px_rgb(1_15_26/0.6)]" style={{ left: pct(250, 696), top: pct(454, 720) }}>
-        <span className="t-label l-16">Alam Al Roum</span><span className="t-label l-12 text-limestone-300/95">Egypt&apos;s North Coast</span></span>
+        <span className="t-label" style={fs(16, 11)}>Alam Al Roum</span><span className="t-label text-limestone-300/95" style={fs(12, 9)}>Egypt&apos;s North Coast</span></span>
     </div>
   );
 }

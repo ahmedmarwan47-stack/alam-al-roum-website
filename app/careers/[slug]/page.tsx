@@ -40,7 +40,7 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
       <Navbar />
       <section className="mt-[76px] flex flex-col items-center gap-6 bg-white px-[var(--gutter)] py-[60px] text-center text-black">
         <span className="t-label l-12 text-black/60">Careers</span>
-        <RevealText as="h1" text={r.title} onLoad delay={0.15} className="t-body capitalize [font-size:clamp(44px,4.5vw,68px)] leading-[1]" />
+        <RevealText as="h1" text={r.title} onLoad delay={0.15} className="t-body capitalize d-68 leading-[1]" />
         <RevealText text={r.lede} onLoad delay={0.3} className="t-body b-18 text-black/70" />
       </section>
       <section className="flex flex-col gap-16 bg-terracotta-500 py-20 text-white container-x">

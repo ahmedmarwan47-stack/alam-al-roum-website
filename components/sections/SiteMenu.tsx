@@ -89,7 +89,7 @@ export default function SiteMenu({ open, onClose }: { open: boolean; onClose: ()
       <div id="site-menu" role="dialog" aria-modal="true" aria-label="Site menu"
         className={`absolute inset-y-0 left-0 flex w-full max-w-[348px] overflow-hidden rounded-r-lg bg-limestone-50 transition-[transform,max-width] duration-300 ${EASE} ${open ? "translate-x-0" : "-translate-x-full"} ${sub ? "min-[720px]:max-w-[696px]" : ""}`}>
         {/* Column 1 */}
-        <div className="flex h-full w-full flex-none flex-col justify-between overflow-y-auto pb-5 pr-5 min-[720px]:w-[348px]">
+        <div data-lenis-prevent className="flex h-full w-full flex-none flex-col justify-between overflow-y-auto pb-5 pr-5 min-[720px]:w-[348px]">
           <div className="flex flex-col gap-8">
             <div className="flex h-[60px] flex-none items-center border-b border-deepsea-500/15 pl-5">
               <button onClick={onClose} className="flex items-center gap-2 t-label l-12 text-deepsea-500"><Icon name="cancel-01" size={14} />CLOSE</button>
@@ -123,7 +123,7 @@ export default function SiteMenu({ open, onClose }: { open: boolean; onClose: ()
           </div>
         </div>
         {/* Column 2 */}
-        <div className="hidden h-full w-[348px] flex-none overflow-y-auto bg-limestone-100 min-[720px]:block">
+        <div data-lenis-prevent className="hidden h-full w-[348px] flex-none overflow-y-auto bg-limestone-100 min-[720px]:block">
           {sub && second(sub)}
         </div>
       </div>

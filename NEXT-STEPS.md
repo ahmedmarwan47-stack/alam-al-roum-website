@@ -35,8 +35,18 @@
   - Hero copy turns light only once the photo covers it; in-town modes keep their text visible and activate earlier
   - Story and event cards are row subgrids, so a row stays in line when one title wraps
 - No orphans: `text-wrap: pretty` on all text, and RevealText ties each block's last two words
+- Phone pass (390 px):
+  - one fluid type scale (app/globals.css): every Figma size runs on a straight line from a phone size at 390
+    to Figma's size at 1512, page titles included (`.d-*`); long statements use the smaller `.hd-56l`
+  - Qatari Diar numbers keep the photo numerals on phones, under the copy; the lighthouse title breaks only from tablet up
+  - Life in Bloom copy stays inside the framed photo; The Story's scattered words stay on screen and its paragraph
+    waits until they have gathered
+  - Since the Romans stacks the title above the mosaic; the water panels get a deeper shade behind their copy
+  - the flight-radius map sizes its labels to the map; the Contact map uses dot pins; the Cal.com booker stacks
+  - a text-overlap check (every page scrolled at 390 and 768) finds no colliding or off-screen text
 - Responsive: no horizontal overflow at 390 / 768 / 1024; phone fixes for the Grandeur film, Ways to live rows,
-  the masterplan pin card (shown under the map), the Romans panel and the Water strategy decor
+  the masterplan pin card (shown under the map), the Romans panel and the Water strategy decor; the hotel drawer
+  and the menu scroll under a mouse wheel (`data-lenis-prevent`)
 
 ## Open
 1. Contact and Register Interest forms have no backend: sending opens the visitor's mail app addressed to info@alamalroumegypt.com.

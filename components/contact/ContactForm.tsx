@@ -25,7 +25,7 @@ export default function ContactForm() {
   };
   return (
     <form onSubmit={send} className="flex w-full flex-col gap-10 rounded-[30px] bg-[rgba(10,10,10,0.4)] p-5 backdrop-blur-[16px] sm:p-7 lg:w-[588px] lg:flex-none">
-      <span className="t-label capitalize text-white [font-size:32px] leading-[40px]">{F.title}</span>
+      <span className="t-label capitalize text-white d-32 leading-[1.25]">{F.title}</span>
       <div className="flex flex-col gap-7">
         <label className={line}><span className={label}>{F.fields.name[0]}</span><input name="name" required autoComplete="name" placeholder={F.fields.name[1]} className={input} /></label>
         <label className={line}><span className={label}>{F.fields.email[0]}</span><input name="email" type="email" required autoComplete="email" placeholder={F.fields.email[1]} className={input} /></label>

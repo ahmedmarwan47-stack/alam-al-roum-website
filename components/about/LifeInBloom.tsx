@@ -63,8 +63,9 @@ export default function LifeInBloom() {
           </div>
         </div>
       ))}
-      <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 text-center text-limestone-50 container-x">
-        <h2 data-title data-reveal className="t-heading hd-56">{B.title}</h2>
+      {/* the copy stays inside the framed photo at rest (light type, so it would vanish on the Limestone around it) */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-[14%] text-center text-limestone-50 lg:px-[20%]">
+        <h2 data-title data-reveal className="t-heading hd-56 text-balance">{B.title}</h2>
         <p data-body data-reveal className="t-body b-14 max-w-[520px]">{B.body}</p>
       </div>
     </section>

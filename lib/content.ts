@@ -39,7 +39,7 @@ export const grandeur = {
   ] as GrandeurCard[],
 };
 
-export const lighthouse = { title: [{ t: "The lighthouse still" }, { t: "marks the way home", br: true }], cta: "About Us" };
+export const lighthouse = { title: [{ t: "The lighthouse still" }, { t: "marks the way home", br: "md" as const }], cta: "About Us" };
 
 export const communities = {
   tag: "Featured communities", title: "Places to call home", cta: "View All Communities",

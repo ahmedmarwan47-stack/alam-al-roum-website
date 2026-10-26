@@ -40,11 +40,12 @@ export default function QatariDiarNumbers() {
   }, [s]);
   return (
     <section ref={root} data-no-blur className="relative bg-limestone-50" style={{ height: `${STATS.length * 100}svh` }}>
-      <div className="sticky top-0 flex h-svh items-center container-x">
+      {/* below lg the numerals sit under the copy, so each stat still fills the screen */}
+      <div className="sticky top-0 flex h-svh flex-col justify-center gap-10 container-x lg:flex-row lg:items-center lg:justify-start lg:gap-0">
         {/* Figma "Copy" block: logo 80, 24 gap, Heading/48 (440 wide), 24 gap, Body/18 (≈405 wide) */}
         <div className="relative z-10 w-full max-w-[440px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/qatari-diar.png" alt="Qatari Diar" width={80} height={80} className="mb-6" />
+          <img src="/images/qatari-diar.png" alt="Qatari Diar" width={80} height={80} className="mb-6 h-14 w-14 lg:h-20 lg:w-20" />
           <div className="grid">
             {STATS.map((x, k) => (
               <div key={x.n} aria-hidden={k !== s} className="col-start-1 row-start-1 flex flex-col gap-6">
@@ -58,7 +59,7 @@ export default function QatariDiarNumbers() {
               </div>))}
           </div>
         </div>
-        <div className="pointer-events-none absolute inset-y-0 right-[var(--gutter)] hidden w-[min(58.9vw,890px)] items-center lg:flex">
+        <div className="pointer-events-none w-full max-w-[620px] lg:absolute lg:inset-y-0 lg:right-[var(--gutter)] lg:flex lg:w-[min(58.9vw,890px)] lg:max-w-none lg:items-center">
           <div className="flex w-full items-center justify-end">
             <div className="relative w-full" style={{ aspectRatio: "890 / 580" }}>
               {STATS.map((x, k) => (

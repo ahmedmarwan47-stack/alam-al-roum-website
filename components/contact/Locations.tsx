@@ -10,12 +10,18 @@ export default function Locations() {
   return (
     <section className="flex flex-col gap-10 bg-white py-[60px] container-x">
       <SectionTitle tag={L.tag} title={L.title} align="left" />
-      <div className="relative aspect-[2784/960] overflow-hidden">
+      {/* full bleed on phones, where the strip is short; each pin is a point the labels hang from */}
+      <div className="relative -mx-[var(--gutter)] aspect-[2784/960] overflow-hidden md:mx-0">
         <RevealImage src={L.map} alt="Map of Egypt and the Gulf with the three Alam Al Roum offices" className="h-full w-full" />
         {L.pins.map(([name, x, y]) => (
-          <span key={name} style={{ left: `${x}%`, top: `${y}%` }}
-            className="absolute flex -translate-y-1/2 items-center gap-1.5 rounded-full bg-white px-3 py-1.5 t-label l-12 text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)]">
-            <Icon name="location-01" size={14} />{name}
+          <span key={name} style={{ left: `${x}%`, top: `${y}%` }} className="absolute">
+            {/* md up: Figma's pill, its left edge on the spot */}
+            <span className="absolute left-0 top-0 hidden -translate-y-1/2 items-center gap-1.5 whitespace-nowrap rounded-full bg-white px-3 py-1.5 t-label l-12 text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)] md:flex">
+              <Icon name="location-01" size={14} />{name}
+            </span>
+            {/* phones: a dot on the spot and a small label above it (below for Cairo, so it clears the North Coast) */}
+            <span className="absolute size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white ring-2 ring-black/70 md:hidden" />
+            <span className={`absolute -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-2 py-0.5 t-label text-[10px] leading-[14px] text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)] md:hidden ${name === "Cairo" ? "top-2" : "bottom-2"}`}>{name}</span>
           </span>))}
         <span className="absolute inset-x-0 bottom-0 hidden bg-white/70 px-2 py-1 t-text text-[10px] leading-3 truncate text-black/80 md:block">{L.credit}</span>
       </div>

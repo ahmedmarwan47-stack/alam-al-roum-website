@@ -47,7 +47,7 @@ export default function HotelsList({ data: D }: { data: HotelsData }) {
       <div className={`fixed inset-0 z-[60] transition-[visibility] ${h ? "visible" : "invisible delay-500"}`} aria-hidden={!h}>
         <button aria-label="Close" tabIndex={-1} onClick={() => setOpen(null)} className={`absolute inset-0 bg-deepsea-950/50 transition-opacity duration-500 ${h ? "opacity-100" : "opacity-0"}`} />
         <aside role="dialog" aria-modal="true" aria-label={h?.name}
-          className={`absolute inset-y-0 right-0 flex w-full max-w-[560px] flex-col justify-between gap-10 overflow-y-auto bg-limestone-50 p-5 transition-transform duration-500 [transition-timing-function:var(--ease-site)] sm:p-7 ${h ? "translate-x-0" : "translate-x-full"}`}>
+          data-lenis-prevent className={`absolute inset-y-0 right-0 flex w-full max-w-[560px] flex-col justify-between gap-10 overflow-y-auto bg-limestone-50 p-5 transition-transform duration-500 [transition-timing-function:var(--ease-site)] sm:p-7 ${h ? "translate-x-0" : "translate-x-full"}`}>
           {h && <>
             <div className="flex flex-col gap-6">
               <button onClick={() => setOpen(null)} className="self-start text-deepsea-500" aria-label="Close drawer"><Icon name="cancel-01" size={24} /></button>

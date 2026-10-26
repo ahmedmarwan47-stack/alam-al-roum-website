@@ -76,7 +76,7 @@ export default function CoastalFacts() {
         <div data-facts className="absolute inset-x-[var(--gutter)] top-[77.34%] grid grid-cols-4 gap-6 opacity-0">
           {F.items.map((x) => (
             <div key={x.value} data-fb className="flex flex-col gap-2 border-t border-limestone-600 pt-5">
-              <span data-fv className="t-text text-deepsea-500" style={{ fontSize: "clamp(34px, 3.7vw, 56px)", lineHeight: 60 / 56, letterSpacing: "-0.035em" }}>{x.value}</span>
+              <span data-fv className="t-text text-deepsea-500" style={{ fontSize: "clamp(30px, calc(30px + 26 * (100vw - 390px) / 1122), 56px)", lineHeight: 60 / 56, letterSpacing: "-0.035em" }}>{x.value}</span>
               <span data-fl className="t-text x-16 text-limestone-800">{x.label}</span>
             </div>
           ))}

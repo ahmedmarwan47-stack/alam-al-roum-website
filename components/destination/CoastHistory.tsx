@@ -55,7 +55,7 @@ export default function CoastHistory({ path }: { path: string }) {
   const L = H.line;
   return (
     <div ref={root} className="flex flex-col items-center gap-10 lg:h-[min(844px,calc(100svh-160px))] lg:w-[1392px]">
-      <h2 className="max-w-[842px] text-center t-body uppercase leading-none [font-size:clamp(36px,4vw,60px)]">{H.coast.title}</h2>
+      <h2 className="max-w-[842px] text-center t-body uppercase leading-none d-60">{H.coast.title}</h2>
       {/* the 3D coin sits where Figma's coin photo is (371 square) */}
       <div className="aspect-square w-full max-w-[420px] lg:h-[clamp(160px,calc(100svh-620px),371px)] lg:w-auto lg:flex-none">
         <Coin3D pose={pose} className="h-full w-full" />

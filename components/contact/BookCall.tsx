@@ -23,15 +23,16 @@ export default function BookCall() {
   return (
     <section className="flex flex-col items-center gap-12 bg-limestone-50 py-[60px] container-x">
       <SectionTitle tag={B.tag} title={B.title} />
-      <div className="w-full max-w-[890px] overflow-x-auto rounded-xl border border-black/10 bg-white">
-        <div className="flex min-w-[820px]">
-          <div className={`flex w-[274px] flex-none flex-col gap-5 border-r border-black/10 px-6 py-7 ${ink}`}>
+      {/* below lg the three panes stack: event info, the month, then the day's slots two by two */}
+      <div className="w-full max-w-[890px] overflow-hidden rounded-xl border border-black/10 bg-white">
+        <div className="flex flex-col lg:flex-row">
+          <div className={`flex flex-col gap-5 border-b border-black/10 px-6 py-7 lg:w-[274px] lg:flex-none lg:border-b-0 lg:border-r ${ink}`}>
             <span className="size-[51px] rounded-full bg-[#c4c4c4]" />
             <div className="flex flex-col gap-1.5"><span className="t-label l-14 text-black/70">{B.host}</span><span className="t-text x-20">{B.event}</span></div>
             <p className="t-body b-14 text-black/70">{B.body}</p>
             <div className="flex flex-col gap-3">{B.meta.map(([i, t]) => <span key={t} className="flex items-center gap-2 t-label l-14"><Icon name={i} size={16} />{t}</span>)}</div>
           </div>
-          <div className="flex w-[384px] flex-none flex-col gap-5 px-6 py-7">
+          <div className="flex flex-col gap-5 px-5 py-7 sm:px-6 lg:w-[384px] lg:flex-none">
             <div className={`flex items-center justify-between ${ink}`}>
               <span className="flex items-baseline gap-1.5"><span className="t-text x-20">{month}</span><span className="t-text x-14 text-black/60">{B.year}</span></span>
               <span className="flex gap-2 text-black/40"><Icon name="arrow-left-01-sharp" size={16} /><Icon name="arrow-right-01-sharp" size={16} /></span>
@@ -47,21 +48,23 @@ export default function BookCall() {
               })}
             </div>
           </div>
-          <div className="flex flex-1 flex-col gap-3 border-l border-black/10 px-5 py-7">
+          <div className="flex flex-1 flex-col gap-3 border-t border-black/10 px-5 py-7 lg:border-l lg:border-t-0">
             <div className={`flex items-center justify-between pb-1 ${ink}`}>
               <span className="t-label l-14">{weekday} <span className="text-black/60">{day}</span></span>
               <span className="flex rounded-md border border-black/10 p-[3px] t-label l-12">
                 {["12h", "24h"].map((f, k) => <button key={f} onClick={() => setH24(k === 1)} className={`rounded px-1.5 py-0.5 ${h24 === (k === 1) ? "bg-black/[0.07]" : "text-black/60"}`}>{f}</button>)}
               </span>
             </div>
+            <div className="grid grid-cols-2 gap-2 lg:flex lg:flex-col lg:gap-3">
             {B.times.map((t, k) => (
               <a key={t} href="#contact-form" onClick={() => setSlot(k)}
                 className={`flex h-[46px] items-center justify-center gap-2 rounded-md border t-label l-14 transition-colors ${slot === k ? "border-[#2c2929] bg-[#2c2929] text-white" : `border-black/15 ${ink} hover:border-black/40`}`}>
                 {slot !== k && <i className="size-1.5 rounded-full bg-[#8b8a5e]" />}{h24 ? to24(t) : t}
               </a>))}
+            </div>
           </div>
         </div>
-        <div className="flex justify-between border-t border-black/10 px-6 py-3.5 t-text x-12 text-black/70"><span>{B.tz}</span><span className="text-black/40">Powered by Cal.com</span></div>
+        <div className="flex justify-between gap-4 border-t border-black/10 px-6 py-3.5 t-text x-12 text-black/70"><span>{B.tz}</span><span className="text-black/40">Powered by Cal.com</span></div>
       </div>
     </section>
   );

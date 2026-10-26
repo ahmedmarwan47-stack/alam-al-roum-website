@@ -40,24 +40,26 @@ export default function RomansIntro() {
     return () => { track?.removeEventListener("track-ready", build); rise.scrollTrigger?.kill(); rise.kill(); titleST.kill(); title.kill(); drift?.scrollTrigger?.kill(); drift?.kill(); };
   }, []);
   const R = H.romans;
-  // below lg the flower sits on the mosaic's lower corner, clear of the copy under it
+  // below lg the title stands above the mosaic (no overlap at phone size) and the flower sits on the mosaic's lower corner
   return (
     <div ref={root} className="relative flex flex-col gap-8 lg:h-[min(844px,calc(100svh-160px))] lg:w-[1392px] lg:flex-row lg:items-end lg:gap-[30px]">
       {/* Figma columns: 1041 for the title over the mosaic (the mosaic at 419–1041), 30 gap, 321 for the statement */}
-      <div className="relative h-[70svh] max-h-[640px] flex-none lg:h-full lg:max-h-none lg:w-[1041px]">
-        <div data-mosaic className="absolute left-[16%] top-0 h-full w-[68%] overflow-hidden lg:left-[419px] lg:w-[622px]">
-          <img src={R.photo} alt="A Roman mosaic of a ship" className="h-full w-full object-cover" />
-        </div>
-        <h2 data-title data-reveal className="absolute left-0 top-1/2 flex w-[60%] -translate-y-1/2 flex-col gap-[7px] t-body text-right uppercase leading-none [font-size:clamp(56px,7.9vw,120px)] lg:w-[552px]">
+      <div className="relative flex flex-col gap-6 lg:block lg:h-full lg:w-[1041px] lg:flex-none">
+        <h2 data-title data-reveal className="relative z-10 flex w-[4.6em] flex-col gap-[7px] t-body text-right uppercase leading-none d-120 lg:absolute lg:left-0 lg:top-1/2 lg:-translate-y-1/2">
           <span>{R.title[0]}</span><span>{R.title[1]}</span><span className="text-center">{R.title[2]}</span>
         </h2>
+        <div className="relative ml-auto h-[58svh] max-h-[560px] w-[84%] lg:absolute lg:left-[419px] lg:top-0 lg:ml-0 lg:h-full lg:max-h-none lg:w-[622px]">
+          <div data-mosaic className="h-full w-full overflow-hidden">
+            <img src={R.photo} alt="A Roman mosaic of a ship" className="h-full w-full object-cover" />
+          </div>
+          <div data-flower-drift className="pointer-events-none absolute -bottom-6 left-[calc(-19.05%-var(--gutter))] w-[200px] origin-bottom-left lg:-bottom-20 lg:left-[calc(-419px-var(--gutter))] lg:w-[344px] lg:max-w-[60vw]">
+            <img data-flower src={R.flower} alt="" className="w-full origin-bottom-left animate-[sway_6s_ease-in-out_infinite]" />
+          </div>
+        </div>
       </div>
       <div className="flex max-w-[360px] flex-col gap-3 t-body lg:w-[321px] lg:flex-none">
-        <RevealText text={R.side.title} className="text-[36px] leading-none" />
-        <RevealText text={R.side.body} className="text-[20px] leading-[1.5]" delay={0.08} />
-      </div>
-      <div data-flower-drift className="pointer-events-none absolute left-[calc(var(--gutter)*-1)] top-[calc(min(70svh,640px)_-_170px)] w-[200px] origin-bottom-left lg:top-auto lg:-bottom-20 lg:w-[344px] lg:max-w-[60vw]">
-        <img data-flower src={R.flower} alt="" className="w-full origin-bottom-left animate-[sway_6s_ease-in-out_infinite]" />
+        <RevealText text={R.side.title} className="d-36 leading-none" />
+        <RevealText text={R.side.body} className="b-20" delay={0.08} />
       </div>
     </div>
   );

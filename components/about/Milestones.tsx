@@ -17,7 +17,7 @@ function Milestone({ i }: { i: number }) {
       {/* the line: 268 tall at rest, 632 when in focus (Figma) — drawn at 632 and scaled */}
       <span data-ms-line className="absolute left-0 top-0 h-[632px] w-px origin-top bg-deepsea-500" style={{ transform: `scaleY(${268 / 632})` }} />
       <div className="flex flex-col gap-2 pl-4">
-        <span className="t-text text-[56px] leading-[1.07] text-deepsea-500">{m.year}</span>
+        <span className="t-text d-56 leading-[1.07] text-deepsea-500">{m.year}</span>
         <span className="t-text x-16 text-limestone-800">{m.title}</span>
       </div>
       <div className="flex h-[136px] items-center gap-6 pl-6" aria-hidden>
