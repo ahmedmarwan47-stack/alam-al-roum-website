@@ -8,8 +8,8 @@ import { connectivity as c } from "@/lib/content";
 /** `tag` overrides the eyebrow; `compact` drops the visa card and button (Destination · To town, Figma 11012:15889). */
 export default function Connectivity({ tag, compact = false }: { tag?: string; compact?: boolean }) {
   return (
-    <section className="flex flex-col gap-10 bg-terracotta-500 py-20 text-limestone-50 container-x lg:flex-row">
-      <div className="flex flex-col gap-10 lg:w-[46%]">
+    <section className={`flex flex-col gap-10 bg-terracotta-500 py-20 text-limestone-50 container-x lg:flex-row ${compact ? "lg:items-center lg:gap-[72px]" : ""}`}>
+      <div className="flex flex-col gap-10 lg:w-1/2 lg:flex-none">
         <RevealMask from="left"><RadiusMap /></RevealMask>
         {!compact && <div className="flex flex-col gap-4 rounded-[20px] border border-limestone-50/15 bg-limestone-50/5 p-6">
           <span className="flex items-center gap-[10px] t-label l-16"><Icon name="airplane-01" />{c.visa.label}</span>
@@ -19,7 +19,7 @@ export default function Connectivity({ tag, compact = false }: { tag?: string; c
           </div>
         </div>}
       </div>
-      <div className="flex flex-1 flex-col justify-center gap-8 lg:pl-10">
+      <div className={`flex flex-1 flex-col justify-center ${compact ? "gap-10" : "gap-8"}`}>
         <div className="flex flex-col gap-4">
           <RevealText text={tag ?? c.tag} className="t-label l-16" />
           <RevealText as="h2" text={c.title} className="t-heading hd-48" delay={0.05} />
@@ -29,10 +29,10 @@ export default function Connectivity({ tag, compact = false }: { tag?: string; c
           <span className="t-text x-16 text-limestone-50/70">{c.listLabel}</span>
           <div className="flex flex-col">
             {c.items.map((it, k) => (
-              <div key={it.title} className="flex gap-4 border-b border-limestone-50/15 py-[18px]">
+              <div key={it.title} className="flex gap-6 border-b border-limestone-50/15 py-5">
                 <span className="w-6 t-label l-14 text-limestone-50/60">{String(k + 1).padStart(2, "0")}</span>
                 <Icon name={it.icon} />
-                <div className="flex flex-col gap-1"><RevealText text={it.title} className="t-heading hd-14" /><RevealText text={it.body} className="t-body b-16 text-limestone-50/75" delay={0.06} /></div>
+                <div className="flex flex-col gap-[6px]"><RevealText text={it.title} className="t-heading hd-14" /><RevealText text={it.body} className="t-body b-16 text-limestone-50/75" delay={0.06} /></div>
               </div>))}
           </div>
         </div>

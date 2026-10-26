@@ -1,13 +1,13 @@
 import { archSea as A } from "@/lib/destination";
 
 /**
- * Lighthouse · the arch at sea (Figma 11134:15815): the page melts into clouds, and below them the
- * mirror arch stands in the moving sea (real footage, looped). The film starts 5.3 % of the width
- * down so its top edge always sits under the solid band of the clouds (≈ top 15 % of the cloud art).
+ * Lighthouse · the arch at sea (Figma 11134:15815, 1512 × 1524): the page melts into clouds, and below them the
+ * mirror arch stands in the moving sea under an open sky ("arch-water-loop-with-sky", the video placed in Figma).
+ * The film starts 80 px (5.3 % of the width) down so its top edge sits under the solid band of the clouds.
  */
 export default function ArchSea() {
   return (
-    <section className="relative overflow-hidden bg-limestone-50" aria-label="The arch at sea">
+    <section className="relative overflow-hidden bg-limestone-50" style={{ aspectRatio: "1512 / 1524" }} aria-label="The arch at sea">
       <div className="relative mt-[5.3vw]">
         <video className="block w-full" poster={A.poster} autoPlay muted loop playsInline aria-hidden>
           <source src={A.webm} type="video/webm" />

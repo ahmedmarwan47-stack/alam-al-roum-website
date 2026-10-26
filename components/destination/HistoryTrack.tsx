@@ -29,14 +29,15 @@ function HistoryLine() {
 }
 
 /**
- * Lighthouse · history (Figma 11134:16011): three 1392 px panels in a row; the section pins and the
+ * Lighthouse · history (Figma 11134:16011): 80 px above and below, three 1392 px panels in a row (844 tall, or
+ * the viewport less the padding); the section pins and the
  * row slides left with the scroll (desktop). Panels: Since the Romans, the coast line, the terracotta frame.
  */
 export default function HistoryTrack() {
   return (
-    <PinnedTrack className="bg-limestone-50 text-deepsea-900" trackClassName="gap-24 py-20 lg:h-screen lg:max-h-[1000px] lg:gap-[94px]">
+    <PinnedTrack className="bg-limestone-50 text-deepsea-900" trackClassName="gap-24 py-20 lg:h-svh lg:max-h-[1000px] lg:gap-[94px]">
         {/* 1 · Since the Romans */}
-        <div className="relative flex flex-col gap-8 lg:h-[844px] lg:w-[1392px] lg:flex-row lg:items-end lg:gap-[30px]">
+        <div className="relative flex flex-col gap-8 lg:h-[min(844px,calc(100svh-160px))] lg:w-[1392px] lg:flex-row lg:items-end lg:gap-[30px]">
           <div className="relative h-[70vh] flex-1 lg:h-full">
             <img src={H.romans.photo} alt="A Roman mosaic of a ship" className="absolute left-[16%] top-0 h-full w-[68%] object-cover lg:left-[419px] lg:w-[622px]" />
             <h2 className="absolute left-0 top-1/2 flex w-[60%] -translate-y-1/2 flex-col gap-[7px] t-body text-right uppercase leading-none [font-size:clamp(56px,7.9vw,120px)] lg:w-[552px]">
@@ -50,7 +51,7 @@ export default function HistoryTrack() {
           <img src={H.romans.flower} alt="" className="pointer-events-none absolute -bottom-20 left-[calc(var(--gutter)*-1)] w-[344px] max-w-[60vw]" />
         </div>
         {/* 2 · The coast that guided the Romans */}
-        <div className="flex flex-col items-center gap-10 lg:h-[844px] lg:w-[1392px]">
+        <div className="flex flex-col items-center gap-10 lg:h-[min(844px,calc(100svh-160px))] lg:w-[1392px]">
           <h2 className="max-w-[842px] text-center t-body uppercase leading-none [font-size:clamp(36px,4vw,60px)]">{H.coast.title}</h2>
           <img src={H.coast.photo} alt="The North Coast shoreline" className="aspect-square w-full max-w-[420px] min-h-0 flex-1 object-cover lg:w-auto lg:max-w-none" />
           <div className="hidden w-full justify-center lg:flex"><HistoryLine /></div>
@@ -64,8 +65,8 @@ export default function HistoryTrack() {
           <p className="t-text x-12 text-limestone-800">{H.line.caption}</p>
         </div>
         {/* 3 · Terracotta frame */}
-        <div className="relative flex items-center justify-center overflow-hidden bg-terracotta-500 p-10 lg:h-[844px] lg:w-[596px] lg:p-20">
-          <img src={H.photo} alt="Life on the coast" className="h-[60vh] w-full max-w-[371px] object-cover lg:h-[582px]" />
+        <div className="relative flex items-center justify-center overflow-hidden bg-terracotta-500 p-10 lg:h-[min(844px,calc(100svh-160px))] lg:w-[596px] lg:p-20">
+          <img src={H.photo} alt="Life on the coast" className="h-[60vh] w-full max-w-[371px] object-cover lg:h-[69%]" />
           <img src={H.romans.flower} alt="" className="pointer-events-none absolute -top-4 right-0 w-[344px] max-w-[60%] rotate-180" />
         </div>
     </PinnedTrack>

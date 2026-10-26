@@ -5,7 +5,7 @@ import { hero } from "@/lib/content";
 
 export default function Hero() {
   return (
-    <section className="relative mt-[76px] h-[min(calc(100svh-76px),900px)] min-h-[640px] overflow-hidden text-limestone-50">
+    <section className="relative mt-[76px] h-[calc(100svh-76px)] min-h-[560px] overflow-hidden text-limestone-50">
       <RevealImage src={hero.video} video poster={hero.poster} onLoad delay={0.2} className="absolute inset-0" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[47%] bg-gradient-to-b from-transparent to-[#010F1A]/70" />
       <div className="absolute inset-x-0 bottom-[84px] flex items-end justify-between container-x">

@@ -51,7 +51,7 @@ export const history = {
 };
 
 export const archSea = {
-  video: "/video/destination-arch-sea.mp4", webm: "/video/destination-arch-sea.webm", poster: d("arch-sea-poster.jpg"),
+  video: "/video/destination-arch-sky.mp4", webm: "/video/destination-arch-sky.webm", poster: d("arch-sky-poster.jpg"),
   clouds: d("clouds-top.png"),
 };
 

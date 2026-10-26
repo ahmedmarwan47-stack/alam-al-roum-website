@@ -6,8 +6,8 @@ import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 const SEL = "main :is(h1, h2, h3, h4, p, img, video, [data-blur])";
 
 /**
- * Site-wide blur in / blur out: text and media sharpen from a 12px blur as they rise into view and soften again
- * as they leave at the top, scrubbed (smoothed) with the scroll. Pinned sections run their own choreography,
+ * Site-wide blur in: text and media sharpen from a 12px blur as they rise into view from the bottom, scrubbed
+ * (smoothed) with the scroll. Nothing blurs on the way out at the top. Pinned sections run their own choreography,
  * so anything inside a pin is left alone, as are the header and elements nested in an already-blurred one.
  * Mounted after the page, so the pins already exist when it looks.
  */
@@ -26,12 +26,9 @@ export default function BlurInOut() {
         if (picked.some((p) => p.contains(el))) continue;
         picked.push(el);
       }
-      const tweens = picked.flatMap((el) => [
+      const tweens = picked.map((el) =>
         gsap.fromTo(el, { filter: "blur(12px)", opacity: 0.35 }, { filter: "blur(0px)", opacity: 1, ease: "none",
-          scrollTrigger: { trigger: el, start: "top 98%", end: "top 74%", scrub: 1 } }),
-        gsap.fromTo(el, { filter: "blur(0px)", opacity: 1 }, { filter: "blur(12px)", opacity: 0.35, ease: "none", immediateRender: false,
-          scrollTrigger: { trigger: el, start: "bottom 26%", end: "bottom 2%", scrub: 1 } }),
-      ]);
+          scrollTrigger: { trigger: el, start: "top 98%", end: "top 74%", scrub: 1 } }));
       ScrollTrigger.refresh();
       kill = () => tweens.forEach((t) => { t.scrollTrigger?.kill(); t.kill(); gsap.set(t.targets(), { clearProps: "filter,opacity" }); });
     });

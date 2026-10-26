@@ -2,12 +2,12 @@ import Button from "@/components/ui/Button";
 import RevealText from "@/components/reveal/RevealText";
 import { waterStrategy as W } from "@/lib/destination";
 
-/** Environment · Water strategy (Figma 10999:13971): the shore loop fills the section, copy sits on the sand at the right. */
+/** Environment · Water strategy (Figma 10999:13971): one viewport; the shore loop fills it, copy sits on the sand at the right. */
 export default function WaterStrategy() {
   return (
     <section className="relative overflow-hidden bg-limestone-500">
       <video className="absolute inset-0 h-full w-full object-cover object-left" src={W.video} poster={W.poster} autoPlay muted loop playsInline aria-hidden />
-      <div className="relative flex justify-end px-[var(--gutter)] pb-[200px] pt-20 lg:min-h-[1100px]">
+      <div className="relative flex justify-end px-[var(--gutter)] pb-[166px] pt-20 lg:h-svh lg:min-h-[760px] lg:items-center lg:pb-20">
         <div className="flex w-full max-w-[776px] flex-col gap-10 rounded-2xl bg-limestone-500/85 p-6 backdrop-blur-sm lg:rounded-none lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
           <div className="flex flex-col gap-4">
             <RevealText text={W.tag} className="t-label l-16" />

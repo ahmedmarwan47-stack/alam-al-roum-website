@@ -1,31 +1,29 @@
 "use client";
-import { useEffect, useRef } from "react";
-import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
+import { useEffect, useRef, useState } from "react";
+import { gsap, reducedMotion } from "@/lib/gsap";
 import SectionTitle from "@/components/sections/SectionTitle";
 import { milestones as M } from "@/lib/about/b-content";
 
-const TICKS = 15;
-/** Tick heights: 56 at rest (Figma Default), swelling to 136 at the focus (Figma Hover's peak). */
-const LOW = 56, HIGH = 136;
-/** The focus line sits at this fraction of the rail's visible width; the wave's half-width in px. */
-const FOCUS = 0.3, SPREAD = 260;
+/** Figma "UI / Milestone" (10979:18571…): 400 wide, 15 ticks 24 apart from x 24, ticks 56 at rest → 136 at the focus. */
+const CARD = 400, TICKS = 15, TICK_X0 = 24, TICK_GAP = 25, LOW = 56, HIGH = 136;
+/** Half-width of the tick wave (px) and the section's natural height in Figma (1076, minus nothing: it is scaled to fit). */
+const SPREAD = 190, NATURAL_H = 1076;
 
-/** One "UI / Milestone": the year, the tick rhythm, and its description and photo (revealed by the scroll). */
+/** One milestone: the year, the tick rhythm, then (when it is the one in focus) its long line, description and photo. */
 function Milestone({ i }: { i: number }) {
   const m = M.items[i];
   return (
-    <div data-ms className="relative flex w-[320px] flex-none snap-start flex-col gap-10 lg:w-[400px]">
-      <span data-ms-line className="absolute inset-y-0 left-0 w-px origin-top bg-deepsea-500" />
+    <div data-ms className="relative flex w-[400px] flex-none flex-col gap-10">
+      {/* the line: 268 tall at rest, 632 when in focus (Figma) — drawn at 632 and scaled */}
+      <span data-ms-line className="absolute left-0 top-0 h-[632px] w-px origin-top bg-deepsea-500" style={{ transform: `scaleY(${268 / 632})` }} />
       <div className="flex flex-col gap-2 pl-4">
-        <span className="relative t-text text-[44px] leading-[1.07] text-limestone-800 lg:text-[56px]">
-          {m.year}<span data-ms-on aria-hidden className="absolute inset-0 text-deepsea-500 opacity-0">{m.year}</span>
-        </span>
-        <span data-ms-title className="t-text x-16 text-limestone-800">{m.title}</span>
+        <span className="t-text text-[56px] leading-[1.07] text-deepsea-500">{m.year}</span>
+        <span className="t-text x-16 text-limestone-800">{m.title}</span>
       </div>
       <div className="flex h-[136px] items-center gap-6 pl-6" aria-hidden>
         {Array.from({ length: TICKS }, (_, k) => <i key={k} data-ms-tick className="block h-[136px] w-px flex-none origin-center bg-deepsea-500" />)}
       </div>
-      <div data-ms-detail className="-mt-4 flex flex-col gap-6 px-6">
+      <div data-ms-detail className="flex flex-col gap-6 px-6 opacity-0">
         <p className="t-body b-16 text-limestone-800">{m.body}</p>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={m.photo} alt={m.title} loading="lazy" className="aspect-[352/200] w-full rounded-lg object-cover" />
@@ -34,56 +32,57 @@ function Milestone({ i }: { i: number }) {
 }
 
 /**
- * Milestones · phase one, as one continuous horizontal scroll (no hover, no steps — Figma's Default/Hover
- * states only stood in for this because a prototype can't scroll). On desktop the section pins and the rail
- * travels left with the scroll; below lg it swipes natively. Either way the ticks form a single wave that
- * rolls along the rail — each one scales up as it nears the focus line and back down as it passes — and each
- * milestone's year, description and photo come up as it reaches the focus and fade as it leaves.
+ * Milestones · phase one (Figma 10921:8293). The section is exactly one viewport: it pins, and its Figma layout
+ * is scaled to fit the screen's height. The scroll moves the rail so the milestones pass through the centre one
+ * at a time (snapping to each); the one in focus is fully shown with its long line, description and photo, and
+ * the others fade away. The ticks form one wave centred on the focus, computed from the scroll position itself
+ * (not from per-frame layout reads), so it glides with the smoothed scroll.
  */
 export default function Milestones() {
-  const root = useRef<HTMLElement>(null), rail = useRef<HTMLDivElement>(null);
+  const root = useRef<HTMLElement>(null), rail = useRef<HTMLDivElement>(null), frame = useRef<HTMLDivElement>(null);
+  const [zoom, setZoom] = useState(1);
 
   useEffect(() => {
-    const el = root.current!, r = rail.current!;
-    const ticks = gsap.utils.toArray<HTMLElement>("[data-ms-tick]", el), cards = gsap.utils.toArray<HTMLElement>("[data-ms]", el);
-    const rm = reducedMotion();
-    // the wave: positions are read relative to the rail's viewport each frame (rail translate or native scroll)
+    const fit = () => setZoom(Math.min(1, window.innerHeight / NATURAL_H));
+    fit(); window.addEventListener("resize", fit);
+    return () => window.removeEventListener("resize", fit);
+  }, []);
+
+  useEffect(() => {
+    const el = root.current!, r = rail.current!, n = M.items.length;
+    const cards = gsap.utils.toArray<HTMLElement>("[data-ms]", el);
+    const ticks = cards.map((c) => gsap.utils.toArray<HTMLElement>("[data-ms-tick]", c));
+    const state = { f: 0 };   // the milestone in focus, as a float 0 … n-1
     const paint = () => {
-      const view = r.parentElement!.getBoundingClientRect();
-      const fx = view.left + view.width * FOCUS;
-      for (const t of ticks) {
-        const b = t.getBoundingClientRect(), d = (b.left - fx) / SPREAD, k = Math.exp(-d * d);   // 1 at the focus → 0 away
-        t.style.transform = `scaleY(${(LOW + (HIGH - LOW) * k) / HIGH})`;
-      }
-      for (const c of cards) {
-        const b = c.getBoundingClientRect(), mid = b.left + Math.min(b.width, 400) * 0.35, d = (mid - fx) / (SPREAD * 1.6);
-        const k = rm ? 1 : Math.max(0, Math.exp(-d * d) * 1.25 - 0.1), o = Math.min(1, k);
-        const det = c.querySelector<HTMLElement>("[data-ms-detail]")!, on = c.querySelector<HTMLElement>("[data-ms-on]")!;
-        det.style.opacity = String(o); det.style.transform = `translateY(${(1 - o) * 24}px)`;
-        on.style.opacity = String(o);
-      }
+      const f = state.f, fx = f * CARD + CARD / 2;
+      r.style.transform = `translate3d(${frame.current!.clientWidth / 2 - fx}px,0,0)`;
+      cards.forEach((c, i) => {
+        const near = Math.max(0, 1 - Math.abs(i - f));                 // 1 in focus → 0 one step away
+        c.style.opacity = String(0.08 + 0.92 * near);
+        const det = c.querySelector<HTMLElement>("[data-ms-detail]")!, line = c.querySelector<HTMLElement>("[data-ms-line]")!;
+        const d = Math.max(0, 1 - Math.abs(i - f) * 2);                 // the detail only for the one in focus
+        det.style.opacity = String(d); det.style.transform = `translateY(${(1 - d) * 24}px)`;
+        line.style.transform = `scaleY(${(268 + (632 - 268) * d) / 632})`;
+        ticks[i].forEach((t, k) => {
+          const x = i * CARD + TICK_X0 + k * TICK_GAP, q = (x - fx) / SPREAD;
+          t.style.transform = `scaleY(${(LOW + (HIGH - LOW) * Math.exp(-q * q)) / HIGH})`;
+        });
+      });
     };
-    const mm = gsap.matchMedia();
-    mm.add("(min-width: 1024px)", () => {
-      const dist = () => Math.max(0, r.scrollWidth - r.parentElement!.clientWidth * (1 - FOCUS) + 120);
-      const tw = gsap.to(r, { x: () => -dist(), ease: "none",
-        scrollTrigger: { trigger: el, start: "top top", end: () => `+=${dist() * 1.1}`, pin: true, scrub: 1, invalidateOnRefresh: true, onRefresh: paint } });
-      gsap.ticker.add(paint);
-      return () => { gsap.ticker.remove(paint); tw.scrollTrigger?.kill(); tw.kill(); gsap.set(r, { clearProps: "transform" }); };
-    });
-    mm.add("(max-width: 1023px)", () => {
-      r.addEventListener("scroll", paint, { passive: true }); window.addEventListener("scroll", paint, { passive: true }); paint();
-      return () => { r.removeEventListener("scroll", paint); window.removeEventListener("scroll", paint); };
-    });
-    return () => mm.revert();
+    if (reducedMotion()) { paint(); return; }
+    const tw = gsap.to(state, { f: n - 1, ease: "none", onUpdate: paint,
+      scrollTrigger: { trigger: el, start: "top top", end: () => `+=${window.innerHeight * (n - 1) * 0.9}`, pin: true, scrub: 1.2,
+        snap: { snapTo: 1 / (n - 1), duration: { min: 0.3, max: 0.8 }, ease: "power2.inOut" }, invalidateOnRefresh: true, onRefresh: paint } });
+    paint();
+    return () => { tw.scrollTrigger?.kill(); tw.kill(); };
   }, []);
 
   return (
-    <section ref={root} className="flex flex-col justify-center gap-16 overflow-hidden bg-limestone-50 py-20 lg:h-svh lg:min-h-[760px] lg:py-12">
-      <SectionTitle tag={M.tag} title={M.title} body={M.body} className="mx-auto max-w-[920px] container-x" />
-      <div className="container-x">
-        <div ref={rail}
-          className="-mx-[var(--gutter)] flex snap-x snap-mandatory items-start overflow-x-auto px-[var(--gutter)] [scrollbar-width:none] lg:mx-0 lg:snap-none lg:overflow-visible lg:px-0">
+    <section ref={root} className="relative h-svh overflow-hidden bg-limestone-50">
+      {/* the Figma frame (1076 tall) scaled to the viewport's height */}
+      <div ref={frame} className="flex h-full flex-col gap-20 pt-20" style={{ zoom, width: `${100 / zoom}%`, height: `${100 / zoom}%` }}>
+        <SectionTitle tag={M.tag} title={M.title} body={M.body} className="mx-auto max-w-[920px] container-x" />
+        <div ref={rail} className="flex w-max items-start will-change-transform">
           {M.items.map((m, i) => <Milestone key={m.year} i={i} />)}
         </div>
       </div>

@@ -5,8 +5,8 @@ export const nav = { menu: "MENU", cta: "Register interest" };
 
 export const hero = {
   photo: ph("ui-hero-sea"),
-  /** Figma hero video: the open-sea drone shot from the Experience Centre film (2.3–3.7 s), slowed 2× and ping-ponged into a seamless loop. */
-  video: "/video/hero-sea.mp4", poster: "/images/photo/hero-sea-poster.jpg",
+  /** Figma hero video: the Alam Al Roum brand film (no subtitles), its footage only (2.6–33.9 s), looped. */
+  video: "/video/hero-film.mp4", poster: "/images/photo/hero-film-poster.jpg",
   title: [{ t: "A coastline restored" }, { t: "to a", br: true }, { t: "Circle", i: true }],
   body: "7.2 kilometres of shoreline, a restored lighthouse, and a city built for those who return. On Egypt's North Coast, by Qatari Diar.",
   cta: "Register interest", proof: "Backed by Qatari Diar",

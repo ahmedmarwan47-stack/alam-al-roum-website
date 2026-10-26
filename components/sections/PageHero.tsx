@@ -37,19 +37,19 @@ export default function PageHero({ data: H }: { data: PageHeroData }) {
   return (
     // the pinned node is the inner div, so GSAP's pin-spacer never wraps the element React owns
     <section className="mt-[76px]">
-    <div ref={wrap} className="relative overflow-hidden bg-limestone-50 lg:h-[760px]">
+    <div ref={wrap} className="relative overflow-hidden bg-limestone-50 lg:h-[calc(100svh-76px)] lg:min-h-[640px]">
       {/* slot from Figma (1512 × 760): left 1092, top 480, 360 × 240 */}
       <div ref={photo} className="relative h-[60vh] overflow-hidden lg:absolute lg:left-[72.2%] lg:top-[63.2%] lg:h-[31.6%] lg:w-[23.8%] lg:rounded-[2px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={H.photo} alt={H.alt ?? ""} className="h-full w-full object-cover" />
         <div ref={dim} className="absolute inset-0 bg-gradient-to-r from-black to-transparent opacity-0" />
       </div>
-      <div ref={copy} className="relative flex flex-col gap-4 py-16 text-deepsea-500 container-x lg:absolute lg:left-0 lg:top-[230px] lg:py-0">
+      <div ref={copy} className="relative flex flex-col gap-4 py-16 text-deepsea-500 container-x lg:absolute lg:left-0 lg:top-[30.3%] lg:py-0">
         <RevealText text={H.pre} onLoad delay={0.4} className="t-label l-16" />
         <RevealText as="h1" segs={H.title} onLoad delay={0.45} stagger={0.5} className="t-label hd-56 max-w-[1000px] capitalize" />
         <div ref={body} className="text-limestone-800"><RevealText text={H.body} onLoad delay={1.0} className="t-body b-18 max-w-[300px]" /></div>
       </div>
-      <div ref={rule} className="absolute inset-x-[var(--gutter)] top-[720px] hidden h-px origin-left bg-limestone-300 lg:block" />
+      <div ref={rule} className="absolute inset-x-[var(--gutter)] top-[94.7%] hidden h-px origin-left bg-limestone-300 lg:block" />
     </div>
     </section>
   );
