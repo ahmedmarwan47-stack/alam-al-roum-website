@@ -34,7 +34,7 @@ export default function Manifesto() {
       };
       const tl = gsap.timeline({
         defaults: { ease: "none" },
-        scrollTrigger: { trigger: el, start: "top 76px", end: "+=80%", pin: true, scrub: 1, invalidateOnRefresh: true },   // starts with the first pixel of scroll
+        scrollTrigger: { trigger: el, start: "top 76px", end: "+=100%", pin: true, scrub: 1, invalidateOnRefresh: true },   // same length as the inner-page heroes
       })
         .fromTo(q("[data-clip]"), { clipPath: box }, { clipPath: "inset(0px 0px 0px 0px)", duration: 1 }, 0)
         .fromTo(q("[data-clip] img"), { scale: 1.15 }, { scale: 1, duration: 1 }, 0)

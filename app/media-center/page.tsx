@@ -13,7 +13,7 @@ export default function MediaCenterPage() {
     <main>
       <Navbar />
       <ListingHero title={mediaPage.title} body={mediaPage.body} />
-      <TabbedGrid tabs={mediaPage.tabs} lists={[mediaPage.blog, mediaPage.news]} aspect="443 / 300" />
+      <TabbedGrid tabs={mediaPage.tabs} lists={[mediaPage.blog, mediaPage.news]} kind="story" />
       <Cta />
       <Footer />
     </main>

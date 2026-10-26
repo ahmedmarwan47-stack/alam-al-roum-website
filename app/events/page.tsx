@@ -13,7 +13,7 @@ export default function EventsPage() {
     <main>
       <Navbar />
       <ListingHero title={eventsPage.title} body={eventsPage.body} />
-      <TabbedGrid tabs={eventsPage.tabs} lists={[eventsPage.upcoming, eventsPage.past]} aspect="443 / 495" />
+      <TabbedGrid tabs={eventsPage.tabs} lists={[eventsPage.upcoming, eventsPage.past]} kind="event" />
       <Cta />
       <Footer />
     </main>

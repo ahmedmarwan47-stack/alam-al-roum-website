@@ -1,33 +1,38 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import { gsap, reducedMotion } from "@/lib/gsap";
-import RevealText from "@/components/reveal/RevealText";
+import "@/lib/about/a-motion";
+import { splitChars, writeIn } from "@/components/reveal/letters";
 import type { Seg } from "@/components/reveal/RevealText";
 
 export type PageHeroData = { pre: string; title: Seg[]; body: string; photo: string; alt?: string };
 
 /**
- * Inner-page hero (Figma "UI / Headline / Destination", 11053:7571), its four states in order:
- * Hidden → Line 1 (on load, after 0.4 s: the pre-headline and the first line rise, 0.9 s) →
- * Shown (the second line and the paragraph, the photo fades in rising 60 px into its 360 × 240 slot, and the rule
- * draws across, 1.1 s) → Full (on scroll, pinned: the photo grows to full bleed under a 75% dim, the rule fades
- * and the headline stays, turning Limestone over the photo). The box itself grows, so the photo is re-framed at
- * every size and its subject stays in view.
+ * Inner-page hero (Figma "UI / Headline / Destination", 11053:7571) — the same motion as the About hero
+ * (Manifesto, "UI / Headline / Accent"), since both are one concept:
+ * on load, after 0.3 s, the headline writes itself in letter by letter; the pre-headline and the paragraph rise
+ * 16 px into view, the photo rises 60 px into its 360 × 240 slot and the rule draws across (0.22/1/0.36/1 settle).
+ * On scroll (pinned, linear from the first pixel, one viewport long) the photo grows to full bleed easing back from
+ * a 1.15 zoom, the dim comes up to 75 %, the copy turns Limestone and the rule fades. The box itself grows, so the
+ * photo is re-framed at every size and its subject stays in view.
  */
 export default function PageHero({ data: H }: { data: PageHeroData }) {
   const wrap = useRef<HTMLDivElement>(null), photo = useRef<HTMLDivElement>(null), dim = useRef<HTMLDivElement>(null),
     rule = useRef<HTMLDivElement>(null), copy = useRef<HTMLDivElement>(null), body = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const el = photo.current; if (!el || reducedMotion()) return;
-    // Line 1 → Shown: the photo and the rule arrive with the second line
-    const intro = gsap.timeline({ delay: 0.95 })
-      .fromTo(el, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 1.1, ease: "power3.out" }, 0)
-      .fromTo(rule.current, { scaleX: 0 }, { scaleX: 1, duration: 1.1, ease: "power3.out" }, 0);
+    const el = photo.current!, q = gsap.utils.selector(wrap.current);
+    if (reducedMotion()) return;
+    const intro = gsap.timeline({ delay: 0.3, defaults: { ease: "aSettle" } })
+      .add(writeIn(splitChars(q("h1")[0] as HTMLElement), 0.04, 0.7))
+      .addLabel("shown", ">-0.35")
+      .fromTo(q("[data-pre], [data-body]"), { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, stagger: 0.06 }, "shown")
+      .fromTo(el, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1 }, "shown")
+      .fromTo(rule.current, { scaleX: 0 }, { scaleX: 1, duration: 1.1 }, "shown");
     if (!window.matchMedia("(min-width: 1024px)").matches) return () => { intro.kill(); };
-    // Shown → Full, scrubbed
-    const tl = gsap.timeline({ defaults: { ease: "none" },   // linear: it visibly moves from the very first pixel of scroll
-      scrollTrigger: { trigger: wrap.current, start: "top 76px", end: "+=110%", scrub: 1, pin: true } });   // 76 = under the bar: grows from the first pixel of scroll
+    const tl = gsap.timeline({ defaults: { ease: "none" },
+      scrollTrigger: { trigger: wrap.current, start: "top 76px", end: "+=100%", scrub: 1, pin: true } });   // 76 = under the bar
     tl.to(el, { left: "0%", top: "0%", width: "100%", height: "100%", borderRadius: 0 }, 0)
+      .fromTo(el.querySelector("img"), { scale: 1.15 }, { scale: 1 }, 0)
       .to(dim.current, { opacity: 0.75 }, 0)
       .to(rule.current, { opacity: 0 }, 0)
       .to(copy.current, { color: "#FBFAF8" }, 0)
@@ -45,9 +50,12 @@ export default function PageHero({ data: H }: { data: PageHeroData }) {
         <div ref={dim} className="absolute inset-0 bg-gradient-to-r from-black to-transparent opacity-0" />
       </div>
       <div ref={copy} className="relative flex flex-col gap-4 py-16 text-deepsea-500 container-x lg:absolute lg:left-0 lg:top-[30.3%] lg:py-0">
-        <RevealText text={H.pre} onLoad delay={0.4} className="t-label l-16" />
-        <RevealText as="h1" segs={H.title} onLoad delay={0.45} stagger={0.5} className="t-label hd-56 max-w-[1000px] capitalize" />
-        <div ref={body} className="text-limestone-800"><RevealText text={H.body} onLoad delay={1.0} className="t-body b-18 max-w-[300px]" /></div>
+        <span data-pre className="t-label l-16">{H.pre}</span>
+        <h1 data-no-blur className="t-label hd-56 max-w-[1000px] capitalize">
+          {H.title.map((s, k) => (
+            <Fragment key={k}>{s.br && <br />}{k > 0 && !s.br && " "}{s.i ? <span className="t-accent">{s.t}</span> : s.t}</Fragment>))}
+        </h1>
+        <div ref={body} data-body className="text-limestone-800"><p className="t-body b-18 max-w-[300px]">{H.body}</p></div>
       </div>
       <div ref={rule} className="absolute inset-x-[var(--gutter)] top-[94.7%] hidden h-px origin-left bg-limestone-300 lg:block" />
     </div>

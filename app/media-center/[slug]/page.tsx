@@ -3,7 +3,7 @@ import Navbar from "@/components/sections/Navbar";
 import RevealImage from "@/components/reveal/RevealImage";
 import RevealText from "@/components/reveal/RevealText";
 import SectionTitle from "@/components/sections/SectionTitle";
-import { ListCardItem } from "@/components/sections/TabbedGrid";
+import { StoryCard } from "@/components/sections/Cards";
 import ShareRow from "@/components/media/ShareRow";
 import ArticleBody from "@/components/media/ArticleBody";
 import Cta from "@/components/sections/Cta";
@@ -43,7 +43,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       <section className="flex flex-col gap-10 border-t border-black/10 py-20 container-x">
         <SectionTitle tag={related.tag} title={related.title} />
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {related.items.filter((s) => s.slug !== a.slug).slice(0, 3).map((c, k) => <ListCardItem key={c.slug} c={c} k={k} aspect="443 / 300" />)}
+          {related.items.filter((s) => s.slug !== a.slug).slice(0, 3).map((c, k) => <StoryCard key={c.slug} {...c} delay={k * 0.08} />)}
         </div>
       </section>
       <Cta />
