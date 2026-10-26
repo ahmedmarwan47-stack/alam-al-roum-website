@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 import { story as S } from "@/lib/about/b-content";
+import { splitChars, LETTER_FROM, LETTER_TO } from "@/components/reveal/letters";
 
 const FW = 1512, FH = 1024;                 // the motion-study frame
 const fy = (y: number) => `${(y / FH) * 100}%`;
@@ -9,8 +10,10 @@ const fy = (y: number) => `${(y / FH) * 100}%`;
  * The two domes are clip-path circles driven by two CSS variables: --t is the dome's top edge (% of the
  * stage height), --r its radius. Figma: a 2400 circle rises from y 1100 to 560, then grows to 4400 at
  * y −1700 and covers the frame. Radii are in vmax so a portrait phone is still fully covered.
+ * As in the ERA Residence reference, the dome is born as a small arc at the bottom centre and widens as it rises
+ * (its radius grows from 14 to 79 vmax on the way up), rather than a full-size circle sliding in.
  */
-const DOME = { below: { "--t": fy(1100), "--r": "79.37vmax" }, risen: { "--t": fy(560) }, cover: { "--t": fy(-1700), "--r": "145.5vmax" } };
+const DOME = { below: { "--t": fy(1060), "--r": "14vmax" }, risen: { "--t": fy(560), "--r": "79.37vmax" }, cover: { "--t": fy(-1700), "--r": "145.5vmax" } };
 const domeStyle = { ...DOME.below, clipPath: "circle(var(--r) at 50% calc(var(--t) + var(--r)))" } as React.CSSProperties;
 /** Each state change in the Figma prototype: Smart Animate 1.2 s on the slideWipe curve. */
 // continuous scroll: each move overlaps the next a little (STEP < MOVE) and runs linear with the scroll — no holds
@@ -48,6 +51,8 @@ export default function TheStory() {
     const dy = (el?: HTMLElement) => (el?.dataset?.y ? (+el.dataset.y / FH) * H() - off(el, st).y : 0);
     // the Greatness word flies from the dome to its place above the headline (a measured FLIP)
     const gw = $("[data-g-word]"), slot = $("[data-g-slot]");
+    // each dome's word writes itself in, letter by letter, while its dome rises
+    const cChars = splitChars($("[data-c-word]")), gChars = splitChars(gw);
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { duration: D, ease } });
@@ -65,6 +70,7 @@ export default function TheStory() {
       // 1 → 2 · Culture rises
       tl.to($("[data-dome=culture]"), DOME.risen, t)
         .to($("[data-c-word]"), { top: fy(640) }, t)
+        .fromTo(cChars, LETTER_FROM, { ...LETTER_TO, duration: D * 0.5, stagger: (D * 0.5) / cChars.length }, t + D * 0.3)
         .to($("[data-h-text]"), { y: -60, autoAlpha: 0.4 }, t);
       // 2 → 3 · Culture covers, the words float in
       t += STEP;
@@ -80,7 +86,8 @@ export default function TheStory() {
       // 4 → 5 · Greatness rises
       t += STEP;
       tl.to($("[data-dome=greatness]"), DOME.risen, t)
-        .to(gw, { top: fy(640) }, t);
+        .to(gw, { top: fy(640) }, t)
+        .fromTo(gChars, LETTER_FROM, { ...LETTER_TO, duration: D * 0.5, stagger: (D * 0.5) / gChars.length }, t + D * 0.3);
       // 5 → 6 · Greatness covers; the word settles over the headline
       t += STEP;
       tl.to($("[data-dome=greatness]"), DOME.cover, t)
@@ -113,7 +120,7 @@ export default function TheStory() {
 
         {/* 2–4 · Culture: the Limestone dome, its word, the three photos and the gathered headline */}
         <div data-dome="culture" className="absolute inset-0 bg-limestone-500" style={domeStyle} />
-        <span data-c-word className="absolute left-1/2 -translate-x-1/2 t-accent hd-56 text-deepsea-500" style={{ top: fy(1180) }}>{C.word}</span>
+        <span data-c-word data-no-blur className="absolute left-1/2 -translate-x-1/2 t-accent hd-56 text-deepsea-500" style={{ top: fy(1180) }}>{C.word}</span>
         {C.photos.map((p) => (
           <div key={p.src} data-photo className="absolute hidden overflow-hidden md:block"
             style={{ left: `${(p.x / FW) * 100}%`, top: fy(p.y), width: `${(p.w / FW) * 100}%`, aspectRatio: `${p.w} / ${p.h}` }}>
@@ -136,7 +143,7 @@ export default function TheStory() {
           <img src={G.photo} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
           <div data-g-dim className="absolute inset-0 bg-gradient-to-b from-deepsea-950/15 to-deepsea-950/70" />
         </div>
-        <span data-g-word className="absolute left-1/2 t-accent hd-56 text-limestone-50" style={{ top: fy(1180) }}>{G.word}</span>
+        <span data-g-word data-no-blur className="absolute left-1/2 t-accent hd-56 text-limestone-50" style={{ top: fy(1180) }}>{G.word}</span>
         <div className="absolute left-[var(--gutter)] right-[var(--gutter)] flex flex-col text-limestone-50" style={{ top: fy(430) }}>
           <span data-g-slot aria-hidden className="invisible self-start t-accent hd-56">{G.word}</span>
           <h2 className="mt-[30px] flex flex-col">

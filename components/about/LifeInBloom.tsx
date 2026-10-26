@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { gsap, reducedMotion } from "@/lib/gsap";
+import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 import "@/lib/about/a-motion";
-import RevealText from "@/components/reveal/RevealText";
+import { splitChars, writeIn } from "@/components/reveal/letters";
 import { bloom as B } from "@/lib/about/a-content";
 
 const pct = (v: number) => `${v}%`;
@@ -12,12 +12,22 @@ const pct = (v: number) => `${v}%`;
  * after 0.2 s), all on the 0.76/0/0.24/1 in-out. The framed photo opens from 1000 × 620 to 1200 × 740 to full
  * bleed (dim 25 → 30 %), while the bougainvillea and olive cut-outs drift out past the corners, growing
  * 300 → 360 → 420px, turning further and fading on the last leg.
+ * Before the pin, as the section scrolls up into place (the ERA Residence entrance): the flowers and olives ride
+ * in from their corners — the top pair down from above, the bottom pair up from below — and once it lands the
+ * title and the quote write themselves in, letter by letter from a pale blur.
  */
 export default function LifeInBloom() {
   const root = useRef<HTMLElement>(null);
   useEffect(() => {
     if (reducedMotion()) return;
     const el = root.current!, q = gsap.utils.selector(el);
+    // entrance: corners ride in with the scroll, then the copy writes in
+    const cutsIn = gsap.fromTo(q("[data-cut-in]"), { y: (k) => (k < 2 ? -1 : 1) * window.innerHeight * 0.35, x: (k) => (k % 2 ? 1 : -1) * window.innerWidth * 0.06 },
+      { y: 0, x: 0, ease: "none", scrollTrigger: { trigger: el, start: "top bottom", end: "top top", scrub: 1 } });
+    const copy = gsap.timeline({ paused: true })
+      .add(writeIn(splitChars(q("[data-title]")[0] as HTMLElement), 0.045, 0.7))
+      .add(writeIn(splitChars(q("[data-body]")[0] as HTMLElement), 0.008, 0.6), "-=0.4");
+    const copyST = ScrollTrigger.create({ trigger: el, start: "top 35%", onEnter: () => copy.play(), onLeaveBack: () => copy.reverse() });
     const mm = gsap.matchMedia();
     mm.add({ lg: "(min-width: 1024px)", sm: "(max-width: 1023px)" }, (ctx) => {
       const lg = ctx.conditions!.lg;
@@ -39,7 +49,7 @@ export default function LifeInBloom() {
       });
       return () => { tl.scrollTrigger?.kill(); tl.kill(); };
     });
-    return () => mm.revert();
+    return () => { mm.revert(); cutsIn.scrollTrigger?.kill(); cutsIn.kill(); copyST.kill(); copy.kill(); };
   }, []);
 
   return (
@@ -50,13 +60,16 @@ export default function LifeInBloom() {
         <div data-dim className="absolute inset-0 bg-deepsea-600 opacity-25" />
       </div>
       {B.cutouts.map((c, k) => (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img key={k} data-cut src={c.src} alt="" aria-hidden className="pointer-events-none absolute w-[36%] lg:w-[19.84%]"
-          style={{ left: pct(c.rest[0]), top: pct(c.rest[1]), transform: `translate(-50%, -50%) rotate(${c.rest[2]}deg)` }} />
+        // the outer layer rides in (entrance), the inner one drifts out (pinned states)
+        <div key={k} data-cut-in className="pointer-events-none absolute inset-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img data-cut src={c.src} alt="" aria-hidden className="absolute w-[36%] lg:w-[19.84%]"
+            style={{ left: pct(c.rest[0]), top: pct(c.rest[1]), transform: `translate(-50%, -50%) rotate(${c.rest[2]}deg)` }} />
+        </div>
       ))}
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 text-center text-limestone-50 container-x">
-        <RevealText as="h2" text={B.title} className="t-heading hd-56" />
-        <RevealText text={B.body} className="t-body b-14 max-w-[520px]" delay={0.1} />
+        <h2 data-title data-no-blur className="t-heading hd-56">{B.title}</h2>
+        <p data-body data-no-blur className="t-body b-14 max-w-[520px]">{B.body}</p>
       </div>
     </section>
   );

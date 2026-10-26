@@ -1,5 +1,6 @@
 import PinnedTrack from "@/components/sections/PinnedTrack";
 import RevealText from "@/components/reveal/RevealText";
+import FramedPhoto from "./FramedPhoto";
 import { history as H } from "@/lib/destination";
 
 /* eslint-disable @next/next/no-img-element */
@@ -64,11 +65,8 @@ export default function HistoryTrack() {
           </ol>
           <p className="t-text x-12 text-limestone-800">{H.line.caption}</p>
         </div>
-        {/* 3 · Terracotta frame */}
-        <div className="relative flex items-center justify-center overflow-hidden bg-terracotta-500 p-10 lg:h-[min(844px,calc(100svh-160px))] lg:w-[596px] lg:p-20">
-          <img src={H.photo} alt="Life on the coast" className="h-[60vh] w-full max-w-[371px] object-cover lg:h-[69%]" />
-          <img src={H.romans.flower} alt="" className="pointer-events-none absolute -top-4 right-0 w-[344px] max-w-[60%] rotate-180" />
-        </div>
+        {/* 3 · Terracotta frame (with its ERA entrance) */}
+        <FramedPhoto photo={H.photo} flower={H.romans.flower} />
     </PinnedTrack>
   );
 }

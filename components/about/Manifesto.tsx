@@ -2,12 +2,13 @@
 import { useEffect, useRef } from "react";
 import { gsap, reducedMotion } from "@/lib/gsap";
 import { token } from "@/lib/about/a-motion";
+import { splitChars, writeIn } from "@/components/reveal/letters";
 import { manifesto as M } from "@/lib/about/a-content";
 
 /**
- * UI / Headline / Accent. On load it plays the Figma states in order: Hidden → Line 1 (0.9 s, after 0.3 s)
- * → Shown (1.1 s, after 0.05 s), all on the 0.22/1/0.36/1 settle — "The coast" rises, then "all year round",
- * the italic accent, the paragraph, the small photo (60px up) and the rule. From lg up, Shown → Full is
+ * UI / Headline / Accent. On load it plays the Figma states in order: Hidden → Line 1 (after 0.3 s) → Shown,
+ * with the ERA Residence letter reveal: the headline writes itself in, letter by letter from left to right,
+ * each one coming up from a pale soft blur to full ink; then the paragraph, the small photo (60px up) and the rule. From lg up, Shown → Full is
  * scroll-scrubbed while the section is pinned: the photo opens to full bleed, the dim comes up to 75 %
  * and the copy turns Limestone (Figma 1.3 s in-out, here spread over 80 % of a viewport).
  */
@@ -16,11 +17,11 @@ export default function Manifesto() {
   useEffect(() => {
     const el = root.current!, q = gsap.utils.selector(el);
     if (reducedMotion()) return;
+    const chars = splitChars(q("h1")[0] as HTMLElement);
     const intro = gsap.timeline({ delay: 0.3, defaults: { ease: "aSettle" } })
-      .fromTo(q("[data-l1]"), { yPercent: 115 }, { yPercent: 0, duration: 0.9 })
-      .addLabel("shown", ">0.05")
-      .fromTo(q("[data-l2]"), { yPercent: 115 }, { yPercent: 0, duration: 1.1 }, "shown")
-      .fromTo(q("[data-accent], [data-body]"), { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, stagger: 0.06 }, "shown")
+      .add(writeIn(chars, 0.04, 0.7))
+      .addLabel("shown", ">-0.35")
+      .fromTo(q("[data-body]"), { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1 }, "shown")
       .fromTo(q("[data-media]"), { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1 }, "shown")
       .fromTo(q("[data-rule]"), { scaleX: 0 }, { scaleX: 1, duration: 1.1 }, "shown");
 
@@ -48,7 +49,7 @@ export default function Manifesto() {
   return (
     <section ref={root} className="relative mt-[76px] overflow-hidden bg-limestone-50 lg:h-[calc(100svh-76px)] lg:min-h-[640px]">
       <div data-copy className="relative z-10 flex flex-col gap-3 py-16 text-deepsea-500 container-x lg:absolute lg:inset-0 lg:justify-center lg:py-0">
-        <h1 className="t-heading hd-56" style={{ textTransform: "capitalize" }}>
+        <h1 data-no-blur className="t-heading hd-56" style={{ textTransform: "capitalize" }}>
           <span className="block">
             <span className="rt-line align-top" style={{ display: "inline-block" }}><span data-l1 className="rt-inner">{M.line1}</span></span>{" "}
             <span data-accent className="t-accent inline-block" style={{ textTransform: "capitalize" }}>{M.accent}</span>
