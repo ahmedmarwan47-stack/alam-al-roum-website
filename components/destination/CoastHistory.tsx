@@ -7,6 +7,8 @@ import type { TrackEl } from "@/components/sections/PinnedTrack";
 import { history as H } from "@/lib/destination";
 
 /* eslint-disable @next/next/no-img-element */
+// each stop's wrapper fills the drawing (absolute inset-0): it is animated, and a transformed wrapper becomes the
+// positioning box of its dot and label, so it must be the drawing's size for their percentages to land on the line
 const Coin3D = dynamic(() => import("@/components/ui/Coin3D"), { ssr: false });
 const W = 1218, Ht = 273;
 const pct = (v: number, of: number) => `${(v / of) * 100}%`;
@@ -55,7 +57,7 @@ export default function CoastHistory({ path }: { path: string }) {
     <div ref={root} className="flex flex-col items-center gap-10 lg:h-[min(844px,calc(100svh-160px))] lg:w-[1392px]">
       <h2 className="max-w-[842px] text-center t-body uppercase leading-none [font-size:clamp(36px,4vw,60px)]">{H.coast.title}</h2>
       {/* the 3D coin sits where Figma's coin photo is (371 square) */}
-      <div className="aspect-square w-full max-w-[420px] min-h-0 flex-1 lg:w-auto lg:max-w-none">
+      <div className="aspect-square w-full max-w-[420px] lg:h-[clamp(160px,calc(100svh-620px),371px)] lg:w-auto lg:flex-none">
         <Coin3D pose={pose} className="h-full w-full" />
       </div>
       <div className="relative hidden w-full max-w-[1218px] lg:block" style={{ aspectRatio: `${W} / ${Ht}` }}>
@@ -63,14 +65,14 @@ export default function CoastHistory({ path }: { path: string }) {
           <path ref={line} d={path} stroke="#07293C" strokeWidth={1.5} strokeLinecap="round" fill="none" vectorEffect="non-scaling-stroke" />
         </svg>
         {L.stops.map((s) => (
-          <div key={s.date} data-stop data-x={s.x}>
+          <div key={s.date} data-stop data-x={s.x} className="absolute inset-0">
             <img src={L.stop} alt="" className="absolute h-[7px] w-[7px] -translate-x-1/2 -translate-y-1/2" style={{ left: pct(s.x, W), top: pct(s.y, Ht) }} />
             <div className="absolute flex w-[170px] -translate-x-1/2 flex-col items-center gap-1 text-center" style={{ left: pct(s.x, W), top: pct(s.ly, Ht) }}>
               <span className="t-label l-12 uppercase">{s.date}</span>
               <span className="t-text x-12 text-limestone-800">{s.text}</span>
             </div>
           </div>))}
-        <div data-stop data-x={L.today.x}>
+        <div data-stop data-x={L.today.x} className="absolute inset-0">
           <img src={L.mark} alt="" className="absolute h-14 w-14 -translate-x-1/2" style={{ left: pct(L.today.x, W), top: pct(64, Ht) }} />
           <img src={L.todayDot} alt="" className="absolute h-[9px] w-[9px] -translate-x-1/2 -translate-y-1/2" style={{ left: pct(L.today.x, W), top: pct(L.today.y, Ht) }} />
           <div className="absolute flex -translate-x-1/2 flex-col items-center gap-1 whitespace-nowrap text-center" style={{ left: pct(L.today.x, W), top: pct(168, Ht) }}>

@@ -52,8 +52,6 @@ export const history = {
 
 export const archSea = {
   video: "/video/destination-arch-sky.mp4", webm: "/video/destination-arch-sky.webm", poster: d("arch-sky-poster.jpg"),
-  /** the same film with a keyframe every 4 frames, for scroll-scrubbing */
-  scrub: "/video/destination-arch-sky-scrub.mp4",
   clouds: d("clouds-top.png"),
 };
 
