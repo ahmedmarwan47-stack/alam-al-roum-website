@@ -1,9 +1,10 @@
+import Link from "next/link";
 import Icon from "./Icon";
 
 type Variant = "primary" | "light" | "outline" | "outline-light";
 
 /** UI / Button: fill rises on hover (0.5 s), label recolours after 0.15 s, the icon exits top-right and re-enters bottom-left.
- *  Renders a link by default, or a form submit button with `submit`. */
+ *  Renders a link by default (Next `Link` for internal paths, so the site works under a base path), or a form submit button with `submit`. */
 export default function Button({ label, href = "#", variant = "primary", size = 48, icon = "arrow-up-right", className = "", submit = false }:
   { label: string; href?: string; variant?: Variant; size?: 48 | 54 | 64; icon?: string; className?: string; submit?: boolean }) {
   const text = size === 64 ? "x-18" : "x-16";   // Figma Button/18 on 64, Button/16 on 48 and 54
@@ -18,5 +19,6 @@ export default function Button({ label, href = "#", variant = "primary", size = 
       </span>
     </>
   );
-  return submit ? <button type="submit" className={cls}>{inner}</button> : <a href={href} className={cls}>{inner}</a>;
+  if (submit) return <button type="submit" className={cls}>{inner}</button>;
+  return href.startsWith("/") ? <Link href={href} className={cls}>{inner}</Link> : <a href={href} className={cls}>{inner}</a>;
 }

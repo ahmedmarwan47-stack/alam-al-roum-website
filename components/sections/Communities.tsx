@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Button from "@/components/ui/Button";
 import RevealText from "@/components/reveal/RevealText";
 import SectionTitle from "./SectionTitle";
@@ -10,7 +11,7 @@ export default function Communities() {
       <SectionTitle tag={communities.tag} title={communities.title} />
       <div className="grid w-full grid-cols-2 gap-6 lg:grid-cols-4">
         {communities.items.map((c) => (
-          <a key={c.name} href={`/communities/${c.slug}`} className="group flex flex-col gap-5">
+          <Link key={c.name} href={`/communities/${c.slug}`} className="group flex flex-col gap-5">
             <div className="relative aspect-square w-full overflow-hidden transition-transform duration-[.8s] [transition-timing-function:var(--ease-coin-spring)] group-hover:-rotate-[10deg]"
               style={{ WebkitMask: "url(/images/coin-silhouette.svg) center / contain no-repeat", mask: "url(/images/coin-silhouette.svg) center / contain no-repeat" }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -20,7 +21,7 @@ export default function Communities() {
               <RevealText text={c.name} className="t-label l-18" />
               <RevealText text={c.line} className="t-body b-16 text-limestone-800" delay={0.08} />
             </div>
-          </a>
+          </Link>
         ))}
       </div>
       <Button label={communities.cta} href="/communities" variant="outline" />
