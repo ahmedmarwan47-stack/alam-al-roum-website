@@ -8,7 +8,7 @@ export default function ArticleBody({ a }: { a: Article }) {
     <div className="mx-auto flex w-full max-w-[768px] flex-col gap-6 text-black">
       {a.takeaways && (
         <div className="flex flex-col gap-3 bg-[#f4f4f4] p-6">
-          <span className="t-heading hd-16">Key takeaways</span>
+          <span className="t-heading hd-16">{a.takeawaysTitle ?? "Key takeaways"}</span>
           <ul className="flex flex-col gap-2 t-body b-14">{a.takeaways.map((t) => <li key={t}>• {t}</li>)}</ul>
         </div>)}
       {a.body.map((b, k) =>

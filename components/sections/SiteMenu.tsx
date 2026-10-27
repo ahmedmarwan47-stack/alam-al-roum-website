@@ -87,12 +87,13 @@ export default function SiteMenu({ open, onClose }: { open: boolean; onClose: ()
     <div className={`fixed inset-0 z-[60] ${open ? "" : "pointer-events-none"}`} inert={!open}>
       <div onClick={onClose} className={`absolute inset-0 bg-black/25 transition-opacity duration-300 ${EASE} ${open ? "opacity-100" : "opacity-0"}`} />
       <div id="site-menu" role="dialog" aria-modal="true" aria-label="Site menu"
-        className={`absolute inset-y-0 left-0 flex w-full max-w-[348px] overflow-hidden rounded-r-lg bg-limestone-50 transition-[transform,max-width] duration-300 ${EASE} ${open ? "translate-x-0" : "-translate-x-full"} ${sub ? "min-[720px]:max-w-[696px]" : ""}`}>
+        className={`absolute inset-y-0 left-0 flex w-full max-w-[348px] overflow-hidden rounded-r-lg bg-limestone-50 transition-[transform,max-width] duration-300 ${EASE} ${open ? "translate-x-0" : "-translate-x-full"} ${sub ? "min-[720px]:max-w-[696px]" : ""} max-sm:max-w-none max-sm:rounded-none`}>
+        {/* phones: the panel fills the screen (as Discovery Land's does), CLOSE where the bar's menu icon sits */}
         {/* Column 1 */}
         <div data-lenis-prevent className="flex h-full w-full flex-none flex-col justify-between overflow-y-auto pb-5 pr-5 min-[720px]:w-[348px]">
-          <div className="flex flex-col gap-8">
-            <div className="flex h-[60px] flex-none items-center border-b border-deepsea-500/15 pl-5">
-              <button onClick={onClose} className="flex items-center gap-2 t-label l-12 text-deepsea-500"><Icon name="cancel-01" size={14} />CLOSE</button>
+          <div className="flex flex-col gap-8 max-sm:gap-4">
+            <div className="flex h-[60px] flex-none items-center border-b border-deepsea-500/15 pl-5 max-sm:ml-5 max-sm:h-[76px] max-sm:pl-0">
+              <button onClick={onClose} className="flex items-center gap-2 t-label l-12 text-deepsea-500 max-lg:self-stretch"><Icon name="cancel-01" size={14} />CLOSE</button>
             </div>
             <ul className="flex flex-col">
               {items.map(([label, to], k) => {
@@ -114,10 +115,11 @@ export default function SiteMenu({ open, onClose }: { open: boolean; onClose: ()
             </ul>
           </div>
           <div className="flex flex-col gap-5 pl-5 pt-10">
-            <div className="flex flex-col gap-3 t-label l-16 text-deepsea-500">
-              <Link href="/careers" onClick={onClose} className="hover:opacity-60">Careers</Link>
-              <Link href="/faq" onClick={onClose} className="hover:opacity-60">FAQ</Link>
-              <a href="tel:16922" className="flex items-center gap-2 text-limestone-800 hover:opacity-60"><Icon name="call" size={16} />16922</a>
+            {/* touch screens: each line a 40 px target */}
+            <div className="flex flex-col gap-3 t-label l-16 text-deepsea-500 max-lg:gap-0">
+              <Link href="/careers" onClick={onClose} className="hover:opacity-60 max-lg:py-2">Careers</Link>
+              <Link href="/faq" onClick={onClose} className="hover:opacity-60 max-lg:py-2">FAQ</Link>
+              <a href="tel:16922" className="flex items-center gap-2 text-limestone-800 hover:opacity-60 max-lg:py-2"><Icon name="call" size={16} />16922</a>
             </div>
             <Button label="Register interest" href="/contact" className="w-full" />
           </div>

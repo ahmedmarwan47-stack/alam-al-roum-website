@@ -1,10 +1,14 @@
 /** Events and Media Center copy, from the Figma frames "Events • Desktop" (10921:8974) and "Media Center • Desktop" (10921:9167). */
 import { events as homeEvents } from "@/lib/content";
+import { writtenEvents, writtenStories, type Written } from "@/lib/articles";
 
 const ev = (f: string) => `/images/events/${f}.jpg`;
 const md = (f: string) => `/images/media/${f}.jpg`;
 
 export type ListCard = { tag: string; meta: string; title: string; photo: string; href: string; slug?: string };
+
+const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+const eventCard = (tag: string, meta: string, title: string, photo: string): ListCard => ({ tag, meta, title, photo, slug: slugify(title), href: `/events/${slugify(title)}` });
 
 export const eventsPage = {
   title: "Alam Al Roum Events",
@@ -20,11 +24,10 @@ export const eventsPage = {
     ["Marina", "Sat 13 Feb 2027", "Marina regatta weekend", "regatta"],
     ["Beach", "Wed 10 Feb 2027", "Full moon beach festival", "beach-festival"],
     ["Wellness", "Thu 11 Feb 2027", "Coastal wellness retreat", "wellness-retreat"],
-  ].map(([tag, meta, title, p]) => ({ tag, meta, title, photo: ev(p), href: "/contact" })) as ListCard[],
-  past: homeEvents.past.map(([tag, meta, title, p]) => ({ tag, meta, title, photo: `/images/photo/${p}.jpg`, href: "/media-center" })) as ListCard[],
+  ].map(([tag, meta, title, p]) => eventCard(tag, meta, title, ev(p))),
+  past: homeEvents.past.map(([tag, meta, title, p]) => eventCard(tag, meta, title, `/images/photo/${p}.jpg`)),
 };
 
-const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 const story = (tag: string, read: string, title: string, p: string): ListCard =>
   ({ tag, meta: read, title, photo: md(p), slug: slugify(title), href: `/media-center/${slugify(title)}` });
 
@@ -56,7 +59,7 @@ export const mediaBlog = [...F.slice(0, 3), ...N.slice(0, 3), ...F.slice(3), ...
 export const stories = [...mediaPage.news, ...mediaPage.features];
 
 type Block = { h?: string; p?: string; list?: string[]; img?: string; caption?: string };
-export type Article = { slug: string; tag: string; date: string; title: string; sub: string; byline: [string, string]; hero: string; takeaways?: string[]; body: Block[] };
+export type Article = { slug: string; tag: string; date: string; title: string; sub: string; byline: [string, string]; hero: string; takeawaysTitle?: string; takeaways?: string[]; body: Block[] };
 
 /** The written story (Figma "Article Detail • Desktop": header 10921:10139, body 10921:10164). */
 const phaseOne: Article = {
@@ -79,11 +82,20 @@ const phaseOne: Article = {
   ],
 };
 
-/** Only the phase-one story is written in Figma; the others open on their card copy until their text exists. */
+/** Phase one is Figma's written story; the others come from lib/articles.ts (draft copy in the same structure). */
 export const articleFor = (slug: string): Article | undefined => {
   if (slug === phaseOne.slug) return phaseOne;
   const s = stories.find((x) => x.slug === slug);
+  const w = s && writtenStories[s.title];
+  if (w) return { slug, ...w };
   return s && { slug, tag: s.tag, date: s.meta, title: s.title, sub: "", byline: ["Alam Al Roum Newsroom", ""], hero: s.photo, body: [] };
+};
+
+/** Event pages (no Figma frame of their own): the article template with the event's details in the summary panel. */
+export const allEvents = [...eventsPage.upcoming, ...eventsPage.past];
+export const eventFor = (slug: string): (Article & { past: boolean }) | undefined => {
+  const e = allEvents.find((x) => x.slug === slug); const w: Written | undefined = e && writtenEvents[e.title];
+  return e && w && { slug, ...w, past: eventsPage.past.includes(e) };
 };
 
 export const related = { title: "Keep reading", body: "More from the Media Center.", cta: "View All", items: mediaPage.features.slice(0, 3) };

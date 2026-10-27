@@ -42,6 +42,12 @@ export default function CoinStage({ poster }: { poster?: string }) {
     // geometry in Figma frame units: positions scale with the height, sizes with the frame's contain / cover scale
     const fit = () => Math.min(el.offsetWidth / FW, el.offsetHeight / FH);
     const cover = () => Math.max(el.offsetWidth / FW, el.offsetHeight / FH);
+    // below lg the frame's contain scale leaves a portrait screen a tiny coin (67 px on a phone): there the coin rests
+    // at 38 % of the width (≤ 200 px, ≤ 22 % of the height, so it stays clear of GRANDEUR) and the window opens to 92 %
+    // of the width (≤ 80 % of the height), so the reveal reads as a coin, not a dot
+    const small = () => !window.matchMedia("(min-width: 1024px)").matches;   // the lg breakpoint, scrollbar included
+    const coinAt = (figma: number, ofW: number, px: number, ofH: number) =>
+      small() ? Math.max(figma * fit(), Math.min(ofW * el.offsetWidth, px, ofH * el.offsetHeight)) : figma * fit();
     const P = { size: 0, cy: COIN_CY / FH, win: 0 };           // silhouette width (px), centre (fraction of height), window shown 0–1
     const draw = () => {
       const W = el.offsetWidth, H = el.offsetHeight, s = P.size, sh = s * (259.04 / 260), cx = W / 2, cy = P.cy * H;
@@ -89,7 +95,7 @@ export default function CoinStage({ poster }: { poster?: string }) {
       .fromTo(P, { win: 0 }, { win: 1, duration: 0.12 }, 1.0)
       .fromTo(cv, { opacity: 1 }, { opacity: 0, duration: 0.85, ease: "power1.in" }, 1.05)
       // 2 · Reveal
-      .fromTo(P, { size: () => 260 * fit(), cy: COIN_CY / FH }, { size: () => 900 * fit(), cy: 512.5 / FH, duration: 1.4 }, 1.0)
+      .fromTo(P, { size: () => coinAt(260, 0.38, 200, 0.22), cy: COIN_CY / FH }, { size: () => coinAt(900, 0.92, Infinity, 0.8), cy: 512.5 / FH, duration: 1.4 }, 1.0)
       .fromTo(v, { y: () => (-132 / FH) * el.offsetHeight }, { y: 0, duration: 1.4 }, 1.0)
       .to(q("[data-tick]"), { y: 48, duration: 1.4 }, 1.0)
       // 3 · Fill
@@ -103,9 +109,11 @@ export default function CoinStage({ poster }: { poster?: string }) {
     // the film reaches its last frame with the motion; then a reading hold on the finished copy before the pin lets go
     motionEnd = tl.duration();
     const vh = withHold(tl, 4.5, 0.8);
+    // below lg the same sequence plays over 60 % of the scroll (~3 screens instead of 5.3), so a phone isn't held long
+    const pinVh = () => (small() ? vh * 0.6 : vh);
     let st: ScrollTrigger | undefined;
     if (reducedMotion()) { tl.progress(1); film(tl.time()); }
-    else st = ScrollTrigger.create({ trigger: el, start: "top top", end: `+=${vh * 100}%`, pin: true, scrub: 1, animation: tl, invalidateOnRefresh: true, onRefresh: draw });
+    else st = ScrollTrigger.create({ trigger: el, start: "top top", end: () => `+=${pinVh() * 100}%`, pin: true, scrub: 1, animation: tl, invalidateOnRefresh: true, onRefresh: draw });
     draw();
     window.addEventListener("resize", draw);
     return () => { st?.kill(); tl.kill(); window.removeEventListener("resize", draw); window.removeEventListener("resize", size); };
@@ -132,6 +140,9 @@ export default function CoinStage({ poster }: { poster?: string }) {
         style={{ background: "linear-gradient(180deg, rgb(3 30 46 / 0), rgb(3 30 46 / .4))" }} />
       <div data-shade className="pointer-events-none absolute inset-0 opacity-0"
         style={{ background: "linear-gradient(90deg, rgb(3 30 46 / .55), rgb(3 30 46 / .35) 45%, rgb(3 30 46 / 0) 75%)" }} />
+      {/* below lg the copy runs the full width, over the bright tower: an even shade behind the whole top of the frame */}
+      <div data-shade className="pointer-events-none absolute inset-0 opacity-0 lg:hidden"
+        style={{ background: "linear-gradient(180deg, rgb(3 30 46 / .55), rgb(3 30 46 / .45) 60%, rgb(3 30 46 / .15))" }} />
 
       {/* Beat 5 copy · Heading/80 (600 wide), Body/20 at 85% (520 wide), history points 260 + 32 + 260 */}
       <div className="absolute left-[var(--gutter)] right-[var(--gutter)] top-[16%] flex max-w-[600px] flex-col gap-7 lg:top-[29.3%]">

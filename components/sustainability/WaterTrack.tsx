@@ -6,14 +6,16 @@ import { waterTrack as W } from "@/lib/sustainability";
 
 function Panel({ photo, title, features, from }: { photo: string; title: string[]; features: string[][]; from: "top" | "bottom" }) {
   return (
-    <div className="relative h-[80vh] overflow-hidden rounded-3xl lg:h-[760px] lg:w-[1392px] lg:flex-none">
-      <img src={photo} alt="" className="absolute inset-0 h-full w-full object-cover" />
-      <div className={`absolute inset-0 ${from === "top" ? "bg-gradient-to-t" : "bg-gradient-to-b"} from-deepsea-500/60 to-transparent`} />
-      {/* below lg the copy stacks tall over the photo: a deeper shade behind it keeps it legible */}
-      <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-deepsea-950/80 via-deepsea-950/45 to-transparent lg:hidden" />
-      <div className="absolute inset-x-6 bottom-6 flex flex-col gap-6 text-limestone-50 lg:inset-x-12 lg:bottom-12 lg:flex-row lg:items-end lg:justify-between">
-        <h3 className="t-heading hd-40 lg:w-[439px]">{title.map((l) => <span key={l} className="block">{l}</span>)}</h3>
-        <div className="grid gap-6 sm:grid-cols-3 lg:w-[800px] lg:gap-[30px]">
+    // phones (below sm) stack the card the way Solène's phone cards do: the photo, nearly whole (4:5) and clear of
+    // copy but for the title, which sits on a fade into the Deep Sea panel that carries the three features
+    <div className="relative h-[80vh] overflow-hidden rounded-3xl max-sm:grid max-sm:h-auto max-sm:bg-deepsea-500 lg:h-[760px] lg:w-[1392px] lg:flex-none">
+      <img src={photo} alt="" className="absolute inset-0 h-full w-full object-cover max-sm:relative max-sm:col-start-1 max-sm:row-start-1 max-sm:aspect-[4/5] max-sm:h-auto" />
+      <div className={`absolute inset-0 ${from === "top" ? "bg-gradient-to-t" : "bg-gradient-to-b"} from-deepsea-500/60 to-transparent max-sm:hidden`} />
+      {/* tablets (sm to lg) keep the copy over the photo: a deeper shade behind it keeps it legible */}
+      <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-deepsea-950/80 via-deepsea-950/45 to-transparent max-sm:hidden lg:hidden" />
+      <div className="absolute inset-x-6 bottom-6 flex flex-col gap-6 text-limestone-50 max-sm:contents lg:inset-x-12 lg:bottom-12 lg:flex-row lg:items-end lg:justify-between">
+        <h3 className="t-heading hd-40 max-sm:relative max-sm:col-start-1 max-sm:row-start-1 max-sm:self-end max-sm:bg-gradient-to-t max-sm:from-deepsea-500 max-sm:via-deepsea-500/70 max-sm:to-transparent max-sm:px-6 max-sm:pb-2 max-sm:pt-24 lg:w-[439px]">{title.map((l) => <span key={l} className="block">{l}</span>)}</h3>
+        <div className="grid gap-6 max-sm:row-start-2 max-sm:px-6 max-sm:pb-7 max-sm:pt-4 sm:grid-cols-3 lg:w-[800px] lg:gap-[30px]">
           {features.map(([h, b]) => <div key={h} className="flex flex-col gap-3"><span className="t-label hd-24">{h}</span><span className="t-body b-16">{b}</span></div>)}
         </div>
       </div>

@@ -21,9 +21,9 @@ export default function Locations() {
             </span>
             {/* phones: a dot on the spot and a small label above it (below for Cairo, so it clears the North Coast) */}
             <span className="absolute size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white ring-2 ring-black/70 md:hidden" />
-            <span className={`absolute -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-2 py-0.5 t-label text-[10px] leading-[14px] text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)] md:hidden ${name === "Cairo" ? "top-2" : "bottom-2"}`}>{name}</span>
+            <span className={`absolute -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-2 py-0.5 t-label l-12 text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)] md:hidden ${name === "Cairo" ? "top-2" : "bottom-2"}`}>{name}</span>
           </span>))}
-        <span className="absolute inset-x-0 bottom-0 hidden bg-white/70 px-2 py-1 t-text text-[10px] leading-3 truncate text-black/80 md:block">{L.credit}</span>
+        <span className="absolute inset-x-0 bottom-0 hidden bg-white/70 px-2 py-1 t-text text-[10px] leading-3 truncate max-lg:text-[12px] max-lg:leading-4 text-black/80 md:block">{L.credit}</span>
       </div>
       <div className="grid gap-10 md:grid-cols-3 md:gap-6">
         {L.offices.map((o) => (

@@ -8,15 +8,30 @@ import { COAST_EAST, COAST_WEST } from "@/lib/about/b-nearby-geo";
 
 const W = 1512, H = 1024;
 const pct = (v: number, of: number) => `${(v / of) * 100}%`;
-/** Type sized in container units so labels scale with the map like the SVG, never below a readable floor. */
-const cq = (px: number, min: number): CSSProperties => ({ fontSize: `max(${min}px, ${(px / W) * 100}cqw)`, lineHeight: 1.45 });
+/**
+ * Type sized in container units so labels scale with the map like the SVG, never below a readable floor
+ * (`min` from lg up, `minSm` below lg, where the map is a narrow strip and Figma's floors fell to 9–10 px).
+ * Use with the CQ class, which reads the two variables.
+ */
+const cq = (px: number, min: number, minSm = 12) =>
+  ({ "--cq": `${(px / W) * 100}cqw`, "--cq-min": `${min}px`, "--cq-min-sm": `${minSm}px`, lineHeight: 1.45 }) as CSSProperties;
+const CQ = "[font-size:max(var(--cq-min),var(--cq))] max-lg:[font-size:max(var(--cq-min-sm),var(--cq))]";
+/** Below lg the strip pans to keep the drawing's head in view: [timeline time, head x on the 1512 frame]. */
+const HEAD = [[0, 0], [0.8, 140], [2.2, 332], [3.6, 691], [5.0, 1100], [6.6, 1400]] as const;
+const headAt = (t: number) => {
+  const k = HEAD.findIndex(([t1]) => t1 >= t);
+  if (k <= 0) return k === 0 ? HEAD[0][1] : HEAD[HEAD.length - 1][1];
+  const [t0, x0] = HEAD[k - 1], [t1, x1] = HEAD[k];
+  return x0 + ((t - t0) / (t1 - t0)) * (x1 - x0);
+};
 
 /**
  * Nearby, after the Figma "UI / Coastline drawing (Nearby)" prototype (4 steps, Smart Animate 1.4 s
  * ease-in-out), turned into one scroll-scrubbed timeline. The coastline draws outward from Alam Al Roum
  * in both directions, each pin and label rises in (10 px, like Figma) as the line reaches it, then the
  * dashed desert road draws down to Cairo. Desktop pins the map full-screen (cover-cropped like the
- * frame); below lg the map keeps its true proportions inside a swipeable strip.
+ * frame); below lg the map keeps its true proportions inside a swipeable strip, which pans east with the drawing
+ * (so Alexandria and Cairo come into view on a phone) until the visitor swipes it themselves.
  */
 export default function Nearby() {
   const root = useRef<HTMLElement>(null);
@@ -64,7 +79,22 @@ export default function Nearby() {
       const st = ctx.conditions!.desk
         ? ScrollTrigger.create({ trigger: el, start: "top top", end: `+=${vh * 100}%`, pin: true, scrub: 1, animation: tl })
         : ScrollTrigger.create({ trigger: el.querySelector("[data-map]"), start: "top 75%", end: "bottom 35%", scrub: 1, animation: tl });
-      return () => st.kill();
+      if (ctx.conditions!.desk) return () => st.kill();
+      // below lg: follow the line's head (at ~60 % of the strip's width) until the strip is touched
+      const strip = el.querySelector<HTMLElement>("[data-strip]")!, map = el.querySelector<HTMLElement>("[data-map]")!;
+      let own = false;
+      const mine = () => { own = true; };
+      const pan = () => {
+        if (own) return;
+        const max = strip.scrollWidth - strip.clientWidth;
+        strip.scrollLeft = Math.min(max, Math.max(0, (headAt(tl.time()) / W) * map.offsetWidth - 0.6 * strip.clientWidth));
+      };
+      strip.addEventListener("pointerdown", mine); strip.addEventListener("wheel", mine, { passive: true });
+      tl.eventCallback("onUpdate", pan);
+      return () => {
+        st.kill(); tl.eventCallback("onUpdate", null);
+        strip.removeEventListener("pointerdown", mine); strip.removeEventListener("wheel", mine);
+      };
     });
     return () => { mm.revert(); tl.kill(); };
   }, []);
@@ -77,13 +107,14 @@ export default function Nearby() {
         <RevealText as="h2" text={N.title} className="t-heading hd-48 text-deepsea-500" delay={0.05} />
       </div>
 
-      {/* below lg: a swipeable strip; lg: the map box covers the viewport like object-fit: cover */}
-      <div className="overflow-x-auto [scrollbar-width:none] lg:absolute lg:inset-0 lg:overflow-hidden">
-        <div data-map className="relative w-[220vw] max-w-[1512px] lg:absolute lg:left-1/2 lg:top-1/2 lg:w-[max(100%,calc(100vh*1512/1024))] lg:max-w-none lg:-translate-x-1/2 lg:-translate-y-1/2"
+      {/* below lg: a swipeable strip (wide enough on a phone that the 12 px labels clear each other's leaders);
+          lg: the map box covers the viewport like object-fit: cover */}
+      <div data-strip className="overflow-x-auto [scrollbar-width:none] lg:absolute lg:inset-0 lg:overflow-hidden">
+        <div data-map className="relative w-[max(260vw,1000px)] max-w-[1512px] md:w-[170vw] lg:absolute lg:left-1/2 lg:top-1/2 lg:w-[max(100%,calc(100vh*1512/1024))] lg:max-w-none lg:-translate-x-1/2 lg:-translate-y-1/2"
           style={{ aspectRatio: `${W} / ${H}`, containerType: "inline-size" }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={N.map} alt="Satellite map of Egypt's North Coast from Marsa Matrouh to Alexandria and Cairo" className="absolute inset-0 h-full w-full object-cover" />
-          <span className="absolute -translate-x-1/2 t-body text-limestone-300" style={{ left: pct(628, W), top: pct(120, H), ...cq(16, 10) }}>{N.sea}</span>
+          <span className={`absolute -translate-x-1/2 t-body text-limestone-300 ${CQ}`} style={{ left: pct(628, W), top: pct(120, H), ...cq(16, 10) }}>{N.sea}</span>
 
           <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 h-full w-full overflow-visible" aria-hidden>
             <defs>
@@ -108,16 +139,16 @@ export default function Nearby() {
           {N.places.map((p, k) => (
             <span key={p.name} data-label={k} className="absolute flex flex-col whitespace-nowrap"
               style={{ left: pct(p.x - 4, W), bottom: pct(H - (p.y - 16 - p.tick), H) }}>
-              <span className="t-label text-limestone-50" style={cq(16, 10)}>{p.name}</span>
-              <span className="t-text text-limestone-300" style={cq(14, 9)}>{p.km}</span>
+              <span className={`t-label text-limestone-50 ${CQ}`} style={cq(16, 10)}>{p.name}</span>
+              <span className={`t-text text-limestone-300 ${CQ}`} style={cq(14, 9)}>{p.km}</span>
             </span>))}
 
           <div data-badge className="absolute flex items-center gap-[0.8cqw] rounded-full bg-deepsea-500 py-[0.66cqw] pl-[0.66cqw] pr-[1.2cqw]" style={{ left: pct(101, W), top: pct(376, H) }}>
             <span aria-hidden className="block aspect-[591/271] w-[max(34px,4.5cqw)] bg-limestone-50"
               style={{ WebkitMask: `url(${N.coinPair}) center / contain no-repeat`, mask: `url(${N.coinPair}) center / contain no-repeat` }} />
             <span className="flex flex-col">
-              <span className="t-heading text-limestone-50" style={cq(20, 11)}>{N.origin.name}</span>
-              <span className="t-text text-limestone-300" style={cq(14, 9)}>{N.origin.note}</span>
+              <span className={`t-heading text-limestone-50 ${CQ}`} style={cq(20, 11, 13)}>{N.origin.name}</span>
+              <span className={`t-text text-limestone-300 ${CQ}`} style={cq(14, 9)}>{N.origin.note}</span>
             </span>
           </div>
         </div>

@@ -52,7 +52,7 @@ export default function BookCall() {
             <div className={`flex items-center justify-between pb-1 ${ink}`}>
               <span className="t-label l-14">{weekday} <span className="text-black/60">{day}</span></span>
               <span className="flex rounded-md border border-black/10 p-[3px] t-label l-12">
-                {["12h", "24h"].map((f, k) => <button key={f} onClick={() => setH24(k === 1)} className={`rounded px-1.5 py-0.5 ${h24 === (k === 1) ? "bg-black/[0.07]" : "text-black/60"}`}>{f}</button>)}
+                {["12h", "24h"].map((f, k) => <button key={f} onClick={() => setH24(k === 1)} className={`rounded px-1.5 py-0.5 max-lg:px-3 max-lg:py-2 ${h24 === (k === 1) ? "bg-black/[0.07]" : "text-black/60"}`}>{f}</button>)}
               </span>
             </div>
             <div className="grid grid-cols-2 gap-2 lg:flex lg:flex-col lg:gap-3">

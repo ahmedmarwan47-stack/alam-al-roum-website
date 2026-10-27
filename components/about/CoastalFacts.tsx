@@ -91,7 +91,7 @@ export default function CoastalFacts() {
         <div className="grid grid-cols-2 gap-x-6 gap-y-8">
           {F.items.map((x) => (
             <div key={x.value} className="flex flex-col gap-2 border-t border-limestone-600 pt-5">
-              <span className="t-text text-deepsea-500" style={{ fontSize: 34, lineHeight: 1.1, letterSpacing: "-0.035em" }}>{x.value}</span>
+              <span className="t-text text-deepsea-500" style={{ fontSize: 28, lineHeight: 1.1, letterSpacing: "-0.035em" }}>{x.value}</span>
               <span className="t-text x-16 text-limestone-800">{x.label}</span>
             </div>
           ))}

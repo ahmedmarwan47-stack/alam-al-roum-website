@@ -1,4 +1,19 @@
-# Status — 26 Oct 2026
+# Status — 27 Oct 2026
+
+## 27 Oct — phone pass 2, articles and events
+- Shared phone rules (below lg; desktop unchanged): footer link groups are accordions; the CTA film sits on top and
+  fades into the copy; every Button is full width (below 768) at one 44 px size; `Drawer` is a bottom sheet (masterplan
+  pins, hotel and unit drawers); filter chips scroll in one row; header = menu icon / centred logo / register chip
+- Phone type scale lowered (headings and display sizes; body stays 16 px); the 1512 sizes are unchanged
+- Landmarks (Ayana "Residence Types"): desktop is click-driven, no pin; phones and tablets are a tap accordion that
+  opens each row's photo
+- Per page: Home (stacked Qatari Diar numbers, swipeable masterplan, Ways to live thumbnails, Connectivity order),
+  About (Milestones prev/next + swipe, shorter coin and Story pins, Nearby panning), Destination (in-town coin stays
+  in view), Sustainability (water cards), listings (swipe tracks, two-column grids, 4:3 article heroes)
+- Flight-radius map: no ring or route crosses any label at any width
+- All 11 remaining Media Center stories written in the Figma article structure (`lib/articles.ts`), and every event
+  has its own page `/events/<slug>` on the same template ("Event details" panel, programme, how to attend)
+- Phone screenshot checker: `node ~/alam-elroum/docs/tools/phone/shots.mjs <path> [width]`
 
 ## Done
 - All pages: Home, About, Destination, Experiences (+ 9 details), Communities (+ 6 neighbourhoods), Sustainability,
@@ -59,6 +74,9 @@
    the repo cropped to the Figma framing, and new icons come from the Hugeicons free set Figma uses.
 
 ## Copy and design not from Figma, to review
+- Article copy for the 11 stories beyond phase one, and all event pages (venues, timings, dates are drafts); some
+  Figma headlines ("robotics deployed", "healthcare facilities established", "green energy launched") are written as plans
+- Masterplan phone caption "Swipe the map, tap a pin to explore"
 - Drawer copy for the five hotels and three unit types beyond Figma's two drawers (same structure, figures from their cards)
 - The last FAQ answer ("When will the first homes be handed over?") is closed in Figma; its answer follows the timeline
 - Only the phase-one article has body text; the other 11 stories show their card image and "The full story will be published here soon."

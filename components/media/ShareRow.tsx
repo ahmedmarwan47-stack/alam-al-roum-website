@@ -13,7 +13,8 @@ export default function ShareRow({ title }: { title: string }) {
     <div className="flex items-center gap-4">
       <span className="t-text x-16 text-black">Share via</span>
       {targets.map(([icon, url]) => (
-        <button key={icon} aria-label={`Share on ${icon.split("-")[0]}`} className="text-black transition-opacity hover:opacity-60"
+        // below lg each icon gets a 40 px tap target; the negative margin keeps the icons where they were
+        <button key={icon} aria-label={`Share on ${icon.split("-")[0]}`} className="text-black transition-opacity hover:opacity-60 max-lg:-m-[10px] max-lg:grid max-lg:size-10 max-lg:place-items-center"
           onClick={() => window.open(url(window.location.href, title), "_blank", "noopener,noreferrer")}>
           <Icon name={icon} size={20} />
         </button>))}

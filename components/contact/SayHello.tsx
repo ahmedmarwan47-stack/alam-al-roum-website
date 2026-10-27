@@ -23,7 +23,7 @@ export default function SayHello() {
           {/* Figma "Contact grid": the first row holds three cells, then one full-width row per office */}
           <div className="flex flex-col">
             {S.rows.map((row, r) => (
-              <div key={r} className={r === 0 ? "grid gap-x-3 py-5 sm:grid-cols-3" : "flex flex-col"}>
+              <div key={r} className={r === 0 ? "grid gap-x-3 sm:grid-cols-3 sm:py-5" : "flex flex-col"}>
                 {row.map(([icon, k, v, href]) => (
                   <div key={k} className="flex flex-col gap-2 border-t border-white/20 py-5">
                     <span className="flex items-center gap-2"><Icon name={icon} size={18} /><span className="t-label l-12 opacity-60">{k}</span></span>

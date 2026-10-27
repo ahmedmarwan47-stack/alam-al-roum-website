@@ -24,11 +24,12 @@ type Community = (typeof communities)[number];
 
 /**
  * The staggered three-column community grid (Figma Communities · Grid). Card sizes belong to the grid slots,
- * so a shorter list (Other communities, the current one hidden) keeps the same rhythm.
+ * so a shorter list (Other communities, the current one hidden) keeps the same rhythm. Below lg it runs in two
+ * columns, phones included, as Discovery Land's communities grid does; on a phone the name drops to Heading/16.
  */
 export function CommunityGrid({ items, className = "" }: { items: Community[]; className?: string }) {
   return (
-    <div className={`grid w-full gap-x-3 gap-y-14 sm:grid-cols-2 lg:grid-cols-[492fr_380fr_496fr] ${className}`}>
+    <div className={`grid w-full grid-cols-2 gap-x-3 gap-y-14 max-sm:gap-y-8 lg:grid-cols-[492fr_380fr_496fr] ${className}`}>
       {items.map((c, k) => {
         const slot = communities[k % communities.length].card;
         return (
@@ -37,7 +38,7 @@ export function CommunityGrid({ items, className = "" }: { items: Community[]; c
               <RevealImage src={c.photo} alt={c.name} delay={(k % 3) * 0.08} className="h-full w-full"
                 imgClassName="transition-transform duration-[1.2s] [transition-timing-function:var(--ease-site)] group-hover:scale-[1.05]" />
             </div>
-            <span className="t-heading hd-24 text-black">{c.name}</span>
+            <span className="t-heading hd-24 text-black max-sm:text-[16px]! max-sm:leading-[22px]! max-sm:break-words">{c.name}</span>
             <span className="t-body b-14 text-black/60">{c.body}</span>
           </Link>);
       })}

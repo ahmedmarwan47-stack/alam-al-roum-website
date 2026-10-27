@@ -100,8 +100,10 @@ export default function TheStory() {
         .to($$("[data-g-text]"), { y: 0, autoAlpha: 1, stagger: rm ? 0 : 0.08 }, t + (rm ? 0 : 0.1))
         .to({}, { duration: rm ? 0.15 : HOLD }, t + D);     // reading hold on the closing copy before the pin releases
 
-      // about one viewport of scroll per timeline second
-      ScrollTrigger.create({ trigger: st, start: "top top", end: () => `+=${H() * tl.duration()}`, pin: true, scrub: rm ? true : 1,
+      // about one viewport of scroll per timeline second; below lg 60 % of that (~4 screens rather than 6.6), so a phone
+      // is not held long on one section
+      const per = () => (window.matchMedia("(min-width: 1024px)").matches ? 1 : 0.6);
+      ScrollTrigger.create({ trigger: st, start: "top top", end: () => `+=${H() * tl.duration() * per()}`, pin: true, scrub: rm ? true : 1,
         animation: tl, invalidateOnRefresh: true });
     }, st);
     return () => ctx.revert();
@@ -110,7 +112,7 @@ export default function TheStory() {
   const C = S.culture, G = S.greatness;
   return (
     <section aria-label="The Story" className="bg-limestone-500">
-      <div ref={stage} className="relative h-screen w-full overflow-hidden bg-limestone-500">
+      <div ref={stage} className="relative h-svh w-full overflow-hidden bg-limestone-500 lg:h-screen">
         {/* 1 · History */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={S.history.photo} alt="" className="absolute inset-0 h-full w-full object-cover" />
@@ -127,7 +129,7 @@ export default function TheStory() {
         <div data-dome="culture" className="absolute inset-0 bg-limestone-500" style={domeStyle} />
         <span data-c-word data-no-blur className="absolute left-1/2 -translate-x-1/2 t-accent hd-56 text-deepsea-500" style={{ top: fy(1180) }}>{C.word}</span>
         {C.photos.map((p) => (
-          <div key={p.src} data-photo className="absolute hidden overflow-hidden md:block"
+          <div key={p.src} data-photo className="absolute hidden overflow-hidden lg:block"
             style={{ left: `${(p.x / FW) * 100}%`, top: fy(p.y), width: `${(p.w / FW) * 100}%`, aspectRatio: `${p.w} / ${p.h}` }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={p.src} alt={p.alt} loading="lazy" className="h-full w-full object-cover" />
@@ -140,6 +142,15 @@ export default function TheStory() {
               </span>))}
           </h3>
           <p data-c-body className="max-w-[560px] t-body b-18">{C.body}</p>
+          {/* tablets: the three photos as a row under the paragraph (at Figma's scattered spots they crowd the headline
+              on a portrait screen); phones and short screens leave them out */}
+          <div className="hidden w-full max-w-[560px] grid-cols-3 gap-4 [@media(min-width:768px)_and_(max-width:1023.98px)_and_(min-height:800px)]:grid">
+            {C.photos.map((p) => (
+              <div key={p.src} data-photo className="aspect-[3/4] overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={p.src} alt={p.alt} loading="lazy" className="h-full w-full object-cover" />
+              </div>))}
+          </div>
         </div>
 
         {/* 5–6 · Greatness: a dome cut from the photo, the word, then the headline and body */}

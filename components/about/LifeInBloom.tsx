@@ -33,7 +33,7 @@ export default function LifeInBloom() {
         .fromTo(q("[data-clip]"), { clipPath: `inset(${rest[0]}% ${rest[1]}%)` }, { clipPath: `inset(${mid[0]}% ${mid[1]}%)`, duration: 1.2 }, 0)
         .to(q("[data-clip]"), { clipPath: "inset(0% 0%)", duration: 1.3 }, 1.2)
         .fromTo(q("[data-clip] img"), { scale: 1.12 }, { scale: 1, duration: 2.5, ease: "none" }, 0)
-        .to(q("[data-dim]"), { opacity: 0.3, duration: 1.3 }, 1.2);
+        .to(q("[data-dim]"), { opacity: lg ? 0.3 : 0.45, duration: 1.3 }, 1.2);   // deeper below lg: the copy spans the narrow frame
       B.cutouts.forEach((c, k) => {
         // as they drift out past the corners they go soft, like the ERA Residence cut-outs
         tl.fromTo(cuts[k], { left: pct(c.rest[0]), top: pct(c.rest[1]), x: 0, y: 0, xPercent: -50, yPercent: -50, rotation: c.rest[2], scale: 1, opacity: 1, filter: "blur(0px)" },
@@ -52,7 +52,7 @@ export default function LifeInBloom() {
       <div data-clip className="absolute inset-0 overflow-hidden [clip-path:inset(22%_8%)] lg:[clip-path:inset(20%_16.93%)]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={B.image} alt="A shaded dining terrace open to the sea" className="h-full w-full object-cover" />
-        <div data-dim className="absolute inset-0 bg-deepsea-600 opacity-25" />
+        <div data-dim className="absolute inset-0 bg-deepsea-600 opacity-25 max-lg:opacity-40" />
       </div>
       {B.cutouts.map((c, k) => (
         <div key={k} className="pointer-events-none absolute inset-0">

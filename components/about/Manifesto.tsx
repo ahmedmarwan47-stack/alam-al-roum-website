@@ -53,8 +53,8 @@ export default function Manifesto() {
         <p data-body data-reveal className="t-body b-18 max-w-[300px]">{M.body}</p>
       </div>
 
-      {/* photo: in the flow below lg, a clipped full-bleed layer from lg up */}
-      <div data-media data-reveal className="relative mx-[var(--gutter)] mb-16 aspect-[3/2] overflow-hidden lg:absolute lg:inset-0 lg:m-0 lg:aspect-auto">
+      {/* photo: in the flow below lg (portrait on a phone, so the opening screen is copy + photo), a clipped full-bleed layer from lg up */}
+      <div data-media data-reveal className="relative mx-[var(--gutter)] mb-16 aspect-[4/5] overflow-hidden md:aspect-[3/2] lg:absolute lg:inset-0 lg:m-0 lg:aspect-auto">
         <div data-clip className="absolute inset-0 overflow-hidden lg:[clip-path:inset(calc(100%_-_40px_-_15.87vw)_3.97vw_40px_calc(100%_-_27.78vw))]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={M.image} alt="The Mediterranean off Alam Al Roum" className="h-full w-full object-cover" />

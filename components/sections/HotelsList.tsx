@@ -11,10 +11,14 @@ export type Spec = [string, string, string];
 export type Hotel = { name: string; type: string; photo: string; card: { w: number; h: number }; body?: string; specs?: Spec[] };
 export type HotelsData = { tag: string; title: string; body: string; items: Hotel[]; cols?: string; bodyWidth?: number; kind?: "hotel" | "unit"; extra?: string[] };
 
+/** Phones: the unit cards (equal columns) sit on one swipe row running to the screen edges. */
+const swipe = "max-sm:-mx-[var(--gutter)] max-sm:w-auto max-sm:self-stretch max-sm:snap-x max-sm:snap-mandatory max-sm:auto-cols-[72vw] max-sm:grid-flow-col max-sm:overflow-x-auto max-sm:scroll-px-[var(--gutter)] max-sm:px-[var(--gutter)] max-sm:[scrollbar-width:none] max-sm:[&::-webkit-scrollbar]:hidden max-sm:[&>button]:snap-start";
+
 /**
  * Card grid that opens the Figma Drawer (10480:3695) from the right. Hotels list (Figma 10921:10498) uses the
- * staggered three-column flow; Unit types (Figma 10921:9816) pass `cols` for three equal columns and `kind: "unit"`
- * for the unit drawer's two actions (Register Interest, Download Brochure); hotels get Visit Website.
+ * staggered three-column flow (two columns on tablets and phones, as Discovery Land's grid does on a phone, with the
+ * name at Heading/16 there); Unit types (Figma 10921:9816) pass `cols` for equal columns (a swipe row on a phone) and
+ * `kind: "unit"` for the unit drawer's two actions (Register Interest, Download Brochure); hotels get Visit Website.
  */
 export default function HotelsList({ data: D }: { data: HotelsData }) {
   // `last` keeps the drawer's content in place while it slides out
@@ -28,14 +32,14 @@ export default function HotelsList({ data: D }: { data: HotelsData }) {
   return (
     <section className="flex flex-col items-center gap-10 bg-white py-20 container-x">
       <SectionTitle tag={D.tag} title={D.title} body={D.body} bodyWidth={D.bodyWidth} className="max-w-[870px]" />
-      <div className={`grid w-full gap-x-3 gap-y-14 sm:grid-cols-2 ${D.cols ?? "lg:grid-cols-[492fr_380fr_496fr]"}`}>
+      <div className={`grid w-full gap-x-3 gap-y-14 ${D.cols ? `${swipe} ${D.cols}` : "grid-cols-2 max-sm:gap-y-8 lg:grid-cols-[492fr_380fr_496fr]"}`}>
         {D.items.map((it, k) => (
           <button key={it.name} onClick={() => show(k)} className="group flex flex-col gap-[10px] self-start text-left">
             <div className="w-full overflow-hidden" style={{ aspectRatio: `${it.card.w} / ${it.card.h}` }}>
               <RevealImage src={it.photo} alt={it.name} delay={(k % 3) * 0.08} className="h-full w-full"
                 imgClassName="transition-transform duration-[1.2s] [transition-timing-function:var(--ease-site)] group-hover:scale-[1.05]" />
             </div>
-            <span className="t-heading hd-24 text-black">{it.name}</span>
+            <span className={`t-heading hd-24 text-black ${D.cols ? "" : "max-sm:text-[16px]! max-sm:leading-[22px]! max-sm:break-words"}`}>{it.name}</span>
             <span className="t-body b-14 text-black/60">{it.type}</span>
           </button>))}
       </div>

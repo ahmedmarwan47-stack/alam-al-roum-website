@@ -9,9 +9,9 @@ import { track as T, experiences } from "@/lib/experiences";
 type X = (typeof experiences)[number];
 
 /** One tall card: photo (mask reveal, slow hover zoom) with the Explore chip, then name + fact. `num` adds the slider's index. */
-function Card({ x, delay, num }: { x: X; delay: number; num?: number }) {
+function Card({ x, delay, num, className = "" }: { x: X; delay: number; num?: number; className?: string }) {
   return (
-    <Link href={`/experiences/${x.slug}`} className="group flex flex-col gap-4">
+    <Link href={`/experiences/${x.slug}`} className={`group flex flex-col gap-4 ${className}`}>
       <div className="relative aspect-[448/587] overflow-hidden">
         <RevealImage src={x.photo} alt={x.title} delay={delay} className="h-full w-full"
           imgClassName="transition-transform duration-[1.2s] [transition-timing-function:var(--ease-site)] group-hover:scale-[1.06]" />
@@ -31,8 +31,10 @@ function Card({ x, delay, num }: { x: X; delay: number; num?: number }) {
 /**
  * Detail pages (Figma 11128:14102): the same cards on one horizontal track, 440 px wide, with a progress bar
  * (the visible share of the track, moving with it) and round prev / next controls that step one card at a time.
+ * `grid` (the Experiences page): below lg the cards swipe on this track, as The Drop does on a phone; from lg up the
+ * same rail is the three-column grid and the controls hide.
  */
-function Slider() {
+function Slider({ grid = false }: { grid?: boolean }) {
   const rail = useRef<HTMLDivElement>(null);
   const [bar, setBar] = useState({ w: 0.3, x: 0, start: true, end: false });
   const update = useCallback(() => {
@@ -50,11 +52,12 @@ function Slider() {
   return (
     <>
       <div ref={rail} onScroll={update}
-        className="-mx-[var(--gutter)] flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-px-[var(--gutter)] px-[var(--gutter)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {experiences.map((x, k) => (
-          <div key={x.slug} className="w-[min(440px,78vw)] flex-none snap-start"><Card x={x} delay={Math.min(k, 3) * 0.08} num={k + 1} /></div>))}
+        className={`-mx-[var(--gutter)] flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-px-[var(--gutter)] px-[var(--gutter)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${grid ? "lg:mx-0 lg:grid lg:grid-cols-3 lg:overflow-visible lg:px-0" : ""}`}>
+        {experiences.map((x, k) => grid
+          ? <Card key={x.slug} x={x} delay={(k % 3) * 0.08} className="w-[min(440px,78vw)] flex-none snap-start lg:w-auto" />
+          : <div key={x.slug} className="w-[min(440px,78vw)] flex-none snap-start"><Card x={x} delay={Math.min(k, 3) * 0.08} num={k + 1} /></div>)}
       </div>
-      <div className="flex items-center gap-10">
+      <div className={`flex items-center gap-10 ${grid ? "lg:hidden" : ""}`}>
         <div className="relative h-[2px] flex-1 overflow-hidden bg-black/15">
           <span className="absolute inset-y-0 left-0 bg-black transition-transform duration-300" style={{ width: `${bar.w * 100}%`, transform: `translateX(${(bar.x / bar.w) * 100}%)` }} />
         </div>
@@ -69,7 +72,7 @@ function Slider() {
 
 /**
  * Experiences · Track (Figma 10921:7608, "The Drop" style). The Experiences page lays the nine tall cards
- * out as a 3-column grid; detail pages pass `slider` for the horizontal track. Each photo opens with the
+ * out as a 3-column grid (a swipe track below lg); detail pages pass `slider` for the horizontal track. Each photo opens with the
  * mask reveal, then slowly scales on hover while the Explore chip lifts.
  */
 export default function ExperienceTrack({ slider = false, title }: { slider?: boolean; title?: typeof T.title }) {
@@ -80,10 +83,7 @@ export default function ExperienceTrack({ slider = false, title }: { slider?: bo
         <RevealText as="h2" segs={title ?? T.title} className="t-label hd-56 capitalize" delay={0.05} />
         <RevealText text={T.body} className="t-body b-18 opacity-70" delay={0.12} />
       </div>
-      {slider ? <Slider /> : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {experiences.map((x, k) => <Card key={x.slug} x={x} delay={(k % 3) * 0.08} />)}
-        </div>)}
+      <Slider grid={!slider} />
     </section>
   );
 }

@@ -37,11 +37,12 @@ export default function SingleHero({ data: H }: { data: SingleHeroData }) {
         <RevealText text={H.line} onLoad delay={0.55} className="t-body b-20 max-w-[520px]" />
       </div>
       {H.facts && (
-        // Figma Fact card: frosted white glass, 300 px, three stacked facts with hairline dividers
-        <div className="absolute bottom-20 right-[var(--gutter)] hidden w-[300px] flex-col gap-4 rounded-2xl border border-white/35 bg-white/14 p-6 text-black backdrop-blur-md md:flex">
+        // Figma Fact card: frosted white glass, 300 px, three stacked facts with hairline dividers.
+        // Phones: the same glass as a strip across the foot of the photo, the three facts side by side (it was hidden)
+        <div className="absolute bottom-5 left-[var(--gutter)] right-[var(--gutter)] grid grid-cols-3 gap-3 rounded-2xl border border-white/35 bg-white/14 p-4 text-black backdrop-blur-md max-md:bg-white/60 md:bottom-20 md:left-auto md:flex md:w-[300px] md:flex-col md:gap-4 md:p-6">
           {H.facts.map(([v, l], k) => (
             <div key={l} className="flex flex-col gap-4">
-              {k > 0 && <i className="block h-px w-full bg-black/25" />}
+              {k > 0 && <i className="hidden h-px w-full bg-black/25 md:block" />}
               <div className="flex flex-col gap-1"><span className="t-heading hd-32">{v}</span><span className="t-text x-14 text-black/78">{l}</span></div>
             </div>))}
         </div>)}

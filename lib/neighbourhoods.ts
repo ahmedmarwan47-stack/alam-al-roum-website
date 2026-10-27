@@ -26,7 +26,7 @@ const beachfront: Neighbourhood = {
     body: "Beachfront communities hold the edge of the city. Homes face the Mediterranean with nothing between you and the horizon. Low-rise architecture, sunlit terraces, and direct beach access define the district." },
   // drawer copy follows the Figma unit drawer (11128:14826), with each unit's figures from its card
   units: { tag: "Residences", title: "Unit types", body: "Three ways to live on the shore. Each with its own floor plans, specifications, and brochure.",
-    cols: "lg:grid-cols-3", bodyWidth: 560, kind: "unit", extra: [n("f1-inset")],
+    cols: "sm:grid-cols-3", bodyWidth: 560, kind: "unit", extra: [n("f1-inset")],
     items: [
       { name: "Beach villa", type: "4 beds · From 420 m² · Private pool · Sea view", photo: n("unit-villa"), card: { w: 456, h: 684 },
         body: "A four-bedroom villa with a private pool facing the sea, set along the beachfront promenade.",

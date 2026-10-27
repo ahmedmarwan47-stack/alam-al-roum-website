@@ -15,8 +15,11 @@ export default function InTown() {
   const [active, setActive] = useState(0);
   const zones = useRef<(HTMLDivElement | null)[]>([]), coin = useRef<HTMLDivElement>(null), wrap = useRef<HTMLDivElement>(null);
   useEffect(() => {
+    // below lg the coin rides in a band at the top of the screen, so a mode turns active at the middle of what is
+    // left under it (65 %) rather than 75 %; a function so a resize across lg re-reads it on refresh
+    const line = () => (window.matchMedia("(min-width: 1024px)").matches ? "75%" : "65%");
     const sts = zones.current.map((z, k) => ScrollTrigger.create({
-      trigger: z, start: "top 75%", end: "bottom 75%", onToggle: (s) => { if (s.isActive) setActive(k); },
+      trigger: z, start: () => `top ${line()}`, end: () => `bottom ${line()}`, onToggle: (s) => { if (s.isActive) setActive(k); },
     }));
     const spin = reducedMotion() ? null : gsap.fromTo(coin.current, { rotate: 4 }, {
       rotate: -14, ease: "none", scrollTrigger: { trigger: wrap.current, start: "top bottom", end: "bottom top", scrub: 1 },
@@ -29,8 +32,10 @@ export default function InTown() {
     <section className="flex flex-col items-center gap-20 overflow-x-clip bg-limestone-50 py-[120px] container-x">
       <SectionTitle tag={T.tag} title={T.title} body={T.body} className="max-w-[900px]" />
       <div ref={wrap} className="relative grid w-full max-w-[1392px] gap-10 lg:grid-cols-[656px_1fr] lg:gap-20">
-        <div className="lg:h-full">
-          <div className="sticky top-[calc(50vh-328px)] mx-auto aspect-square w-full max-w-[656px]">
+        {/* below lg (one column) the coin sits in a band stuck to the top of the screen while the three modes scroll
+            up under it, so each photo swap happens in view; a short fade softens the band's lower edge */}
+        <div className="max-lg:sticky max-lg:top-0 max-lg:z-10 max-lg:bg-limestone-50 max-lg:py-4 max-lg:after:pointer-events-none max-lg:after:absolute max-lg:after:inset-x-0 max-lg:after:top-full max-lg:after:h-8 max-lg:after:bg-gradient-to-b max-lg:after:from-limestone-50 max-lg:after:to-transparent lg:h-full">
+          <div className="mx-auto aspect-square w-full max-w-[656px] max-lg:w-[min(58vw,36svh,320px)] lg:sticky lg:top-[calc(50vh-328px)]">
             <div ref={coin} className="relative h-full w-full" style={mask}>
               {T.modes.map((m, k) => (
                 // eslint-disable-next-line @next/next/no-img-element

@@ -36,7 +36,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         </div>
       </header>
       <div className="container-x">
-        <div className="aspect-[1392/640] overflow-hidden"><RevealImage src={a.hero} alt={a.title} onLoad className="h-full w-full" /></div>
+        {/* phones: a 4:3 crop, as the 1392 × 640 banner would be a thin strip there */}
+        <div className="aspect-[4/3] overflow-hidden sm:aspect-[1392/640]"><RevealImage src={a.hero} alt={a.title} onLoad className="h-full w-full" /></div>
       </div>
       <section className="px-[var(--gutter)] py-[60px]">
         {a.body.length ? <ArticleBody a={a} /> : <p className="mx-auto max-w-[768px] t-body b-18 text-limestone-800">The full story will be published here soon.</p>}
@@ -44,7 +45,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
       {/* Related Articles (Figma 10921:10181): Keep Reading on Limestone, three story cards, View All */}
       <section className="flex flex-col items-center gap-10 bg-limestone-50 py-20 container-x">
         <SectionTitle title={related.title} body={related.body} />
-        <div className="grid w-full gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid w-full gap-6 sm:grid-cols-2 md:grid-cols-3">
           {[...related.items, ...stories].filter((s, k, all) => s.slug !== a.slug && all.findIndex((x) => x.slug === s.slug) === k).slice(0, 3)
             .map((c, k) => <StoryCard key={c.slug} {...c} delay={k * 0.08} />)}
         </div>

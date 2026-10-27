@@ -15,17 +15,26 @@ function Row({ i, r, ghost }: { i: number; r: R; ghost?: boolean }) {
   const num = String(i + 1).padStart(2, "0");
   if (ghost) return (
     <div className="flex flex-wrap items-center gap-y-2 py-6 md:flex-nowrap md:px-8 md:py-8" aria-hidden>
-      <span className="w-12 t-label l-14 md:w-[120px]">{num}</span>
+      <span className="w-12 flex-none t-label l-14 md:w-[120px]">{num}</span>
       <span className="flex-1 t-heading hd-32 md:flex-[0_0_42%]">{r.title}</span>
       <span className="order-last basis-full pl-12 t-body b-16 md:order-none md:flex-1 md:basis-auto md:pl-10">{r.body}</span>
-      <span className="h-11 w-11" />
+      <span className="h-11 w-11 flex-none" />
     </div>);
   return (
-    <Link href={`/experiences/${slugify(r.title)}`} data-row={i} className="group relative flex flex-wrap items-center gap-y-2 border-b border-limestone-600 py-6 md:flex-nowrap md:px-8 md:py-8">
-      <span className="w-12 t-label l-14 text-limestone-800 transition-colors duration-300 group-hover:text-teal-600 md:w-[120px]">{num}</span>
-      <span className="flex-1 md:flex-[0_0_42%]"><RevealText as="h3" text={r.title} className="t-heading hd-32" /></span>
-      <span className="order-last basis-full pl-12 text-limestone-800 md:order-none md:flex-1 md:basis-auto md:pl-10"><RevealText text={r.body} className="t-body b-16" delay={0.08} /></span>
-      <span className="grid h-11 w-11 place-items-center rounded-full border border-limestone-600 transition-[background-color,border-color,color,transform] duration-500 [transition-timing-function:var(--ease-btn)] group-hover:border-deepsea-500 group-hover:bg-deepsea-500 group-hover:text-limestone-50 group-hover:-rotate-45">
+    <Link href={`/experiences/${slugify(r.title)}`} data-row={i} className="group relative flex items-center gap-4 border-b border-limestone-600 py-5 md:gap-6 lg:gap-0 lg:px-8 lg:py-8">
+      {/* below lg there is no cursor to carry the photo, so each row shows its own; from lg the copy column dissolves
+          (display: contents) and number, title and body are the row's own flex items, as in Figma */}
+      {/* (the span, not the img, carries lg:hidden: globals.css sets img { display: block } outside any layer) */}
+      <span className="block aspect-[210/267] w-[72px] flex-none overflow-hidden rounded md:w-[96px] lg:hidden">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={r.photo} alt="" loading="lazy" className="h-full w-full object-cover" />
+      </span>
+      <span className="flex min-w-0 flex-1 flex-col gap-1 lg:contents">
+        <span className="t-label l-14 text-limestone-800 transition-colors duration-300 group-hover:text-teal-600 lg:w-[120px] lg:flex-none">{num}</span>
+        <span className="lg:flex-[0_0_42%]"><RevealText as="h3" text={r.title} className="t-heading hd-32" /></span>
+        <span className="pt-1 text-limestone-800 lg:flex-1 lg:basis-auto lg:pl-10 lg:pt-0"><RevealText text={r.body} className="t-body b-16" delay={0.08} /></span>
+      </span>
+      <span className="grid h-11 w-11 flex-none place-items-center rounded-full border border-limestone-600 transition-[background-color,border-color,color,transform] duration-500 [transition-timing-function:var(--ease-btn)] group-hover:border-deepsea-500 group-hover:bg-deepsea-500 group-hover:text-limestone-50 group-hover:-rotate-45">
         <Icon name="arrow-right-01-sharp" size={18} /></span>
     </Link>);
 }
@@ -33,7 +42,8 @@ function Row({ i, r, ghost }: { i: number; r: R; ghost?: boolean }) {
 /**
  * Ways to live, after the Understory "Services" hover: the hovered row's photo (210×267) trails the
  * cursor on a soft catch-up (~0.45 s), and the text it passes over is redrawn in Tropical Teal/200
- * through a copy of the list clipped to the photo's rectangle.
+ * through a copy of the list clipped to the photo's rectangle. Below lg (touch, no cursor) each row shows
+ * its photo as a thumbnail instead.
  */
 export default function WaysToLive() {
   const rows = waysToLive.rows as R[];
@@ -41,21 +51,26 @@ export default function WaysToLive() {
   const [active, setActive] = useState(0);
   useEffect(() => {
     const el = list.current!, c = card.current!, g = ghost.current!;
-    if (reducedMotion() || matchMedia("(hover: none)").matches) return;
-    const W = 210, H = 267;
-    gsap.set(c, { xPercent: -50, yPercent: -50, x: 0, y: 0, autoAlpha: 0, scale: 0.85 });
-    const qx = gsap.quickTo(c, "x", { duration: 0.45, ease: "power3.out" }), qy = gsap.quickTo(c, "y", { duration: 0.45, ease: "power3.out" });
-    const clip = () => { const x = +gsap.getProperty(c, "x") - W / 2, y = +gsap.getProperty(c, "y") - H / 2, s = +gsap.getProperty(c, "scale");
-      const dw = (W * (1 - s)) / 2, dh = (H * (1 - s)) / 2; const o = +gsap.getProperty(c, "opacity");
-      g.style.clipPath = o < 0.02 ? "inset(100%)" : `polygon(${x + dw}px ${y + dh}px, ${x + W - dw}px ${y + dh}px, ${x + W - dw}px ${y + H - dh}px, ${x + dw}px ${y + H - dh}px)`; };
-    gsap.ticker.add(clip);
-    const move = (e: PointerEvent) => { const b = el.getBoundingClientRect(); qx(e.clientX - b.left); qy(e.clientY - b.top);
-      const row = (e.target as HTMLElement).closest<HTMLElement>("[data-row]"); if (row) setActive(+row.dataset.row!); };
-    const enter = (e: PointerEvent) => { const b = el.getBoundingClientRect(); gsap.set(c, { x: e.clientX - b.left, y: e.clientY - b.top });
-      gsap.to(c, { autoAlpha: 1, scale: 1, duration: 0.4, ease: "power3.out" }); };
-    const leave = () => gsap.to(c, { autoAlpha: 0, scale: 0.85, duration: 0.35, ease: "power2.inOut" });
-    el.addEventListener("pointermove", move); el.addEventListener("pointerenter", enter); el.addEventListener("pointerleave", leave);
-    return () => { gsap.ticker.remove(clip); el.removeEventListener("pointermove", move); el.removeEventListener("pointerenter", enter); el.removeEventListener("pointerleave", leave); };
+    if (reducedMotion()) return;
+    // the cursor photo is a desktop (lg, mouse) effect; below lg every row carries its own photo
+    const mm = gsap.matchMedia();
+    mm.add("(min-width: 1024px) and (hover: hover)", () => {
+      const W = 210, H = 267;
+      gsap.set(c, { xPercent: -50, yPercent: -50, x: 0, y: 0, autoAlpha: 0, scale: 0.85 });
+      const qx = gsap.quickTo(c, "x", { duration: 0.45, ease: "power3.out" }), qy = gsap.quickTo(c, "y", { duration: 0.45, ease: "power3.out" });
+      const clip = () => { const x = +gsap.getProperty(c, "x") - W / 2, y = +gsap.getProperty(c, "y") - H / 2, s = +gsap.getProperty(c, "scale");
+        const dw = (W * (1 - s)) / 2, dh = (H * (1 - s)) / 2; const o = +gsap.getProperty(c, "opacity");
+        g.style.clipPath = o < 0.02 ? "inset(100%)" : `polygon(${x + dw}px ${y + dh}px, ${x + W - dw}px ${y + dh}px, ${x + W - dw}px ${y + H - dh}px, ${x + dw}px ${y + H - dh}px)`; };
+      gsap.ticker.add(clip);
+      const move = (e: PointerEvent) => { const b = el.getBoundingClientRect(); qx(e.clientX - b.left); qy(e.clientY - b.top);
+        const row = (e.target as HTMLElement).closest<HTMLElement>("[data-row]"); if (row) setActive(+row.dataset.row!); };
+      const enter = (e: PointerEvent) => { const b = el.getBoundingClientRect(); gsap.set(c, { x: e.clientX - b.left, y: e.clientY - b.top });
+        gsap.to(c, { autoAlpha: 1, scale: 1, duration: 0.4, ease: "power3.out" }); };
+      const leave = () => gsap.to(c, { autoAlpha: 0, scale: 0.85, duration: 0.35, ease: "power2.inOut" });
+      el.addEventListener("pointermove", move); el.addEventListener("pointerenter", enter); el.addEventListener("pointerleave", leave);
+      return () => { gsap.ticker.remove(clip); g.style.clipPath = "inset(100%)"; el.removeEventListener("pointermove", move); el.removeEventListener("pointerenter", enter); el.removeEventListener("pointerleave", leave); };
+    });
+    return () => mm.revert();
   }, []);
   return (
     <section className="flex flex-col gap-10 bg-limestone-50 py-20 container-x">
