@@ -17,7 +17,7 @@ const EASE = "duration-[350ms] [transition-timing-function:var(--ease-fig-inout)
 const Group = ({ title, children }: { title: string; children: ReactNode }) => {
   const [on, setOn] = useState(false);
   return (
-    <div className="flex flex-col border-b border-deepsea-500/20 md:gap-6 md:border-0">
+    <div className="flex flex-col md:gap-6">
       <span className="hidden t-label l-14 md:block">{title}</span>
       <button type="button" onClick={() => setOn(!on)} aria-expanded={on} className="flex h-14 w-full items-center justify-between text-left t-label l-16 md:hidden">
         {title}<Icon name="plus-sign" size={20} className={`transition-transform ${EASE} ${on ? "rotate-45" : ""}`} />
@@ -41,7 +41,9 @@ const contactHref = (icon: string, t: string) =>
 export default function Footer({ video = true }: { video?: boolean }) {
   return (
     <footer className="relative overflow-hidden bg-limestone-50 text-deepsea-500">
-      {video && <video data-media-blur className="absolute inset-x-0 bottom-0 top-[185px] h-[calc(100%-185px)] w-full object-cover" src={F.video} autoPlay muted loop playsInline />}
+      {/* the film rises out of the Limestone with no edge (Figma): it starts behind the address block and its top
+          fades in over 260 px, so nothing reads as a divider between the newsletter row and the water */}
+      {video && <video data-media-blur className="absolute inset-x-0 bottom-0 top-[42%] h-[58%] w-full object-cover [mask-image:linear-gradient(to_bottom,transparent_0,black_260px)] max-md:top-[55%] max-md:h-[45%]" src={F.video} autoPlay muted loop playsInline />}
       <div className="relative flex flex-col pt-10 container-x">
         <div className="flex flex-col justify-between gap-8 py-10 lg:flex-row lg:items-center">
           <div className="flex flex-col gap-2"><RevealText text={F.newsTitle} className="t-text x-28" /><span className="t-text x-16">{F.newsBody}</span></div>
@@ -62,8 +64,9 @@ export default function Footer({ video = true }: { video?: boolean }) {
             {/* below lg the three links wrap whole, with room between them, instead of breaking inside a name */}
             <div className="flex flex-wrap gap-[6px] t-text x-16 max-lg:gap-x-5 max-lg:gap-y-0">{F.legal.map((l) => <a key={l} href="#" className="max-lg:whitespace-nowrap max-lg:py-2">{l}</a>)}</div>
           </div>
-          {/* phones: the three groups stack as accordion rows (the Contact column used to run off-screen) */}
-          <div className="flex flex-col border-t border-deepsea-500/20 md:flex-row md:gap-[120px] md:border-0">
+          {/* phones: the three groups stack as accordion rows (the Contact column used to run off-screen), with rules
+              only between the rows */}
+          <div className="flex flex-col max-md:divide-y max-md:divide-deepsea-500/20 md:flex-row md:gap-[120px]">
             <Group title="Discover"><Links items={F.discover} /></Group>
             <Group title="More"><Links items={F.more} /></Group>
             <Group title="Contact">

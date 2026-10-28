@@ -3,18 +3,18 @@ const c = (f: string) => `/images/communities/${f}.jpg`;
 
 export const comHero = {
   pre: "Communities",
-  title: [{ t: "One light" }, { t: "With the city", i: true }, { t: "Year after year", br: true }],
-  body: "The lighthouse stood here first. Everything else was planned in relation to it.",
+  title: [{ t: "One light" }, { t: "With the city", i: true }, { t: "since the first stone", br: true }],
+  body: "The lighthouse stood here first. Every district, from the beachfront to the golf greens, was planned in relation to it.",
   photo: c("hero"), alt: "A family on a hillside by the sea",
 };
 
 export const comSection = {
   tag: "Communities", title: "Six ways to live", body: "Each district has its own character. All share the sea.",
-  toggle: ["Map", "Grid"] as const, masterplan: c("masterplan"),
+  toggle: ["Map", "Grid"] as const,
 };
 
 /**
- * The six communities. `pin` is the hotspot centre on the 1512 × 839 masterplan (the town centre has no pin);
+ * The six communities. `pin` is the hotspot centre in masterplan plan units (1512 × 839, see lib/masterplan.ts);
  * `card` is the grid card size from Figma (the grid is a staggered three-column flow).
  */
 export const communities = [
@@ -27,7 +27,7 @@ export const communities = [
   { slug: "resort", name: "Resort districts", line: "Hotels and residences share the same streets. Service is permanent here.",
     body: "Hotels and residences share the same streets. Service is permanent here.", photo: c("resort"), pinPhoto: c("pin-resort"), pin: { x: 544, y: 437 }, card: { w: 496, h: 620 } },
   { slug: "golf", name: "Golf community", line: "Homes framed by an 18-hole championship course, green all year.",
-    body: "Homes framed by an 18-hole championship course. Green all year.", photo: c("golf"), pinPhoto: c("pin-golf"), pin: { x: 1247, y: 89 }, card: { w: 380, h: 475 } },
+    body: "Homes framed by an 18-hole championship course. Green all year.", photo: c("golf"), pinPhoto: c("pin-golf"), pin: { x: 1250, y: 165 }, card: { w: 380, h: 475 } },
   { slug: "town-centre", name: "Town centre quarter", line: "Homes above shops and cafés on the commercial boulevard.",
-    body: "Homes above shops and cafés on the commercial boulevard. Everything within a short walk.", photo: c("town-centre"), pinPhoto: c("town-centre"), pin: null, card: { w: 492, h: 744 } },
+    body: "Homes above shops and cafés on the commercial boulevard. Everything within a short walk.", photo: c("town-centre"), pinPhoto: c("town-centre"), pin: { x: 805, y: 262 }, card: { w: 492, h: 744 } },
 ];

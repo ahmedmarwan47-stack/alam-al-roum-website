@@ -5,6 +5,7 @@ import SectionTitle from "./SectionTitle";
 import MasterplanMap from "./MasterplanMap";
 import RevealImage from "@/components/reveal/RevealImage";
 import { comSection as S, communities } from "@/lib/communities";
+import { communityPins, planViews } from "@/lib/masterplan";
 
 /** Segmented Toggle (Figma 10941:17875): the dark thumb slides across, Smart Animate 350 ms. */
 export function SegmentedToggle({ options, value, onChange }: { options: readonly string[]; value: number; onChange: (i: number) => void }) {
@@ -48,16 +49,18 @@ export function CommunityGrid({ items, className = "" }: { items: Community[]; c
 
 /**
  * Section / Communities (Map · Grid), Figma 10921:12509: one viewport with a Map / Grid toggle.
- * Map = the masterplan with pins (Beachfront open), Grid = the six community cards in a staggered flow.
+ * Map = the built-up city cropped from the masterplan, with the six communities' pins and names only (no other
+ * places); Grid = the six community cards in a staggered flow.
  */
 export default function CommunitiesExplorer() {
   const [view, setView] = useState(0);
-  const pins = communities.filter((c) => c.pin).map((c) => ({ title: c.name, body: c.line, x: c.pin!.x, y: c.pin!.y, photo: c.pinPhoto, href: `/communities/${c.slug}` }));
   return (
     <section className="flex flex-col items-center gap-10 bg-white pt-20">
       <SectionTitle tag={S.tag} title={S.title} body={S.body} className="container-x" />
       <SegmentedToggle options={S.toggle} value={view} onChange={setView} />
-      {view === 0 ? <MasterplanMap image={S.masterplan} pins={pins} /> : <CommunityGrid items={communities} className="pb-20 container-x" />}
+      {view === 0
+        ? <MasterplanMap image={planViews.communities.src} view={planViews.communities} pins={communityPins} initial={-1} labels />
+        : <CommunityGrid items={communities} className="pb-20 container-x" />}
     </section>
   );
 }

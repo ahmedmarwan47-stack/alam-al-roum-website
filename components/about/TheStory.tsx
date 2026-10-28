@@ -1,10 +1,17 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
+import { BLOCK_FROM, BLOCK_TO } from "@/components/reveal/letters";
 import { story as S } from "@/lib/about/b-content";
 
 const FW = 1512, FH = 1024;                 // the motion-study frame
 const fy = (y: number) => `${(y / FH) * 100}%`;
+/** The three Culture photos: % of the frame up to 1512 × 1024; on a larger screen, Figma's pixels in a 1512 × 1024
+ * box centred on the screen, so they keep to the content edges (60 px in from that box) and to their Figma spacing
+ * instead of drifting out towards the screen's edges and apart. */
+const fx = (x: number) => `calc(max(0px, (100% - ${FW}px) / 2) + min(${(x / FW) * 100}%, ${x}px))`;
+const fyBox = (y: number) => `calc(max(0px, (100% - ${FH}px) / 2) + min(${(y / FH) * 100}%, ${y}px))`;
+const fw = (w: number) => `min(${(w / FW) * 100}%, ${w}px)`;
 /**
  * The two domes are clip-path circles driven by two CSS variables: --t is the dome's top edge (% of the
  * stage height), --r its radius. Figma: a 2400 circle rises from y 1100 to 560, then grows to 4400 at
@@ -28,13 +35,15 @@ const off = (el: HTMLElement, stop: HTMLElement) => {
 
 /**
  * The Story, after the Figma component set "Motion Study · The Story (dome + scattered words)" (10673:8318):
- * one pinned stage, one scroll-scrubbed timeline through its six states.
+ * one pinned stage, one scroll-scrubbed timeline.
  *  1 History — the shoreline photo with "This Shoreline Guided Sailors Home".
- *  2 Culture Rises — a Limestone dome rises from below carrying the word "Culture"; the history copy dims.
- *  3 Culture Covers — the dome swells over the frame; six words float in, scattered, at 35 %.
- *  4 Culture — the words gather into the headline, the paragraph and three culture photos rise in.
- *  5 Greatness Rises — a second dome, cut from the Greatness photo, rises with the word "Greatness".
- *  6 Greatness — it covers the frame, the word settles above "Greatness Is What Remains" and the body.
+ *  2 Culture Rises — a Limestone dome rises from below carrying the word "Architecture"; the history copy dims.
+ *  3 Culture — the dome swells over the frame; as it settles, the headline and then the paragraph blur in, each as
+ *    one block (the site's text entrance), and the three photos rise a little into place. The Figma study's scattered
+ *    words, flying in from every side before gathering, were dropped (28 Oct review: too much movement), and with
+ *    them one viewport of the pin.
+ *  4 Greatness Rises — a second dome, cut from the Greatness photo, rises with the word "The Sea".
+ *  5 Greatness — it covers the frame, the word settles above "Greatness Is What Remains" and the body.
  * Replaces the static About frames "The Story · Culture" and "The Story · About greatness".
  */
 export default function TheStory() {
@@ -43,15 +52,9 @@ export default function TheStory() {
     const st = stage.current!;
     const $ = <T extends Element = HTMLElement>(s: string) => st.querySelector<T & HTMLElement>(s)!;
     const $$ = (s: string) => gsap.utils.toArray<HTMLElement>(s, st);
-    const words = $$("[data-word]"), photos = $$("[data-photo]");
+    const photos = $$("[data-photo]");
     const rm = reducedMotion(), D = rm ? 0.001 : MOVE, ease = "none";
-    const W = () => st.clientWidth, H = () => st.clientHeight;
-    // where each headline word floats in state 3, relative to its resting place in the headline
-    // (kept inside the gutters, so on a phone a word on the right edge never runs off the screen)
-    const gut = () => Math.min(60, Math.max(20, window.innerWidth * 0.0397));   // --gutter
-    const dx = (el?: HTMLElement) => (el?.dataset?.x
-      ? Math.min(Math.max(gut(), (+el.dataset.x / FW) * W()), W() - gut() - el.offsetWidth) - off(el, st).x : 0);
-    const dy = (el?: HTMLElement) => (el?.dataset?.y ? (+el.dataset.y / FH) * H() - off(el, st).y : 0);
+    const H = () => st.clientHeight;
     // the Greatness word flies from the dome to its place above the headline (a measured FLIP)
     const gw = $("[data-g-word]"), slot = $("[data-g-slot]");
     // each dome's word blurs in as one block while its dome rises (opacity and blur only: its position is the dome's)
@@ -63,9 +66,8 @@ export default function TheStory() {
       tl.set([$("[data-dome=culture]"), $("[data-dome=greatness]")], DOME.below, 0)
         .set($("[data-c-word]"), { top: fy(1180) }, 0)
         .set($("[data-h-text]"), { y: 0, autoAlpha: 1 }, 0)
-        .set(words, { x: (_, el) => dx(el), y: (_, el) => dy(el) + (1100 / FH) * H(), autoAlpha: 0 }, 0)
-        .set(photos, { y: 120, autoAlpha: 0 }, 0)
-        .set($("[data-c-body]"), { y: 60, autoAlpha: 0 }, 0)
+        .set([$("[data-c-head]"), $("[data-c-body]")], BLOCK_FROM, 0)
+        .set(photos, { y: 60, autoAlpha: 0 }, 0)
         .set(gw, { top: fy(1180), xPercent: -50, x: 0, y: 0 }, 0)
         .set($$("[data-g-text]"), { y: () => H() * 0.4, autoAlpha: 0 }, 0)
         .set($("[data-g-dim]"), { autoAlpha: 0 }, 0);
@@ -75,24 +77,24 @@ export default function TheStory() {
         .to($("[data-c-word]"), { top: fy(640) }, t)
         .fromTo($("[data-c-word]"), WORD_FROM, { ...WORD_TO, duration: D * 0.5 }, t + D * 0.3)
         .to($("[data-h-text]"), { y: -60, autoAlpha: 0.4 }, t);
-      // 2 → 3 · Culture covers, the words float in
+      // 2 → 3 · Culture covers and its word rises to the top; once the word has cleared the middle of the frame, the
+      // headline and then the paragraph blur in (one block each, the site's text entrance) and the photos rise into place
       t += STEP;
+      const IN = rm ? 0 : 0.55, BLOCK = rm ? 0.001 : 0.8;
       tl.to($("[data-dome=culture]"), DOME.cover, t)
-        .to($("[data-c-word]"), { top: fy(210) }, t)
+        .to($("[data-c-word]"), { top: fy(210), duration: D * 0.7 }, t)
         .to($("[data-h-text]"), { y: -80, autoAlpha: 0 }, t)
-        .to(words, { y: (_, el) => dy(el), autoAlpha: 0.35, stagger: rm ? 0 : 0.04 }, t);
-      // 3 → 4 · the words gather into the headline; paragraph and photos rise
-      t += STEP;
-      tl.to(words, { x: 0, y: 0, autoAlpha: 1 }, t)
-        .to($("[data-c-body]"), { y: 0, autoAlpha: 1 }, t + (rm ? 0 : W() < 768 ? 0.6 : 0.15))   // on a phone, once the words have gathered
-        .to(photos, { y: 0, autoAlpha: 1, stagger: rm ? 0 : 0.08 }, t);
+        .to($("[data-c-head]"), { ...BLOCK_TO, duration: BLOCK }, t + IN)
+        .to($("[data-c-body]"), { ...BLOCK_TO, duration: BLOCK }, t + IN + (rm ? 0 : 0.15))
+        // (spread over 0.16 s in all: the tablet row repeats the three photos, so a per-photo stagger would lengthen the pin)
+        .to(photos, { y: 0, autoAlpha: 1, duration: BLOCK, stagger: { amount: rm ? 0 : 0.16 } }, t + IN);
       // reading hold: the headline, paragraph and photos rest, fully in place, before Greatness rises
-      t += D + (rm ? 0 : HOLD);
-      // 4 → 5 · Greatness rises
+      t = tl.duration() + (rm ? 0 : HOLD);
+      // 3 → 4 · Greatness rises
       tl.to($("[data-dome=greatness]"), DOME.risen, t)
         .to(gw, { top: fy(640) }, t)
         .fromTo(gw, WORD_FROM, { ...WORD_TO, duration: D * 0.5 }, t + D * 0.3);
-      // 5 → 6 · Greatness covers; the word settles over the headline
+      // 4 → 5 · Greatness covers; the word settles over the headline
       t += STEP;
       tl.to($("[data-dome=greatness]"), DOME.cover, t)
         .to($("[data-g-dim]"), { autoAlpha: 1 }, t)
@@ -100,7 +102,7 @@ export default function TheStory() {
         .to($$("[data-g-text]"), { y: 0, autoAlpha: 1, stagger: rm ? 0 : 0.08 }, t + (rm ? 0 : 0.1))
         .to({}, { duration: rm ? 0.15 : HOLD }, t + D);     // reading hold on the closing copy before the pin releases
 
-      // about one viewport of scroll per timeline second; below lg 60 % of that (~4 screens rather than 6.6), so a phone
+      // about one viewport of scroll per timeline second; below lg 60 % of that (~3.5 screens rather than 5.9), so a phone
       // is not held long on one section
       const per = () => (window.matchMedia("(min-width: 1024px)").matches ? 1 : 0.6);
       ScrollTrigger.create({ trigger: st, start: "top top", end: () => `+=${H() * tl.duration() * per()}`, pin: true, scrub: rm ? true : 1,
@@ -130,16 +132,13 @@ export default function TheStory() {
         <span data-c-word data-no-blur className="absolute left-1/2 -translate-x-1/2 t-accent hd-56 text-deepsea-500" style={{ top: fy(1180) }}>{C.word}</span>
         {C.photos.map((p) => (
           <div key={p.src} data-photo className="absolute hidden overflow-hidden lg:block"
-            style={{ left: `${(p.x / FW) * 100}%`, top: fy(p.y), width: `${(p.w / FW) * 100}%`, aspectRatio: `${p.w} / ${p.h}` }}>
+            style={{ left: fx(p.x), top: fyBox(p.y), width: fw(p.w), aspectRatio: `${p.w} / ${p.h}` }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={p.src} alt={p.alt} loading="lazy" className="h-full w-full object-cover" />
           </div>))}
         <div className="absolute inset-x-0 flex flex-col items-center gap-14 px-[var(--gutter)] text-center text-deepsea-500" style={{ top: fy(360) }}>
-          <h3 className="t-heading hd-56 normal-case! leading-[1.25]!">
-            {C.lines.map((line, k) => (
-              <span key={k} className="flex flex-wrap justify-center gap-x-[0.28em]">
-                {line.map((w) => <span key={w.t} data-word data-x={w.x} data-y={w.y} className="relative inline-block">{w.t}</span>)}
-              </span>))}
+          <h3 data-c-head className="t-heading hd-56 normal-case! leading-[1.25]!">
+            {C.lines.map((line) => <span key={line} className="block">{line}</span>)}
           </h3>
           <p data-c-body className="max-w-[560px] t-body b-18">{C.body}</p>
           {/* tablets: the three photos as a row under the paragraph (at Figma's scattered spots they crowd the headline

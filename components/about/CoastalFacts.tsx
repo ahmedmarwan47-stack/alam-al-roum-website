@@ -9,8 +9,25 @@ import { facts as F } from "@/lib/about/a-content";
 type State = keyof typeof F.states;
 type Box = { left: string; top: string; width: string; height: string };
 const p = (v: number) => `${+(v * 100).toFixed(3)}%`;
-/** A window's box in % of the 1512 × 1024 stage. */
-const win = ([x, y, w, h]: number[]): Box => ({ left: p(x / 1512), top: p(y / 1024), width: p(w / 1512), height: p(h / 1024) });
+/**
+ * The Figma stage is 1512 × 1024. Up to that size the windows scale with the screen (% of the stage); on a wider or
+ * taller screen the split and merged windows keep Figma's pixels in a 1512 × 1024 box centred on the stage, so they
+ * stay inside the content edges like every other section (the full state still opens to the whole screen).
+ */
+const AW = 1512, AH = 1024;
+const ax = (x: number) => `calc(max(0px, (100% - ${AW}px) / 2) + min(${p(x / AW)}, ${x}px))`;
+const ay = (y: number) => `calc(max(0px, (100% - ${AH}px) / 2) + min(${p(y / AH)}, ${y}px))`;
+/** A window's box on the stage (CSS, for the first paint). */
+const win = ([x, y, w, h]: number[]): Box => ({ left: ax(x), top: ay(y), width: `min(${p(w / AW)}, ${w}px)`, height: `min(${p(h / AH)}, ${h}px)` });
+/** The same box in px for the tweens, measured from the stage (re-read on every ScrollTrigger refresh). */
+const winPx = (stage: HTMLElement, s: State, k: "l" | "r") => {
+  const W = stage.clientWidth, H = stage.clientHeight;
+  if (s === "full") return { left: k === "l" ? 0 : W / 2, top: 0, width: W / 2, height: H };
+  const aw = Math.min(W, AW), ah = Math.min(H, AH), [x, y, w, h] = F.states[s][k];
+  return { left: (W - aw) / 2 + (x * aw) / AW, top: (H - ah) / 2 + (y * ah) / AH, width: (w * aw) / AW, height: (h * ah) / AH };
+};
+const tweenBox = (stage: HTMLElement, s: State, k: "l" | "r") =>
+  (["left", "top", "width", "height"] as const).reduce((o, prop) => ({ ...o, [prop]: () => winPx(stage, s, k)[prop] }), {} as Record<string, () => number>);
 /** The picture's box in % of its window, so both windows look onto one continuous photo when they meet. */
 const pic = ([x, y, w, h]: number[], [ix, iy, iw, ih]: number[]): Box => ({ left: p((ix - x) / w), top: p((iy - y) / h), width: p(iw / w), height: p(ih / h) });
 const boxes = (s: State) => {
@@ -24,9 +41,10 @@ const TITLE = [{ t: "A fully integrated" }, { t: "coastal city", br: true }];
 /**
  * UI / Section / Split Merge, scroll-scrubbed while pinned (lg up). Split → Merged (Figma 1.2 s): the two
  * offset halves slide together into one 880 × 560 picture. Merged → Full (1.4 s, after 0.35 s): the halves
- * open to full bleed under a 40 % Deep Sea dim, the copy turns Limestone, the paragraph fades and the facts
- * row rises 40px into view. Both legs on the 0.76/0/0.24/1 in-out. Below lg the section stacks with the
- * standard line and image reveals.
+ * open to full bleed under a 40 % Deep Sea dim and the title and paragraph turn Limestone (a soft shade comes up
+ * under the paragraph, so it keeps its contrast over the bright courtyard). Both legs on the 0.76/0/0.24/1 in-out.
+ * The four figures that used to rise in at the end now have their own static section (CityNumbers, higher up),
+ * so the paragraph stays and the reading hold is shorter. Below lg the section stacks with the standard reveals.
  */
 export default function CoastalFacts() {
   const stage = useRef<HTMLDivElement>(null);
@@ -37,21 +55,18 @@ export default function CoastalFacts() {
       const m = boxes("merged"), f = boxes("full");
       const [L, R, IL, IR] = ["[data-l]", "[data-r]", "[data-l] img", "[data-r] img"].map((s) => q(s));
       const tl = gsap.timeline({ paused: true, defaults: { ease: "none" } })   // linear with the scroll; a reading hold at the end
-        .to(L, { ...m.l, duration: 1.2 }, 0).to(R, { ...m.r, duration: 1.2 }, 0)
+        .fromTo(L, tweenBox(el, "split", "l"), { ...tweenBox(el, "merged", "l"), duration: 1.2 }, 0)
+        .fromTo(R, tweenBox(el, "split", "r"), { ...tweenBox(el, "merged", "r"), duration: 1.2 }, 0)
         .to(IL, { ...m.il, duration: 1.2 }, 0).to(IR, { ...m.ir, duration: 1.2 }, 0)
         .addLabel("full", 1.2)
-        .to(L, { ...f.l, duration: 1.4 }, "full").to(R, { ...f.r, duration: 1.4 }, "full")
+        .to(L, { ...tweenBox(el, "full", "l"), duration: 1.4 }, "full").to(R, { ...tweenBox(el, "full", "r"), duration: 1.4 }, "full")
         .to(IL, { ...f.il, duration: 1.4 }, "full").to(IR, { ...f.ir, duration: 1.4 }, "full")
         .to(q("[data-dim]"), { opacity: 0.4, duration: 1.4 }, "full")
-        .to(q("[data-ink]"), { color: token("limestone-50"), duration: 1 }, "full+=0.2")
-        .to(q("[data-para]"), { opacity: 0, duration: 0.6 }, "full")
-        .fromTo(q("[data-facts]"), { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1 }, "full+=0.4")
-        .fromTo(q("[data-fv]"), { color: token("deepsea-500") }, { color: token("limestone-50"), duration: 1 }, "full+=0.4")
-        .fromTo(q("[data-fl]"), { color: token("limestone-800") }, { color: token("deepsea-200"), duration: 1 }, "full+=0.4")
-        .fromTo(q("[data-fb]"), { borderColor: token("limestone-600") }, { borderColor: token("deepsea-400"), duration: 1 }, "full+=0.4");
-      const vh = withHold(tl, 2, 0.6);
+        .to(q("[data-scrim]"), { opacity: 1, duration: 1.4 }, "full")
+        .to(q("[data-ink]"), { color: token("limestone-50"), duration: 1 }, "full+=0.2");
+      const vh = withHold(tl, 2, 0.4);
       if (reducedMotion()) { tl.progress(1); return () => tl.kill(); }
-      const st = ScrollTrigger.create({ trigger: el, start: "top top", end: `+=${vh * 100}%`, pin: true, scrub: 1, animation: tl });
+      const st = ScrollTrigger.create({ trigger: el, start: "top top", end: `+=${vh * 100}%`, pin: true, scrub: 1, animation: tl, invalidateOnRefresh: true });
       return () => { st.kill(); tl.kill(); };
     });
     return () => mm.revert();
@@ -69,17 +84,14 @@ export default function CoastalFacts() {
           </div>
         ))}
         <div data-dim className="pointer-events-none absolute inset-0 bg-deepsea-600 opacity-0" />
-        <div data-ink className="absolute left-[var(--gutter)] top-[9.375%] max-w-[780px] text-deepsea-500">
-          <RevealText as="h2" segs={TITLE} className="t-heading hd-56" />
-        </div>
-        <p data-para className="absolute left-[72.22%] top-[78.125%] w-[300px] t-body b-14 text-deepsea-500">{F.body}</p>
-        <div data-facts className="absolute inset-x-[var(--gutter)] top-[77.34%] grid grid-cols-4 gap-6 opacity-0">
-          {F.items.map((x) => (
-            <div key={x.value} data-fb className="flex flex-col gap-2 border-t border-limestone-600 pt-5">
-              <span data-fv className="t-text text-deepsea-500" style={{ fontSize: "clamp(30px, calc(30px + 26 * (100vw - 390px) / 1122), 56px)", lineHeight: 60 / 56, letterSpacing: "-0.035em" }}>{x.value}</span>
-              <span data-fl className="t-text x-16 text-limestone-800">{x.label}</span>
-            </div>
-          ))}
+        {/* full state: a soft Deep Sea shade towards the bottom right, under the paragraph */}
+        <div data-scrim className="pointer-events-none absolute inset-0 opacity-0"
+          style={{ background: "radial-gradient(70% 60% at 85% 90%, rgb(3 30 46 / .6), rgb(3 30 46 / 0))" }} />
+        <div data-ink className="absolute inset-0 text-deepsea-500">
+          <div className="absolute left-[var(--gutter)] top-[calc(max(0px,(100%-1024px)/2)+min(9.375%,96px))] max-w-[780px]">
+            <RevealText as="h2" segs={TITLE} className="t-heading hd-56" />
+          </div>
+          <p className="absolute left-[calc(max(0px,(100%-1512px)/2)+min(72.22%,1092px))] top-[calc(max(0px,(100%-1024px)/2)+min(78.125%,800px))] w-[300px] t-body b-14">{F.body}</p>
         </div>
       </div>
 
@@ -88,14 +100,6 @@ export default function CoastalFacts() {
         <RevealText as="h2" segs={TITLE} className="t-heading hd-56 text-deepsea-500" />
         <RevealText text={F.body} className="t-body b-14 max-w-[420px] text-deepsea-500" delay={0.1} />
         <RevealImage src={F.image} alt="The Experience Centre courtyard" className="aspect-[3/2] w-full" />
-        <div className="grid grid-cols-2 gap-x-6 gap-y-8">
-          {F.items.map((x) => (
-            <div key={x.value} className="flex flex-col gap-2 border-t border-limestone-600 pt-5">
-              <span className="t-text text-deepsea-500" style={{ fontSize: 28, lineHeight: 1.1, letterSpacing: "-0.035em" }}>{x.value}</span>
-              <span className="t-text x-16 text-limestone-800">{x.label}</span>
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );

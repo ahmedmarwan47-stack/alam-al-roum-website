@@ -2,17 +2,18 @@ import SectionTitle from "./SectionTitle";
 import MasterplanMap from "./MasterplanMap";
 import { CommunityGrid } from "./CommunitiesExplorer";
 import { communities } from "@/lib/communities";
+import { districtPins, planViews } from "@/lib/masterplan";
 
-const pinsFor = () => communities.filter((c) => c.pin).map((c) => ({ title: c.name, body: c.line, x: c.pin!.x, y: c.pin!.y, photo: c.pinPhoto, href: `/communities/${c.slug}` }));
-
-/** "<Name> on the masterplan" (Figma 10921:9835): the shared masterplan with this community's pin open. */
+/**
+ * "<Name> on the masterplan" (Figma 10921:9835): the community's own masterplan, a crop of the master around the
+ * district (scripts/masterplan-crops.py) with pins for the places inside it, named on the map.
+ */
 export function CommunityOnMasterplan({ slug, title, body }: { slug: string; title: string; body: string }) {
-  const pins = pinsFor();
-  const k = pins.findIndex((p) => p.href.endsWith(`/${slug}`));
+  const view = planViews[slug] ?? planViews.communities;
   return (
     <section className="flex flex-col gap-10 bg-white pt-20">
       <SectionTitle tag="Masterplan" title={title} body={body} className="container-x" />
-      <MasterplanMap image="/images/communities/masterplan.jpg" pins={pins} initial={k} />
+      <MasterplanMap image={view.src} view={view} pins={districtPins[slug] ?? []} initial={-1} labels />
     </section>
   );
 }

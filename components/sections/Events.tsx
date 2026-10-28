@@ -21,8 +21,8 @@ export default function Events({ hrefs = {} }: { hrefs?: Record<string, string> 
         </div>
       </div>
       <div className="grid w-full grid-cols-2 gap-4 lg:grid-cols-4">
-        {list.map(([cat, date, title, p], k) => (
-          <EventCard key={`${past}-${k}`} tag={cat} meta={date} title={title} photo={`/images/photo/${p}.jpg`} href={hrefs[title] ?? "/events"} delay={k * 0.08} dark />))}
+        {list.map(([place, date, title, p], k) => (
+          <EventCard key={`${past}-${k}`} tag={place} meta={date} title={title} photo={`/images/photo/${p}.jpg`} href={hrefs[title] ?? "/events"} delay={k * 0.08} dark />))}
       </div>
       <Button label={E.cta} href="/events" variant="outline-light" />
     </section>

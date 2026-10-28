@@ -3,10 +3,12 @@ import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 import RevealMask from "@/components/reveal/RevealMask";
 import RevealText from "@/components/reveal/RevealText";
+import GalleryCarousel from "./GalleryCarousel";
 import { gallery } from "@/lib/content";
 import type { Seg } from "@/components/reveal/RevealText";
 
-export type GalleryData = { tag: string; title: Seg[]; rows: string[][] };
+/** `rows` feed the Home wall; `layout: "carousel"` (the inside pages) shows `photos` (or the rows, in order) as a carousel. */
+export type GalleryData = { tag: string; title: Seg[]; rows: string[][]; layout?: "wall" | "carousel"; photos?: string[] };
 
 /** Figma start offsets of the three rows (px at a 1000 px tall wall) and their drift: rows 1 and 3 left, row 2 right. */
 const START = [100, 410, 250], DIR = [-1, 1, -1];
@@ -21,8 +23,7 @@ const COPIES = 3;              // each row repeats its tiles so the loop never s
  *    easing back to the loop speed once the page stops.
  * The whole wall blurs in as one block (no sweep); the tiles themselves don't animate in one by one.
  */
-export default function Gallery({ data = gallery }: { data?: GalleryData }) {
-  const G = data;
+function GalleryWall({ data: G }: { data: GalleryData }) {
   const root = useRef<HTMLElement>(null);
   useEffect(() => {
     if (reducedMotion()) return;
@@ -75,4 +76,11 @@ export default function Gallery({ data = gallery }: { data?: GalleryData }) {
       </div>
     </section>
   );
+}
+
+/** Home keeps the marquee wall; the inside pages (their data sets `layout: "carousel"`) get the carousel. */
+export default function Gallery({ data = gallery }: { data?: GalleryData }) {
+  return data.layout === "carousel"
+    ? <GalleryCarousel tag={data.tag} title={data.title} photos={data.photos ?? data.rows.flat()} />
+    : <GalleryWall data={data} />;
 }

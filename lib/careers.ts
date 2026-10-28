@@ -1,8 +1,8 @@
 /** Careers copy, from Figma "Careers • Desktop" (10921:9335 / 9339) and "Job Detail • Desktop" (10921:10078–10101). */
 export const careersHero = {
   title: "Open Careers",
-  // Figma's hero body repeats the Media Center line; kept as designed until the careers copy is written.
-  body: "A record of progress, announcements, and the ideas shaping a permanent city on the Mediterranean. Here is the narrative as it is written.",
+  // Figma's hero body repeated the Media Center line; this one is the careers page's own (its three departments)
+  body: "Join the teams building a permanent city on the Mediterranean, from masterplanning and construction to operations.",
 };
 
 export const departments = ["All roles", "Masterplanning", "Construction", "Operations"] as const;

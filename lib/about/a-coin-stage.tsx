@@ -13,7 +13,7 @@ const MASK = `url(${C.mask}) no-repeat`;
 const Coin3D = dynamic(() => import("@/components/ui/Coin3D"), { ssr: false });
 /** The window opens a little after the coin has dissolved into it (timeline seconds). */
 const COIN_GONE = 2.0;
-/** Coin centre at rest: Figma's 379.5 raised by 20 so the turning coin keeps ~40 px clear of GRANDEUR. */
+/** Coin centre at rest: Figma's 379.5 raised by 20 so the turning coin keeps ~40 px clear of the display word. */
 const COIN_CY = 359.5;
 /** The sky-fall film as a frame sequence (every 2nd frame of grandeur-skyfall-v2, 1920 × 1080 WebP), drawn on a canvas. */
 const FRAMES = 145;
@@ -22,11 +22,12 @@ const frameSrc = (i: number) => `/seq/skyfall/${String(i + 1).padStart(4, "0")}.
 /**
  * UI / Section / Landmark Reveal (10979:18395), pinned and scrubbed as ONE continuous move (linear with the scroll,
  * smoothed scrub, no holds — Figma's pauses only existed because a prototype can't scroll):
- * 1 Spin: the landing page's 3D gold coin idles and bobs over GRANDEUR; scrolling turns it in place (1½ turns) onto its compass face.
+ * 1 Spin: the landing page's 3D gold coin idles and bobs over the display word (BEHIND / THE NAME, two lines at the
+ *   Display/172 size; it replaced GRANDEUR); scrolling turns it in place (1½ turns) onto its compass face.
  * 2 Reveal: the same 3D coin grows with the coin-shaped window (260 → 900) and dissolves into the film behind it,
  *   so there is no hand-over to a flat coin image.
- *   GRANDEUR fades and blurs out as the window's edge approaches it, so the two never overlap.
- * 3 Fill: the window grows past the screen (3000). 4 Restored: a soft Deep Sea shade, the headline, the subline and
+ *   The word fades and blurs out as the window's edge approaches it, so the two never overlap.
+ * 3 Fill: the window grows past the screen (3000). 4 Restored ("A landmark restored"): a soft Deep Sea shade, the headline, the subline and
  *   the history points blur in, block by block. The progress tick steps with it.
  * The film is scrubbed by the scroll from the reveal on (forwards down, backwards up); never blurred, no clouds.
  * It is a frame sequence painted on a canvas rather than a seeking <video>: the source has two keyframes in 12 s,
@@ -43,7 +44,7 @@ export default function CoinStage({ poster }: { poster?: string }) {
     const fit = () => Math.min(el.offsetWidth / FW, el.offsetHeight / FH);
     const cover = () => Math.max(el.offsetWidth / FW, el.offsetHeight / FH);
     // below lg the frame's contain scale leaves a portrait screen a tiny coin (67 px on a phone): there the coin rests
-    // at 38 % of the width (≤ 200 px, ≤ 22 % of the height, so it stays clear of GRANDEUR) and the window opens to 92 %
+    // at 38 % of the width (≤ 200 px, ≤ 22 % of the height, so it stays clear of the word) and the window opens to 92 %
     // of the width (≤ 80 % of the height), so the reveal reads as a coin, not a dot
     const small = () => !window.matchMedia("(min-width: 1024px)").matches;   // the lg breakpoint, scrollbar included
     const coinAt = (figma: number, ofW: number, px: number, ofH: number) =>
@@ -58,7 +59,7 @@ export default function CoinStage({ poster }: { poster?: string }) {
       const cs = s / COIN_FILL;   // the 3D coin's face matches the silhouette exactly
       Object.assign(cv.style, { width: `${cs}px`, height: `${cs}px`, left: `${cx - cs / 2}px`, top: `${cy - cs / 2}px` });
       w.style.opacity = String(P.win);
-      // GRANDEUR fades (and blurs) out over the last 7% of height before the growing window would touch it
+      // the word fades (and blurs) out over the last 7% of height before the growing window would touch it
       const gap = wd.offsetTop - (cy + sh / 2), o = P.win > 0 ? Math.min(Math.max(gap / (0.07 * H), 0), 1) : 1;
       wd.style.opacity = String(o); wd.style.filter = o < 1 ? `blur(${(1 - o) * 14}px)` : "";
     };
@@ -121,10 +122,11 @@ export default function CoinStage({ poster }: { poster?: string }) {
 
   return (
     <section ref={root} className="relative h-svh min-h-[600px] overflow-hidden bg-deepsea-700 text-limestone-50">
-      {/* Beat 1 word · Display/172 (scales with the frame like the coin, so the 24px gap under the coin holds) */}
-      <p ref={word} data-word aria-hidden className="absolute inset-x-0 top-[52.05%] text-center font-bold leading-none"
+      {/* Beat 1 word · Display/172 (scales with the frame like the coin, so the 24px gap under the coin holds), on two
+          lines so the longer phrase keeps GRANDEUR's size: the wider line, THE NAME, is no wider than GRANDEUR was */}
+      <p ref={word} data-word aria-hidden className="absolute inset-x-0 top-[52.05%] text-center font-bold uppercase leading-[0.94]"
         style={{ fontSize: "clamp(56px, min(11.38vw, 16.8svh), 172px)", letterSpacing: "0.02em" }}>
-        {C.word}
+        {C.word.map((l) => <span key={l} className="block whitespace-nowrap">{l}</span>)}
       </p>
 
       {/* coin window: the film, cut to the coin's silhouette */}

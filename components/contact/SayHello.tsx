@@ -10,24 +10,30 @@ import { sayHello as S } from "@/lib/contact";
  */
 export default function SayHello() {
   return (
-    <section className="relative mt-[76px] overflow-hidden bg-deepsea-950 py-20 container-x">
+    <section data-hero className="relative overflow-hidden bg-deepsea-950 pb-20 pt-[156px] container-x">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={S.image} alt="" className="pointer-events-none absolute inset-0 h-full w-full object-cover" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/[.48] to-black/[.33]" />
+      {/* Deep Sea wash, held at 56 %+ across the copy column so its 12 px labels pass AA on the bright water (measured);
+          phones: the copy spans the full width, so the wash is even */}
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgb(1_15_26/.66)_0%,rgb(1_15_26/.58)_52%,rgb(1_15_26/.42)_100%)] max-md:bg-[linear-gradient(0deg,rgb(1_15_26/.64),rgb(1_15_26/.64))]" />
       <div className="relative flex flex-col gap-10 lg:flex-row lg:items-stretch">
         <div className="flex flex-col justify-between gap-16 text-white lg:flex-1">
           <div className="flex flex-col gap-10">
             <RevealText as="h1" text={S.title} onLoad delay={0.15} className="t-label capitalize d-68 leading-[0.94] max-w-[525px]" />
-            <RevealText text={S.body} onLoad delay={0.3} className="t-text x-18 max-w-[504px]" />
+            <RevealText text={S.body} onLoad delay={0.3} className="t-text x-18 wrap-balance max-w-[504px]" />
           </div>
-          {/* Figma "Contact grid": the first row holds three cells, then one full-width row per office */}
+          {/* Figma "Contact grid": the first row holds three cells, then one full-width row per office; rules only between
+              the rows (none above the first row; on phones, where its cells stack, between them) */}
           <div className="flex flex-col">
             {S.rows.map((row, r) => (
               <div key={r} className={r === 0 ? "grid gap-x-3 sm:grid-cols-3 sm:py-5" : "flex flex-col"}>
-                {row.map(([icon, k, v, href]) => (
-                  <div key={k} className="flex flex-col gap-2 border-t border-white/20 py-5">
-                    <span className="flex items-center gap-2"><Icon name={icon} size={18} /><span className="t-label l-12 opacity-60">{k}</span></span>
-                    {href ? <a href={href} className="t-text x-18 break-words hover:opacity-60">{v}</a> : <span className="t-text x-18">{v}</span>}
+                {row.map(([icon, k, v, href], c) => (
+                  <div key={k} className={`flex flex-col gap-2 py-5 ${r > 0 ? "border-t border-white/20" : c > 0 ? "border-t border-white/20 sm:border-t-0" : ""}`}>
+                    <span className="flex items-center gap-2"><Icon name={icon} size={18} /><span className="t-label l-12 opacity-90">{k}</span></span>
+                    {href ? <a href={href} className="t-text x-18 break-words hover:opacity-60">
+                      {/* an email may wrap only after the @, never mid-word */}
+                      {v.includes("@") ? <>{v.split("@")[0]}@<wbr />{v.split("@")[1]}</> : v}
+                    </a> : <span className="t-text x-18">{v}</span>}
                   </div>))}
               </div>))}
           </div>

@@ -3,8 +3,7 @@ const img = (f: string) => `/images/about/${f}`;
 
 /**
  * The Story — Figma "Motion Study · The Story (dome + scattered words)" (10673:8318).
- * Positions are in the 1512 × 1024 motion-study frame; `scatter` is where each headline word floats in
- * state 3 "Culture Covers" before it gathers into the headline in state 4.
+ * Photo positions are in the 1512 × 1024 motion-study frame.
  */
 export const story = {
   history: {
@@ -13,15 +12,11 @@ export const story = {
     line: "This Shoreline Guided Sailors Home",
     accent: "For Two Thousand Years.",
   },
-  // UI / Motion Study · The Story (11027:19127), as placed on About (11027:19600): copy and photos from the instance
+  // UI / Motion Study · The Story (11027:19127), as placed on About (11027:19600): copy and photos from the instance.
+  // The headline blurs in as one block (the site's text entrance); its words no longer fly in from scattered spots.
   culture: {
     word: "Architecture",
-    // headline lines, each word with its state-3 scatter position (frame x, y)
-    lines: [
-      [{ t: "Built In", x: 140, y: 250 }, { t: "Limestone,", x: 1080, y: 180 }],
-      [{ t: "Open To", x: 260, y: 560 }, { t: "The Sea,", x: 980, y: 520 }],
-      [{ t: "Made To Be", x: 180, y: 840 }, { t: "Lived In.", x: 1060, y: 820 }],
-    ],
+    lines: ["Built In Limestone,", "Open To The Sea,", "Made To Be Lived In."],
     body: "The Experience Centre is the first part of the city to stand: limestone walls, shaded courtyards and rooms that open onto the sea, built to be lived in every month of the year.",
     photos: [
       { src: img("b-story-table.jpg"), alt: "A woman in a white dress walking barefoot on stone", x: 60, y: 300, w: 300, h: 400 },
@@ -82,8 +77,6 @@ export const nearby = {
   ],
   /** The desert road, Alamein → Cairo (Figma "Road to Cairo"), and its reveal box. */
   road: { x1: 650.5, y1: 468.2, x2: 1378.8, y2: 772.3, box: { x: 641, y: 466, w: 748, h: 316 } },
-  /** How far the east coast has drawn at the end of Figma steps 2 "Neighbours" and 3 "The coast" (x = 332, 691). */
-  steps: [0.161, 0.403],
 } as const;
 
 /** Visa FAQ — About frame 10921:8429 (all five answers are in Figma). */

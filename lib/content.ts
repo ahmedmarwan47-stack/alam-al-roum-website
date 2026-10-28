@@ -7,7 +7,8 @@ export const hero = {
   photo: ph("ui-hero-sea"),
   /** Figma hero video: the Alam Al Roum brand film (no subtitles), its footage only (2.6–33.9 s), looped. */
   video: "/video/hero-film.mp4", poster: "/images/photo/hero-film-poster.jpg",
-  title: [{ t: "A coastline restored" }, { t: "to a", br: true }, { t: "Circle", i: true }],
+  // two even lines (the second 88 % of the first): "the coast was a line" (brand manifesto), restored to a circle
+  title: [{ t: "A coastline restored" }, { t: "from line to", br: true }, { t: "Circle", i: true }],
   body: "7.2 kilometres of shoreline, a restored lighthouse, and a city built for those who return. On Egypt's North Coast, by Qatari Diar.",
   cta: "Register interest", proof: "Backed by Qatari Diar",
 };
@@ -54,14 +55,13 @@ export const communities = {
 export const masterplan = {
   tag: "Masterplan", title: "A city shaped by water",
   body: "The masterplan extends from the Mediterranean inward, creating a seamless relationship between land and water.",
-  image: ph("masterplan-aerial"),
-  // Pin centres on the 1512 × 839 image
+  // the image is the master plan (lib/masterplan.ts, fullPlan); pin centres in its 1512 × 839 plan units
   pins: [
     { title: "Beachfront communities", body: "Homes set along 7.2 km of Mediterranean sand, with private beach clubs.", x: 1081, y: 293, photo: ph("ui-g-beach") },
     { title: "Lagoon neighbourhoods", body: "Districts woven through 22 km of waterfront and lagoons, with water taxis to the marina.", x: 643, y: 316, photo: ph("ui-lagoon-clear") },
     { title: "Marina boulevard", body: "An international marina and promenade, the social centre of the city.", x: 975, y: 361, photo: ph("ui-g-boardwalk") },
     { title: "Resort districts", body: "Hotels and residences share the same streets. Service is permanent here.", x: 544, y: 437, photo: ph("ui-g-interior") },
-    { title: "Golf community", body: "Homes framed by an 18-hole championship course, green all year.", x: 1247, y: 89, photo: ph("ui-g-terraces") },
+    { title: "Golf community", body: "Homes framed by an 18-hole championship course, green all year.", x: 1250, y: 165, photo: ph("ui-g-terraces") },
   ],
 };
 
@@ -115,19 +115,20 @@ export const landmarks = {
   ].map(([title, body, a, b]) => ({ title, body, large: ph(a), inset: ph(b) })),
 };
 
+/** Event cards: [location, date, title, photo]. The location is the venue on the event's own page (lib/articles.ts). */
 export const events = {
   tag: "Events", title: "Alam Al Roum Events", cta: "View all",
   upcoming: [
-    ["Golf", "Wed 10 Feb 2027", "Coastal open championship", "ui-v-pavilion-dusk"],
-    ["Culture", "Fri 12 Feb 2027", "Seaside sculpture unveiling", "ui-v-sculpture"],
-    ["Retail & Dining", "Thu 11 Feb 2027", "Waterfront food market", "ui-g-table"],
-    ["Culture", "Sat 20 Feb 2027", "Music by the sea", "ui-g-music"],
+    ["Golf course", "Wed 10 Feb 2027", "Coastal open championship", "ui-v-pavilion-dusk"],
+    ["Beach promenade", "Fri 12 Feb 2027", "Seaside sculpture unveiling", "ui-v-sculpture"],
+    ["Marina promenade", "Thu 11 Feb 2027", "Waterfront food market", "ui-g-table"],
+    ["Marina quay", "Sat 20 Feb 2027", "Music by the sea", "ui-g-music"],
   ],
   past: [
-    ["Visit", "Aug 2026", "Prime Minister's site visit", "ui-pm-visit"],
-    ["Opening", "Sep 2026", "Experience Center opening", "ui-expcenter-facade"],
-    ["Hospitality", "Sep 2026", "An evening at the Experience Center", "ui-expcenter-dusk"],
-    ["Lifestyle", "Sep 2026", "Inside the Experience Center lounge", "ui-v-lounge"],
+    ["Phase one site", "Aug 2026", "Prime Minister's site visit", "ui-pm-visit"],
+    ["Experience Center", "Sep 2026", "Experience Center opening", "ui-expcenter-facade"],
+    ["Experience Center", "Sep 2026", "An evening at the Experience Center", "ui-expcenter-dusk"],
+    ["Experience Center", "Sep 2026", "Inside the Experience Center lounge", "ui-v-lounge"],
   ],
 };
 
@@ -139,6 +140,19 @@ export const gallery = {
     ["ui-expcenter-facade", "ui-expcenter-court", "ui-g-pool", "ui-expcenter-lounge", "ui-v-lounge", "ui-v-pavilion-dusk", "ui-g-boardwalk"],
   ].map((r) => r.map(ph)),
 };
+
+/**
+ * Inside-page galleries (single community, single experience) are a carousel of large photos rather than the Home
+ * wall, so near-identical sea textures (and the two lighthouse renders saved with a social post's controls on them)
+ * would read badly: a page lists its own photos first, then this pool fills
+ * the carousel up to 12, with no photo twice.
+ */
+export const galleryPool = ["ui-g-beach", "ui-g-boardwalk", "ui-g-pool", "ui-g-colonnade", "ui-lagoon-clear", "ui-g-terraces",
+  "ui-expcenter-court", "ui-g-table", "ui-v-pavilion-dusk", "ui-g-coast", "ui-g-interior", "ui-expcenter-lounge", "ui-v-horizon", "ui-g-music"].map(ph);
+export const pageGallery = (name: string, own: string[] = []) => ({
+  ...gallery, title: [{ t: name }, { t: "shots" }], layout: "carousel" as const,   // one line (28 Oct review)
+  photos: [...new Set([...own, ...galleryPool])].slice(0, 12),
+});
 
 export const news = {
   tag: "News & Blogs", title: "Media Center", body: "Updates from Alam Al Roum and its progress", cta: "View all",

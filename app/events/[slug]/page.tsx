@@ -2,10 +2,9 @@ import { notFound } from "next/navigation";
 import Navbar from "@/components/sections/Navbar";
 import Button from "@/components/ui/Button";
 import RevealImage from "@/components/reveal/RevealImage";
-import RevealText from "@/components/reveal/RevealText";
 import SectionTitle from "@/components/sections/SectionTitle";
 import { EventCard } from "@/components/sections/Cards";
-import ShareRow from "@/components/media/ShareRow";
+import DetailHeader from "@/components/media/DetailHeader";
 import ArticleBody from "@/components/media/ArticleBody";
 import Cta from "@/components/sections/Cta";
 import Footer from "@/components/sections/Footer";
@@ -21,7 +20,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 /**
  * Event detail: Figma has no event frame, so it follows "Article Detail (Blog / News) • Desktop" (10921:10137) —
- * header, 1392×640 hero, the reading column with the event's details in the summary panel — then More Events.
+ * the shared detail header (location | date, no byline), 1392×640 hero, the reading column with the event's details in
+ * the summary panel — then More Events.
  */
 export default async function EventPage({ params }: { params: Promise<{ slug: string }> }) {
   const e = eventFor((await params).slug);
@@ -30,22 +30,13 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
   return (
     <main>
       <Navbar />
-      <header className="mx-auto mt-[76px] flex max-w-[768px] flex-col items-center gap-6 px-[var(--gutter)] pt-[60px] pb-10 text-center lg:px-0">
-        <span className="flex items-center gap-3 t-label l-14 text-black/70"><span>{e.tag}</span><i className="h-[14px] w-px bg-black/30" /><span>{e.date}</span></span>
-        <RevealText as="h1" text={e.title} onLoad delay={0.15} className="t-heading hd-48 text-deepsea-500" />
-        {e.sub && <RevealText text={e.sub} onLoad delay={0.3} className="t-body b-18 text-limestone-800" />}
-        <div className="flex w-full flex-wrap items-center justify-between gap-4 pt-2 text-left">
-          <div className="flex flex-col"><span className="t-label l-14 text-black">{e.byline[0]}</span>{e.byline[1] && <span className="t-text x-12 text-black/60">{e.byline[1]}</span>}</div>
-          <ShareRow title={e.title} />
-        </div>
-      </header>
+      <DetailHeader tag={e.tag} date={e.date} title={e.title} sub={e.sub} />
       <div className="container-x">
         {/* phones: a 4:3 crop, as the 1392 × 640 banner would be a thin strip there */}
         <div className="aspect-[4/3] overflow-hidden sm:aspect-[1392/640]"><RevealImage src={e.hero} alt={e.title} onLoad className="h-full w-full" /></div>
       </div>
       <section className="px-[var(--gutter)] py-[60px]">
         <ArticleBody a={e} />
-        {!e.past && <div className="mx-auto mt-10 flex max-w-[768px]"><Button label="Register interest" href="/contact" /></div>}
       </section>
       <section className="flex flex-col items-center gap-10 bg-limestone-50 py-20 container-x">
         <SectionTitle title={e.past ? "More moments" : "More events"} body="A calendar of culture, sport, and conversation." />

@@ -27,7 +27,8 @@ export default function Locations() {
       </div>
       <div className="grid gap-10 md:grid-cols-3 md:gap-6">
         {L.offices.map((o) => (
-          <div key={o.city} className="flex flex-col gap-4 border-t border-black/15 pt-6 text-black">
+          // phones stack the offices: rules only between them; from md each column keeps its hairline cap
+          <div key={o.city} className="flex flex-col gap-4 border-t border-black/15 pt-6 text-black max-md:first:border-t-0 max-md:first:pt-0">
             <span className="t-label l-12 text-black/60">{o.label}</span>
             <span className="t-heading hd-32">{o.city}</span>
             <div className="flex flex-col gap-2 t-text x-16">

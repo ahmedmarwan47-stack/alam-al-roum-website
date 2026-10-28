@@ -3,7 +3,7 @@ const e = (f: string) => `/images/experiences/${f}.jpg`;
 
 export const expHero = {
   pre: "Experiences & Lifestyle",
-  title: [{ t: "Built for" }, { t: "The Long Return", i: true }, { t: "Year after year", br: true }],
+  title: [{ t: "Built for" }, { t: "The Long Return", i: true }, { t: "and the years that follow", br: true }],
   body: "Life here is measured in seasons, not weekends. It is a place you come back to because it was always yours.",
   photo: e("hero"), alt: "A family on a hillside at sunset",
 };

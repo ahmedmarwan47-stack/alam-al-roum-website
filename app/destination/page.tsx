@@ -20,7 +20,7 @@ export default function Destination() {
       <Navbar />
       <PageHero data={destHero} />
       <InTown />
-      <Connectivity tag="To Town" compact />
+      <Connectivity tag="To Town" compact visa />
       <WaterStrategy />
       <HistoryTrack />
       <ArchSea />

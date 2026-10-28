@@ -2,13 +2,15 @@
 const s = (f: string) => `/images/sustainability/${f}`;
 
 export const susHero = {
-  eyebrow: "Our approach", name: "Sustainability", line: "Designed for a coast that lasts generations.",
+  eyebrow: "Our approach", name: "Sustainability", line: "Designed for a coast that lasts generations: native habitats protected, every drop of water managed, and streets shaped for sun, shade and breeze.",
   photo: s("hero.jpg"), alt: "A swimmer in clear lagoon water",
 };
 
 export const susOverview = {
   tag: "Our approach", title: "Embedded in every plan",
   body: "Sustainability is embedded into the planning of Alam Al Roum through climate-responsive design, nature-led infrastructure and long-term environmental stewardship. Every aspect of the destination is designed to balance human experience with ecological resilience.",
+  // factsheet "Key Facts": 15 % footprint, 85 % open spaces; the six commitments below
+  facts: [["85%", "Of the city kept as open space"], ["15%", "Built footprint"], ["6", "Commitments in every plan"]] as [string, string][],
 };
 
 export const commitments = {
@@ -28,8 +30,7 @@ export const waterTrack = {
   statement1: { tag: "Water strategy", text: "Lagoons to swim in, canals to walk along, a harbour to come home to.", accent: "A city shaped by water." },
   living: { photo: s("water-living.jpg"), title: ["Water you", "can live in"],
     features: [["Swimmable lagoons", "Calm, clean water for everyday swimming."], ["Canal promenade", "Walkable edges along the waterways."], ["Marina basin", "A sheltered harbour at the heart of the city."]] },
-  statement2: { text: "Clean by nature.", accent: "Calm by design.", body: "The water system keeps the landscape, the lagoons and the public spaces working together.",
-    cups: s("cups-clinking.png"), martini: s("cup-martini.png") },
+  statement2: { text: "Clean by nature.", accent: "Calm by design.", body: "The water system keeps the landscape, the lagoons and the public spaces working together." },
   systems: { photo: s("water-systems.jpg"), title: ["Water that looks after itself"],
     features: [["Ecological water", "Natural filtration that keeps the lagoons healthy."], ["Greener landscape", "Water that supports the planting and public spaces."], ["Resilient community", "A system built to keep the city running well, season after season."]] },
 };

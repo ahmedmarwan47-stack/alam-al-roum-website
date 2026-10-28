@@ -13,7 +13,9 @@
   --font-immortel: var(--font-immortel), Georgia, serif;
 }
 
-:root { --gutter: clamp(20px, 3.97vw, 60px); --ease-site: cubic-bezier(.16,1,.3,1); --ease-btn: cubic-bezier(.32,.72,0,1);
+/* --gutter: Figma's 60 px side margin (scaled down on small screens); on screens wider than Figma's 1512 frame the
+   content keeps Figma's 1392 px measure and the margins grow, so every section lines up on the same edges */
+:root { --gutter: max(clamp(20px, 3.97vw, 60px), calc((100vw - 1392px) / 2)); --ease-site: cubic-bezier(.16,1,.3,1); --ease-btn: cubic-bezier(.32,.72,0,1);
   /* Figma prototype presets, so each section moves the way its Figma prototype (and its reference) does */
   --ease-fig-out: cubic-bezier(0,0,.58,1); --ease-fig-inout: cubic-bezier(.42,0,.58,1);
   /* Figma custom spring (mass 1, stiffness 160, damping 15), sampled over 0.8 s */
@@ -27,6 +29,8 @@ html.lenis, html.lenis body { height: auto; }
 /* ── No orphans (as in Figma): no word left alone on a block's last line. RevealText also ties each block's last
    two words with a no-break space, for browsers without text-wrap: pretty ── */
 :is(p, li, dt, dd, blockquote, figcaption, label, h1, h2, h3, h4, h5, h6, [data-reveal]) { text-wrap: pretty; }
+/* hero subtitles: even lines (a Tailwind [text-wrap:balance] would lose to the unlayered rule above) */
+.wrap-balance { text-wrap: balance; }
 
 /* ── Type scale (Figma text styles) ──
    Each size is fluid from a phone (390 px wide) to the Figma desktop frame (1512 px): Figma's size at 1512 and up,
@@ -117,6 +121,32 @@ html.js [data-reveal-img] { visibility: hidden; }
 .btn-outline-light:hover .btn-label { color: var(--color-deepsea-500); } .btn-outline-light:hover .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); }
 
 .container-x { padding-left: var(--gutter); padding-right: var(--gutter); }
+
+/* ── Navbar glass: a Limestone gradient over a backdrop blur, so the hero's photo or film shows through the bar.
+   Measured, not guessed: the band the logo and MENU sit in (26–50 px of 76) keeps at least 62 % Limestone, which holds
+   Deep Sea text above 5:1 even over a black frame; the foot thins to 30 % so the bar settles into the photo. ── */
+.nav-glass {
+  background: linear-gradient(180deg, rgb(251 250 248 / .8) 0%, rgb(251 250 248 / .68) 34%, rgb(251 250 248 / .62) 66%, rgb(251 250 248 / .3) 100%);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4);
+}
+
+/* ── Glass card on a hero photo (SingleHero facts): Limestone at 74 % over a 20 px blur, Deep Sea text. Even over a
+   black photo the card stays light enough for Deep Sea at 7:1 (labels at 85 %, 5.6:1). ── */
+.glass-card {
+  background: rgb(251 250 248 / .74); border: 1px solid rgb(255 255 255 / .5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.3); backdrop-filter: blur(20px) saturate(1.3);
+}
+
+/* ── Hero foot shade (SingleHero): Deep Sea 950 rising from the foot under the copy, deep enough for Limestone text
+   at AA on a white photo across the copy's band; clear at the top, so the photo shows through the bar. ── */
+.hero-foot-shade { background: linear-gradient(0deg, rgb(1 15 26 / .8) 0%, rgb(1 15 26 / .62) 50%, rgb(1 15 26 / 0) 84%); }
+/* Home film: a foot shade plus a left one, so the copy (bottom left) holds AA on the film's brightest frames while the
+   top and right of the film stay clear */
+.hero-film-shade { background: linear-gradient(0deg, rgb(1 15 26 / .74) 0%, rgb(1 15 26 / .52) 36%, rgb(1 15 26 / 0) 64%),
+  linear-gradient(90deg, rgb(1 15 26 / .38) 0%, rgb(1 15 26 / .26) 45%, rgb(1 15 26 / 0) 72%); }
+/* PageHero at full bleed: the shade is held across the copy column (gutter + 600 px) and clears to the right */
+.hero-side-shade { background: linear-gradient(90deg, rgb(1 15 26 / .86) 0, rgb(1 15 26 / .66) calc(var(--gutter) + 600px), rgb(1 15 26 / 0) calc(var(--gutter) + 1000px)); }
+@media (width < 48rem) { .hero-foot-shade { background: linear-gradient(0deg, rgb(1 15 26 / .82) 0%, rgb(1 15 26 / .64) 64%, rgb(1 15 26 / 0) 94%); } }
 
 @media (prefers-reduced-motion: reduce) { .btn * { transition: none !important; } }
 

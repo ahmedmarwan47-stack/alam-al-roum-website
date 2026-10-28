@@ -10,8 +10,9 @@ export type LandmarksData = { title: string; body: string; rows: { title: string
 
 /**
  * UI / Landmarks (Residence Types style, Figma 10979:15280; pattern from Ayana Residences' "Residence Types").
- * Desktop: clicking a row makes it active — it turns dark while the large photo wipes up and the inset wipes down
- * (1 s, cubic .165,.84,.44,1). The section scrolls like any other, so the page never feels held.
+ * Desktop: clicking a row makes it active — it turns dark while the backdrop wipes up and the inset wipes down
+ * (1 s, cubic .165,.84,.44,1). The inset is the row's photo, large (66 % × 68 % of the column); the backdrop behind it
+ * is the same photo, softly blurred. The section scrolls like any other, so the page never feels held.
  * Below lg the photo column goes, as on Ayana: the rows are an accordion, all closed, and tapping one opens its photo.
  * Used on Home, Destination, Sustainability (commitments), the neighbourhoods (facilities) and the experiences.
  */
@@ -48,7 +49,7 @@ export default function Landmarks({ data = landmarks }: { data?: LandmarksData }
             const on = k === a;
             return (
               <button key={r.title} onClick={() => setA(k)} aria-pressed={on}
-                className={`flex items-center gap-10 border-b p-6 text-left transition-colors duration-500 ${on ? "border-deepsea-500 bg-deepsea-500 text-limestone-50" : "border-limestone-600 hover:bg-limestone-100"}`}>
+                className={`flex items-center gap-10 p-6 text-left [&:not(:last-child)]:border-b transition-colors duration-500 ${on ? "border-deepsea-500 bg-deepsea-500 text-limestone-50" : "border-limestone-600 hover:bg-limestone-100"}`}>
                 <span className={`t-label l-12 ${on ? "text-deepsea-200" : ""}`}>({String(k + 1).padStart(2, "0")})</span>
                 <span className="flex flex-1 flex-col gap-2">
                   <RevealText text={r.title} className="t-heading hd-24" />
@@ -57,12 +58,12 @@ export default function Landmarks({ data = landmarks }: { data?: LandmarksData }
               </button>);
           })}
         </div>
-        {/* phones and tablets: an accordion, each row opens onto its photo */}
-        <div className="flex flex-col border-t border-limestone-600 lg:hidden">
+        {/* phones and tablets: an accordion, each row opens onto its photo (rules only between the rows) */}
+        <div className="flex flex-col divide-y divide-limestone-600 lg:hidden">
           {L.rows.map((r, k) => {
             const on = k === open;
             return (
-              <div key={r.title} className="border-b border-limestone-600">
+              <div key={r.title}>
                 <button onClick={() => setOpen(on ? -1 : k)} aria-expanded={on} className="flex w-full items-start gap-5 py-5 text-left">
                   <span className="t-label l-12 pt-1.5">({String(k + 1).padStart(2, "0")})</span>
                   <span className="flex flex-1 flex-col gap-1.5">
@@ -85,12 +86,13 @@ export default function Landmarks({ data = landmarks }: { data?: LandmarksData }
       </div>
       <RevealMask className="relative hidden lg:block lg:w-1/2">
         <div className="absolute inset-0">
+          {/* the backdrop is the inset's own photo, softly blurred (scaled up so the blur never shows a pale edge) */}
           {L.rows.map((r, k) => (
-            <div key={r.large} ref={(el) => { big.current[k] = el; }} className="absolute inset-0" style={{ zIndex: k === 0 ? 2 : 0 }}>
+            <div key={r.title} ref={(el) => { big.current[k] = el; }} className="absolute inset-0 overflow-hidden" style={{ zIndex: k === 0 ? 2 : 0 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={r.large} alt="" className="h-full w-full object-cover" />
+              <img src={r.inset} alt="" className="h-full w-full scale-[1.08] object-cover blur-[12px] will-change-transform" />
             </div>))}
-          <div className="absolute left-[23.5%] top-[26.6%] z-10 h-[46.9%] w-[52.9%]">
+          <div className="absolute left-[17%] top-[16%] z-10 h-[68%] w-[66%] shadow-[0_30px_80px_rgb(1_15_26/.28)]">
             {L.rows.map((r, k) => (
               <div key={r.inset} ref={(el) => { ins.current[k] = el; }} className="absolute inset-0" style={{ zIndex: k === 0 ? 2 : 0 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}

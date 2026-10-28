@@ -5,7 +5,11 @@ import RevealMask from "@/components/reveal/RevealMask";
 import SectionTitle from "./SectionTitle";
 import { communities } from "@/lib/content";
 
-/** Coin-shaped photos, appearing with the blur-only entrance (no sweep). Hover = the Figma Coin Crop spring: the coin tilts −10° and the photo grows 12%. */
+/**
+ * Coin-shaped photos, appearing with the blur-only entrance (no sweep). Hover = the Figma Coin Crop spring: the coin
+ * tilts −10° and the photo grows 12%. Only the coin turns: the photo counter-rotates +10° on the same curve and timing,
+ * so the two cancel at every frame and the picture (the lighthouse, the horizon) stays level while the edge turns.
+ */
 export default function Communities() {
   return (
     <section className="flex flex-col items-center gap-10 bg-limestone-50 py-20 container-x">
@@ -17,7 +21,7 @@ export default function Communities() {
               <div className="relative aspect-square w-full overflow-hidden transition-transform duration-[.8s] [transition-timing-function:var(--ease-coin-spring)] group-hover:-rotate-[10deg]"
                 style={{ WebkitMask: "url(/images/coin-silhouette.svg) center / contain no-repeat", mask: "url(/images/coin-silhouette.svg) center / contain no-repeat" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={c.photo} alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[.8s] [transition-timing-function:var(--ease-coin-spring)] group-hover:scale-[1.12]" />
+                <img src={c.photo} alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-[.8s] [transition-timing-function:var(--ease-coin-spring)] group-hover:rotate-[10deg] group-hover:scale-[1.12]" />
               </div>
             </RevealMask>
             <div className="flex flex-col items-center gap-1 text-center">

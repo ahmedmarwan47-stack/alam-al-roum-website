@@ -4,29 +4,47 @@ import Link from "next/link";
 import Button from "@/components/ui/Button";
 import Icon from "@/components/ui/Icon";
 import { nav } from "@/lib/content";
-import SiteMenu from "./SiteMenu";
+import SiteMenu, { MENU_BTN } from "./SiteMenu";
 
-/** Fixed bar: hides while scrolling down, returns on the way up. MENU opens the side menu (Figma "Menu" 11012:14922). */
+/** Bar height; every hero runs up under it. */
+const BAR_H = 76;
+
+/** The page's hero: one marked `data-hero`, else the first block after the bar (GSAP's pin-spacer once a hero is pinned). */
+const heroOf = (bar: HTMLElement) => document.querySelector<HTMLElement>("[data-hero]")
+  ?? ([...(bar.parentElement?.children ?? [])].find((c) => c !== bar && !c.hasAttribute("data-site-menu")) as HTMLElement | undefined);
+
+/**
+ * Fixed glass bar (a Limestone gradient over a backdrop blur, `.nav-glass`), so the hero's photo or film shows
+ * through it. It stays put until the hero has scrolled past it (pinned heroes included), then hides while scrolling
+ * down and returns on the way up, with a hairline once it sits over the page. MENU opens the side menu (Figma "Menu"
+ * 11012:14922), whose CLOSE takes MENU's exact place.
+ */
 export default function Navbar() {
   const bar = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
   const close = useCallback(() => setOpen(false), []);
   useEffect(() => {
+    const el = bar.current!;
     let last = window.scrollY;
     const on = () => {
-      const y = window.scrollY, el = bar.current; if (!el) return;
-      el.style.transform = y > last && y > 120 ? "translateY(-100%)" : "translateY(0)";
+      const y = window.scrollY, hero = heroOf(el);
+      const past = !hero || hero.getBoundingClientRect().bottom <= BAR_H;
+      el.dataset.over = past ? "page" : "hero";
+      el.style.transform = past && y > last && y > 120 ? "translateY(-100%)" : "translateY(0)";
       last = y;
     };
+    on();
     window.addEventListener("scroll", on, { passive: true });
     return () => window.removeEventListener("scroll", on);
   }, []);
   return (
     <>
-      <header ref={bar} className="fixed inset-x-0 top-0 z-50 flex h-[76px] items-center justify-between border-b border-deepsea-500/15 bg-limestone-50 px-5 md:px-10 transition-transform duration-500 [transition-timing-function:var(--ease-site)]">
-        {/* phones: the menu icon alone (a 44 px target, its glyph on the gutter), as on Discovery Land; the word from 640 up */}
-        <button onClick={() => setOpen(true)} aria-expanded={open} aria-controls="site-menu"
-          className="flex items-center gap-2 text-deepsea-500 t-label l-18 max-sm:-ml-[10px] max-sm:size-11 max-sm:justify-center">
+      <header ref={bar} data-over="hero" className="group/bar fixed inset-x-0 top-0 z-50 flex h-[76px] items-center justify-between px-5 md:px-10 transition-transform duration-500 [transition-timing-function:var(--ease-site)]">
+        <div aria-hidden className="nav-glass pointer-events-none absolute inset-0 -z-10" />
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-deepsea-500/12 opacity-0 transition-opacity duration-500 group-data-[over=page]/bar:opacity-100" />
+        {/* phones: the menu icon alone (a 44 px target, its glyph on the gutter), as on Discovery Land; the word from 640 up.
+            SiteMenu's CLOSE copies this box exactly (MENU_BTN), so it opens where the cursor already is */}
+        <button onClick={() => setOpen(true)} aria-expanded={open} aria-controls="site-menu" className={MENU_BTN}>
           <Icon name="menu-01" size={24} /><span className="max-sm:sr-only">{nav.menu}</span></button>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <Link href="/" className="absolute left-1/2 -translate-x-1/2 max-lg:py-[14px]"><img src="/images/logotype.svg" alt="Alam Al Roum" width={255} height={22} className="h-auto w-[150px] md:w-[200px] lg:w-[255px]" /></Link>

@@ -24,8 +24,9 @@ export function StoryCard({ tag, meta, title, photo, href, big = false, delay = 
 }
 
 /**
- * Event card (Figma Home "Upcoming Events", the Events listing): the photo (336 × 376), `category | date`
- * (Label/14) and the title (Text/20). `dark` is for the Deep Sea band on Home; the listing page is light.
+ * Event card (Figma Home "Upcoming Events", the Events listing, More events): the photo (336 × 376), `location | date`
+ * (Label/14; `tag` is the event's venue, as on its page) and the title (Text/20). `dark` is for the Deep Sea band on
+ * Home; the listing page is light.
  */
 export function EventCard({ tag, meta, title, photo, href, delay = 0, dark = false }:
   { tag: string; meta: string; title: string; photo: string; href: string; delay?: number; dark?: boolean }) {

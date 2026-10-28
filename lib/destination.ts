@@ -14,9 +14,9 @@ export const inTown = {
   body: "A multi-layered transportation network connects destinations efficiently while prioritising accessibility, sustainability and ease of movement.",
   mask: d("coin-mask.svg"),
   modes: [
-    { tag: "Connected", title: "The Loop", body: "A continuous route linking every district, the marina and the town centres.", photo: d("loop-aerial.jpg") },
-    { tag: "Low impact", title: "Sustainable solutions", body: "Water taxis link the lagoon districts to the marina, alongside cycling routes and shaded walks.", photo: ph("ui-lagoon-clear") },
-    { tag: "Planned ahead", title: "Smart mobility", body: "Movement around the city is planned from day one, so every home, beach and town centre stays close.", photo: ph("ui-g-boardwalk") },
+    { tag: "Connected", title: "The Loop", body: "A continuous route linking every district, the marina and the town centres. Autonomous shuttles run the Loop through the day, with stops a short walk from every home, beach and lagoon promenade.", photo: d("loop-aerial.jpg") },
+    { tag: "Low impact", title: "Sustainable solutions", body: "Water taxis link the lagoon districts to the marina, alongside dedicated cycling routes and shaded pedestrian promenades. Shared micromobility, from bikes to e-scooters, covers the short trips in between.", photo: ph("ui-lagoon-clear") },
+    { tag: "Planned ahead", title: "Smart mobility", body: "Movement around the city is planned from day one, so every home, beach and town centre stays close. Private vehicles enter through the seven gates on managed routes, keeping neighbourhood streets calm and walkable.", photo: ph("ui-g-boardwalk") },
   ],
 };
 

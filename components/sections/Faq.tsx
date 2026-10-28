@@ -15,11 +15,12 @@ type FaqData = { title: string | Seg[]; body: string; cta: string; href?: string
 export function FaqList({ items, first = 0 }: { items: string[][] | [string, string][]; first?: number }) {
   const [open, setOpen] = useState(first);
   return (
-    <div className="flex flex-col">
+    // rules only between the questions: none above the first, none under the last
+    <div className="flex flex-col divide-y divide-limestone-600">
       {items.map(([q, a], k) => {
         const on = open === k;
         return (
-          <div key={q} className="border-b border-limestone-600">
+          <div key={q}>
             <button onClick={() => setOpen(on ? -1 : k)} aria-expanded={on} className="flex w-full items-center justify-between gap-8 px-5 py-6 text-left sm:px-8 sm:py-7">
               <RevealText text={q} className="t-text x-28" delay={Math.min(k, 5) * 0.05} />
               <Icon name="plus-sign" size={24} className={`flex-none transition-transform duration-[350ms] [transition-timing-function:var(--ease-fig-inout)] ${on ? "rotate-45" : ""}`} />
@@ -33,19 +34,23 @@ export function FaqList({ items, first = 0 }: { items: string[][] | [string, str
   );
 }
 
-/** FAQ section: title, intro and a button on the left, the accordion on the right. */
+/**
+ * FAQ section: title, intro and a button on the left, the accordion on the right. On desktop the accordion starts
+ * at the page centre, the same line the Landmarks photo starts on just above it (28 Oct review; it sat 160 px left
+ * of that line in Figma).
+ */
 export default function Faq({ data = faq }: { data?: FaqData }) {
   const F = data;
   return (
-    <section className="flex flex-col gap-10 bg-limestone-50 py-20 container-x lg:flex-row">
-      <div className="flex flex-col gap-10 lg:w-[456px] lg:flex-none">
+    <section className="flex flex-col gap-10 bg-limestone-50 py-20 container-x lg:grid lg:grid-cols-2 lg:gap-0">
+      <div className="flex flex-col gap-10 lg:max-w-[456px]">
         <div className="flex flex-col gap-3">
           <RevealText as="h2" {...(typeof F.title === "string" ? { text: F.title } : { segs: F.title })} className="t-heading hd-48" />
           <RevealText text={F.body} className="t-body b-18 text-limestone-800" delay={0.08} />
         </div>
         <div><Button label={F.cta} href={F.href ?? "/faq"} variant="outline" /></div>
       </div>
-      <div className="flex-1 lg:pl-10"><FaqList items={F.items} /></div>
+      <div><FaqList items={F.items} /></div>
     </section>
   );
 }

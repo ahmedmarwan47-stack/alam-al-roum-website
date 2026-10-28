@@ -8,24 +8,29 @@ const md = (f: string) => `/images/media/${f}.jpg`;
 export type ListCard = { tag: string; meta: string; title: string; photo: string; href: string; slug?: string };
 
 const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-const eventCard = (tag: string, meta: string, title: string, photo: string): ListCard => ({ tag, meta, title, photo, slug: slugify(title), href: `/events/${slugify(title)}` });
+/** An event card reads its location and date from the event's own page (lib/articles.ts), so the two always agree. */
+const eventCard = (title: string, photo: string): ListCard => {
+  const w = writtenEvents[title];
+  return { tag: w.tag, meta: w.date, title, photo, slug: slugify(title), href: `/events/${slugify(title)}` };
+};
 
 export const eventsPage = {
   title: "Alam Al Roum Events",
   body: "A calendar of culture, sport, and conversation. These are the moments that build a year-round community.",
   tabs: ["Upcoming", "Past"] as const,
   upcoming: [
-    ["Education", "Tue 09 Feb 2027", "Roman coast symposium", "symposium"],
-    ["Golf", "Wed 10 Feb 2027", "Coastal open championship", "golf-open"],
-    ["Retail & Dining", "Thu 11 Feb 2027", "Waterfront food market", "food-market"],
-    ["Culture", "Fri 12 Feb 2027", "Seaside sculpture unveiling", "sculpture"],
-    ["Sports", "Wed 10 Feb 2027", "Coastal 10K run", "golf-open"],
-    ["Hotels", "Thu 11 Feb 2027", "Grand hotel opening gala", "hotel-gala"],
-    ["Marina", "Sat 13 Feb 2027", "Marina regatta weekend", "regatta"],
-    ["Beach", "Wed 10 Feb 2027", "Full moon beach festival", "beach-festival"],
-    ["Wellness", "Thu 11 Feb 2027", "Coastal wellness retreat", "wellness-retreat"],
-  ].map(([tag, meta, title, p]) => eventCard(tag, meta, title, ev(p))),
-  past: homeEvents.past.map(([tag, meta, title, p]) => eventCard(tag, meta, title, `/images/photo/${p}.jpg`)),
+    ["Roman coast symposium", ev("symposium")],
+    ["Coastal open championship", ev("golf-open")],
+    ["Waterfront food market", ev("food-market")],
+    ["Seaside sculpture unveiling", ev("sculpture")],
+    ["Coastal 10K run", ev("coastal-run")],
+    ["Grand hotel opening gala", ev("hotel-gala")],
+    ["Marina regatta weekend", ev("regatta")],
+    ["Full moon beach festival", ev("beach-festival")],
+    ["Coastal wellness retreat", ev("wellness-retreat")],
+    ["Music by the sea", "/images/photo/ui-g-music.jpg"],
+  ].map(([title, photo]) => eventCard(title, photo)),
+  past: homeEvents.past.map(([, , title, p]) => eventCard(title, `/images/photo/${p}.jpg`)),
 };
 
 const story = (tag: string, read: string, title: string, p: string): ListCard =>
@@ -58,41 +63,23 @@ export const mediaBlog = [...F.slice(0, 3), ...N.slice(0, 3), ...F.slice(3), ...
 
 export const stories = [...mediaPage.news, ...mediaPage.features];
 
-type Block = { h?: string; p?: string; list?: string[]; img?: string; caption?: string };
-export type Article = { slug: string; tag: string; date: string; title: string; sub: string; byline: [string, string]; hero: string; takeawaysTitle?: string; takeaways?: string[]; body: Block[] };
+export type Article = Omit<Written, "takeaways"> & { slug: string; takeaways?: string[] };
 
-/** The written story (Figma "Article Detail • Desktop": header 10921:10139, body 10921:10164). */
-const phaseOne: Article = {
-  slug: stories[0].slug!, tag: "Construction", date: "Sun 9 Aug 2026",
-  title: "Phase one construction begins on the coast",
-  sub: "The first foundations are laid as the city moves from plan to permanence.",
-  byline: ["Alam Al Roum Newsroom", "9 August 2026"], hero: md("m04"),
-  takeaways: ["Phase one construction started in August 2026.", "First handovers are planned for 2030.", "Phase one covers the beachfront and first lagoon districts."],
-  body: [
-    { img: md("m05") },
-    { p: "Qatari Diar and the Egyptian government have marked the start of phase one at Alam Al Roum, a 20.58 million square metre city on Egypt's North Coast. Site works began in August 2026 along the western edge of the bay." },
-    { p: "The milestone moves the project from masterplan to ground. Over the coming months, roads, utilities and the first lagoon basins will take shape, laying the foundations for homes that will welcome their first residents in 2030." },
-    { h: "What phase one includes" },
-    { p: "Phase one focuses on the beachfront, where the city meets its 7.2 kilometre shoreline. It brings together the first neighbourhoods, the infrastructure that serves them, and the public spaces that will make the coast feel lived in from day one." },
-    { list: ["Beachfront homes and the first lagoon districts", "Core roads, utilities and the coastal promenade", "The first swimmable lagoons", "A town centre with everyday retail and dining"] },
-    { img: md("m04"), caption: "Illustrative coastal imagery from the brand collection." },
-    { h: "What happens next" },
-    { p: "Infrastructure and lagoon works continue through 2027, followed by the marina and the 18-hole golf course by the sea in 2028. The first neighbourhoods are planned to near completion in 2029, with handovers beginning in 2030." },
-    { p: "Registered buyers will be the first to hear about new launches, site visits and progress updates. To register your interest, use the form on this site or call 16922." },
-  ],
-};
-
-/** Phase one is Figma's written story; the others come from lib/articles.ts (draft copy in the same structure). */
+/** Every story is written in lib/articles.ts (the phase-one story is Figma's); a story without one shows its card. */
 export const articleFor = (slug: string): Article | undefined => {
-  if (slug === phaseOne.slug) return phaseOne;
   const s = stories.find((x) => x.slug === slug);
   const w = s && writtenStories[s.title];
   if (w) return { slug, ...w };
-  return s && { slug, tag: s.tag, date: s.meta, title: s.title, sub: "", byline: ["Alam Al Roum Newsroom", ""], hero: s.photo, body: [] };
+  return s && { slug, tag: s.tag, date: s.meta, title: s.title, sub: "", hero: s.photo, body: [] };
 };
 
 /** Event pages (no Figma frame of their own): the article template with the event's details in the summary panel. */
 export const allEvents = [...eventsPage.upcoming, ...eventsPage.past];
+/** An event card for the experience pages' "Events at …" band, from the same event data (`photo` overrides the listing's). */
+export const eventTile = (title: string, photo?: string) => {
+  const e = allEvents.find((x) => x.title === title)!;
+  return { location: e.tag, date: e.meta, title, photo: photo ?? e.photo, href: e.href };
+};
 export const eventFor = (slug: string): (Article & { past: boolean }) | undefined => {
   const e = allEvents.find((x) => x.slug === slug); const w: Written | undefined = e && writtenEvents[e.title];
   return e && w && { slug, ...w, past: eventsPage.past.includes(e) };

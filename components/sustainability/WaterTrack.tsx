@@ -23,22 +23,24 @@ function Panel({ photo, title, features, from }: { photo: string; title: string[
   );
 }
 
-/** Water strategy (Figma 11134:15173): four 1392 px panels on terracotta that scroll sideways while the section is pinned. */
+/**
+ * Water strategy (Figma 11134:15173): four 1392 × 760 px panels on terracotta that scroll sideways while the section is
+ * pinned. On screens taller than 1000 px the track takes the whole screen, so the panels sit in its middle with the
+ * terracotta above and below them (not all of it under them); up to 1000 px it keeps the 920 px cap.
+ */
 export default function WaterTrack() {
   const s1 = W.statement1, s2 = W.statement2;
   return (
-    <PinnedTrack className="bg-terracotta-500 text-limestone-50" trackClassName="gap-6 py-20 lg:h-screen lg:max-h-[920px]">
+    <PinnedTrack className="bg-terracotta-500 text-limestone-50" trackClassName="gap-6 py-20 lg:h-screen lg:max-h-[920px] lg:[@media(min-height:1000px)]:max-h-none">
       <div className="flex flex-col items-center justify-center gap-6 py-16 text-center lg:h-[760px] lg:w-[1392px] lg:flex-none">
         <span className="t-label l-16">{s1.tag}</span>
         <p className="max-w-[1100px] t-heading hd-56l">{s1.text} <span className="text-deepsea-200">{s1.accent}</span></p>
       </div>
       <Panel photo={W.living.photo} title={W.living.title} features={W.living.features} from="top" />
-      <div className="relative flex flex-col items-center justify-center gap-6 py-40 text-center lg:h-[760px] lg:w-[1392px] lg:flex-none lg:py-24">
-        {/* below lg the glasses sit in the panel's padding, above and below the copy */}
-        <img src={s2.cups} alt="" className="pointer-events-none absolute left-0 top-0 w-[clamp(120px,19vw,293px)]" />
-        <p className="relative max-w-[1100px] t-heading hd-56l">{s2.text} <span className="text-deepsea-200">{s2.accent}</span></p>
-        <RevealText text={s2.body} className="relative t-body b-18 max-w-[720px]" />
-        <img src={s2.martini} alt="" className="pointer-events-none absolute bottom-0 right-0 w-[clamp(96px,17vw,256px)]" />
+      {/* the second statement stands on the terracotta alone (the cut-out glasses were removed, client edit 28 Oct) */}
+      <div className="flex flex-col items-center justify-center gap-6 py-16 text-center lg:h-[760px] lg:w-[1392px] lg:flex-none lg:py-24">
+        <p className="max-w-[1100px] t-heading hd-56l">{s2.text} <span className="text-deepsea-200">{s2.accent}</span></p>
+        <RevealText text={s2.body} className="t-body b-18 max-w-[720px]" />
       </div>
       <Panel photo={W.systems.photo} title={W.systems.title} features={W.systems.features} from="bottom" />
     </PinnedTrack>

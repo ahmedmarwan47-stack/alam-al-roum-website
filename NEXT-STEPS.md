@@ -79,10 +79,44 @@
 - Masterplan phone caption "Swipe the map, tap a pin to explore"
 - Drawer copy for the five hotels and three unit types beyond Figma's two drawers (same structure, figures from their cards)
 - The last FAQ answer ("When will the first homes be handed over?") is closed in Figma; its answer follows the timeline
-- Only the phase-one article has body text; the other 11 stories show their card image and "The full story will be published here soon."
 - Only Marine works engineer has responsibilities/requirements; the other 4 job pages show position details and "What we offer"
 - Careers hero body repeats the Media Center line, as in Figma
 - Contact Interest dropdown options beyond "Register interest"; Register Interest unit types beyond "Standalone Villa"
-- In-town modes 2 and 3 bodies, last destination FAQ answer
-- Generic experience and neighbourhood detail pages built from card text
+- In-town modes: all three bodies (lengthened to ~3 lines, 28 Oct) expand the factsheet's smart-mobility list; the
+  autonomous shuttles running the Loop, shared bikes / e-scooters and private cars entering by the seven gates are
+  drafts. Last destination FAQ answer
+- Neighbourhood detail pages built from card text
 - Events dates use 2027; the Past tab reuses the home page's past events
+- 28 Oct client edits (items 08, 09, 22, 23):
+  - Event cards everywhere read `location | date` (no category). Every event has a venue (lib/articles.ts `location`),
+    which leads its page header and its cards; Home's cards repeat it in lib/content.ts. "Events at the marina" now
+    shows the marina's own events (regatta, food market, 10K run, Music by the sea, linked to their pages) instead of
+    the golf and sculpture cards; "Music by the sea" got its own page and joined the Events list (10 upcoming). The four
+    hotel events ("Events at the hotels") name their hotel as the location and still have no pages
+  - Article and event headers are one structure: tag row (events: location · date), title, a two-line standfirst,
+    Share via; the byline/date block and the event "Register interest" button are gone. Every standfirst was
+    rewritten to run two lines at 1024–1512 px
+  - Every story and event body was lengthened: a third intro paragraph, a second heading section, a pull quote or a
+    row of key figures, and captions on both images. All of it is draft copy; the pull quotes are lines from the
+    article itself, unattributed (one cites "Alam Al Roum" for the FAQ line "built for permanence, not for a season");
+    event programme times are drafts
+  - The Coastal open championship (golf course) and Marina regatta weekend (international marina) are dated Feb 2027,
+    before the course and the marina open (2028 in the phase-one story): dates or venues to confirm
+  - Experience pages: all nine share one template (app/experiences/[slug]/page.tsx): overview with key facts, the
+    Landmarks section for what's here (hotels: "Where to stay"), the hotel directory (hotels only), the community
+    (terracotta band, clubs, membership, a photo pair), "Life in the community" (four photo cards), gallery carousel,
+    events (filled to four) and the experience slider. Facts are from the factsheet; clubs, memberships and
+    programmes are drafts
+  - Eleven experience photos were generated with Figma AI (public/images/experiences/gen/, Figma page "Generated —
+    website photos"): placeholders until real photography exists
+  - Brand-book photos added for these pages need licence confirmation: public/images/experiences/{beach-lagoon-deck,
+    marina-sailing, marina-dusk, golf-clubhouse-terrace, golf-clubhouse-bar, sports-courts, sports-swim, sports-sailing,
+    dining-evening, dining-table, hotels-pool, hotels-suite, wellness-rest, wellness-shore, education-hub,
+    education-heritage, education-nature, culture-fresco, culture-music, culture-studio}.jpg and
+    public/images/events/coastal-run.jpg (from docs/brand/imagery/4k, 1600 px)
+  - Sustainability: the cut-out glasses beside "Clean by nature. Calm by design." were removed (the PNGs stay in
+    public/images/sustainability, unused)
+- 28 Oct large-screen pass: content is capped at 1392 px and centred from 1512 px up (--gutter); lists have rules
+  only between items; the FAQ accordion starts at the page centre (the Landmarks photo line), not where Figma has it
+- Waiting on the client: the full masterplan image (replace public/images/photo/masterplan-aerial.jpg, then run
+  scripts/masterplan-crops.py)
