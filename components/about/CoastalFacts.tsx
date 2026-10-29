@@ -40,9 +40,9 @@ const TITLE = [{ t: "A fully integrated" }, { t: "coastal city", br: true }];
 
 /**
  * UI / Section / Split Merge, scroll-scrubbed while pinned (lg up), simplified (29 Oct review): the picture starts
- * whole, at Figma's merged 880 × 560, and opens in one eased move to full bleed under a 40 % Deep Sea dim while the
- * title and paragraph turn Limestone (a soft shade comes up under the paragraph, so it keeps its contrast over the
- * bright courtyard). The split halves sliding together are gone. (The picture is still drawn as two halves, so it
+ * whole, at Figma's merged 880 × 560, and opens in one eased move to full bleed under a 33 % black dim while the
+ * title and paragraph turn Limestone and the paragraph (Body/20, 498 wide) eases 60 px to the right (Figma's
+ * updated Merged → Full, 29 Oct). The split halves sliding together are gone. (The picture is still drawn as two halves, so it
  * opens from the centre outwards.)
  * The four figures that used to rise in at the end now have their own static section (CityNumbers, higher up),
  * so the paragraph stays and the reading hold is shorter. Below lg the section stacks with the standard reveals.
@@ -60,8 +60,8 @@ export default function CoastalFacts() {
         .fromTo(L, tweenBox(el, "merged", "l"), { ...tweenBox(el, "full", "l"), duration: 1.4, ease: E }, 0)
         .fromTo(R, tweenBox(el, "merged", "r"), { ...tweenBox(el, "full", "r"), duration: 1.4, ease: E }, 0)
         .fromTo(IL, m.il, { ...f.il, duration: 1.4, ease: E }, 0).fromTo(IR, m.ir, { ...f.ir, duration: 1.4, ease: E }, 0)
-        .to(q("[data-dim]"), { opacity: 0.4, duration: 1.4, ease: "none" }, 0)
-        .to(q("[data-scrim]"), { opacity: 1, duration: 1.4, ease: "none" }, 0)
+        .to(q("[data-dim]"), { opacity: 0.33, duration: 1.4, ease: "none" }, 0)
+        .to(q("[data-para]"), { x: () => (60 * Math.min(el.clientWidth, AW)) / AW, duration: 1.4, ease: E }, 0)
         .to(q("[data-ink]"), { color: token("limestone-50"), duration: 0.8, ease: "none" }, 0.5);
       const vh = withHold(tl, 1.2, 0.4);
       if (reducedMotion()) { tl.progress(1); return () => tl.kill(); }
@@ -82,15 +82,12 @@ export default function CoastalFacts() {
             <img src={F.image} alt={k === "l" ? "The Experience Centre courtyard" : ""} className="absolute max-w-none object-cover" style={k === "l" ? s.il : s.ir} />
           </div>
         ))}
-        <div data-dim className="pointer-events-none absolute inset-0 bg-deepsea-600 opacity-0" />
-        {/* full state: a soft Deep Sea shade towards the bottom right, under the paragraph */}
-        <div data-scrim className="pointer-events-none absolute inset-0 opacity-0"
-          style={{ background: "radial-gradient(70% 60% at 85% 90%, rgb(3 30 46 / .6), rgb(3 30 46 / 0))" }} />
+        <div data-dim className="pointer-events-none absolute inset-0 bg-black opacity-0" />
         <div data-ink className="absolute inset-0 text-deepsea-500">
-          <div className="absolute left-[var(--gutter)] top-[calc(max(0px,(100%-1024px)/2)+min(9.375%,96px))] max-w-[780px]">
+          <div className="absolute left-[var(--gutter)] top-[calc(max(0px,(100%-1024px)/2)+min(7.8125%,80px))] max-w-[780px]">
             <RevealText as="h2" segs={TITLE} className="t-heading hd-56" />
           </div>
-          <p className="absolute left-[calc(max(0px,(100%-1512px)/2)+min(72.22%,1092px))] top-[calc(max(0px,(100%-1024px)/2)+min(78.125%,800px))] w-[300px] t-body b-14">{F.body}</p>
+          <p data-para className="absolute left-[calc(max(0px,(100%-1512px)/2)+min(59.13%,894px))] top-[calc(max(0px,(100%-1024px)/2)+min(79.6875%,816px))] w-[min(32.94%,498px)] t-body b-20">{F.body}</p>
         </div>
       </div>
 
