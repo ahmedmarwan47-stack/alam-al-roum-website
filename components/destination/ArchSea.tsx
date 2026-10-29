@@ -5,7 +5,7 @@ import { archSea as A } from "@/lib/destination";
 
 /**
  * Lighthouse · the arch at sea (Figma 11134:15815): the mirror arch stands in the sea under an open sky
- * ("arch-water-loop-with-sky", the video placed in Figma), its sky melting up into the page's Limestone. Without the
+ * ("arch-water-loop-with-sky", the video placed in Figma), with no fade over its top edge (29 Oct review). Without the
  * clouds the film's empty upper sky read as white space, so the section starts a quarter of the way down the film,
  * a little above the arch (1512 × 1125, 29 Oct review). The film
  * plays on its own loop and settles from a slight push-in as you scroll through. The clouds that covered its top
@@ -28,8 +28,6 @@ export default function ArchSea() {
           <source src={A.video} type="video/mp4" />
         </video>
       </div>
-      {/* the sky fades up into the Limestone, so the film's top edge never shows */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[14%] bg-gradient-to-b from-limestone-50 via-limestone-50/60 to-limestone-50/0" />
     </section>
   );
 }
