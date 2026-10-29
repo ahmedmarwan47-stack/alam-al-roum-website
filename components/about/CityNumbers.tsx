@@ -7,17 +7,16 @@ import { cityNumbers as N } from "@/lib/about/a-content";
 
 /**
  * About only: the masterplan's four figures (the ones Coastal Facts used to reveal), in the slot the pinned Qatari Diar
- * numbers held (Home keeps that animated stage). A calm, static section: the tag and heading on the left, Qatari
- * Diar's mark as the developer credit on the right, then the four figures in a row under thin rules (2 × 2 on a
- * phone). Nothing pins; the copy and the figures blur in as the section arrives (the site's one text entrance).
+ * numbers held (Home keeps that animated stage). A calm, static section: the tag and heading (no developer credit,
+ * 29 Oct review), then the four figures in a row under thin rules (2 × 2 on a phone). Nothing pins; the copy and the figures blur in as the section arrives (the site's one text entrance).
  */
 export default function CityNumbers() {
   const root = useRef<HTMLElement>(null);
   useEffect(() => {
     const el = root.current; if (!el || reducedMotion()) return;
-    const blocks = el.querySelectorAll("[data-fig], [data-credit]");
+    const blocks = el.querySelectorAll("[data-fig]");
     gsap.set(blocks, BLOCK_FROM);
-    return whenSectionEnters(el, () => { blurIn(el.querySelectorAll("[data-credit]"), { delay: 0.15 }); blurIn(el.querySelectorAll("[data-fig]"), { delay: 0.25, stagger: 0.12 }); });
+    return whenSectionEnters(el, () => { blurIn(el.querySelectorAll("[data-fig]"), { delay: 0.25, stagger: 0.12 }); });
   }, []);
   return (
     <section ref={root} aria-labelledby="city-numbers-title" className="bg-limestone-50 py-20 container-x lg:py-32">
@@ -25,11 +24,6 @@ export default function CityNumbers() {
         <div className="flex flex-col gap-4">
           <RevealText text={N.tag} className="t-label l-16 text-deepsea-500" />
           <div id="city-numbers-title"><RevealText as="h2" text={N.title} className="t-heading hd-48 max-w-[620px] text-deepsea-500" delay={0.05} /></div>
-        </div>
-        <div data-credit data-reveal className="flex items-center gap-4">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/qatari-diar.png" alt="" width={56} height={56} className="h-12 w-12 lg:h-14 lg:w-14" />
-          <span className="t-text x-14 text-limestone-800">{N.credit}</span>
         </div>
       </div>
       <ul className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 lg:mt-24 lg:grid-cols-4">

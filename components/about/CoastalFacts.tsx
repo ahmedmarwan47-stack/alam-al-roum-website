@@ -39,10 +39,11 @@ const boxes = (s: State) => {
 const TITLE = [{ t: "A fully integrated" }, { t: "coastal city", br: true }];
 
 /**
- * UI / Section / Split Merge, scroll-scrubbed while pinned (lg up). Split → Merged (Figma 1.2 s): the two
- * offset halves slide together into one 880 × 560 picture. Merged → Full (1.4 s, after 0.35 s): the halves
- * open to full bleed under a 40 % Deep Sea dim and the title and paragraph turn Limestone (a soft shade comes up
- * under the paragraph, so it keeps its contrast over the bright courtyard). Both legs on the 0.76/0/0.24/1 in-out.
+ * UI / Section / Split Merge, scroll-scrubbed while pinned (lg up), simplified (29 Oct review): the picture starts
+ * whole, at Figma's merged 880 × 560, and opens in one eased move to full bleed under a 40 % Deep Sea dim while the
+ * title and paragraph turn Limestone (a soft shade comes up under the paragraph, so it keeps its contrast over the
+ * bright courtyard). The split halves sliding together are gone. (The picture is still drawn as two halves, so it
+ * opens from the centre outwards.)
  * The four figures that used to rise in at the end now have their own static section (CityNumbers, higher up),
  * so the paragraph stays and the reading hold is shorter. Below lg the section stacks with the standard reveals.
  */
@@ -54,17 +55,15 @@ export default function CoastalFacts() {
     mm.add("(min-width: 1024px)", () => {
       const m = boxes("merged"), f = boxes("full");
       const [L, R, IL, IR] = ["[data-l]", "[data-r]", "[data-l] img", "[data-r] img"].map((s) => q(s));
-      const tl = gsap.timeline({ paused: true, defaults: { ease: "none" } })   // linear with the scroll; a reading hold at the end
-        .fromTo(L, tweenBox(el, "split", "l"), { ...tweenBox(el, "merged", "l"), duration: 1.2 }, 0)
-        .fromTo(R, tweenBox(el, "split", "r"), { ...tweenBox(el, "merged", "r"), duration: 1.2 }, 0)
-        .to(IL, { ...m.il, duration: 1.2 }, 0).to(IR, { ...m.ir, duration: 1.2 }, 0)
-        .addLabel("full", 1.2)
-        .to(L, { ...tweenBox(el, "full", "l"), duration: 1.4 }, "full").to(R, { ...tweenBox(el, "full", "r"), duration: 1.4 }, "full")
-        .to(IL, { ...f.il, duration: 1.4 }, "full").to(IR, { ...f.ir, duration: 1.4 }, "full")
-        .to(q("[data-dim]"), { opacity: 0.4, duration: 1.4 }, "full")
-        .to(q("[data-scrim]"), { opacity: 1, duration: 1.4 }, "full")
-        .to(q("[data-ink]"), { color: token("limestone-50"), duration: 1 }, "full+=0.2");
-      const vh = withHold(tl, 2, 0.4);
+      const E = "power2.inOut";
+      const tl = gsap.timeline({ paused: true })   // one eased opening with the scroll; a reading hold at the end
+        .fromTo(L, tweenBox(el, "merged", "l"), { ...tweenBox(el, "full", "l"), duration: 1.4, ease: E }, 0)
+        .fromTo(R, tweenBox(el, "merged", "r"), { ...tweenBox(el, "full", "r"), duration: 1.4, ease: E }, 0)
+        .fromTo(IL, m.il, { ...f.il, duration: 1.4, ease: E }, 0).fromTo(IR, m.ir, { ...f.ir, duration: 1.4, ease: E }, 0)
+        .to(q("[data-dim]"), { opacity: 0.4, duration: 1.4, ease: "none" }, 0)
+        .to(q("[data-scrim]"), { opacity: 1, duration: 1.4, ease: "none" }, 0)
+        .to(q("[data-ink]"), { color: token("limestone-50"), duration: 0.8, ease: "none" }, 0.5);
+      const vh = withHold(tl, 1.2, 0.4);
       if (reducedMotion()) { tl.progress(1); return () => tl.kill(); }
       const st = ScrollTrigger.create({ trigger: el, start: "top top", end: `+=${vh * 100}%`, pin: true, scrub: 1, animation: tl, invalidateOnRefresh: true });
       return () => { st.kill(); tl.kill(); };
@@ -72,7 +71,7 @@ export default function CoastalFacts() {
     return () => mm.revert();
   }, []);
 
-  const s = boxes("split");
+  const s = boxes("merged");
   return (
     <section className="relative bg-limestone-50">
       {/* lg up: the pinned split → merge stage */}

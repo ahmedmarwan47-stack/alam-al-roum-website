@@ -24,7 +24,6 @@ export const bloom = {
 export const cityNumbers = {
   tag: "In numbers",
   title: "The scale of the masterplan",
-  credit: "Developed by Qatari Diar",
   items: [
     { value: "20.58M", label: "sqm total land area" },
     { value: "4,902", label: "feddan masterplan area" },
