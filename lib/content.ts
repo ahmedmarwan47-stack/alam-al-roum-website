@@ -189,5 +189,4 @@ export const footer = {
   more: ["Media Center", "Events", "Careers", "FAQs"],
   contact: [["", "Contact Us"], ["call", "16922"], ["whatsapp", "+20 120 001 6922"], ["mail-01", "info@alamalroumegypt.com"]],
   credit: "Design and Development by MitchDesigns", copyright: "© 2026 Alam Al Roum, a Qatari Diar development ·  All rights reserved",
-  video: "/video/footer-lagoon.mp4",
 };

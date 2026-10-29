@@ -35,15 +35,11 @@ const contactHref = (icon: string, t: string) =>
 
 /**
  * Footer (Figma "Footer" 10921:11186 · Home 10970:12490): newsletter row, links, legal row, wordmark.
- * Every page uses Home's version, the lagoon film behind the lower part and a 200 px legal row (1035 tall),
- * so the footer is the same site-wide; `video={false}` gives Figma's plain Limestone variant (885 tall).
+ * Every page uses Figma's plain Limestone footer (Theme=Light, 885 tall): no lagoon film behind it (29 Oct review).
  */
-export default function Footer({ video = true }: { video?: boolean }) {
+export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-limestone-50 text-deepsea-500">
-      {/* the film rises out of the Limestone with no edge (Figma): it starts behind the address block and its top
-          fades in over 260 px, so nothing reads as a divider between the newsletter row and the water */}
-      {video && <video data-media-blur className="absolute inset-x-0 bottom-0 top-[42%] h-[58%] w-full object-cover [mask-image:linear-gradient(to_bottom,transparent_0,black_260px)] max-md:top-[55%] max-md:h-[45%]" src={F.video} autoPlay muted loop playsInline />}
       <div className="relative flex flex-col pt-10 container-x">
         <div className="flex flex-col justify-between gap-8 py-10 lg:flex-row lg:items-center">
           <div className="flex flex-col gap-2"><RevealText text={F.newsTitle} className="t-text x-28" /><span className="t-text x-16">{F.newsBody}</span></div>
@@ -77,7 +73,7 @@ export default function Footer({ video = true }: { video?: boolean }) {
           </div>
         </div>
         {/* phones: the Qatari Diar mark and copyright first, the credit under them, all on the left */}
-        <div className={`flex items-end justify-between pb-2 max-md:flex-col-reverse max-md:items-start max-md:gap-4 ${video ? "pt-[200px]" : "pt-[50px]"}`}>
+        <div className={`flex items-end justify-between pb-2 max-md:flex-col-reverse max-md:items-start max-md:gap-4 pt-[50px]`}>
           <span className="t-body b-12 text-limestone-950">{F.credit}</span>
           <div className="flex flex-col items-end gap-4 max-md:items-start">
             {/* eslint-disable-next-line @next/next/no-img-element */}
