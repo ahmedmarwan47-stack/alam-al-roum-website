@@ -177,7 +177,7 @@ export const faq = {
 export const cta = {
   title: [{ t: "Live" }, { t: "Greatness", i: true }],
   body: "Be among the first to receive news of residences, districts, and the city's progress", cta: "Register interest",
-  video: "/video/cta-portal.mp4",
+  video: "/video/cta-portal.mp4", still: "/images/photo/cta-portal-still.jpg",
 };
 
 export const footer = {

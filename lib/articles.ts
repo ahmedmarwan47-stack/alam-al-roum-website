@@ -4,8 +4,8 @@
  *   header — tag · date (events: location · date), title, a two-line standfirst (`sub`, ~140–160 characters so it
  *            runs two lines in the 768 px header on desktop), Share via; no byline
  *   hero   — 1392 × 640
- *   body   — the key-takeaways panel (events: "Event details"), a captioned image, three paragraphs, a heading with a
- *            paragraph and a list, a callout (a pull quote or a row of key figures), a second captioned image, a
+ *   body   — the key-takeaways panel (stories only: events have none, 29 Oct review), a captioned image, three
+ *            paragraphs, a heading with a paragraph and a list, a callout (a pull quote or a row of key figures), a second captioned image, a
  *            second heading section, then a closing heading and paragraphs.
  * Figures come from the Alam Al Roum factsheet (2026) and the site; anything not in them is kept to plans and intentions.
  * Draft copy for the client to review — headlines, dates, venues and timings beyond the phase-one story are not from Figma.
@@ -17,7 +17,7 @@ const ev = (f: string) => `/images/events/${f}.jpg`;
 export type Block = { h?: string; p?: string; list?: string[]; img?: string; caption?: string; quote?: string; cite?: string; figures?: [string, string][] };
 export type Written = {
   tag: string; date: string; title: string; sub: string; hero: string;
-  takeawaysTitle?: string; takeaways: string[]; body: Block[];
+  takeaways?: string[]; body: Block[];
 };
 
 const REGISTER = "Registered buyers will be the first to hear about new launches, site visits and progress updates. To register your interest, use the form on this site or call 16922.";
@@ -293,10 +293,10 @@ export const writtenStories: Record<string, Written> = {
 
 /**
  * Event pages, keyed by event title (lib/listings.ts slugs them and takes each card's location and date from here).
- * `location` is the venue: it leads the header and every card (`location | date`), and the details panel names it in full.
+ * `location` is the venue: it leads the header and every card (`location | date`).
  */
 type EventDraft = {
-  title: string; location: string; date: string; hero: string; sub: string; details: string[];
+  title: string; location: string; date: string; hero: string; sub: string;
   about: string[]; programme: string[]; callout: Block; setting: { h: string; p: string[] };
   img: [string, string]; img2: [string, string]; attend?: string[]; past?: boolean;
 };
@@ -306,7 +306,6 @@ const NEXT = ["More moments like this are planned through the year. See the Even
 
 const event = (e: EventDraft): Written => ({
   tag: e.location, date: e.date, title: e.title, sub: e.sub, hero: e.hero,
-  takeawaysTitle: e.past ? "At a glance" : "Event details", takeaways: e.details,
   body: [
     { img: e.img[0], caption: e.img[1] },
     ...ps(...e.about),
@@ -324,7 +323,6 @@ const event = (e: EventDraft): Written => ({
 const events: EventDraft[] = [
   { title: "Roman coast symposium", location: "Experience Center", date: "Tue 09 Feb 2027", hero: ev("symposium"),
     sub: "Historians and archaeologists gather at the Experience Center for a day on three thousand years of the North Coast, from Ramesses II to Roman Paraetonium.",
-    details: ["Tuesday 9 February 2027", "Experience Center, Alam Al Roum", "09:30 to 18:00, reception from 19:00", "Talks in Arabic and English", "Free, by invitation"],
     about: ["A day of talks on the history of the coast, from the fortress of Ramesses II to Roman Paraetonium and the sailors who steered by its lights.",
       "Speakers will share what the land and the sea still tell us, and how that history shapes the city being built today.",
       "The symposium is the first in a planned series on the heritage of the North Coast, open to residents, students and guests."],
@@ -335,7 +333,6 @@ const events: EventDraft[] = [
       "Alam Al Roum, the landmark of the Romans, takes its name from that history. The symposium asks what it means to build a new city on such old ground."] } },
   { title: "Coastal open championship", location: "Golf course", date: "Wed 10 Feb 2027", hero: ev("golf-open"),
     sub: "An invitational tournament on the coast where the 18-hole course will run beside the sea, closing with prize-giving and a sunset dinner on the terrace.",
-    details: ["Wednesday 10 February 2027", "Golf course, Alam Al Roum", "Registration from 08:00, dinner from 18:30", "Open to invited players and guests", "Spectators welcome by registration"],
     about: ["An invitational tournament on the coast, where the 18-hole course will run alongside the sea.",
       "Players and guests will spend a day on the greens and end it with dinner overlooking the water.",
       "The championship previews the golf community planned around the course: homes along the fairways, a clubhouse and an academy for players of every age."],
@@ -346,7 +343,6 @@ const events: EventDraft[] = [
       "Homes of the golf community face the course, and the clubhouse is planned as a social centre for players and non-players alike."] } },
   { title: "Waterfront food market", location: "Marina promenade", date: "Thu 11 Feb 2027", hero: ev("food-market"),
     sub: "Growers, bakers and cooks from across the coast fill the marina promenade for an evening of Mediterranean produce, live music and long tables by the water.",
-    details: ["Thursday 11 February 2027", "Marina promenade, Alam Al Roum", "16:00 to 22:00", "Free entry"],
     about: ["An evening market along the marina promenade, bringing together growers, bakers and cooks from across the coast.",
       "Long shared tables, live music and the sunset over the water set the pace.",
       "The market is planned as a regular fixture on the promenade, a place for residents to shop, meet and eat together through the seasons."],
@@ -357,7 +353,6 @@ const events: EventDraft[] = [
       "On market evenings the stalls run along the water, with tables set between them and music at the head of the marina."] } },
   { title: "Seaside sculpture unveiling", location: "Beach promenade", date: "Fri 12 Feb 2027", hero: ev("sculpture"),
     sub: "A new public artwork joins the beach promenade, unveiled at dusk by its artist: the first of the sculptures planned along the city's Mediterranean shore.",
-    details: ["Friday 12 February 2027", "Beach promenade, Alam Al Roum", "From 17:00, unveiling at dusk", "Free and open to all"],
     about: ["A new sculpture joins the beach promenade, the first of the public artworks planned for the city.",
       "The artist will introduce the work, inspired by the coast's stone, water and history.",
       "The unveiling opens a programme of public art for the city, with works planned along the beach and marina promenades."],
@@ -368,7 +363,6 @@ const events: EventDraft[] = [
       "The sculpture stands where the promenade widens towards the sea, placed to be seen against the water from both directions."] } },
   { title: "Coastal 10K run", location: "Marina promenade", date: "Wed 10 Feb 2027", hero: ev("coastal-run"),
     sub: "Ten kilometres along the beach promenade and the lagoons at sunrise, with a shorter family route and breakfast at the marina for every finisher.",
-    details: ["Wednesday 10 February 2027", "Start and finish on the marina promenade", "06:30 start, breakfast from 08:00", "10K and 3K family routes", "Registration required"],
     about: ["A 10K run that follows the beach promenade and loops back along the lagoons, open to runners of every level.",
       "A shorter family route runs alongside, so everyone can take part.",
       "Water stations, marshals and a medical team line the route, and every finisher receives a medal."],
@@ -379,7 +373,6 @@ const events: EventDraft[] = [
       "The course is flat and closed to traffic, suited to first-time runners as much as to those chasing a time."] } },
   { title: "Grand hotel opening gala", location: "Resort district", date: "Thu 11 Feb 2027", hero: ev("hotel-gala"),
     sub: "An evening celebrating hospitality at Alam Al Roum, with dinner, music and views over the water in the resort district, where hotels and homes meet.",
-    details: ["Thursday 11 February 2027", "Resort district, Alam Al Roum", "From 19:00, black tie", "By invitation"],
     about: ["A gala evening celebrating hospitality at Alam Al Roum, where hotels and residences share the same streets.",
       "Guests will be welcomed with dinner, music and views over the water.",
       "The gala introduces the hotel brands and hospitality partners who will welcome guests to the city."],
@@ -390,7 +383,6 @@ const events: EventDraft[] = [
       "Hotels range from beachfront resorts to boutique addresses on the lagoons and at the head of the marina."] } },
   { title: "Marina regatta weekend", location: "International marina", date: "Sat 13 Feb 2027", hero: ev("regatta"),
     sub: "Two days of racing off the coast, starting and finishing at the international marina, with every race followed from the promenade and the lighthouse.",
-    details: ["Saturday 13 and Sunday 14 February 2027", "International marina, Alam Al Roum", "Races from 10:30, social programme each evening", "Crews by registration, spectators welcome"],
     about: ["A weekend of racing off the coast, starting and finishing at the international marina, which will offer 370 berths.",
       "Spectators can follow the races from the promenade and the lighthouse.",
       "Classes for keelboats and dinghies give crews of every level a place on the start line."],
@@ -401,7 +393,6 @@ const events: EventDraft[] = [
       "Its promenade gives spectators a view of the start and finish, and the quay fills with crews and guests each evening."] } },
   { title: "Full moon beach festival", location: "Beachfront", date: "Wed 10 Feb 2027", hero: ev("beach-festival"),
     sub: "An evening on the 7.2 kilometre beach with music, food and fire pits under the full moon: a night to gather by the sea, unhurried and close to the water.",
-    details: ["Wednesday 10 February 2027", "The beach, Alam Al Roum", "From sunset to midnight", "Registration required"],
     about: ["An evening on the 7.2 km beach, with music, food and fire pits under the full moon.",
       "A night to gather by the sea, unhurried and close to the water.",
       "Families are welcome early in the evening, with music and the moonlit walk later into the night."],
@@ -412,7 +403,6 @@ const events: EventDraft[] = [
       "For the festival a stretch of sand near the beach clubs is set with low tables, lanterns and a small stage, leaving the shore open to walk."] } },
   { title: "Coastal wellness retreat", location: "Lagoon shore", date: "Thu 11 Feb 2027", hero: ev("wellness-retreat"),
     sub: "A day of gentle movement, breathwork, good food and time in calm water on the lagoon shore, led by practitioners with space to rest in between.",
-    details: ["Thursday 11 February 2027", "Lagoon shore, Alam Al Roum", "07:00 to 15:00", "Limited places"],
     about: ["A wellness day by the lagoons, built around gentle movement, good food and time by the water.",
       "Practitioners will lead each session, with space to rest in between.",
       "The retreat is the first of a seasonal series, part of the city's focus on wellness and longevity by the sea."],
@@ -423,7 +413,6 @@ const events: EventDraft[] = [
       "Their shores are planted and shaded, with space for classes, quiet and an easy swim between sessions."] } },
   { title: "Music by the sea", location: "Marina quay", date: "Sat 20 Feb 2027", hero: ph("ui-g-music"),
     sub: "An evening of live music at the head of the marina, with musicians from across the Mediterranean playing on the quay as the lights come on over the water.",
-    details: ["Saturday 20 February 2027", "Marina quay, Alam Al Roum", "From 18:00", "Free and open to all"],
     about: ["An evening concert on the marina quay, with musicians from across the Mediterranean playing as the sun sets over the water.",
       "Food stalls and the restaurants of the promenade stay open late, so the music can be heard from the berths, the quay and the lighthouse.",
       "It is the first of a season of music by the sea, part of the city's year-round calendar of culture."],
@@ -434,7 +423,6 @@ const events: EventDraft[] = [
       "On concert nights the stage faces the water, so the music carries across the marina and the boats become part of the audience."] } },
   { title: "Prime Minister's site visit", location: "Phase one site", date: "Aug 2026", hero: ph("ui-pm-visit"), past: true,
     sub: "Egypt's Prime Minister visited Alam Al Roum as phase one got under way, reviewing the masterplan and the first site works with the project team.",
-    details: ["August 2026", "Alam Al Roum site, North Coast", "Visit to the phase one works"],
     about: ["Egypt's Prime Minister visited Alam Al Roum as phase one construction began, reviewing the masterplan and the first site works with the project team.",
       "The visit marked the move from plan to ground for a city that will span 20.58 million square metres of the North Coast.",
       "A briefing on site set out how the city will be delivered in stages, beginning with the beachfront and the first lagoon districts."],
@@ -445,7 +433,6 @@ const events: EventDraft[] = [
       "Infrastructure and lagoon works continue through 2027, followed by the marina and the golf course in 2028."] } },
   { title: "Experience Center opening", location: "Experience Center", date: "Sep 2026", hero: ph("ui-expcenter-facade"), past: true,
     sub: "The Alam Al Roum Experience Center opened its doors: the first place to see, feel and plan life in the city, built in limestone around a shaded courtyard.",
-    details: ["September 2026", "Experience Center, Alam Al Roum", "Open for visits by appointment"],
     about: ["The Alam Al Roum Experience Center opened its doors, giving visitors the first chance to see the city's architecture, materials and masterplan in person.",
       "Built in limestone and plaster around a shaded courtyard, it is a first glimpse of the city's architecture.",
       "Visitors can walk around the masterplan model, handle the materials and finishes, and talk with the team about the neighbourhoods being planned."],
@@ -456,7 +443,6 @@ const events: EventDraft[] = [
       "Inside, the lounge, the model room and the material library lead from one to the next, ending with views back onto the courtyard."] } },
   { title: "An evening at the Experience Center", location: "Experience Center", date: "Sep 2026", hero: ph("ui-expcenter-dusk"), past: true,
     sub: "As the sun set, guests gathered at the Experience Center for an evening of conversation, music and food to celebrate its opening on the coast.",
-    details: ["September 2026", "Experience Center, Alam Al Roum", "An evening reception"],
     about: ["As the sun set, guests gathered at the Experience Center for an evening of conversation, music and food.",
       "It was the first of many evenings planned to bring people together on the coast.",
       "Guests toured the building after dark, when the courtyard and the façade are lit and the limestone takes on the evening light."],
@@ -467,7 +453,6 @@ const events: EventDraft[] = [
       "The courtyard becomes an outdoor room at night, set for dinner and music beneath the open sky."] } },
   { title: "Inside the Experience Center lounge", location: "Experience Center", date: "Sep 2026", hero: ph("ui-v-lounge"), past: true,
     sub: "A look inside the lounge, where visitors sit down with the team to talk about the city, its neighbourhoods and the homes being planned on the coast.",
-    details: ["September 2026", "Experience Center lounge", "Open by appointment"],
     about: ["The lounge is where visitors sit down with the team to talk about the city, the neighbourhoods and the homes being planned.",
       "Its warm materials and soft light set the tone for the hospitality of the city.",
       "Appointments can be arranged in Arabic and English, and combined with a tour of the masterplan model."],

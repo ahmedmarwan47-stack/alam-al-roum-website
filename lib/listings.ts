@@ -63,7 +63,7 @@ export const mediaBlog = [...F.slice(0, 3), ...N.slice(0, 3), ...F.slice(3), ...
 
 export const stories = [...mediaPage.news, ...mediaPage.features];
 
-export type Article = Omit<Written, "takeaways"> & { slug: string; takeaways?: string[] };
+export type Article = Written & { slug: string };
 
 /** Every story is written in lib/articles.ts (the phase-one story is Figma's); a story without one shows its card. */
 export const articleFor = (slug: string): Article | undefined => {

@@ -6,8 +6,8 @@ import { cta as C } from "@/lib/content";
 
 /**
  * CTA / Live Greatness (Figma 10921:12607): the portal film under a white radial vignette; left-aligned copy
- * (Live 80 / Greatness 76 italic), 720 px. Neighbourhood pages pass `form` (Figma 11128:16156): the same film
- * with the Register Interest panel in place of the copy, 80 px top and bottom.
+ * (Live 80 / Greatness 76 italic), 720 px. Neighbourhood pages pass `form` (Figma 11128:16156): a still of the same
+ * film with the Register Interest panel in place of the copy, 80 px top and bottom.
  */
 export default function Cta({ form }: { form?: string }) {
   return (
@@ -15,7 +15,10 @@ export default function Cta({ form }: { form?: string }) {
       {/* below lg the film sits on top, framed on the portal, and melts into the Limestone under the copy (a soft fade
           in, a longer one out), so film and copy read as one block as on desktop, where the copy sits on the film */}
       <div className={`absolute inset-0 ${form ? "" : "max-lg:relative max-lg:h-[min(125vw,560px)]"}`}>
-        <RevealImage src={C.video} video blur className="absolute inset-0" imgClassName={form ? "" : "max-lg:object-[68%_50%]"} />
+        {/* with the form the portal is a still (29 Oct review), so nothing moves beside the fields */}
+        {form
+          ? <RevealImage src={C.still} blur className="absolute inset-0" />
+          : <RevealImage src={C.video} video blur className="absolute inset-0" imgClassName="max-lg:object-[68%_50%]" />}
         {!form && <>
           <div className="pointer-events-none absolute inset-x-0 top-0 h-[16%] bg-gradient-to-b from-limestone-50/80 to-limestone-50/0 lg:hidden" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-b from-limestone-50/0 via-limestone-50/70 via-60% to-limestone-50 lg:hidden" />

@@ -130,6 +130,13 @@ html.js [data-reveal-img] { visibility: hidden; }
   -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4);
 }
 
+/* Over a full-bleed photo or film hero the bar is all but clear: a whisper of Deep Sea 950 and a light blur, just
+   enough to seat the Limestone MENU and logo (29 Oct review). */
+.nav-veil {
+  background: linear-gradient(180deg, rgb(1 15 26 / .3) 0%, rgb(1 15 26 / .14) 70%, rgb(1 15 26 / 0) 100%);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+}
+
 /* ── Glass card on a hero photo (SingleHero facts): Limestone at 74 % over a 20 px blur, Deep Sea text. Even over a
    black photo the card stays light enough for Deep Sea at 7:1 (labels at 85 %, 5.6:1). ── */
 .glass-card {

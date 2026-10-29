@@ -1,6 +1,6 @@
 import SectionTitle from "./SectionTitle";
 import MasterplanMap from "./MasterplanMap";
-import { CommunityGrid } from "./CommunitiesExplorer";
+import CommunityCarousel from "./CommunityCarousel";
 import { communities } from "@/lib/communities";
 import { districtPins, planViews } from "@/lib/masterplan";
 
@@ -18,12 +18,7 @@ export function CommunityOnMasterplan({ slug, title, body }: { slug: string; tit
   );
 }
 
-/** Other communities (Figma 11128:16022): the Communities grid, with the current community hidden. */
+/** Other communities (Figma 11128:16022): a carousel of the other communities, with "View All Communities". */
 export default function OtherCommunities({ exclude }: { exclude: string }) {
-  return (
-    <section className="flex flex-col items-center gap-10 bg-white py-20 container-x">
-      <SectionTitle tag="Communities" title="More communities" body="Each district has its own character. All share the sea." />
-      <CommunityGrid items={communities.filter((c) => c.slug !== exclude)} />
-    </section>
-  );
+  return <CommunityCarousel items={communities.filter((c) => c.slug !== exclude)} />;
 }

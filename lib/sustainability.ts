@@ -9,8 +9,9 @@ export const susHero = {
 export const susOverview = {
   tag: "Our approach", title: "Embedded in every plan",
   body: "Sustainability is embedded into the planning of Alam Al Roum through climate-responsive design, nature-led infrastructure and long-term environmental stewardship. Every aspect of the destination is designed to balance human experience with ecological resilience.",
-  // factsheet "Key Facts": 15 % footprint, 85 % open spaces; the six commitments below
-  facts: [["85%", "Of the city kept as open space"], ["15%", "Built footprint"], ["6", "Commitments in every plan"]] as [string, string][],
+  photo: "/images/photo/ui-sea-6.jpg", alt: "Clear shallows off the coast",
+  points: [["Open space first", "Most of the city stays open: parks, dunes, beaches and lagoons. Buildings take a small share of the land, so nature and public space come first."], ["Every drop managed", "Water is recycled and reused, from the lagoons to the landscape. One connected network serves homes, gardens and public spaces with as little waste as possible."],
+    ["Shaped by the climate", "Streets and buildings use shade, sun and sea breeze to keep cool. Colonnades, courtyards and planting cut the need for cooling through the year."]] as [string, string][],
 };
 
 export const commitments = {

@@ -20,8 +20,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 /**
  * Event detail: Figma has no event frame, so it follows "Article Detail (Blog / News) • Desktop" (10921:10137) —
- * the shared detail header (location | date, no byline), 1392×640 hero, the reading column with the event's details in
- * the summary panel — then More Events.
+ * the shared detail header (location | date, no byline), 1392×640 hero, the reading column (no details panel: the
+ * header already gives the venue and date, 29 Oct review) — then More Events.
  */
 export default async function EventPage({ params }: { params: Promise<{ slug: string }> }) {
   const e = eventFor((await params).slug);

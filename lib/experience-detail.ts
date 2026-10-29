@@ -36,7 +36,9 @@ const marina: ExperienceDetail = {
     facts: [["2", "Marinas, international and local"], ["22 km", "Water frontage, incl. lagoons"], ["24/7", "Waterfront promenade"]] },
   overview: { tag: "Overview", title: "Life on the water",
     body: "The marina district brings together boating, hospitality, dining, retail and public life within a vibrant waterfront setting that serves as a focal point for residents and visitors alike.",
-    facts: [["370", "Berths in the international marina"], ["Private", "Residential docking"], ["Year-round", "Regattas, markets and evenings on the quay"]] },
+    photo: "/images/photo/ui-lighthouse-marina.jpg", alt: "The lighthouse over the marina at sunset",
+    points: [["Life on the quay", "Cafés, restaurants and boutiques line the berths from morning to late evening. The quay is where the city meets, for coffee, a long lunch or a sunset walk."], ["Boating at the door", "Berths in the international and local marinas sit a short walk from home, with services, sailing schools and charters for every kind of boat."],
+      ["Events on the water", "Regattas, markets and music on the promenade run through the year, so there is always something happening on the waterfront, in every season."]] },
   highlights: { title: "Landmarks and leisure", body: "Four reasons the marina is the city's meeting point, from the water to the promenade.",
     rows: [
       ["International & local marinas", "Berths for visiting yachts and residents' boats."],
@@ -60,7 +62,9 @@ const hotelsBase: Omit<ExperienceDetail, "highlights"> = {
     facts: [["3,500+", "Hotel rooms planned"], ["5", "Hotels across the city"], ["4", "Ways to stay"]] },
   overview: { tag: "Overview", title: "A place to stay, every season",
     body: "From beachfront resorts to serviced suites in the town centre, every district has its own way to stay.",
-    facts: [["Beachfront", "Resorts on the open shore"], ["Lagoon", "Boutique hotels on the water"], ["Town centre", "Serviced suites above the boulevard"]] },
+    photo: "/images/experiences/hotels-pool.jpg", alt: "A hotel pool by the sea",
+    points: [["Beachfront resorts", "Resorts on the open shore, with the sand at the door, pools facing the sea and restaurants that stay open late through the summer evenings."], ["Lagoon boutiques", "Smaller hotels on calm water, each with its own character, quiet decks and rooms that open straight onto the lagoon."],
+      ["Town centre suites", "Serviced suites above the boulevard, open all year, with the shops, cafés and the marina all within a short walk."]] },
   hotels: { tag: "Hotels", title: "International brands and boutique hospitality",
     body: "Each hotel has its own address on the coast, from the open beachfront to the lagoon and the head of the marina.",
     // drawer copy: The Beachfront Resort is the Figma drawer (11128:14825); the others follow it from their card line

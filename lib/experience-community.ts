@@ -1,6 +1,6 @@
 /**
  * The community around each experience (experience detail pages, client edit 28 Oct: "the pages look empty"):
- *   overview  — a fuller Overview with a row of key facts (pages built from their card only)
+ *   overview  — a fuller Overview with a photo and three qualities of the place (29 Oct review: no numbers)
  *   here      — what's there, as numbered rows beside a photo (not on Marina and Hotels, which have Landmarks / the hotel list)
  *   community — the people around it: clubs, membership, the life it brings
  *   week      — life in the community: four parts of everyday life, each with a photo (no days or times)
@@ -30,7 +30,8 @@ export const experienceCommunity: Record<string, ExperienceCommunityData> = {
   beach: {
     overview: { title: "Seven kilometres of open shore",
       body: "The beach runs the full 7.2 kilometres of the city's Mediterranean edge, backed by a continuous promenade. Inland, open-to-sea and swimmable lagoons give calmer water for children and early swimmers, so the shore is part of daily life rather than a day out.",
-      facts: [["7.2 km", "Mediterranean shoreline"], ["1.4M sqm", "Beach area"], ["850K sqm", "Swimmable lagoons"], ["22 km", "Lagoon promenade and beaches"]] },
+      photo: ph("ui-sea-9"), alt: "Clear turquoise water to the horizon",
+      points: [["Open shore", "The beach runs the full length of the city, backed by a continuous promenade with cafés, showers and shade, so the sea is never more than a short walk away."], ["Calm lagoons", "Sheltered, swimmable lagoons give calmer water for children and early swimmers, with lifeguards on every stretch and decks to rest between swims."], ["Part of daily life", "A short walk from every home, in every season. The shore is where the day begins and ends, not a trip planned for the weekend."]] },
     here: { tag: "On the shore", title: "What's on the beach", body: "Open sand, calm lagoons and a promenade that never leaves the water.",
       photo: ph("ui-g-beach"), alt: "Waves on the beach at sunset",
       rows: [
@@ -50,9 +51,9 @@ export const experienceCommunity: Record<string, ExperienceCommunityData> = {
     week: { tag: "On the shore", title: WEEK, body: "The beach keeps its own rhythm, from the first swimmers at sunrise to music on the promenade at dusk.",
       items: [
         { title: "Morning swims", body: "Open-water swimmers meet at the beach clubs for guided swims along the shore. The lagoons give calmer water for lengths before work.", photo: x("sports-swim"), alt: "A swimmer in clear water" },
-        { title: "Learning the water", body: "Swim schools teach children in the shallow, sheltered lagoons, grouped by age and ability, with lifeguards on every stretch.", photo: ph("ui-lagoon-clear"), alt: "Clear, shallow lagoon water" },
-        { title: "Evenings on the promenade", body: "As the sun goes down the 7 km promenade fills with walkers and cyclists, and music and food carry on into the night.", photo: ph("ui-g-boardwalk"), alt: "The promenade at sunset" },
-        { title: "Caring for the shore", body: "Residents join shore clean-ups and dune planting with the beach team, keeping the coast as clean as the day it opened.", photo: md("m05"), alt: "Sand ripples under clear water" },
+        { title: "Swim school", body: "Swim schools teach children in the shallow, sheltered lagoons, grouped by age and ability, with lifeguards on every stretch.", photo: ph("ui-lagoon-clear"), alt: "Clear, shallow lagoon water" },
+        { title: "Evening walks", body: "As the sun goes down the 7 km promenade fills with walkers and cyclists, and music and food carry on into the night.", photo: ph("ui-g-boardwalk"), alt: "The promenade at sunset" },
+        { title: "Shore care", body: "Residents join shore clean-ups and dune planting with the beach team, keeping the coast as clean as the day it opened.", photo: md("m05"), alt: "Sand ripples under clear water" },
       ] },
   },
   marina: {
@@ -63,16 +64,17 @@ export const experienceCommunity: Record<string, ExperienceCommunityData> = {
       points: [["Yacht club", "Racing, cruising and social sailing"], ["Sailing school", "From first lessons to skipper"], ["Private docking", "Homes with their own moorings"], ["Dry rack", "120 places for smaller boats"]] },
     week: { tag: "At the marina", title: WEEK, body: "Boats leave in the morning, the quay fills at lunch, and the promenade is at its busiest after dark.",
       items: [
-        { title: "Learning to sail", body: "Beginner and junior courses leave the local marina every morning, from first lessons in the bay to skipper certificates.", photo: ev("regatta"), alt: "A sailing boat on calm water" },
-        { title: "Dinner on the quay", body: "Restaurants over the berths set their tables along the water, and the promenade is at its busiest after dark.", photo: x("dining-evening"), alt: "A terrace strung with lights in the evening" },
+        { title: "Sail school", body: "Beginner and junior courses leave the local marina every morning, from first lessons in the bay to skipper certificates.", photo: ev("regatta"), alt: "A sailing boat on calm water" },
+        { title: "Quay dinners", body: "Restaurants over the berths set their tables along the water, and the promenade is at its busiest after dark.", photo: x("dining-evening"), alt: "A terrace strung with lights in the evening" },
         { title: "Club racing", body: "Members race off the coast while the town follows from the promenade and the foot of the lighthouse.", photo: x("sports-sailing"), alt: "A yacht on turquoise water" },
-        { title: "Life on the promenade", body: "Cafés, boutiques and a weekend market of local producers line the waterfront from morning to late evening.", photo: ev("food-market"), alt: "A drink served at a waterfront table" },
+        { title: "Quay life", body: "Cafés, boutiques and a weekend market of local producers line the waterfront from morning to late evening.", photo: ev("food-market"), alt: "A drink served at a waterfront table" },
       ] },
   },
   golf: {
     overview: { title: "Eighteen holes by the sea",
       body: "The golf course covers 980,000 square metres along the coast, with the sea in view from much of the round. Homes of the golf community face the fairways, and the clubhouse is planned as a social centre for players and non-players alike.",
-      facts: [["980K sqm", "Golf course area"], ["18", "Holes, by the sea"], ["1", "Clubhouse and golf academy"], ["Year-round", "Mild winters for play"]] },
+      photo: gen("golf-academy"), alt: "The golf academy by the sea",
+      points: [["Sea views from the tee", "The course runs along the coast, with the sea in view from much of the round and the breeze off the water shaping every shot."], ["A clubhouse for all", "A social centre for players and non-players alike, with a terrace over the eighteenth green, a restaurant and evenings for members and their families."], ["Play all year", "Mild winters keep the course open in every season, with early tee times in summer and long, bright afternoons on the greens from autumn to spring."]] },
     here: { tag: "At the club", title: "What's at the club", body: "A championship course, and everything a golf community needs around it.",
       photo: ph("ui-g-terraces"), alt: "Homes with terraces and bougainvillea above the sea",
       rows: [
@@ -92,15 +94,16 @@ export const experienceCommunity: Record<string, ExperienceCommunityData> = {
     week: { tag: "At the club", title: WEEK, body: "Early tee times, coaching after school and a supper to close the week: the club runs on the same rhythm as the neighbourhood.",
       items: [
         { title: "Early rounds", body: "The first groups go out at sunrise and play the 18 holes before the heat of the day, then breakfast on the terrace.", photo: ev("golf-open"), alt: "A family on a grassy hill at golden hour" },
-        { title: "The junior academy", body: "Coaching for young players on the range and the short-game area, with a path from first swings to club competitions.", photo: gen("golf-putting"), alt: "Two young players putting on a green by the sea" },
+        { title: "Junior golf", body: "Coaching for young players on the range and the short-game area, with a path from first swings to club competitions.", photo: gen("golf-putting"), alt: "Two young players putting on a green by the sea" },
         { title: "Family days", body: "The clubhouse pool and lawns make the club a place for the whole family, not only for the players.", photo: ph("ui-g-pool"), alt: "A pool among olive trees" },
-        { title: "Evenings at the club", body: "Members' dinners, prize-givings and quiet evenings in the lounge close the week at the clubhouse.", photo: ev("hotel-gala"), alt: "A cocktail on a marble bar" },
+        { title: "Club nights", body: "Members' dinners, prize-givings and quiet evenings in the lounge close the week at the clubhouse.", photo: ev("hotel-gala"), alt: "A cocktail on a marble bar" },
       ] },
   },
   sports: {
     overview: { title: "An active life, every season",
       body: "Sport is part of the city's layout rather than an add-on: courts and pitches within the neighbourhoods, cycling routes and promenades between them, and the open sea at the end of the street. The mild climate keeps the calendar running all year.",
-      facts: [["22 km", "Lagoon promenades for running and cycling"], ["7.2 km", "Shoreline for swimming and sailing"], ["370", "International marina berths"], ["1", "Polo and equestrian club"]] },
+      photo: gen("sports-pitches"), alt: "Sports pitches in the neighbourhood",
+      points: [["Courts close to home", "Courts and pitches sit within the neighbourhoods, so a game of padel, tennis or football is a short walk away, for children and adults alike."], ["Routes between them", "Cycling routes and promenades link every district, from the lagoons to the town centres, for runners and riders at every pace."], ["The sea at the end", "Sailing, swimming and paddling from the shore and the marina, with clubs and coaches for beginners and racers at the end of the street."]] },
     here: { tag: "Facilities", title: "Where the city plays", body: "From neighbourhood courts to the open water, sport is a short walk from home.",
       photo: x("sports-courts"), alt: "A tennis court above the sea",
       rows: [
@@ -120,7 +123,7 @@ export const experienceCommunity: Record<string, ExperienceCommunityData> = {
       points: [["Tennis and padel", "Neighbourhood ladders and coaching"], ["Running club", "Group runs on the promenades"], ["Sailing school", "Lessons from the local marina"], ["Riding", "Lessons and hacks at the equestrian club"]] },
     week: { tag: "On the move", title: WEEK, body: "Something to join every day of the week, from first light on the promenade to matches under the floodlights.",
       items: [
-        { title: "Running the promenade", body: "Group runs of 5 and 10 kilometres follow the beach promenade at first light, with routes for every pace.", photo: ev("coastal-run"), alt: "Runners on the coast" },
+        { title: "Group runs", body: "Group runs of 5 and 10 kilometres follow the beach promenade at first light, with routes for every pace.", photo: ev("coastal-run"), alt: "Runners on the coast" },
         { title: "Swim squads", body: "Coached open-water sessions at the beach and lengths in the sheltered lagoons, for juniors and adults.", photo: ph("ui-lagoon-clear"), alt: "Clear lagoon water" },
         { title: "On the water", body: "Sailing, paddleboarding and kayaking from the watersports centres and the local marina.", photo: x("marina-sailing"), alt: "Sailing on the open sea" },
         { title: "Junior sports", body: "Football, tennis, padel and sailing for children, taught by club coaches in the neighbourhoods.", photo: gen("sports-junior"), alt: "Children playing football on a grass pitch by the sea" },
@@ -129,7 +132,8 @@ export const experienceCommunity: Record<string, ExperienceCommunityData> = {
   "retail-dining": {
     overview: { title: "Town centres made for walking",
       body: "Everyday shops, cafés and restaurants sit in walkable town centres, along a commercial boulevard and beside the water. Dining runs from the marina quay to the lagoon edge, so a good table is always close to home.",
-      facts: [["Town centres", "Everyday shops a short walk from home"], ["Boulevard", "The city's commercial street"], ["Marina quay", "Dining over the water"], ["Year-round", "Open in every season"]] },
+      photo: "/images/experiences/dining-table.jpg", alt: "A table laid by the water",
+      points: [["Shops on foot", "Everyday shops and cafés sit in walkable town centres, under shaded arcades, so daily needs are met without getting into the car."], ["The boulevard", "The city's commercial street, lined with boutiques, restaurants and terraces, is the place for an evening out and a walk to the marina."], ["Tables by the water", "Dining runs from the marina quay to the lagoon edge, from a quick coffee in the morning to long dinners as the lights come on over the water."]] },
     here: { tag: "Where to go", title: "Shops and tables", body: "Daily needs close to home; the boulevard and the marina for an evening out.",
       photo: x("dining-evening"), alt: "A terrace strung with lights in the evening",
       rows: [
@@ -148,9 +152,9 @@ export const experienceCommunity: Record<string, ExperienceCommunityData> = {
       points: [["Weekly market", "Local produce and makers"], ["Chef's tables", "Seasonal dinners with guest chefs"], ["Late opening", "Evenings on the boulevard and the quay"], ["Local makers", "Space for independent shops"]] },
     week: { tag: "Around the table", title: WEEK, body: "Bread in the morning, the market on Thursday, dinner on the quay: the town centres keep the week's rhythm.",
       items: [
-        { title: "Mornings in town", body: "Bakeries and cafés open early under the town centres' arcades, before school and work.", photo: ph("ui-g-colonnade"), alt: "A shaded colonnade by the sea" },
+        { title: "Early cafés", body: "Bakeries and cafés open early under the town centres' arcades, before school and work.", photo: ph("ui-g-colonnade"), alt: "A shaded colonnade by the sea" },
         { title: "Market days", body: "Growers, bakers and cooks from across the coast set up along the marina promenade every week.", photo: ev("food-market"), alt: "A drink served at a market table" },
-        { title: "Dinner on the quay", body: "Tables along the berths fill as the marina lights come on, with menus built on the day's catch.", photo: md("m09"), alt: "A dining terrace under arches" },
+        { title: "Quay dinners", body: "Tables along the berths fill as the marina lights come on, with menus built on the day's catch.", photo: md("m09"), alt: "A dining terrace under arches" },
         { title: "Long lunches", body: "Slow, seasonal lunches on shaded terraces along the boulevard, in every season of the year.", photo: x("dining"), alt: "A table set for lunch" },
       ] },
   },
@@ -162,16 +166,17 @@ export const experienceCommunity: Record<string, ExperienceCommunityData> = {
       points: [["Serviced residences", "Hotel service at home"], ["Spa and wellness", "Open to residents and guests"], ["Beach clubs", "Days on the sand with hotel service"], ["Dining", "Restaurants open to the city"]] },
     week: { tag: "At the hotels", title: WEEK, body: "The hotels' calendar is open to the neighbourhood, from yoga at sunrise to jazz by the lagoon.",
       items: [
-        { title: "Mornings by the water", body: "Yoga on the sand and swims before breakfast are open to residents as well as hotel guests.", photo: ev("wellness-retreat"), alt: "Friends relaxing by the sea" },
+        { title: "Beach yoga", body: "Yoga on the sand and swims before breakfast are open to residents as well as hotel guests.", photo: ev("wellness-retreat"), alt: "Friends relaxing by the sea" },
         { title: "Long lunches", body: "Seasonal menus on the hotels' terraces, with the lagoons and the open sea on either side.", photo: ph("ui-g-table"), alt: "A long table under the arches" },
-        { title: "The chef's table", body: "Guest chefs cook by the water through the year, in the hotels' restaurants and on the marina.", photo: md("m03"), alt: "A candlelit table at night" },
-        { title: "Music after dinner", body: "Live music on the lagoon shore and in the hotel lounges, open to the whole neighbourhood.", photo: ph("ui-g-music"), alt: "Musicians playing in the evening" },
+        { title: "Guest chefs", body: "Guest chefs cook by the water through the year, in the hotels' restaurants and on the marina.", photo: md("m03"), alt: "A candlelit table at night" },
+        { title: "Live music", body: "Live music on the lagoon shore and in the hotel lounges, open to the whole neighbourhood.", photo: ph("ui-g-music"), alt: "Musicians playing in the evening" },
       ] },
   },
   wellness: {
     overview: { title: "Wellness and longevity by the sea",
       body: "Wellness here starts outdoors: a swim in the lagoon, a walk along the shore, a slower pace through the day. Spas, clinics and studios are planned within reach of every neighbourhood, with 85 % of the city kept as open space.",
-      facts: [["85%", "Of the city kept as open space"], ["7.2 km", "Coastal walk along the shore"], ["850K sqm", "Swimmable lagoons"], ["Year-round", "A mild Mediterranean climate"]] },
+      photo: "/images/photo/ui-v-lounger.jpg", alt: "A lounger by the sea",
+      points: [["Wellness outdoors", "Wellness starts outside: a swim in the lagoon, a walk along the shore and a slower pace through the day, in a mild climate all year."], ["Care close to home", "Spas, clinics and studios are planned within reach of every neighbourhood, with preventive care, treatments and classes close to home."], ["Room to breathe", "Most of the city is kept as open space, with gardens, dunes and promenades that make quiet time outdoors part of every day."]] },
     here: { tag: "Facilities", title: "Places to restore", body: "Water, shade and open space, with care close to home.",
       photo: ph("ui-g-pool"), alt: "A pool among olive trees",
       rows: [
@@ -190,16 +195,17 @@ export const experienceCommunity: Record<string, ExperienceCommunityData> = {
       points: [["Morning movement", "Yoga and breathwork on the beach"], ["Swim groups", "Lagoon sessions for every level"], ["Seasonal retreats", "Days of rest, food and the sea"], ["Preventive care", "Clinics close to home"]] },
     week: { tag: "A slower pace", title: WEEK, body: "Movement in the morning, the water at midday, rest when the light goes.",
       items: [
-        { title: "Sunrise movement", body: "Yoga and breathwork on the beach as the sun comes up over the sea, led by resident practitioners.", photo: md("m11"), alt: "Two women resting by the sea" },
+        { title: "Sunrise yoga", body: "Yoga and breathwork on the beach as the sun comes up over the sea, led by resident practitioners.", photo: md("m11"), alt: "Two women resting by the sea" },
         { title: "Lagoon swims", body: "Guided swims in calm, clear water for every level, from first strokes to long distances.", photo: ph("ui-lagoon-clear"), alt: "Clear lagoon water" },
         { title: "Coastal walks", body: "Unhurried walks along the shore and the promenade, with shade and water stops along the way.", photo: ph("ui-g-coast"), alt: "The coast seen from above" },
-        { title: "Rest and treatments", body: "Spa rooms, thermal pools and quiet lounges, open to residents through the year.", photo: ph("ui-v-lounge"), alt: "A quiet lounge" },
+        { title: "Spa days", body: "Spa rooms, thermal pools and quiet lounges, open to residents through the year.", photo: ph("ui-v-lounge"), alt: "A quiet lounge" },
       ] },
   },
   education: {
     overview: { title: "Schools for families who stay",
       body: "Nurseries and schools are planned within the neighbourhoods, so children can walk or cycle to class. A dedicated learning hub brings together after-school programmes, languages and the arts, and the coast's three thousand years of history give lessons a setting outside the classroom.",
-      facts: [["1", "Dedicated learning hub"], ["3,000+ yrs", "Of history on this coast"], ["85%", "Open space to learn outdoors"], ["Walkable", "Schools within the neighbourhoods"]] },
+      photo: "/images/experiences/education-heritage.jpg", alt: "Learning from the coast's history",
+      points: [["Walk to school", "Nurseries and schools sit within the neighbourhoods, on shaded, car-free routes, so children can walk or cycle to class from home."], ["The learning hub", "After-school programmes, languages and the arts come together in one place, with studios, a library and space for clubs of every kind."], ["Lessons in history", "Three thousand years of the coast sit outside the classroom door, from the Roman port to the lighthouse, waiting to be walked and studied."]] },
     here: { tag: "Learning", title: "From nursery to the learning hub", body: "Every stage of learning, a short walk or ride from home.",
       photo: x("education-hub"), alt: "Arches and a stair in pale plaster",
       rows: [
@@ -218,16 +224,17 @@ export const experienceCommunity: Record<string, ExperienceCommunityData> = {
       points: [["Safe routes", "Walking and cycling to school"], ["After-school clubs", "Sport, arts and languages"], ["Holiday programmes", "Camps on the shore and the lagoons"], ["Adult courses", "Languages, crafts and talks"]] },
     week: { tag: "School days", title: WEEK, body: "A school week that uses the whole city: the streets, the shore and the history on the doorstep.",
       items: [
-        { title: "Walking to school", body: "Shaded, car-free routes let children walk and cycle to class from every neighbourhood.", photo: ph("ui-g-colonnade"), alt: "A shaded colonnade" },
-        { title: "Studios and making", body: "After-school clubs in design, coding and craft at the learning hub, for every age.", photo: md("m10"), alt: "A vase on a spiral plaster stair" },
-        { title: "Lessons by the shore", body: "Marine science and nature study by the lagoons and the beach, with the coast as the classroom.", photo: ph("ui-v-ripples"), alt: "Light on shallow water" },
-        { title: "Family weekends", body: "Workshops for parents and children together, from the history of the coast to the night sky.", photo: md("m08"), alt: "A family on a hill at golden hour" },
+        { title: "School walks", body: "Shaded, car-free routes let children walk and cycle to class from every neighbourhood.", photo: ph("ui-g-colonnade"), alt: "A shaded colonnade" },
+        { title: "Making clubs", body: "After-school clubs in design, coding and craft at the learning hub, for every age.", photo: md("m10"), alt: "A vase on a spiral plaster stair" },
+        { title: "Shore lessons", body: "Marine science and nature study by the lagoons and the beach, with the coast as the classroom.", photo: ph("ui-v-ripples"), alt: "Light on shallow water" },
+        { title: "Family days", body: "Workshops for parents and children together, from the history of the coast to the night sky.", photo: md("m08"), alt: "A family on a hill at golden hour" },
       ] },
   },
   culture: {
     overview: { title: "A calendar for the whole year",
       body: "Culture fills the city in every season: talks and exhibitions, music on the promenade and festivals by the sea. An events centre and an international expo and convention centre anchor the calendar, and the coast's Roman past runs through it.",
-      facts: [["Events Centre", "Concerts, shows and celebrations"], ["Expo Centre", "International expo and convention centre"], ["3,000+ yrs", "Of history on this coast"], ["Year-round", "Arts and events in every season"]] },
+      photo: gen("culture-events-centre"), alt: "The events centre",
+      points: [["A year of events", "Talks, exhibitions, music and festivals fill every season, so there is something to see or join every week, not only in summer."], ["Two great venues", "An events centre and an international expo and convention centre anchor the calendar, with concerts, shows, fairs and conferences."], ["A Roman past", "The coast's history runs through the calendar, from guided walks on the Roman trail to talks and exhibitions at the Experience Center."]] },
     here: { tag: "Venues", title: "Where culture happens", body: "Stages, galleries and a history you can walk.",
       photo: x("culture-fresco"), alt: "A fragment of a Roman fresco",
       rows: [
@@ -246,10 +253,10 @@ export const experienceCommunity: Record<string, ExperienceCommunityData> = {
       points: [["Talks and symposia", "History, design and the coast"], ["Music", "Concerts on the quay and at the events centre"], ["Workshops", "Crafts, photography and the arts"], ["Festivals", "Seasonal celebrations by the sea"]] },
     week: { tag: "In the calendar", title: WEEK, body: "Talks, studios, music and a walk through history: a week of culture, close to home.",
       items: [
-        { title: "Talks on the coast", body: "Historians and writers talk about three thousand years of the North Coast at the Experience Center.", photo: md("m12"), alt: "A carved Roman relief" },
+        { title: "Coast talks", body: "Historians and writers talk about three thousand years of the North Coast at the Experience Center.", photo: md("m12"), alt: "A carved Roman relief" },
         { title: "Open studios", body: "Artists and makers open their workshops to visitors through the year.", photo: md("m10"), alt: "A vase on a spiral plaster stair" },
-        { title: "Music by the sea", body: "Live music on the marina quay as the sun sets, from local musicians to visiting ensembles.", photo: ph("ui-g-music"), alt: "Musicians playing in the evening" },
-        { title: "The Roman trail", body: "Guided walks through the site's history, from the fortress of Ramesses II to the Roman port, ending by the sea.", photo: md("m01"), alt: "A fragment of a Roman mosaic" },
+        { title: "Sea concerts", body: "Live music on the marina quay as the sun sets, from local musicians to visiting ensembles.", photo: ph("ui-g-music"), alt: "Musicians playing in the evening" },
+        { title: "Roman trail", body: "Guided walks through the site's history, from the fortress of Ramesses II to the Roman port, ending by the sea.", photo: md("m01"), alt: "A fragment of a Roman mosaic" },
       ] },
   },
 };

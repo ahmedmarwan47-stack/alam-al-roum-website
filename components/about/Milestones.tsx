@@ -5,8 +5,12 @@ import SectionTitle from "@/components/sections/SectionTitle";
 import Icon from "@/components/ui/Icon";
 import { milestones as M } from "@/lib/about/b-content";
 
-/** Figma "UI / Milestone" (10979:18571…): 400 wide, 15 ticks 24 apart from x 24, ticks 56 at rest → 136 at the focus. */
-const CARD = 400, TICKS = 15, TICK_X0 = 24, TICK_GAP = 25, LOW = 56, HIGH = 136;
+/**
+ * Figma "UI / Milestone" (10979:18571…): 400 wide, 15 ticks 24 apart from x 24, ticks 56 at rest → 136 at the focus.
+ * From lg up each milestone is 540 wide (29 Oct review), its ticks 34 apart, so the 15 still span it.
+ */
+const CARD = 400, CARD_LG = 540, TICKS = 15, TICK_X0 = 24, TICK_GAP = 25, TICK_GAP_LG = 35, LOW = 56, HIGH = 136;
+const isLg = () => window.innerWidth >= 1024;
 /** Half-width of the tick wave (px); Figma's 60 px gutter, where 2025 starts (the content edge on wider screens). */
 const SPREAD = 190, GUTTER = 60;
 const N = M.items.length;
@@ -17,14 +21,14 @@ function Milestone({ i, active, onPick }: { i: number; active: boolean; onPick: 
   return (
     // a click on a faded milestone brings it into focus (a pointer shortcut; the year buttons above are the keyboard way)
     <div data-ms aria-hidden={!active} onClick={() => !active && onPick(i)}
-      className={`relative flex w-[400px] flex-none flex-col gap-10 ${active ? "" : "cursor-pointer"}`}>
-      {/* the line: 268 tall at rest, 632 when in focus (Figma) — drawn at 632 and scaled */}
-      <span data-ms-line className="absolute left-0 top-0 h-[632px] w-px origin-top bg-deepsea-500" style={{ transform: `scaleY(${268 / 632})` }} />
+      className={`relative flex w-[400px] flex-none flex-col gap-10 lg:w-[540px] ${active ? "" : "cursor-pointer"}`}>
+      {/* the line: 268 tall at rest, 632 when in focus (Figma; 712 from lg, for the wider photo) — drawn full and scaled */}
+      <span data-ms-line className="absolute left-0 top-0 h-[632px] w-px lg:h-[712px] origin-top bg-deepsea-500" style={{ transform: `scaleY(${268 / 632})` }} />
       <div className="flex flex-col gap-2 pl-4">
         <span className="t-text d-56 leading-[1.07] text-deepsea-500">{m.year}</span>
         <span className="t-text x-16 text-limestone-800">{m.title}</span>
       </div>
-      <div className="flex h-[136px] items-center gap-6 pl-6" aria-hidden>
+      <div className="flex h-[136px] items-center gap-6 pl-6 lg:gap-[34px]" aria-hidden>
         {Array.from({ length: TICKS }, (_, k) => <i key={k} data-ms-tick className="block h-[136px] w-px flex-none origin-center bg-deepsea-500" />)}
       </div>
       <div data-ms-detail className="flex flex-col gap-6 px-6 opacity-0">
@@ -68,10 +72,11 @@ export default function Milestones() {
     const ticks = cards.map((c) => gsap.utils.toArray<HTMLElement>("[data-ms-tick]", c));
     const state = { f: 0 };   // the milestone in focus, as a float 0 … n-1 while the rail glides
     const paint = () => {
-      const f = state.f, fx = f * CARD + CARD / 2;
+      const lg = isLg(), full = lg ? 712 : 632, C = lg ? CARD_LG : CARD, gap = lg ? TICK_GAP_LG : TICK_GAP, spread = SPREAD * C / CARD;
+      const f = state.f, fx = f * C + C / 2;
       // lg: 2025 at the 60 px gutter (wider than 1512, on the 1392 content edge like every section) → 2030 in the
       // centre; where only one milestone fits (phones, tablets) the one in focus stays centred the whole way
-      const W = t.clientWidth, x0 = W < 2.5 * CARD ? W / 2 - CARD / 2 : Math.max(GUTTER, (W - 1392) / 2), x1 = W / 2 - ((N - 1) * CARD + CARD / 2);
+      const W = t.clientWidth, x0 = W < 2.5 * C ? W / 2 - C / 2 : Math.max(GUTTER, (W - 1392) / 2), x1 = W / 2 - ((N - 1) * C + C / 2);
       r.style.transform = `translate3d(${x0 + (x1 - x0) * (f / (N - 1))}px,0,0)`;
       cards.forEach((c, i) => {
         const near = Math.max(0, 1 - Math.abs(i - f));                 // 1 in focus → 0 one step away
@@ -79,9 +84,9 @@ export default function Milestones() {
         const det = c.querySelector<HTMLElement>("[data-ms-detail]")!, line = c.querySelector<HTMLElement>("[data-ms-line]")!;
         const d = Math.max(0, 1 - Math.abs(i - f) * 2);                 // the detail only for the one in focus
         det.style.opacity = String(d); det.style.transform = `translateY(${(1 - d) * 24}px)`;
-        line.style.transform = `scaleY(${(268 + (632 - 268) * d) / 632})`;
+        line.style.transform = `scaleY(${(268 + (full - 268) * d) / full})`;
         ticks[i].forEach((tk, k) => {
-          const x = i * CARD + TICK_X0 + k * TICK_GAP, q = (x - fx) / SPREAD;
+          const x = i * C + TICK_X0 + k * gap, q = (x - fx) / spread;
           tk.style.transform = `scaleY(${(LOW + (HIGH - LOW) * Math.exp(-q * q)) / HIGH})`;
         });
       });

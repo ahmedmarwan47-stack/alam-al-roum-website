@@ -23,7 +23,7 @@ export default function SingleHero({ data: H }: { data: SingleHeroData }) {
     return () => { intro.kill(); t.scrollTrigger?.kill(); t.kill(); };
   }, []);
   return (
-    <section ref={wrap} data-hero className="relative flex h-[67svh] min-h-[540px] flex-col justify-end overflow-hidden bg-deepsea-900 pb-6 pt-[108px] text-limestone-50 md:pb-16">
+    <section ref={wrap} data-hero data-nav="light" className="relative flex h-[67svh] min-h-[540px] flex-col justify-end overflow-hidden bg-deepsea-900 pb-6 pt-[108px] text-limestone-50 md:pb-16">
       <div ref={media} data-reveal-img className="absolute inset-0 origin-top">
         {H.video
           ? <video className="h-full w-full object-cover" src={H.video} poster={H.photo} autoPlay muted loop playsInline aria-hidden />
