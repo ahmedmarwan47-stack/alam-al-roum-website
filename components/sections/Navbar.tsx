@@ -15,8 +15,9 @@ const heroOf = (bar: HTMLElement) => document.querySelector<HTMLElement>("[data-
 
 /**
  * Fixed glass bar (a Limestone gradient over a backdrop blur, `.nav-glass`), so the hero's photo or film shows
- * through it. Over a full-bleed photo or film hero (`data-nav="light"`: Home, the single pages) the bar is all but
- * clear instead (`.nav-veil`, 29 Oct review) and its MENU and logo turn Limestone. It stays put until the hero has scrolled past it (pinned heroes included), then hides while scrolling
+ * through it. Wherever it sits over a photo, a film or a dark band (`data-nav="light"` sections, or any section whose
+ * own background is dark: the community band, galleries, events) the bar is all but clear instead (`.nav-veil`, a
+ * deep blur, 29 Oct review) and its MENU and logo turn Limestone; over light sections it is the frosted Limestone bar. It stays put until the hero has scrolled past it (pinned heroes included), then hides while scrolling
  * down and returns on the way up, with a hairline once it sits over the page. MENU opens the side menu (Figma "Menu"
  * 11012:14922), whose CLOSE takes MENU's exact place.
  */
@@ -27,10 +28,21 @@ export default function Navbar() {
   useEffect(() => {
     const el = bar.current!;
     let last = window.scrollY;
+    // what the bar sits over, sampled at its centre: a marked media section, or the nearest painted background if dark
+    const dark = () => {
+      const under = document.elementsFromPoint(window.innerWidth / 2, BAR_H / 2).find((n) => !el.contains(n) && !n.closest("[data-site-menu]"));
+      if (!under) return false;
+      if (under.closest("[data-nav=light]")) return true;
+      for (let n: Element | null = under; n && n !== document.body; n = n.parentElement) {
+        const c = getComputedStyle(n).backgroundColor.match(/[\d.]+/g)?.map(Number);
+        if (c && (c.length < 4 || c[3] > 0.5)) return (0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]) / 255 < 0.4;
+      }
+      return false;
+    };
     const on = () => {
       const y = window.scrollY, hero = heroOf(el);
       const past = !hero || hero.getBoundingClientRect().bottom <= BAR_H;
-      el.dataset.over = past ? "page" : hero?.closest("[data-nav=light]") || hero?.querySelector("[data-nav=light]") ? "media" : "hero";
+      el.dataset.over = dark() ? "media" : past ? "page" : "hero";
       el.style.transform = past && y > last && y > 120 ? "translateY(-100%)" : "translateY(0)";
       last = y;
     };

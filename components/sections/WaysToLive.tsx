@@ -21,7 +21,7 @@ function Row({ i, r, ghost }: { i: number; r: R; ghost?: boolean }) {
       <span className="h-11 w-11 flex-none" />
     </div>);
   return (
-    <Link href={`/experiences/${slugify(r.title)}`} data-row={i} className="group relative flex items-center gap-4 py-5 md:gap-6 lg:gap-0 lg:px-8 lg:py-8">
+    <Link href={`/experiences/${slugify(r.title)}`} data-row={i} className="group relative flex items-center gap-4 py-5 transition-colors duration-500 [transition-timing-function:var(--ease-site)] md:gap-6 lg:gap-0 lg:px-8 lg:py-8 lg:hover:bg-deepsea-500 lg:hover:text-limestone-50">
       {/* below lg there is no cursor to carry the photo, so each row shows its own; from lg the copy column dissolves
           (display: contents) and number, title and body are the row's own flex items, as in Figma */}
       {/* (the span, not the img, carries lg:hidden: globals.css sets img { display: block } outside any layer) */}
@@ -30,11 +30,11 @@ function Row({ i, r, ghost }: { i: number; r: R; ghost?: boolean }) {
         <img src={r.photo} alt="" loading="lazy" className="h-full w-full object-cover" />
       </span>
       <span className="flex min-w-0 flex-1 flex-col gap-1 lg:contents">
-        <span className="t-label l-14 text-limestone-800 transition-colors duration-300 group-hover:text-teal-600 lg:w-[120px] lg:flex-none">{num}</span>
-        <span className="lg:flex-[0_0_42%]"><RevealText as="h3" text={r.title} className="t-heading hd-32" /></span>
-        <span data-body className="pt-1 text-limestone-800 lg:flex-1 lg:basis-auto lg:pl-10 lg:pt-0"><RevealText text={r.body} className="t-body b-16" delay={0.08} /></span>
+        <span className="t-label l-14 text-limestone-800 transition-colors duration-300 group-hover:text-teal-600 lg:w-[120px] lg:flex-none lg:group-hover:text-limestone-50">{num}</span>
+        <span className="transition-transform duration-500 [transition-timing-function:var(--ease-site)] lg:flex-[0_0_42%] lg:group-hover:translate-x-2.5"><RevealText as="h3" text={r.title} className="t-heading hd-32" /></span>
+        <span data-body className="pt-1 text-limestone-800 transition-[color,translate] duration-500 [transition-timing-function:var(--ease-site)] lg:flex-1 lg:basis-auto lg:pl-10 lg:pt-0 lg:group-hover:translate-x-2.5 lg:group-hover:text-limestone-50"><RevealText text={r.body} className="t-body b-16" delay={0.08} /></span>
       </span>
-      <span className="grid h-11 w-11 flex-none place-items-center rounded-full border border-limestone-600 transition-[background-color,border-color,color,transform] duration-500 [transition-timing-function:var(--ease-btn)] group-hover:border-deepsea-500 group-hover:bg-deepsea-500 group-hover:text-limestone-50 group-hover:-rotate-45">
+      <span className="grid h-11 w-11 flex-none place-items-center rounded-full border border-limestone-600 transition-[background-color,border-color,color,transform] duration-500 [transition-timing-function:var(--ease-btn)] group-hover:border-deepsea-500 group-hover:bg-deepsea-500 group-hover:text-limestone-50 group-hover:-rotate-45 lg:group-hover:border-limestone-50 lg:group-hover:bg-transparent">
         <Icon name="arrow-right-01-sharp" size={18} /></span>
     </Link>);
 }
@@ -44,7 +44,9 @@ function Row({ i, r, ghost }: { i: number; r: R; ghost?: boolean }) {
  * that row (centred on the row, in the open space between the title and the description) and only leans a few pixels
  * toward the cursor, a damped magnet, rather than following it. Moving to another row glides it to that row's spot.
  * Text the photo covers is redrawn in Tropical Teal/200 through a copy of the list clipped to the photo's rectangle.
- * Below lg (touch, no cursor) each row shows its photo as a thumbnail instead.
+ * The hovered row itself turns Deep Sea with Limestone text, its title and description easing 10 px in, and the arrow
+ * chip becomes a Limestone ring (Figma Ways to Live hover state). Below lg (touch, no cursor) each row shows its photo
+ * as a thumbnail instead.
  */
 export default function WaysToLive() {
   const rows = waysToLive.rows as R[];
