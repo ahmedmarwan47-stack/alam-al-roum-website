@@ -21,17 +21,22 @@ const fw = (w: number) => `min(${(w / FW) * 100}%, ${w}px)`;
  */
 const DOME = { below: { "--t": fy(1060), "--r": "14vmax" }, risen: { "--t": fy(560), "--r": "79.37vmax" }, cover: { "--t": fy(-1700), "--r": "145.5vmax" } };
 const domeStyle = { ...DOME.below, clipPath: "circle(var(--r) at 50% calc(var(--t) + var(--r)))" } as React.CSSProperties;
+/**
+ * The Greatness dome in one continuous move (29 Oct review: the two linear legs, rise then cover, met with a sudden
+ * change of speed). Its top edge and radius follow one quadratic curve from below the frame, past the risen state,
+ * to covering it, driven by a single eased progress, so the expansion only ever speeds up and slows down smoothly.
+ */
+const T0 = 1060 / FH * 100, T1 = 560 / FH * 100, T2 = -1700 / FH * 100, R0 = 14, R1 = 79.37, R2 = 145.5;
+const bez = (a: number, b: number, c: number, p: number) => (1 - p) * (1 - p) * a + 2 * (1 - p) * p * b + p * p * c;
+const domeAt = (el: HTMLElement, p: number) => {
+  el.style.setProperty("--t", `${bez(T0, T1, T2, p)}%`);
+  el.style.setProperty("--r", `${bez(R0, R1, R2, p)}vmax`);
+};
 /** Each state change in the Figma prototype: Smart Animate 1.2 s on the slideWipe curve. */
 // each move overlaps the next a little (STEP < MOVE) and runs linear with the scroll; HOLD is a reading rest
 // (timeline seconds ≈ viewports of scroll) on the two states that carry copy
 const STEP = 1.0, MOVE = 1.2, HOLD = 0.6;
 
-/** Offset of `el` inside `stop`, ignoring transforms (offsetLeft/Top chain). */
-const off = (el: HTMLElement, stop: HTMLElement) => {
-  let x = 0, y = 0, n: HTMLElement | null = el;
-  while (n && n !== stop) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent as HTMLElement | null; }
-  return { x, y };
-};
 
 /**
  * The Story, after the Figma component set "Motion Study · The Story (dome + scattered words)" (10673:8318):
@@ -42,8 +47,9 @@ const off = (el: HTMLElement, stop: HTMLElement) => {
  *    one block (the site's text entrance), and the three photos rise a little into place. The Figma study's scattered
  *    words, flying in from every side before gathering, were dropped (28 Oct review: too much movement), and with
  *    them one viewport of the pin.
- *  4 Greatness Rises — a second dome, cut from the Greatness photo, rises with the word "The Sea".
- *  5 Greatness — it covers the frame, the word settles above "Greatness Is What Remains" and the body.
+ *  4 Greatness — a second dome, cut from the Greatness photo, rises and widens until it covers the frame in one smooth
+ *    move; only then does the copy blur in, in place: the word "The Sea", "Greatness Is What Remains" and the body
+ *    (29 Oct review: the word no longer rides the dome or travels across the frame).
  * Replaces the static About frames "The Story · Culture" and "The Story · About greatness".
  */
 export default function TheStory() {
@@ -55,21 +61,20 @@ export default function TheStory() {
     const photos = $$("[data-photo]");
     const rm = reducedMotion(), D = rm ? 0.001 : MOVE, ease = "none";
     const H = () => st.clientHeight;
-    // the Greatness word flies from the dome to its place above the headline (a measured FLIP)
-    const gw = $("[data-g-word]"), slot = $("[data-g-slot]");
+    const gDome = $("[data-dome=greatness]"), gDome$ = { p: 0 };
     // each dome's word blurs in as one block while its dome rises (opacity and blur only: its position is the dome's)
     const WORD_FROM = { opacity: 0, filter: "blur(12px)" }, WORD_TO = { opacity: 1, filter: "blur(0px)" };
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { duration: D, ease } });
       // state 1, set inside the timeline so a resize (invalidateOnRefresh) re-measures from a clean start
-      tl.set([$("[data-dome=culture]"), $("[data-dome=greatness]")], DOME.below, 0)
+      tl.set($("[data-dome=culture]"), DOME.below, 0)
+        .set(gDome$, { p: 0, onComplete: () => domeAt(gDome, 0) }, 0)
         .set($("[data-c-word]"), { top: fy(1180) }, 0)
         .set($("[data-h-text]"), { y: 0, autoAlpha: 1 }, 0)
         .set([$("[data-c-head]"), $("[data-c-body]")], BLOCK_FROM, 0)
         .set(photos, { y: 60, autoAlpha: 0 }, 0)
-        .set(gw, { top: fy(1180), xPercent: -50, x: 0, y: 0 }, 0)
-        .set($$("[data-g-text]"), { y: () => H() * 0.4, autoAlpha: 0 }, 0)
+        .set($$("[data-g-text]"), BLOCK_FROM, 0)
         .set($("[data-g-dim]"), { autoAlpha: 0 }, 0);
       let t = 0;
       // 1 → 2 · Culture rises
@@ -90,17 +95,13 @@ export default function TheStory() {
         .to(photos, { y: 0, autoAlpha: 1, duration: BLOCK, stagger: { amount: rm ? 0 : 0.16 } }, t + IN);
       // reading hold: the headline, paragraph and photos rest, fully in place, before Greatness rises
       t = tl.duration() + (rm ? 0 : HOLD);
-      // 3 → 4 · Greatness rises
-      tl.to($("[data-dome=greatness]"), DOME.risen, t)
-        .to(gw, { top: fy(640) }, t)
-        .fromTo(gw, WORD_FROM, { ...WORD_TO, duration: D * 0.5 }, t + D * 0.3);
-      // 4 → 5 · Greatness covers; the word settles over the headline
-      t += STEP;
-      tl.to($("[data-dome=greatness]"), DOME.cover, t)
-        .to($("[data-g-dim]"), { autoAlpha: 1 }, t)
-        .to(gw, { x: () => off(slot, st).x - off(gw, st).x + gw.offsetWidth / 2, y: () => off(slot, st).y - off(gw, st).y }, t)
-        .to($$("[data-g-text]"), { y: 0, autoAlpha: 1, stagger: rm ? 0 : 0.08 }, t + (rm ? 0 : 0.1))
-        .to({}, { duration: rm ? 0.15 : HOLD }, t + D);     // reading hold on the closing copy before the pin releases
+      // 3 → 4 · Greatness: the dome rises and covers in one eased move, the shade deepens over its second half, then the
+      // word, headline and body blur in where they rest
+      const GD = rm ? 0.001 : STEP + D;
+      tl.to(gDome$, { p: 1, duration: GD, ease: "sine.inOut", onUpdate: () => domeAt(gDome, gDome$.p) }, t)
+        .to($("[data-g-dim]"), { autoAlpha: 1, duration: GD * 0.5 }, t + GD * 0.5)
+        .to($$("[data-g-text]"), { ...BLOCK_TO, duration: BLOCK, stagger: rm ? 0 : 0.12 }, t + GD - (rm ? 0 : 0.1))
+        .to({}, { duration: rm ? 0.15 : HOLD });     // reading hold on the closing copy before the pin releases
 
       // about one viewport of scroll per timeline second; below lg 60 % of that (~3.5 screens rather than 5.9), so a phone
       // is not held long on one section
@@ -158,9 +159,8 @@ export default function TheStory() {
           <img src={G.photo} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
           <div data-g-dim className="absolute inset-0 bg-gradient-to-b from-deepsea-950/15 to-deepsea-950/70" />
         </div>
-        <span data-g-word data-no-blur className="absolute left-1/2 t-accent hd-56 text-limestone-50" style={{ top: fy(1180) }}>{G.word}</span>
         <div className="absolute left-[var(--gutter)] right-[var(--gutter)] flex flex-col text-limestone-50" style={{ top: fy(430) }}>
-          <span data-g-slot aria-hidden className="invisible self-start t-accent hd-56">{G.word}</span>
+          <span data-g-text data-no-blur className="self-start t-accent hd-56">{G.word}</span>
           <h2 className="mt-[30px] flex flex-col">
             <span data-g-text className="t-heading hd-80 normal-case!">{G.line}</span>
             {G.accent && <span data-g-text className="t-accent hd-56">{G.accent}</span>}
