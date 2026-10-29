@@ -15,7 +15,7 @@ export default function Hero() {
           <RevealText as="h1" segs={hero.title} onLoad delay={0.75} className="t-text x-80 capitalize md:whitespace-nowrap" />
           {/* a comfortable measure: two even lines of about 65 characters on desktop */}
           <RevealText text={hero.body} onLoad delay={1.05} className="t-body b-18 wrap-balance max-w-[560px]" />
-          <div className="pt-1"><Button label={hero.cta} href="/contact" size={64} variant="primary" /></div>
+          <div className="pt-1"><Button label={hero.cta} href="/contact" size={64} variant="light" /></div>
         </div>
         <div className="hidden flex-col items-end gap-[10px] md:flex">
           {/* eslint-disable-next-line @next/next/no-img-element */}

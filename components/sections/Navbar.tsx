@@ -28,17 +28,20 @@ export default function Navbar() {
   useEffect(() => {
     const el = bar.current!;
     let last = window.scrollY;
-    // what the bar sits over, sampled at its centre: a marked media section, or the nearest painted background if dark
-    const dark = () => {
-      const under = document.elementsFromPoint(window.innerWidth / 2, BAR_H / 2).find((n) => !el.contains(n) && !n.closest("[data-site-menu]"));
-      if (!under) return false;
-      if (under.closest("[data-nav=light]")) return true;
-      for (let n: Element | null = under; n && n !== document.body; n = n.parentElement) {
-        const c = getComputedStyle(n).backgroundColor.match(/[\d.]+/g)?.map(Number);
+    // what the bar sits over, sampled at its left, centre and right (MENU, logo, button): dark only if every point is
+    // over a marked media section, a visible photo / film / canvas, or a dark painted background
+    const darkAt = (x: number) => {
+      for (const n of document.elementsFromPoint(x, BAR_H / 2)) {
+        if (el.contains(n) || n.closest("[data-site-menu]")) continue;
+        if (n.closest("[data-nav=light]")) return true;
+        const cs = getComputedStyle(n);
+        if (/^(IMG|VIDEO|CANVAS)$/.test(n.tagName) && +cs.opacity > 0.5) return true;
+        const c = cs.backgroundColor.match(/[\d.]+/g)?.map(Number);
         if (c && (c.length < 4 || c[3] > 0.5)) return (0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]) / 255 < 0.4;
       }
       return false;
     };
+    const dark = () => [0.1, 0.5, 0.9].every((f) => darkAt(window.innerWidth * f));
     const on = () => {
       const y = window.scrollY, hero = heroOf(el);
       const past = !hero || hero.getBoundingClientRect().bottom <= BAR_H;
