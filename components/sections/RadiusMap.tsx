@@ -77,10 +77,11 @@ export default function RadiusMap() {
     return () => { off(); tl.kill(); ro.disconnect(); };
   }, []);
   return (
-    <div ref={root} data-flight-map className="relative overflow-hidden rounded-[20px] bg-deepsea-800 [--rm-10:12px] [--rm-11:12px] [--rm-9:12px] lg:[--rm-10:10px] lg:[--rm-11:11px] lg:[--rm-9:9px]" style={{ aspectRatio: "696 / 720", containerType: "inline-size" }}>
-      {/* Semi-real basemap: Sentinel-2 cloudless 2016 by EOX (CC BY 4.0), azimuthal equidistant on 27.90E 31.20N, 300 px = 3,300 km */}
+    <div ref={root} data-flight-map className="relative overflow-hidden rounded-[20px] bg-terracotta-500 [--rm-10:12px] [--rm-11:12px] [--rm-9:12px] lg:[--rm-10:10px] lg:[--rm-11:11px] lg:[--rm-9:9px]" style={{ aspectRatio: "696 / 720", containerType: "inline-size" }}>
+      {/* Terracotta basemap (29 Oct review, for the Deep Terracotta sections): land and sea from the plain map, a faint
+          relief from Sentinel-2 cloudless 2016 by EOX (CC BY 4.0); azimuthal equidistant on 27.90E 31.20N, 300 px = 3,300 km */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/images/basemap-semireal-v2.jpg" alt="" className="absolute inset-0 h-full w-full" />
+      <img src="/images/basemap-terracotta.jpg" alt="" className="absolute inset-0 h-full w-full" />
       <svg viewBox="0 0 696 720" className="absolute inset-0 h-full w-full">
         <defs>
           <mask id={mask} maskUnits="userSpaceOnUse" x="0" y="0" width="696" height="720">

@@ -45,7 +45,7 @@ export const milestones = {
       body: "Phase one begins and breaks ground. Site works begin along the 7.2 km shoreline as the first district takes shape." },
     { year: "2027", title: "Lagoons & infrastructure", photo: img("b-ms-lagoons.jpg"),
       body: "Roads, utilities and the swimmable lagoons advance, linking every district to the coast and the airport." },
-    { year: "2028", title: "Marina & golf", photo: img("b-ms-marina.jpg"),
+    { year: "2028", title: "Marina & golf", photo: img("b-ms-golf.jpg"),
       body: "The marina basin and the 18-hole championship golf course take shape along the sea, ready for first play." },
     { year: "2029", title: "First neighbourhoods", photo: img("b-ms-neighbourhoods.jpg"),
       body: "The first residential neighbourhoods near completion, with the town centre and beachfront opening nearby." },
