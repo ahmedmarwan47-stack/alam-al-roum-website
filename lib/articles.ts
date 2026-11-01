@@ -4,9 +4,7 @@
  *   header — tag · date (events: location · date), title, a two-line standfirst (`sub`, ~140–160 characters so it
  *            runs two lines in the 768 px header on desktop), Share via; no byline
  *   hero   — 1392 × 640
- *   body   — the key-takeaways panel (stories only: events have none, 29 Oct review), a captioned image, three
- *            paragraphs, a heading with a paragraph and a list, a callout (a pull quote or a row of key figures), a second captioned image, a
- *            second heading section, then a closing heading and paragraphs.
+ *   body   — titles, paragraphs and pictures only (1 Nov review): no lists, quotes, figures, takeaways or captions.
  * Figures come from the Alam Al Roum factsheet (2026) and the site; anything not in them is kept to plans and intentions.
  * Draft copy for the client to review — headlines, dates, venues and timings beyond the phase-one story are not from Figma.
  */
@@ -14,10 +12,10 @@ const md = (f: string) => `/images/media/${f}.jpg`;
 const ph = (f: string) => `/images/photo/${f}.jpg`;
 const ev = (f: string) => `/images/events/${f}.jpg`;
 
-export type Block = { h?: string; p?: string; list?: string[]; img?: string; caption?: string; quote?: string; cite?: string; figures?: [string, string][] };
+export type Block = { h?: string; p?: string; img?: string; caption?: string };   // `caption` is the picture's alt text
 export type Written = {
   tag: string; date: string; title: string; sub: string; hero: string;
-  takeaways?: string[]; body: Block[];
+  body: Block[];
 };
 
 const REGISTER = "Registered buyers will be the first to hear about new launches, site visits and progress updates. To register your interest, use the form on this site or call 16922.";
@@ -29,7 +27,6 @@ export const writtenStories: Record<string, Written> = {
     tag: "Construction", date: "Sun 9 Aug 2026", title: "Phase one construction begins on the coast",
     sub: "The first foundations are laid on the western edge of the bay, as Alam Al Roum moves from masterplan to ground and towards its first residents in 2030.",
     hero: md("m04"),
-    takeaways: ["Phase one construction started in August 2026.", "First handovers are planned for 2030.", "Phase one covers the beachfront and first lagoon districts."],
     body: [
       { img: md("m05"), caption: "Site works began along the western edge of the bay." },
       ...ps("Qatari Diar and the Egyptian government have marked the start of phase one at Alam Al Roum, a 20.58 million square metre city on Egypt's North Coast. Site works began in August 2026 along the western edge of the bay.",
@@ -37,8 +34,6 @@ export const writtenStories: Record<string, Written> = {
         "Work is sequenced so that each district opens complete. Roads, water and power arrive before the homes they serve, and the promenade is built with the first neighbourhoods rather than after them."),
       { h: "What phase one includes" },
       { p: "Phase one focuses on the beachfront, where the city meets its 7.2 kilometre shoreline. It brings together the first neighbourhoods, the infrastructure that serves them, and the public spaces that will make the coast feel lived in from day one." },
-      { list: ["Beachfront homes and the first lagoon districts", "Core roads, utilities and the coastal promenade", "The first swimmable lagoons", "A town centre with everyday retail and dining"] },
-      { figures: [["20.58M sqm", "Total land area of the city"], ["7.2 km", "Mediterranean shoreline"], ["2030", "First handovers planned"]] },
       { img: ph("ui-lagoon-clear"), caption: "The first swimmable lagoons are part of phase one." },
       { h: "How the site is being built" },
       ...ps("The site team works from a single digital model of the city, so surveys, drawings and progress records stay in step. Precision matters most at the water's edge, where lagoon basins, levels and the promenade meet.",
@@ -51,7 +46,6 @@ export const writtenStories: Record<string, Written> = {
     tag: "Partnership", date: "Tue 18 Nov 2025", title: "Agreement signed for a new coastal city",
     sub: "Qatari Diar and the Egyptian government commit to Alam Al Roum, a 20.58 million square metre city on the North Coast, 14 kilometres from Marsa Matrouh.",
     hero: md("m05"),
-    takeaways: ["Qatari Diar and the Egyptian government signed the land agreement for Alam Al Roum.", "The city covers 20.58 million square metres, with 7.2 km of Mediterranean shoreline.", "Masterplanning starts immediately, with construction to follow in 2026."],
     body: [
       { img: md("m04"), caption: "The bay at Alam Al Roum, seen from the air." },
       ...ps("Qatari Diar and the Egyptian government have signed the agreement that sets aside the land for Alam Al Roum, a fully integrated coastal city on Egypt's North Coast, 14 kilometres from Marsa Matrouh.",
@@ -59,8 +53,6 @@ export const writtenStories: Record<string, Written> = {
         "For Qatari Diar, it adds to more than two decades of investment in Egypt. The developer, backed by the Qatar Investment Authority, has delivered landmark destinations across five continents."),
       { h: "Why this coast" },
       { p: "The site holds one of the most remarkable stretches of the Mediterranean in Egypt: 7.2 kilometres of open shoreline, water that turns from turquoise to deep blue within a few hundred metres, and a history that reaches back to the sailors who once used this coast to find their way home." },
-      { list: ["14 km from Marsa Matrouh and 40 km from Ras El Hekma", "Three to four hours by air from Doha, Rome, Dubai, Riyadh, London and Paris", "Reached by the International Coast Road and two airports, with high-speed rail planned"] },
-      { quote: "A city built for permanence, not for a season.", cite: "Alam Al Roum" },
       { img: ph("ui-g-coast"), caption: "The North Coast west of Marsa Matrouh, where the city will meet the sea." },
       { h: "A partnership for the long term" },
       ...ps("The agreement sets out a shared commitment to a city that keeps growing across generations, bringing homes, hotels, workplaces and culture together around the water.",
@@ -73,7 +65,6 @@ export const writtenStories: Record<string, Written> = {
     tag: "Progress", date: "Mon 16 Mar 2026", title: "The masterplan for Alam Al Roum is unveiled",
     sub: "A city that runs from the Mediterranean inland, shaped around lagoons, open space and the people who will live here, with 85 % of its land left open.",
     hero: md("m06"),
-    takeaways: ["85 % of the city is open space; buildings cover 15 %.", "22 km of open-to-sea lagoon shoreline joins the 7.2 km beach.", "Eleven anchors, from an 18-hole golf course to an international marina."],
     body: [
       { img: ph("masterplan-aerial"), caption: "The masterplan, from the shore to the golf course inland." },
       ...ps("The masterplan for Alam Al Roum has been unveiled. It extends from the Mediterranean inward, so that land and water meet throughout the city rather than only at its edge.",
@@ -81,8 +72,6 @@ export const writtenStories: Record<string, Written> = {
         "The plan is organised along a central axis that runs from the marina and its lighthouse inland, with neighbourhoods arranged around lagoons on either side."),
       { h: "The anchors of the plan" },
       { p: "Eleven places give the city its structure, each placed where it serves the neighbourhoods around it." },
-      { list: ["An 18-hole golf course and town centres", "An open-sea lagoon with its promenade, and neighbourhood swimmable lagoons", "A commercial boulevard and an international and local marina", "A 7 km beach and promenade", "A free zone, a polo and equestrian club, an events centre and an expo centre"] },
-      { figures: [["85%", "Open space"], ["15%", "Built footprint"], ["22 km", "Open-to-sea lagoon shoreline"]] },
       { img: md("m09"), caption: "The plan keeps public life close to the water." },
       { h: "Water at the centre" },
       ...ps("Lagoons carry the sea into the city. Some are open to the Mediterranean, with a 22 kilometre promenade along their edge; others are calm, swimmable lagoons within the neighbourhoods, covering 850,000 square metres.",
@@ -95,7 +84,6 @@ export const writtenStories: Record<string, Written> = {
     tag: "Technology", date: "Thu 24 Sep 2026", title: "New construction technology on site",
     sub: "Automated survey, layout and monitoring tools help phase one move with precision, giving designers, engineers and contractors one shared picture of the site.",
     hero: md("m10"),
-    takeaways: ["Digital survey and automated layout tools support phase one works.", "Site data is shared across the design and construction teams.", "The aim is accuracy, safety and less waste, not speed alone."],
     body: [
       { img: md("m02"), caption: "Precision on site begins in the model." },
       ...ps("As phase one moves forward, the site team is using automated tools for surveying, setting out and monitoring, so that what is built matches the design closely from the first foundation.",
@@ -103,8 +91,6 @@ export const writtenStories: Record<string, Written> = {
         "The same tools record each stage of the work as it happens, so any difference between design and site is found early, while it is still simple to correct."),
       { h: "Where it helps most" },
       { p: "The tools are used where precision matters most: the edges of the lagoons, the levels of roads and utilities, and the long promenade along the shore." },
-      { list: ["Drone and laser surveys of the site", "Automated setting out for roads and utilities", "Progress tracking against the design model", "Fewer reworks, less material waste"] },
-      { quote: "Precision in the ground makes the finished spaces feel effortless." },
       { img: md("m06"), caption: "Arches and stairs are set out digitally before they are built." },
       { h: "Safer, cleaner sites" },
       ...ps("Drone surveys reduce the time teams spend in hard-to-reach areas, and automated setting out means fewer people working beside heavy machinery.",
@@ -117,7 +103,6 @@ export const writtenStories: Record<string, Written> = {
     tag: "Health", date: "Tue 13 Oct 2026", title: "Planning healthcare for a year-round city",
     sub: "Clinics and wellness close to every neighbourhood, planned with the homes they serve, for residents who live at Alam Al Roum in every season of the year.",
     hero: md("m11"),
-    takeaways: ["Healthcare is planned into the masterplan from the start.", "Everyday care sits within reach of each neighbourhood.", "Wellness and longevity are part of the lifestyle offer."],
     body: [
       { img: ph("ui-v-lounger"), caption: "Rest is part of the plan." },
       ...ps("A city where people live all year needs care all year. Healthcare at Alam Al Roum is planned alongside the homes it serves, rather than added later.",
@@ -125,8 +110,6 @@ export const writtenStories: Record<string, Written> = {
         "Planning care from the start also means planning space for it: clinic sites, access for emergency vehicles and room to grow as the city's population does."),
       { h: "What is planned" },
       { p: "Healthcare sits within a broader focus on wellness and longevity that runs through the city's lifestyle offer." },
-      { list: ["Neighbourhood clinics for everyday care", "Wellness spaces linked to the beaches and lagoons", "Digital appointments and records for residents", "Walking and cycling routes that make daily movement easy"] },
-      { quote: "A city where people live all year needs care all year." },
       { img: md("m08"), caption: "Wellness here begins outdoors." },
       { h: "Wellness and longevity" },
       ...ps("Wellness and longevity are one of the city's lifestyle pillars. Coastal trails, swimmable lagoons and shaded streets make daily movement easy, and spas and studios sit alongside the clinics.",
@@ -139,7 +122,6 @@ export const writtenStories: Record<string, Written> = {
     tag: "Education", date: "Thu 22 Oct 2026", title: "Learning environments for families who stay",
     sub: "Nurseries and schools are planned within the neighbourhoods, so children can walk or cycle to class and grow up knowing the coast around them.",
     hero: md("m12"),
-    takeaways: ["Schools and nurseries are part of the masterplan.", "Neighbourhoods are planned so daily life, school included, is a short walk away.", "The coast's history becomes part of what children learn."],
     body: [
       { img: md("m10"), caption: "Learning spaces are planned around light and calm." },
       ...ps("Families who make Alam Al Roum their home will find education planned into the city from the beginning. Nurseries and schools sit within the neighbourhoods rather than at their edges.",
@@ -147,8 +129,6 @@ export const writtenStories: Record<string, Written> = {
         "A dedicated learning hub completes the network, with after-school clubs, languages and the arts for children, and courses for adults."),
       { h: "A setting to learn from" },
       { p: "The city sits on a coast with three thousand years of history. Its heritage, its water and its landscapes give children a setting to learn from outside the classroom." },
-      { list: ["Nurseries and schools within the neighbourhoods", "Safe walking and cycling routes", "Outdoor learning by the lagoons and the shore", "Cultural programmes rooted in the coast's history"] },
-      { figures: [["3,000+ yrs", "Of history on this coast"], ["85%", "Of the city kept as open space"], ["1", "Dedicated learning hub"]] },
       { img: md("m01"), caption: "The coast's Roman past is close at hand." },
       { h: "Learning beyond the classroom" },
       ...ps("The shore, the lagoons and the Roman archaeological trail give teachers places to take lessons outside, from marine science by the water to history on the trail.",
@@ -161,7 +141,6 @@ export const writtenStories: Record<string, Written> = {
     tag: "Heritage", date: "Sat 4 Jul 2026", title: "The lighthouse that guided Rome home",
     sub: "Long before the first stone was laid, this coast was a place sailors steered by. A new lighthouse at the head of the marina carries that story on.",
     hero: md("m01"),
-    takeaways: ["Ships have used this stretch of coast to find their way for millennia.", "The city's name and lighthouse honour that history.", "A new lighthouse will stand at the head of the marina."],
     body: [
       { img: ph("ui-lighthouse-marina"), caption: "The lighthouse at the head of the marina, as designed." },
       ...ps("For centuries, sailors crossing the eastern Mediterranean looked for the lights of this coast. Paraetonium, the ancient port near today's Marsa Matrouh, was a harbour where Romans, Greeks and Egyptians met.",
@@ -169,8 +148,6 @@ export const writtenStories: Record<string, Written> = {
         "Ships still pass this coast on their way between the eastern and western Mediterranean, and the lights of the shore still mean the same thing: you are close."),
       { h: "A lighthouse for a new city" },
       { p: "At the head of the marina, on the city's main axis, a contemporary lighthouse will mark the way home again: a white twin-blade tower around a glazed lantern, visible from the water and from the boulevard inland." },
-      { list: ["Ramesses II built a fortress at Zawiyet Umm el-Rakham, c. 1270 BC", "Alexander the Great passed through Paraetonium on his way to Siwa, 331 BC", "Mark Antony retreated to Paraetonium after Actium, 31 BC"] },
-      { quote: "The city is built for those who return, as the coast always has been." },
       { img: md("m12"), caption: "Roman and earlier traces still shape the character of the coast." },
       { h: "A landmark on the axis" },
       ...ps("The lighthouse stands where the marina meets the city's central axis, so it is seen from the water on arrival and from the boulevard inland.",
@@ -183,7 +160,6 @@ export const writtenStories: Record<string, Written> = {
     tag: "Design", date: "Thu 30 Jul 2026", title: "Building with limestone and light",
     sub: "A Mediterranean architecture of pale stone, deep shade and open courtyards, shaped by the climate of the coast and designed to step back from the sea.",
     hero: md("m02"),
-    takeaways: ["Limestone and plaster set the city's palette.", "Shade, courtyards and breezes do the work of cooling.", "Architecture stays quiet so the sea and the light lead."],
     body: [
       { img: md("m06"), caption: "Pale plaster and arches hold the light through the day." },
       ...ps("The architecture of Alam Al Roum begins with the material of the coast. Pale limestone, sculptural plaster and natural timber give the city a warmth that changes through the day.",
@@ -191,8 +167,6 @@ export const writtenStories: Record<string, Written> = {
         "The palette is kept deliberately narrow: limestone, plaster, timber and the blue of the water. Each neighbourhood feels part of one city, while its streets and courtyards keep their own character."),
       { h: "Designed for the climate" },
       { p: "Climate-responsive design is one of the city's six sustainability commitments. Here it is also what makes the spaces pleasant to live in." },
-      { list: ["Deep shade and arcades along the streets", "Courtyards that hold cool air", "Orientation that catches the sea breeze", "Natural materials that weather well"] },
-      { quote: "The architecture is meant to step back, to frame the water, the light and the life of the city." },
       { img: ph("ui-g-colonnade"), caption: "Arches frame the sea and shade the walk." },
       { h: "Made to weather well" },
       ...ps("Natural materials age with the coast rather than against it. Stone and lime plaster soften with salt and sun, and timber is chosen for shade, not decoration.",
@@ -205,7 +179,6 @@ export const writtenStories: Record<string, Written> = {
     tag: "Living", date: "Fri 14 Aug 2026", title: "A city that does not close",
     sub: "Alam Al Roum is planned for every season, not only for summer: homes, schools, culture and sport that keep the city open and lively all year.",
     hero: md("m03"),
-    takeaways: ["Homes, services and culture are planned for year-round life.", "Hotels and residences share the same streets.", "Events, sport and dining keep the city lively beyond summer."],
     body: [
       { img: ph("ui-v-pavilion-dusk"), caption: "Evening light in the cooler months." },
       ...ps("Many coastal destinations empty when summer ends. Alam Al Roum is planned the other way round: as a city where people live, work and stay in every season.",
@@ -213,8 +186,6 @@ export const writtenStories: Record<string, Written> = {
         "Hotels and residences share the same streets, so the city's restaurants, spas and beach clubs have neighbours in every season, not only guests."),
       { h: "Life in every season" },
       { p: "The Mediterranean climate gives the coast mild winters and long, bright springs and autumns. The city is designed to make the most of each." },
-      { list: ["Golf, sailing and the beaches in the cooler months", "Dining and culture along the marina all year", "Events and conferences at the expo and events centres", "Hotels and residences that stay open"] },
-      { figures: [["365", "Days a year, open"], ["3,500+", "Hotel rooms planned"], ["2–5 hrs", "By air from Europe and the GCC"]] },
       { img: md("m09"), caption: "Evenings move indoors and out with the seasons." },
       { h: "A city with neighbours" },
       ...ps("Year-round life depends on people who stay. Schools, clinics and workplaces in the neighbourhoods, and a free zone and business district nearby, give residents reasons to live here, not only to visit.",
@@ -227,7 +198,6 @@ export const writtenStories: Record<string, Written> = {
     tag: "Innovation", date: "Mon 7 Sep 2026", title: "Smart infrastructure is designed in from day one",
     sub: "Utilities, mobility and services are planned as one connected system, laid with the first roads so the city does not need to be dug up later.",
     hero: md("m07"),
-    takeaways: ["Infrastructure is planned as one connected network.", "Mobility layers include autonomous shuttles and micromobility.", "Data helps run water, energy and services efficiently."],
     body: [
       { img: ph("ui-g-boardwalk"), caption: "The boulevard runs from the marina and its lighthouse inland." },
       ...ps("As phase one works continue, the city's infrastructure is being planned as a single connected system, so that utilities, mobility and services can work together from the first day.",
@@ -235,8 +205,6 @@ export const writtenStories: Record<string, Written> = {
         "Shared service corridors carry water, power and data together, and are sized for the city at full growth rather than its first phase."),
       { h: "A multi-layered network" },
       { p: "Mobility is planned in layers, so each journey can take the simplest form." },
-      { list: ["The Loop, a continuous route linking every district, the marina and the town centres", "Autonomous shuttles and micromobility", "Cycling routes and pedestrian promenades", "Managed private-vehicle access"] },
-      { quote: "Laying networks with the first roads leaves room for technologies that do not exist yet." },
       { img: ph("ui-lighthouse-aerial"), caption: "The central axis runs from the marina inland." },
       { h: "Data that runs the city" },
       ...ps("Sensors on the water, energy and mobility networks help operators see how the city is working and respond early, from a leak in a pipe to a busy shuttle route.",
@@ -249,7 +217,6 @@ export const writtenStories: Record<string, Written> = {
     tag: "Sustainability", date: "Wed 23 Sep 2026", title: "Sustainability, embedded in every plan",
     sub: "Six commitments, from biodiversity protection to coastal resilience, shape every district, street and shoreline of the city as it is planned and built.",
     hero: md("m08"),
-    takeaways: ["Six sustainability commitments guide the masterplan.", "A water strategy manages every drop, from lagoons to landscape.", "85 % of the city remains open space."],
     body: [
       { img: md("m05"), caption: "Sand, water and shore: the city's first landscape." },
       ...ps("Sustainability at Alam Al Roum is not a separate project. It is built into the planning of the city through climate-responsive design, nature-led infrastructure and long-term stewardship.",
@@ -257,8 +224,6 @@ export const writtenStories: Record<string, Written> = {
         "Planning for sustainability from the start lets the city's form do much of the work: compact neighbourhoods, shaded streets and water close to every home."),
       { h: "Six commitments" },
       { p: "Each commitment shapes how the city is planned, built and run." },
-      { list: ["Biodiversity protection", "Water management", "Climate-responsive design", "Walkability", "Active mobility", "Coastal resilience"] },
-      { figures: [["85%", "Open space"], ["7.2 km", "Mediterranean shoreline"], ["850K sqm", "Swimmable lagoons"]] },
       { img: ph("ui-lagoon-clear"), caption: "Swimmable lagoons are part of the city's water strategy." },
       { h: "Water at the centre" },
       ...ps("A comprehensive water network manages resources across the destination, supporting the landscape and public spaces while improving environmental performance.",
@@ -271,7 +236,6 @@ export const writtenStories: Record<string, Written> = {
     tag: "Community", date: "Fri 9 Oct 2026", title: "Public spaces and cultural centres planned",
     sub: "Promenades, squares and cultural venues along the water and the central axis give residents and visitors a shared life in every season of the year.",
     hero: md("m09"),
-    takeaways: ["A 7 km beach promenade and 22 km of lagoon promenades.", "Town centres, an events centre and an expo centre.", "A polo and equestrian club and an 18-hole golf course."],
     body: [
       { img: ph("ui-g-boardwalk"), caption: "The marina promenade, the social heart of the city." },
       ...ps("A city is remembered by its public places. At Alam Al Roum, promenades, squares and cultural venues are planned to give residents and visitors a shared life all year.",
@@ -279,8 +243,6 @@ export const writtenStories: Record<string, Written> = {
         "Public space is planned first, so streets, squares and promenades connect rather than being left over between buildings."),
       { h: "Where the city gathers" },
       { p: "The masterplan places its civic and cultural anchors along the water and the main axis." },
-      { list: ["Town centres with everyday retail and dining", "The marina promenade, the social heart of the city", "An events centre and an international expo and convention centre", "A polo and equestrian club"] },
-      { figures: [["7 km", "Beach promenade"], ["22 km", "Lagoon promenades and beaches"], ["85%", "Of the city kept as open space"]] },
       { img: ph("ui-v-sculpture"), caption: "Art and culture are part of the public realm." },
       { h: "Culture in the open" },
       ...ps("Public art is planned along the beach and marina promenades, beginning with a new sculpture for the shore. Squares are designed with room for markets, music and outdoor screenings.",
@@ -297,7 +259,7 @@ export const writtenStories: Record<string, Written> = {
  */
 type EventDraft = {
   title: string; location: string; date: string; hero: string; sub: string;
-  about: string[]; programme: string[]; callout: Block; setting: { h: string; p: string[] };
+  about: string[]; programme: string[]; setting: { h: string; p: string[] };
   img: [string, string]; img2: [string, string]; attend?: string[]; past?: boolean;
 };
 const ATTEND = ["Places are limited. Register your interest on this site or call 16922 and the events team will confirm your invitation and the final timings.",
@@ -309,9 +271,6 @@ const event = (e: EventDraft): Written => ({
   body: [
     { img: e.img[0], caption: e.img[1] },
     ...ps(...e.about),
-    { h: e.past ? "What happened" : "The programme" },
-    { list: e.programme },
-    e.callout,
     { img: e.img2[0], caption: e.img2[1] },
     { h: e.setting.h },
     ...ps(...e.setting.p),
@@ -327,7 +286,6 @@ const events: EventDraft[] = [
       "Speakers will share what the land and the sea still tell us, and how that history shapes the city being built today.",
       "The symposium is the first in a planned series on the heritage of the North Coast, open to residents, students and guests."],
     programme: ["09:30 · Welcome and opening address", "10:00 · Morning talks on the ancient coast", "13:00 · Lunch in the courtyard", "14:30 · A walk along the planned Roman archaeological trail", "16:30 · Panel: heritage and the new city", "19:00 · Evening reception"],
-    callout: { figures: [["c. 1270 BC", "Ramesses II builds a fortress at Zawiyet Umm el-Rakham"], ["331 BC", "Alexander passes through Paraetonium on his way to Siwa"], ["31 BC", "Mark Antony retreats to Paraetonium after Actium"]] },
     img: [md("m12"), "Traces of the Roman coast."], img2: [ph("ui-expcenter-court"), "The Experience Center courtyard, where the day closes."],
     setting: { h: "Why this coast", p: ["Paraetonium, the ancient port near today's Marsa Matrouh, was a harbour where Egyptians, Greeks and Romans met. Its name survives in the stories of the coast, and its traces in the stone.",
       "Alam Al Roum, the landmark of the Romans, takes its name from that history. The symposium asks what it means to build a new city on such old ground."] } },
@@ -337,7 +295,6 @@ const events: EventDraft[] = [
       "Players and guests will spend a day on the greens and end it with dinner overlooking the water.",
       "The championship previews the golf community planned around the course: homes along the fairways, a clubhouse and an academy for players of every age."],
     programme: ["08:00 · Registration and breakfast", "09:00 · Shotgun start", "13:30 · Lunch on the clubhouse terrace", "15:00 · Closest-to-the-pin and long-drive challenges", "17:30 · Prize-giving", "18:30 · Sunset dinner"],
-    callout: { figures: [["18", "Holes by the sea"], ["980K sqm", "Golf course area"], ["Year-round", "Play in every season"]] },
     img: [ph("ui-g-terraces"), "The golf community is framed by green all year."], img2: [ph("ui-v-pavilion-dusk"), "Dinner on the terrace as the sun goes down."],
     setting: { h: "The course", p: ["The course covers 980,000 square metres of the coast, laid out so that the sea is in view from much of the round. Fairways are framed by native planting and kept green all year.",
       "Homes of the golf community face the course, and the clubhouse is planned as a social centre for players and non-players alike."] } },
@@ -347,7 +304,6 @@ const events: EventDraft[] = [
       "Long shared tables, live music and the sunset over the water set the pace.",
       "The market is planned as a regular fixture on the promenade, a place for residents to shop, meet and eat together through the seasons."],
     programme: ["16:00 · Stalls open", "17:00 · Cooking demonstrations", "18:30 · Live music on the promenade", "19:00 · Shared tables at sunset", "22:00 · Market closes"],
-    callout: { quote: "A place to shop, meet and eat together, through every season." },
     img: [ph("ui-g-table"), "Long tables by the water."], img2: ["/images/hotels/ev-chef.jpg", "Olives, bread and oil from across the coast."],
     setting: { h: "The promenade", p: ["The marina promenade is the city's waterfront walk, lined with cafés and shade and open onto the berths of the international marina.",
       "On market evenings the stalls run along the water, with tables set between them and music at the head of the marina."] } },
@@ -357,7 +313,6 @@ const events: EventDraft[] = [
       "The artist will introduce the work, inspired by the coast's stone, water and history.",
       "The unveiling opens a programme of public art for the city, with works planned along the beach and marina promenades."],
     programme: ["17:00 · Welcome on the promenade", "17:30 · The artist in conversation", "18:15 · Unveiling at dusk", "18:30 · Music and refreshments"],
-    callout: { quote: "A work drawn from the coast itself: its stone, its water and its history." },
     img: [ph("ui-v-sculpture"), "Art along the shore."], img2: [ph("ui-g-beach"), "The promenade follows the shore."],
     setting: { h: "The beach promenade", p: ["The beach promenade runs seven kilometres along the shore, a walk and cycle path between the sand and the city.",
       "The sculpture stands where the promenade widens towards the sea, placed to be seen against the water from both directions."] } },
@@ -367,7 +322,6 @@ const events: EventDraft[] = [
       "A shorter family route runs alongside, so everyone can take part.",
       "Water stations, marshals and a medical team line the route, and every finisher receives a medal."],
     programme: ["06:00 · Warm-up at the marina", "06:30 · 10K start", "06:45 · 3K family route", "08:00 · Breakfast at the finish", "09:00 · Medals and prize-giving"],
-    callout: { figures: [["10 km", "Main route"], ["3 km", "Family route"], ["06:30", "Start, at sunrise"]] },
     img: [ph("ui-g-beach"), "The promenade runs the length of the shore."], img2: [ph("ui-lagoon-clear"), "The return leg follows the lagoons."],
     setting: { h: "The route", p: ["From the marina, the route heads along the beach promenade with the sea on one side, then turns inland to loop back along the lagoon edge.",
       "The course is flat and closed to traffic, suited to first-time runners as much as to those chasing a time."] } },
@@ -377,7 +331,6 @@ const events: EventDraft[] = [
       "Guests will be welcomed with dinner, music and views over the water.",
       "The gala introduces the hotel brands and hospitality partners who will welcome guests to the city."],
     programme: ["19:00 · Welcome drinks on the terrace", "20:00 · Dinner by the sea", "21:30 · Live music", "23:00 · Late evening on the beach"],
-    callout: { figures: [["3,500+", "Hotel rooms planned"], ["Year-round", "Hospitality in every season"]] },
     img: [ph("ui-v-lounge"), "Hospitality is permanent here."], img2: ["/images/hotels/beachfront-resort.jpg", "Dining rooms open to the sea air."],
     setting: { h: "The resort district", p: ["In the resort districts, hotels and residences share the same streets, so service is part of the neighbourhood rather than set apart from it.",
       "Hotels range from beachfront resorts to boutique addresses on the lagoons and at the head of the marina."] } },
@@ -387,7 +340,6 @@ const events: EventDraft[] = [
       "Spectators can follow the races from the promenade and the lighthouse.",
       "Classes for keelboats and dinghies give crews of every level a place on the start line."],
     programme: ["Saturday 09:00 · Skippers' briefing", "Saturday 10:30 · Coastal races", "Saturday 19:00 · Crew dinner on the quay", "Sunday 10:30 · Final races", "Sunday 16:00 · Prize-giving at the marina"],
-    callout: { figures: [["370", "International marina berths"], ["120", "Dry rack places"], ["2", "Marinas, international and local"]] },
     img: [md("m04"), "Open water, minutes from the marina."], img2: ["/images/experiences/marina.jpg", "Berths for visiting yachts and residents' boats."],
     setting: { h: "The marina", p: ["The marina sits at the head of the city's central axis, beside the lighthouse, with berths for visiting yachts and residents' boats.",
       "Its promenade gives spectators a view of the start and finish, and the quay fills with crews and guests each evening."] } },
@@ -397,7 +349,6 @@ const events: EventDraft[] = [
       "A night to gather by the sea, unhurried and close to the water.",
       "Families are welcome early in the evening, with music and the moonlit walk later into the night."],
     programme: ["17:30 · Sunset gathering", "18:30 · Food and drinks on the sand", "19:30 · Live music", "21:00 · Fire pits and storytelling", "22:30 · Moonlit walk along the shore"],
-    callout: { figures: [["7.2 km", "Of Mediterranean shore"], ["1.4M sqm", "Beach area"]] },
     img: [ph("ui-sea-wide"), "The full length of the shore."], img2: [ph("ui-v-parasol"), "Shade by day, lanterns by night."],
     setting: { h: "The beach", p: ["The beach runs the full length of the city's Mediterranean edge, backed by the promenade and the beachfront communities.",
       "For the festival a stretch of sand near the beach clubs is set with low tables, lanterns and a small stage, leaving the shore open to walk."] } },
@@ -407,7 +358,6 @@ const events: EventDraft[] = [
       "Practitioners will lead each session, with space to rest in between.",
       "The retreat is the first of a seasonal series, part of the city's focus on wellness and longevity by the sea."],
     programme: ["07:00 · Sunrise movement", "08:30 · Breakfast from local produce", "10:00 · Breathwork by the lagoon", "12:30 · Lunch in the shade", "14:00 · Rest and swim"],
-    callout: { quote: "Wellness here begins outdoors, with calm water close by." },
     img: [ph("ui-lagoon-clear"), "Calm water for every age."], img2: [ph("ui-g-pool"), "Space to rest between sessions."],
     setting: { h: "The lagoons", p: ["The swimmable lagoons bring calm, clear water into the neighbourhoods, sheltered from the open sea and shallow enough for every age.",
       "Their shores are planted and shaded, with space for classes, quiet and an easy swim between sessions."] } },
@@ -417,7 +367,6 @@ const events: EventDraft[] = [
       "Food stalls and the restaurants of the promenade stay open late, so the music can be heard from the berths, the quay and the lighthouse.",
       "It is the first of a season of music by the sea, part of the city's year-round calendar of culture."],
     programme: ["18:00 · Food stalls open", "18:45 · Opening set at sunset", "20:00 · Main concert on the quay", "22:00 · Late set by the lighthouse"],
-    callout: { figures: [["18:00", "Food stalls open"], ["Free", "Open to all"], ["4", "Sets through the evening"]] },
     img: ["/images/marina/hero.jpg", "Evenings on the water."], img2: [ph("ui-g-boardwalk"), "The boulevard runs down to the lighthouse and the quay."],
     setting: { h: "The quay", p: ["The quay runs along the head of the marina, between the berths and the lighthouse, with the promenade's restaurants behind it.",
       "On concert nights the stage faces the water, so the music carries across the marina and the boats become part of the audience."] } },
@@ -427,7 +376,6 @@ const events: EventDraft[] = [
       "The visit marked the move from plan to ground for a city that will span 20.58 million square metres of the North Coast.",
       "A briefing on site set out how the city will be delivered in stages, beginning with the beachfront and the first lagoon districts."],
     programme: ["A briefing on the masterplan", "A tour of the phase one works", "A review of the timeline to the first handovers in 2030"],
-    callout: { figures: [["20.58M sqm", "Total land area"], ["Aug 2026", "Phase one begins"], ["2030", "First handovers planned"]] },
     img: [md("m05"), "The coast where phase one begins."], img2: [ph("masterplan-aerial"), "The masterplan, reviewed on site."],
     setting: { h: "Phase one", p: ["Phase one focuses on the beachfront, where the city meets its 7.2 kilometre shoreline, together with the first lagoon districts and the infrastructure that serves them.",
       "Infrastructure and lagoon works continue through 2027, followed by the marina and the golf course in 2028."] } },
@@ -437,7 +385,6 @@ const events: EventDraft[] = [
       "Built in limestone and plaster around a shaded courtyard, it is a first glimpse of the city's architecture.",
       "Visitors can walk around the masterplan model, handle the materials and finishes, and talk with the team about the neighbourhoods being planned."],
     programme: ["The masterplan model", "Materials and finishes", "Lounge and courtyard"],
-    callout: { quote: "The first place to see, feel and plan life at Alam Al Roum." },
     img: [ph("ui-expcenter-court"), "The Experience Center courtyard."], img2: [ph("ui-expcenter-day"), "The Experience Center by day."],
     setting: { h: "The building", p: ["The Experience Center is built in the materials of the city: pale limestone and plaster, timber and shade, arranged around a courtyard that stays cool through the day.",
       "Inside, the lounge, the model room and the material library lead from one to the next, ending with views back onto the courtyard."] } },
@@ -447,7 +394,6 @@ const events: EventDraft[] = [
       "It was the first of many evenings planned to bring people together on the coast.",
       "Guests toured the building after dark, when the courtyard and the façade are lit and the limestone takes on the evening light."],
     programme: ["A welcome in the courtyard", "Dinner and music", "Tours of the Experience Center"],
-    callout: { quote: "The first of many evenings planned to bring people together on the coast." },
     img: [ph("ui-expcenter-lounge"), "Evening at the Experience Center."], img2: [ph("ui-expcenter-facade"), "The façade, lit for the evening."],
     setting: { h: "After dark", p: ["Lighting at the Experience Center is kept low and warm, so the building glows against the evening sky without competing with it.",
       "The courtyard becomes an outdoor room at night, set for dinner and music beneath the open sky."] } },
@@ -457,7 +403,6 @@ const events: EventDraft[] = [
       "Its warm materials and soft light set the tone for the hospitality of the city.",
       "Appointments can be arranged in Arabic and English, and combined with a tour of the masterplan model."],
     programme: ["Consultations with the sales team", "Material and finish samples", "Views onto the courtyard"],
-    callout: { quote: "Warm materials and soft light set the tone for the hospitality of the city." },
     img: [ph("ui-expcenter-lobby"), "The lounge and lobby."], img2: [ph("ui-expcenter-court"), "Views onto the courtyard."],
     setting: { h: "Materials and light", p: ["The lounge uses the city's palette: limestone, plaster, timber and textiles in sand and sea tones.",
       "Daylight is filtered through the courtyard, and in the evening the room is lit low, like a home rather than a showroom."] } },
