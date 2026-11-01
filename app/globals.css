@@ -34,33 +34,35 @@ html.lenis, html.lenis body { height: auto; }
 
 /* ── Type scale (Figma text styles) ──
    Each size is fluid from a phone (390 px wide) to the Figma desktop frame (1512 px): Figma's size at 1512 and up,
-   the phone size at 390 and below, a straight line in between. Line heights are Figma's, as ratios. */
-.t-heading { font-family: var(--font-haas); font-weight: 500; text-transform: uppercase; }
+   the phone size at 390 and below, a straight line in between. Line heights are Figma's, as ratios: Headings/ have their own, every body/ size is 1.5.
+   .t-text, .t-label and .t-body are body/<size>/reg and /med in Haas; .t-serif is for the Immortel titles that have no style in Figma. */
+.t-heading { font-family: var(--font-haas); font-weight: 400; text-transform: capitalize; }
 .hd-80 { font-size: clamp(34px, calc(34px + 46 * (100vw - 390px) / 1122), 80px); line-height: 1.1; }
 .hd-56 { font-size: clamp(26px, calc(26px + 30 * (100vw - 390px) / 1122), 56px); line-height: 1.143; }
 /* a long statement set at Heading/56: smaller on a phone, where it would otherwise run to six lines */
-.hd-56l { font-size: clamp(22px, calc(22px + 34 * (100vw - 390px) / 1122), 56px); line-height: 1.167; }
+.hd-56l { font-size: clamp(22px, calc(22px + 34 * (100vw - 390px) / 1122), 56px); line-height: 1.143; }
 .hd-48 { font-size: clamp(24px, calc(24px + 24 * (100vw - 390px) / 1122), 48px); line-height: 1.167; }
 .hd-40 { font-size: clamp(22px, calc(22px + 18 * (100vw - 390px) / 1122), 40px); line-height: 1.2; }
 .hd-32 { font-size: clamp(20px, calc(20px + 12 * (100vw - 390px) / 1122), 32px); line-height: 1.25; }
 .hd-24 { font-size: clamp(18px, calc(18px + 6 * (100vw - 390px) / 1122), 24px); line-height: 1.333; }
 .hd-20 { font-size: clamp(16px, calc(16px + 4 * (100vw - 390px) / 1122), 20px); line-height: 1.4; }
-.hd-16 { font-size: 16px; line-height: 24px; }
+.hd-16 { font-size: 16px; line-height: 1.5; }
 .hd-14 { font-size: 14px; line-height: 20px; }
 .t-text { font-family: var(--font-haas); font-weight: 400; }
-.x-80 { font-size: clamp(36px, calc(36px + 44 * (100vw - 390px) / 1122), 80px); line-height: 1.075; letter-spacing: -0.02em; }
-.x-28 { font-size: clamp(18px, calc(18px + 10 * (100vw - 390px) / 1122), 28px); line-height: 1.286; }
-.x-20 { font-size: clamp(16px, calc(16px + 4 * (100vw - 390px) / 1122), 20px); line-height: 1.4; }
-.x-18 { font-size: clamp(16px, calc(16px + 2 * (100vw - 390px) / 1122), 18px); line-height: 1.556; }
-.x-16 { font-size: 16px; line-height: 24px; }
-.x-14 { font-size: 14px; line-height: 20px; }
-.x-12 { font-size: 12px; line-height: 16px; }
+.x-80 { font-size: min(8.7vw, clamp(34px, calc(34px + 46 * (100vw - 390px) / 1122), 80px)); line-height: 1.1; }
+.x-28 { font-size: clamp(18px, calc(18px + 10 * (100vw - 390px) / 1122), 28px); line-height: 1.5; }
+.x-20 { font-size: clamp(16px, calc(16px + 4 * (100vw - 390px) / 1122), 20px); line-height: 1.5; }
+.x-18 { font-size: clamp(16px, calc(16px + 2 * (100vw - 390px) / 1122), 18px); line-height: 1.5; }
+.x-16 { font-size: 16px; line-height: 1.5; }
+.x-14 { font-size: 14px; line-height: 1.5; }
+.x-12 { font-size: 12px; line-height: 1.5; }
 .t-label { font-family: var(--font-haas); font-weight: 500; }
-.l-18 { font-size: clamp(16px, calc(16px + 2 * (100vw - 390px) / 1122), 18px); line-height: 1.556; } .l-16 { font-size: 16px; line-height: 24px; }
-.l-14 { font-size: 14px; line-height: 20px; } .l-12 { font-size: 12px; line-height: 16px; }
-.t-body { font-family: var(--font-immortel); font-weight: 400; }
-.b-20 { font-size: clamp(18px, calc(18px + 2 * (100vw - 390px) / 1122), 20px); line-height: 1.6; } .b-18 { font-size: clamp(16px, calc(16px + 2 * (100vw - 390px) / 1122), 18px); line-height: 1.556; }
-.b-16 { font-size: 16px; line-height: 24px; } .b-14 { font-size: 14px; line-height: 20px; } .b-12 { font-size: 12px; line-height: 20px; }
+.l-18 { font-size: clamp(16px, calc(16px + 2 * (100vw - 390px) / 1122), 18px); line-height: 1.5; } .l-16 { font-size: 16px; line-height: 1.5; }
+.l-14 { font-size: 14px; line-height: 1.5; } .l-12 { font-size: 12px; line-height: 1.5; }
+.t-body { font-family: var(--font-haas); font-weight: 400; }
+.t-serif { font-family: var(--font-immortel); font-weight: 400; }
+.b-20 { font-size: clamp(18px, calc(18px + 2 * (100vw - 390px) / 1122), 20px); line-height: 1.5; } .b-18 { font-size: clamp(16px, calc(16px + 2 * (100vw - 390px) / 1122), 18px); line-height: 1.5; }
+.b-16 { font-size: 16px; line-height: 1.5; } .b-14 { font-size: 14px; line-height: 1.5; } .b-12 { font-size: 12px; line-height: 1.5; }
 /* Display sizes used once or twice (page titles in Immortel / Haas), on the same phone-to-desktop line */
 .d-120 { font-size: clamp(44px, calc(44px + 76 * (100vw - 390px) / 1122), 120px); } .d-68 { font-size: clamp(32px, calc(32px + 36 * (100vw - 390px) / 1122), 68px); } .d-60 { font-size: clamp(28px, calc(28px + 32 * (100vw - 390px) / 1122), 60px); }
 .d-56 { font-size: clamp(30px, calc(30px + 26 * (100vw - 390px) / 1122), 56px); } .d-36 { font-size: clamp(24px, calc(24px + 12 * (100vw - 390px) / 1122), 36px); } .d-32 { font-size: clamp(22px, calc(22px + 10 * (100vw - 390px) / 1122), 32px); }
@@ -96,7 +98,7 @@ html.js [data-reveal-img] { visibility: hidden; }
 /* Below lg: one size for every variant (44 px), the same label-left / chip-right layout; on phones (below md) full
    width too. `.btn-keep` (Button `compact`) keeps the desktop size for a button that shares a row with other controls */
 @media (width < 64rem) {
-  .btn:not(.btn-keep) { height: 44px; padding: 0 5px 0 20px; gap: 16px; font-size: 16px; line-height: 24px; }
+  .btn:not(.btn-keep) { height: 44px; padding: 0 5px 0 20px; gap: 16px; font-size: 16px; line-height: 1.5; }
   .btn:not(.btn-keep) .btn-chip { width: 32px; height: 32px; }
   .btn:not(.btn-keep) .btn-chip .icon { width: 20px !important; height: 20px !important; }   /* over Icon's inline size */
 }

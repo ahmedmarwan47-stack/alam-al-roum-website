@@ -14,7 +14,7 @@ export const COIN_URL = "/models/coin.glb";
  * so nothing re-renders React at 60fps. `spin` is an idle turn in revolutions per second (0 = held),
  * exactly like the landing page's stage coin.
  */
-export type CoinPose = { rotY: number; spin: number; bob: number; scale: number };
+export type CoinPose = { rotY: number; spin: number; bob: number; scale: number; y?: number };
 export const idlePose = (): CoinPose => ({ rotY: 0, spin: 0.18, bob: 0.04, scale: 1 });
 
 /** Soft studio light from a room environment (no network fetch). */
@@ -60,7 +60,7 @@ function Model({ pose }: { pose: MutableRefObject<CoinPose> }) {
       idle.current = Math.abs(a) < 1e-3 ? 0 : a;
     }
     g.rotation.set(0, p.rotY + idle.current, 0);
-    g.position.y = p.bob ? Math.sin(state.clock.elapsedTime * 1.4) * p.bob : 0;
+    g.position.y = (p.y ?? 0) + (p.bob ? Math.sin(state.clock.elapsedTime * 1.4) * p.bob : 0);
     g.scale.setScalar(p.scale);
   });
   return <group ref={group}><primitive object={prepared} /></group>;
@@ -74,7 +74,7 @@ const CAM_Z = 12, FOV = 14;
 export const COIN_FILL = 2.2 / (2 * CAM_Z * Math.tan((FOV / 2) * Math.PI / 180));
 
 /** A transparent canvas with the coin; size it with the wrapper (see COIN_FILL). */
-export default function Coin3D({ pose, active = true, className = "" }: { pose: MutableRefObject<CoinPose>; active?: boolean; className?: string }) {
+export default function Coin3D({ pose, active = true, className = "", maxDpr = 1.75 }: { pose: MutableRefObject<CoinPose>; active?: boolean; className?: string; maxDpr?: number }) {
   const phone = typeof window !== "undefined" && window.matchMedia("(max-width: 1023px)").matches;
   // render only while the coin is on screen: an off-screen loop would compete with the page's scroll animations
   const box = useRef<HTMLDivElement>(null), [seen, setSeen] = useState(false);
@@ -85,7 +85,7 @@ export default function Coin3D({ pose, active = true, className = "" }: { pose: 
   }, []);
   return (
     <div ref={box} className={`pointer-events-none ${className}`} aria-hidden>
-      <Canvas frameloop={active && seen ? "always" : "never"} dpr={phone ? [1, 1.5] : [1, 1.75]} camera={{ position: [0, 0, CAM_Z], fov: FOV }}
+      <Canvas frameloop={active && seen ? "always" : "never"} dpr={phone ? [1, Math.min(maxDpr, 1.5)] : [1, maxDpr]} camera={{ position: [0, 0, CAM_Z], fov: FOV }}
         gl={{ alpha: true, antialias: !phone, powerPreference: phone ? "default" : "high-performance" }} style={{ background: "transparent" }}>
         <Studio />
         <directionalLight position={[3, 4, 5]} intensity={1.4} />

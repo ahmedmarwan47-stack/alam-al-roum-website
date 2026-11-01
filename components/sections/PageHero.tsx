@@ -52,7 +52,7 @@ export default function PageHero({ data: H }: { data: PageHeroData }) {
       {(() => {
         const Tag = light ? "div" : "h1";
         return (
-          <Tag data-reveal={light ? undefined : ""} className="t-label hd-56 max-w-[1000px] capitalize">
+          <Tag data-reveal={light ? undefined : ""} className="t-heading hd-56 max-w-[1000px]">
             {H.title.map((s, k) => (
               <Fragment key={k}>{s.br && <br />}{k > 0 && !s.br && " "}{s.i ? <span className="t-accent">{s.t}</span> : s.t}</Fragment>))}
           </Tag>);

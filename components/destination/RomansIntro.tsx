@@ -45,7 +45,7 @@ export default function RomansIntro() {
     <div ref={root} className="relative flex flex-col gap-8 lg:h-[min(844px,calc(100svh-160px))] lg:w-[1392px] lg:flex-row lg:items-end lg:gap-[30px]">
       {/* Figma columns: 1041 for the title over the mosaic (the mosaic at 419–1041), 30 gap, 321 for the statement */}
       <div className="relative flex flex-col gap-6 lg:block lg:h-full lg:w-[1041px] lg:flex-none">
-        <h2 data-title data-reveal className="relative z-10 flex w-[4.6em] flex-col gap-[7px] t-body text-right uppercase leading-none d-120 lg:absolute lg:left-0 lg:top-1/2 lg:-translate-y-1/2">
+        <h2 data-title data-reveal className="relative z-10 flex w-[4.6em] flex-col gap-[7px] t-serif text-right uppercase leading-none d-120 lg:absolute lg:left-0 lg:top-1/2 lg:-translate-y-1/2">
           <span>{R.title[0]}</span><span>{R.title[1]}</span><span className="text-center">{R.title[2]}</span>
         </h2>
         <div className="relative ml-auto h-[58svh] max-h-[560px] w-[84%] lg:absolute lg:left-[419px] lg:top-0 lg:ml-0 lg:h-full lg:max-h-none lg:w-[622px]">

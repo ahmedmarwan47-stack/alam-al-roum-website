@@ -37,12 +37,8 @@ export const facts = {
   title: "A fully integrated coastal city",   // set as "A Fully Integrated / Coastal City"
   body: "Developed by Qatari Diar, Alam Al Roum brings together residential, hospitality, commercial, cultural and recreational destinations within a future-ready urban environment designed to evolve.",
   image: "/images/about/a-courtyard.jpg",
-  /** Two windows (L, R) onto one picture (I), as [x, y, w, h] on the 1512 × 1024 frame. Split → Merged → Full. */
-  states: {
-    split: { l: [180, 380, 440, 560], r: [892, 104, 440, 560], il: [101, 330, 1038, 661], ir: [373, 54, 1038, 661] },
-    merged: { l: [316, 232, 440, 560], r: [756, 232, 440, 560], il: [290, 215, 933, 594], ir: [290, 215, 933, 594] },
-    full: { l: [0, 0, 756, 1024], r: [756, 0, 756, 1024], il: [0, 0, 1512, 1024], ir: [0, 0, 1512, 1024] },
-  },
+  /** The Merged window and the picture inside it, as [x, y, w, h] on the 1512 × 1024 frame; both open to the whole stage. */
+  merged: { win: [316, 232, 880, 560], pic: [290, 215, 933, 594] },
 };
 
 /** UI / Section / Landmark Reveal (10979:18395) */

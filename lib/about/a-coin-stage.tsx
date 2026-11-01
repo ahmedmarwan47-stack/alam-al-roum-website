@@ -11,8 +11,10 @@ import { BLOCK_FROM, BLOCK_TO } from "@/components/reveal/letters";
 const FW = 1512, FH = 1024;
 const MASK = `url(${C.mask}) no-repeat`;
 const Coin3D = dynamic(() => import("@/components/ui/Coin3D"), { ssr: false });
-/** The window opens a little after the coin has dissolved into it (timeline seconds). */
-const COIN_GONE = 2.0;
+/** Radians: edge-on on the last half turn, where the gold is replaced by the window, and face-on as the window. */
+const EDGE_ON = Math.PI * 3.5, TURNED = Math.PI * 4;
+/** Timeline seconds: the flip ends, the window starts to grow. */
+const FLIP_END = 1.4;
 /** Coin centre at rest: Figma's 379.5 raised by 20 so the turning coin keeps ~40 px clear of the display word. */
 const COIN_CY = 359.5;
 /** The sky-fall film as a frame sequence (every 2nd frame of grandeur-skyfall-v2, 1920 × 1080 WebP), drawn on a canvas. */
@@ -23,18 +25,20 @@ const frameSrc = (i: number) => `/seq/skyfall/${String(i + 1).padStart(4, "0")}.
  * UI / Section / Landmark Reveal (10979:18395), pinned and scrubbed as ONE continuous move (linear with the scroll,
  * smoothed scrub, no holds — Figma's pauses only existed because a prototype can't scroll):
  * 1 Spin: the landing page's 3D gold coin idles and bobs over the display word (BEHIND / THE NAME, two lines at the
- *   Display/172 size; it replaced GRANDEUR); scrolling turns it in place (1½ turns) onto its compass face.
- * 2 Reveal: the same 3D coin grows with the coin-shaped window (260 → 900) and dissolves into the film behind it,
- *   so there is no hand-over to a flat coin image.
+ *   Display/172 size; it replaced GRANDEUR); scrolling turns it in place.
+ * 2 Reveal: the last half turn opens the window, at the coin's size, with no fade: the gold goes as the coin passes
+ *   edge-on, so its back never shows, and the coin-shaped window turns on with the same angle. Only then does it grow (260 → 900).
  *   The word fades and blurs out as the window's edge approaches it, so the two never overlap.
  * 3 Fill: the window grows past the screen (3000). 4 Restored ("A landmark restored"): a soft Deep Sea shade, the headline, the subline and
  *   the history points blur in, block by block. The progress tick steps with it.
  * The film is scrubbed by the scroll from the reveal on (forwards down, backwards up); never blurred, no clouds.
  * It is a frame sequence painted on a canvas rather than a seeking <video>: the source has two keyframes in 12 s,
  * so every seek re-decoded from the start and the film stuttered; frames on a canvas follow the scroll smoothly.
+ * The 3D coin's canvas stays the size of the section and the coin is scaled inside its scene: sizing the canvas with the
+ * coin rebuilt its WebGL buffer as it grew, past 3000 px square, which is what lost the context and crashed the coin.
  */
 export default function CoinStage({ poster }: { poster?: string }) {
-  const [coinLive, setCoinLive] = useState(true);   // stop rendering the 3D coin once it has dissolved
+  const [coinLive, setCoinLive] = useState(true);   // stop rendering the 3D coin once the window has taken its place
   const root = useRef<HTMLElement>(null), win = useRef<HTMLDivElement>(null), filmRef = useRef<HTMLCanvasElement>(null), canvas = useRef<HTMLDivElement>(null), word = useRef<HTMLParagraphElement>(null);
   const pose = useRef<CoinPose>(idlePose());
   useEffect(() => {
@@ -49,24 +53,30 @@ export default function CoinStage({ poster }: { poster?: string }) {
     const small = () => !window.matchMedia("(min-width: 1024px)").matches;   // the lg breakpoint, scrollbar included
     const coinAt = (figma: number, ofW: number, px: number, ofH: number) =>
       small() ? Math.max(figma * fit(), Math.min(ofW * el.offsetWidth, px, ofH * el.offsetHeight)) : figma * fit();
-    const P = { size: 0, cy: COIN_CY / FH, win: 0 };           // silhouette width (px), centre (fraction of height), window shown 0–1
+    const rest = () => coinAt(260, 0.38, 200, 0.22);
+    const P = { size: 0, cy: COIN_CY / FH };                   // silhouette width (px), centre (fraction of height)
     const draw = () => {
       const W = el.offsetWidth, H = el.offsetHeight, s = P.size, sh = s * (259.04 / 260), cx = W / 2, cy = P.cy * H;
+      // past edge-on the window takes the coin's place: its width follows the same turn
+      const a = pose.current.rotY, open = a >= EDGE_ON, sw = s * Math.max(Math.abs(Math.cos(a)), 0.001);
       for (const pre of ["", "-webkit-"]) {
-        w.style.setProperty(`${pre}mask-size`, `${s}px ${sh}px`);
-        w.style.setProperty(`${pre}mask-position`, `${cx - s / 2}px ${cy - sh / 2}px`);
+        w.style.setProperty(`${pre}mask-size`, `${sw}px ${sh}px`);
+        w.style.setProperty(`${pre}mask-position`, `${cx - sw / 2}px ${cy - sh / 2}px`);
       }
-      const cs = s / COIN_FILL;   // the 3D coin's face matches the silhouette exactly
-      Object.assign(cv.style, { width: `${cs}px`, height: `${cs}px`, left: `${cx - cs / 2}px`, top: `${cy - cs / 2}px` });
-      w.style.opacity = String(P.win);
-      // the word fades (and blurs) out over the last 7% of height before the growing window would touch it
-      const gap = wd.offsetTop - (cy + sh / 2), o = P.win > 0 ? Math.min(Math.max(gap / (0.07 * H), 0), 1) : 1;
+      w.style.opacity = open ? "1" : "0";
+      // the 3D coin's face matches the silhouette exactly: scaled and placed in its scene, the canvas never resizes
+      pose.current.scale = s / (COIN_FILL * H);
+      pose.current.y = (0.5 - P.cy) * (2.2 / COIN_FILL);
+      cv.style.visibility = open ? "hidden" : "visible";
+      // the word fades (and blurs) out from the coin's first growth, gone before its edge would touch it
+      const r = rest(), restGap = Math.max(wd.offsetTop - ((COIN_CY / FH) * H + (r * (259.04 / 260)) / 2), 1);
+      const gap = wd.offsetTop - (cy + sh / 2), o = s > r + 0.5 ? Math.min(Math.max(gap / Math.min(0.07 * H, restGap), 0), 1) : 1;
       wd.style.opacity = String(o); wd.style.filter = o < 1 ? `blur(${(1 - o) * 14}px)` : "";
     };
 
-    // the film is scrubbed by the scroll: it starts as the coin opens (OPEN) and reaches its last frame at the end
+    // the film is scrubbed by the scroll: it starts when the flip ends and reaches its last frame at the end
     // of the pin; scrolling up plays it backwards. A frame is painted only when the frame index changes.
-    const OPEN = 1.0, ctx = v.getContext("2d")!, imgs: HTMLImageElement[] = [];
+    const ctx = v.getContext("2d")!, imgs: HTMLImageElement[] = [];
     let cur = -1, want = 0, motionEnd = 1;
     const paint = (i: number) => {
       const img = imgs[i]; if (!img?.complete || !img.naturalWidth) return false;
@@ -74,31 +84,32 @@ export default function CoinStage({ poster }: { poster?: string }) {
       ctx.drawImage(img, (v.width - iw) / 2, (v.height - ih) / 2, iw, ih); cur = i; return true;
     };
     const film = (t: number) => {
-      want = Math.round(Math.min(Math.max((t - OPEN) / (motionEnd - OPEN), 0), 1) * (FRAMES - 1));
-      if (want !== cur) paint(want);
+      want = Math.round(Math.min(Math.max((t - FLIP_END) / (motionEnd - FLIP_END), 0), 1) * (FRAMES - 1));
+      if (want !== cur) { paint(want); for (let k = 1; k <= 4; k++) imgs[want + k]?.decode?.().catch(() => {}); }   // the next few frames ready to paint
     };
     const size = () => { const d = Math.min(window.devicePixelRatio || 1, 2); v.width = v.offsetWidth * d; v.height = v.offsetHeight * d; cur = -1; paint(want); };
-    for (let i = 0; i < FRAMES; i++) {
-      const im = new Image(); im.decoding = "async"; im.src = frameSrc(i);
-      // decode ahead, so the first pass through the film never waits on a frame
-      im.onload = () => { im.decode?.().catch(() => {}); if (i === want) paint(i); }; imgs.push(im);
-    }
+    const load = () => {
+      for (let i = 0; i < FRAMES; i++) {
+        const im = new Image(); im.decoding = "async"; im.src = frameSrc(i);
+        im.onload = () => { if (i === want) paint(i); }; imgs.push(im);
+      }
+    };
+    // the frames load as the section comes near, not with the page
+    const near = new IntersectionObserver(([e]) => { if (e.isIntersecting) { near.disconnect(); load(); } }, { rootMargin: "200% 0px" });
+    near.observe(el);
     size(); window.addEventListener("resize", size);
     const tl = gsap.timeline({ paused: true, defaults: { ease: "none" }, onUpdate: () => {
       pose.current.spin = tl.time() < 0.02 ? idlePose().spin : 0;   // idle turn at rest, the scroll drives it after
       pose.current.bob = tl.time() < 0.02 ? idlePose().bob : 0;
       draw(); film(tl.time());
-      setCoinLive(tl.time() < COIN_GONE);
+      setCoinLive(tl.time() < FLIP_END);
     } })
-      // 1 · Spin: a turn and a half in place, landing on the compass face — the face the window opens with
-      .fromTo(pose.current, { rotY: 0 }, { rotY: Math.PI * 3, duration: 1.0, ease: "power1.inOut" }, 0)
-      // the window opens under the 3D coin, which keeps growing with it and dissolves into the film
-      .fromTo(P, { win: 0 }, { win: 1, duration: 0.12 }, 1.0)
-      .fromTo(cv, { opacity: 1 }, { opacity: 0, duration: 0.85, ease: "power1.in" }, 1.05)
-      // 2 · Reveal
-      .fromTo(P, { size: () => coinAt(260, 0.38, 200, 0.22), cy: COIN_CY / FH }, { size: () => coinAt(900, 0.92, Infinity, 0.8), cy: 512.5 / FH, duration: 1.4 }, 1.0)
-      .fromTo(v, { y: () => (-132 / FH) * el.offsetHeight }, { y: 0, duration: 1.4 }, 1.0)
-      .to(q("[data-tick]"), { y: 48, duration: 1.4 }, 1.0)
+      // 1 · Spin: two turns in place, the last half opening the window (draw() swaps the coin for it at edge-on)
+      .fromTo(pose.current, { rotY: 0 }, { rotY: TURNED, duration: FLIP_END, ease: "power1.inOut" }, 0)
+      // 2 · Reveal: the window, now face-on, grows
+      .fromTo(P, { size: rest, cy: COIN_CY / FH }, { size: () => coinAt(900, 0.92, Infinity, 0.8), cy: 512.5 / FH, duration: 2.4 - FLIP_END }, FLIP_END)
+      .fromTo(v, { y: () => (-132 / FH) * el.offsetHeight }, { y: 0, duration: 2.4 - FLIP_END }, FLIP_END)
+      .to(q("[data-tick]"), { y: 48, duration: 2.4 - FLIP_END }, FLIP_END)
       // 3 · Fill
       .to(P, { size: () => 3000 * cover(), duration: 1.3 }, 2.4)
       .to(q("[data-tick]"), { y: 96, duration: 1.3 }, 2.4)
@@ -117,7 +128,7 @@ export default function CoinStage({ poster }: { poster?: string }) {
     else st = ScrollTrigger.create({ trigger: el, start: "top top", end: () => `+=${pinVh() * 100}%`, pin: true, scrub: 1, animation: tl, invalidateOnRefresh: true, onRefresh: draw });
     draw();
     window.addEventListener("resize", draw);
-    return () => { st?.kill(); tl.kill(); window.removeEventListener("resize", draw); window.removeEventListener("resize", size); };
+    return () => { st?.kill(); tl.kill(); near.disconnect(); window.removeEventListener("resize", draw); window.removeEventListener("resize", size); };
   }, []);
 
   return (
@@ -134,8 +145,8 @@ export default function CoinStage({ poster }: { poster?: string }) {
         <canvas ref={filmRef} className="absolute inset-0 h-full w-full bg-cover bg-center" style={poster ? { backgroundImage: `url(${poster})` } : undefined} aria-hidden />
       </div>
 
-      {/* the landing page's 3D coin: idles at rest, turns with the scroll, then grows with the window and dissolves */}
-      <div ref={canvas} className="pointer-events-none absolute"><Coin3D pose={pose} active={coinLive} className="h-full w-full" /></div>
+      {/* the landing page's 3D coin: idles at rest, turns with the scroll, and the last half turn swaps it for the window */}
+      <div ref={canvas} className="pointer-events-none absolute inset-0"><Coin3D pose={pose} active={coinLive} maxDpr={1.5} className="h-full w-full" /></div>
 
       {/* Scrim (to the bottom) and Dim (from the left), as in Figma but a soft Deep Sea 700 instead of black */}
       <div data-shade className="pointer-events-none absolute inset-0 opacity-0"

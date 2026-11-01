@@ -21,7 +21,7 @@ const REST_X = 1190;
 
 /**
  * Nearby, after the Figma "UI / Coastline drawing (Nearby)" prototype. Not pinned and not tied to the scroll
- * (28 Oct review): when the map comes into view the whole drawing plays by itself, once, in about five seconds —
+ * (28 Oct review): when the map comes into view the whole drawing plays by itself, once, in about four and a half seconds —
  * the "You are here" ring and badge, then the coastline drawing outward from Alam Al Roum in both directions at one
  * even speed (each pin and label rising in, 10 px like Figma, as the line reaches it), then the dashed desert road
  * down to Cairo. From lg the map runs full width at its true proportions (never cropped, so the labels keep their
@@ -46,7 +46,7 @@ export default function Nearby() {
     gsap.set(q("[data-badge]"), { autoAlpha: 0, y: 16 });
 
     // timeline seconds: the east coast (the long half) draws over EAST at one even speed, the west half at the same speed
-    const T0 = 0.5, EAST = 3.0, ROAD = 1.1;
+    const T0 = 0.5, EAST = 2.5, ROAD = 1.1;
     const WEST = EAST * (west.getTotalLength() / east.getTotalLength()), ROAD_AT = T0 + EAST - 0.2;
     const tl = gsap.timeline({ paused: true, defaults: { ease: "none" } });
     // the origin: the ring and the "You are here" badge
@@ -138,12 +138,12 @@ export default function Nearby() {
                 <span className={`t-text text-limestone-300 ${CQ}`} style={cq(14, 9)}>{p.km}</span>
               </span>))}
 
-            <div data-badge className="absolute flex items-center gap-[0.8cqw] rounded-full bg-deepsea-500 py-[0.66cqw] pl-[0.66cqw] pr-[1.2cqw]" style={{ left: pct(101, W), top: pct(376, H) }}>
+            <div data-badge className="absolute flex items-center gap-[0.8cqw] rounded-full bg-deepsea-500 py-[0.66cqw] pl-[0.66cqw] pr-[1.2cqw]" style={{ left: pct(88.7, W), top: pct(376, H) }}>
               <span aria-hidden className="block aspect-[591/271] w-[max(34px,4.5cqw)] bg-limestone-50"
                 style={{ WebkitMask: `url(${N.coinPair}) center / contain no-repeat`, mask: `url(${N.coinPair}) center / contain no-repeat` }} />
               <span className="flex flex-col">
-                <span className={`t-heading text-limestone-50 ${CQ}`} style={cq(20, 11, 13)}>{N.origin.name}</span>
-                <span className={`t-text text-limestone-300 ${CQ}`} style={cq(14, 9)}>{N.origin.note}</span>
+                <span className={`t-heading text-limestone-50 ${CQ}`} style={{ ...cq(16, 11, 13), lineHeight: 1.5 }}>{N.origin.name}</span>
+                <span className={`t-text text-limestone-300 ${CQ}`} style={{ ...cq(14, 9), lineHeight: 1.5 }}>{N.origin.note}</span>
               </span>
             </div>
           </div>

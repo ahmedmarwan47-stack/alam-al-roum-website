@@ -16,7 +16,7 @@ function Panel({ photo, title, features, from }: { photo: string; title: string[
       <div className="absolute inset-x-6 bottom-6 flex flex-col gap-6 text-limestone-50 max-sm:contents lg:inset-x-12 lg:bottom-12 lg:flex-row lg:items-end lg:justify-between">
         <h3 className="t-heading hd-40 max-sm:relative max-sm:col-start-1 max-sm:row-start-1 max-sm:self-end max-sm:bg-gradient-to-t max-sm:from-deepsea-500 max-sm:via-deepsea-500/70 max-sm:to-transparent max-sm:px-6 max-sm:pb-2 max-sm:pt-24 lg:w-[439px]">{title.map((l) => <span key={l} className="block">{l}</span>)}</h3>
         <div className="grid gap-6 max-sm:row-start-2 max-sm:px-6 max-sm:pb-7 max-sm:pt-4 sm:grid-cols-3 lg:w-[800px] lg:gap-[30px]">
-          {features.map(([h, b]) => <div key={h} className="flex flex-col gap-3"><span className="t-label hd-24">{h}</span><span className="t-body b-16">{b}</span></div>)}
+          {features.map(([h, b]) => <div key={h} className="flex flex-col gap-3"><span className="t-heading hd-24">{h}</span><span className="t-body b-16">{b}</span></div>)}
         </div>
       </div>
     </div>

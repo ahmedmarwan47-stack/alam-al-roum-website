@@ -6,12 +6,13 @@ import { story as S } from "@/lib/about/b-content";
 
 const FW = 1512, FH = 1024;                 // the motion-study frame
 const fy = (y: number) => `${(y / FH) * 100}%`;
-/** The three Culture photos: % of the frame up to 1512 × 1024; on a larger screen, Figma's pixels in a 1512 × 1024
- * box centred on the screen, so they keep to the content edges (60 px in from that box) and to their Figma spacing
- * instead of drifting out towards the screen's edges and apart. */
-const fx = (x: number) => `calc(max(0px, (100% - ${FW}px) / 2) + min(${(x / FW) * 100}%, ${x}px))`;
-const fyBox = (y: number) => `calc(max(0px, (100% - ${FH}px) / 2) + min(${(y / FH) * 100}%, ${y}px))`;
-const fw = (w: number) => `min(${(w / FW) * 100}%, ${w}px)`;
+/** The three Culture photos: one scale for their size and spacing, the smaller of the width's and the height's and never
+ * above Figma's pixels, so a wide but short screen can't stack them into each other. They sit on the content edges,
+ * centred on the height. */
+const K = `min(100vw / ${FW}, 100vh / ${FH}, 1px)`;
+const photoBox = ({ x, y, w, h }: { x: number; y: number; w: number; h: number }): React.CSSProperties => ({
+  [x < FW / 2 ? "left" : "right"]: "var(--gutter)", top: `calc(50% + ${y - FH / 2} * ${K})`, width: `calc(${w} * ${K})`, aspectRatio: `${w} / ${h}`,
+});
 /**
  * The two domes are clip-path circles driven by two CSS variables: --t is the dome's top edge (% of the
  * stage height), --r its radius. Figma: a 2400 circle rises from y 1100 to 560, then grows to 4400 at
@@ -123,7 +124,7 @@ export default function TheStory() {
         <div data-h-text className="absolute bottom-20 left-[var(--gutter)] right-[var(--gutter)] flex flex-col gap-4 text-limestone-50">
           <span className="t-label l-14">{S.history.label}</span>
           <h2 className="flex flex-col">
-            <span className="t-heading hd-56 normal-case!">{S.history.line}</span>
+            <span className="t-heading hd-56">{S.history.line}</span>
             <span className="t-accent hd-56 leading-[1.071]!">{S.history.accent}</span>
           </h2>
         </div>
@@ -133,12 +134,12 @@ export default function TheStory() {
         <span data-c-word data-no-blur className="absolute left-1/2 -translate-x-1/2 t-accent hd-56 text-deepsea-500" style={{ top: fy(1180) }}>{C.word}</span>
         {C.photos.map((p) => (
           <div key={p.src} data-photo className="absolute hidden overflow-hidden lg:block"
-            style={{ left: fx(p.x), top: fyBox(p.y), width: fw(p.w), aspectRatio: `${p.w} / ${p.h}` }}>
+            style={photoBox(p)}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={p.src} alt={p.alt} loading="lazy" className="h-full w-full object-cover" />
           </div>))}
         <div className="absolute inset-x-0 flex flex-col items-center gap-14 px-[var(--gutter)] text-center text-deepsea-500" style={{ top: fy(360) }}>
-          <h3 data-c-head className="t-heading hd-56 normal-case! leading-[1.25]!">
+          <h3 data-c-head className="t-heading hd-56 leading-[1.25]!">
             {C.lines.map((line) => <span key={line} className="block">{line}</span>)}
           </h3>
           <p data-c-body className="max-w-[560px] t-body b-18">{C.body}</p>
@@ -162,7 +163,7 @@ export default function TheStory() {
         <div className="absolute left-[var(--gutter)] right-[var(--gutter)] flex flex-col text-limestone-50" style={{ top: fy(430) }}>
           <span data-g-text data-no-blur className="self-start t-accent hd-56">{G.word}</span>
           <h2 className="mt-[30px] flex flex-col">
-            <span data-g-text className="t-heading hd-80 normal-case!">{G.line}</span>
+            <span data-g-text className="t-heading hd-80">{G.line}</span>
             {G.accent && <span data-g-text className="t-accent hd-56">{G.accent}</span>}
           </h2>
           <p data-g-text className="mt-8 max-w-[520px] t-body b-18">{G.body}</p>
