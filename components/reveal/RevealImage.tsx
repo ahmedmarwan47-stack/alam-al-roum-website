@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { gsap, reducedMotion } from "@/lib/gsap";
+import { HI_RES } from "@/lib/hi-res";
 import { photoIn, PHOTO_FROM, mediaBlurIn, MEDIA_BLUR_FROM, whenSectionEnters } from "./letters";
 
 /**
@@ -9,8 +10,8 @@ import { photoIn, PHOTO_FROM, mediaBlurIn, MEDIA_BLUR_FROM, whenSectionEnters } 
  * `blur` swaps the sweep for the blur-only entrance (`mediaBlurIn`). The frame is hidden from first paint on
  * scripted pages, so a photo never shows, vanishes and wipes back in.
  */
-export default function RevealImage({ src, alt = "", className = "", video = false, delay = 0, onLoad, imgClassName = "", poster, blur = false }:
-  { src: string; alt?: string; className?: string; video?: boolean; delay?: number; onLoad?: boolean; imgClassName?: string; poster?: string; blur?: boolean }) {
+export default function RevealImage({ src, src4k, alt = "", className = "", video = false, delay = 0, onLoad, imgClassName = "", poster, blur = false }:
+  { src: string; src4k?: string; alt?: string; className?: string; video?: boolean; delay?: number; onLoad?: boolean; imgClassName?: string; poster?: string; blur?: boolean }) {
   const frame = useRef<HTMLDivElement>(null), zoom = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const f = frame.current; if (!f || reducedMotion()) return;
@@ -22,7 +23,10 @@ export default function RevealImage({ src, alt = "", className = "", video = fal
     <div ref={frame} data-reveal-img className={`overflow-hidden ${className}`}>
       <div ref={zoom} className="ri-inner">
         {video
-          ? <video className={imgClassName} src={src} poster={poster} autoPlay muted loop playsInline />
+          // `src4k`: the 4K cut on sharp large screens (`HI_RES`), the 1080p file everywhere else
+          ? src4k
+            ? <video className={imgClassName} poster={poster} autoPlay muted loop playsInline><source src={src4k} media={HI_RES} /><source src={src} /></video>
+            : <video className={imgClassName} src={src} poster={poster} autoPlay muted loop playsInline />
           // eslint-disable-next-line @next/next/no-img-element
           : <img className={imgClassName} src={src} alt={alt} loading="lazy" />}
       </div>

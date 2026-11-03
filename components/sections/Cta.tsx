@@ -21,7 +21,7 @@ export default function Cta({ form }: { form?: string }) {
             stay in frame (the photo is held to its right) */}
         {form
           ? <RevealImage src={C.still} blur className="absolute inset-0" imgClassName="object-[72%_50%] lg:object-center" />
-          : <RevealImage src={C.video} video blur className="absolute inset-0" imgClassName="max-lg:object-[68%_50%]" />}
+          : <RevealImage src={C.video} src4k={C.video4k} video blur className="absolute inset-0" imgClassName="max-lg:object-[68%_50%]" />}
         {!form && <>
           <div className="pointer-events-none absolute inset-x-0 top-0 h-[16%] bg-gradient-to-b from-limestone-50/80 to-limestone-50/0 lg:hidden" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-b from-limestone-50/0 via-limestone-50/70 via-60% to-limestone-50 lg:hidden" />

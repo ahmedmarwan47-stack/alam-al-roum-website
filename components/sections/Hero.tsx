@@ -7,7 +7,7 @@ export default function Hero() {
   return (
     // full viewport, running up under the glass bar, so the film shows through it
     <section data-hero data-nav="light" className="relative h-[100svh] min-h-[636px] overflow-hidden text-limestone-50">
-      <RevealImage src={hero.video} video poster={hero.poster} onLoad delay={0.2} className="absolute inset-0" />
+      <RevealImage src={hero.video} src4k={hero.video4k} video poster={hero.poster} onLoad delay={0.2} className="absolute inset-0" />
       {/* the shade the copy sits on, measured over every frame of the film (`.hero-film-shade`) */}
       <div className="hero-film-shade pointer-events-none absolute inset-0" />
       <div className="absolute inset-x-0 bottom-[84px] flex items-end justify-between container-x">
