@@ -1,4 +1,6 @@
 /** Home copy, taken from the Figma UI Design page (Home • Desktop). */
+import { film4k } from "./hi-res";
+
 const ph = (f: string) => `/images/photo/${f}.jpg`;
 
 export const nav = { menu: "MENU", cta: "Register interest" };
@@ -6,7 +8,7 @@ export const nav = { menu: "MENU", cta: "Register interest" };
 export const hero = {
   photo: ph("ui-hero-sea"),
   /** Figma hero video: the Alam Al Roum brand film (no subtitles), its footage only (2.6–33.9 s), looped. */
-  video: "/video/hero-film.mp4", video4k: "/video/hero-film-4k.mp4", poster: "/images/photo/hero-film-poster.jpg",
+  video: "/video/hero-film.mp4", video4k: film4k("/video/hero-film"), poster: "/images/photo/hero-film-poster.jpg",
   // two even lines (the second 88 % of the first): "the coast was a line" (brand manifesto), restored to a circle
   title: [{ t: "A coastline restored" }, { t: "from line to", br: true }, { t: "Circle", i: true }],
   body: "7.2 kilometres of shoreline, a restored lighthouse, and a city built for those who return. On Egypt's North Coast, by Qatari Diar.",
@@ -177,7 +179,7 @@ export const faq = {
 export const cta = {
   title: [{ t: "Live" }, { t: "Greatness", i: true }],
   body: "Be among the first to receive news of residences, districts, and the city's progress", cta: "Register interest",
-  video: "/video/cta-portal.mp4", video4k: "/video/cta-portal-4k.mp4", still: "/images/photo/cta-form-kids.jpg",
+  video: "/video/cta-portal.mp4", video4k: film4k("/video/cta-portal"), still: "/images/photo/cta-form-kids.jpg",
 };
 
 export const footer = {

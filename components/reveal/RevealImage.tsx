@@ -11,7 +11,7 @@ import { photoIn, PHOTO_FROM, mediaBlurIn, MEDIA_BLUR_FROM, whenSectionEnters } 
  * scripted pages, so a photo never shows, vanishes and wipes back in.
  */
 export default function RevealImage({ src, src4k, alt = "", className = "", video = false, delay = 0, onLoad, imgClassName = "", poster, blur = false }:
-  { src: string; src4k?: string; alt?: string; className?: string; video?: boolean; delay?: number; onLoad?: boolean; imgClassName?: string; poster?: string; blur?: boolean }) {
+  { src: string; src4k?: { src: string; type: string }[]; alt?: string; className?: string; video?: boolean; delay?: number; onLoad?: boolean; imgClassName?: string; poster?: string; blur?: boolean }) {
   const frame = useRef<HTMLDivElement>(null), zoom = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const f = frame.current; if (!f || reducedMotion()) return;
@@ -23,9 +23,11 @@ export default function RevealImage({ src, src4k, alt = "", className = "", vide
     <div ref={frame} data-reveal-img className={`overflow-hidden ${className}`}>
       <div ref={zoom} className="ri-inner">
         {video
-          // `src4k`: the 4K cut on sharp large screens (`HI_RES`), the 1080p file everywhere else
+          // `src4k`: the 4K cuts on sharp large screens (`HI_RES`), the 1080p file everywhere else
           ? src4k
-            ? <video className={imgClassName} poster={poster} autoPlay muted loop playsInline><source src={src4k} media={HI_RES} /><source src={src} /></video>
+            ? <video className={imgClassName} poster={poster} autoPlay muted loop playsInline>
+                {src4k.map((s) => <source key={s.src} src={s.src} type={s.type} media={HI_RES} />)}<source src={src} />
+              </video>
             : <video className={imgClassName} src={src} poster={poster} autoPlay muted loop playsInline />
           // eslint-disable-next-line @next/next/no-img-element
           : <img className={imgClassName} src={src} alt={alt} loading="lazy" />}
