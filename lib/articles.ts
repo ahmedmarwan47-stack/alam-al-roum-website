@@ -8,9 +8,9 @@
  * Figures come from the Alam Al Roum factsheet (2026) and the site; anything not in them is kept to plans and intentions.
  * Draft copy for the client to review — headlines, dates, venues and timings beyond the phase-one story are not from Figma.
  */
-const md = (f: string) => `/images/media/${f}.jpg`;
-const ph = (f: string) => `/images/photo/${f}.jpg`;
-const ev = (f: string) => `/images/events/${f}.jpg`;
+const md = (f: string) => `/images/media/${f}.webp`;
+const ph = (f: string) => `/images/photo/${f}.webp`;
+const ev = (f: string) => `/images/events/${f}.webp`;
 
 export type Block = { h?: string; p?: string; img?: string; caption?: string };   // `caption` is the picture's alt text
 export type Written = {
@@ -304,7 +304,7 @@ const events: EventDraft[] = [
       "Long shared tables, live music and the sunset over the water set the pace.",
       "The market is planned as a regular fixture on the promenade, a place for residents to shop, meet and eat together through the seasons."],
     programme: ["16:00 · Stalls open", "17:00 · Cooking demonstrations", "18:30 · Live music on the promenade", "19:00 · Shared tables at sunset", "22:00 · Market closes"],
-    img: [ph("ui-g-table"), "Long tables by the water."], img2: ["/images/hotels/ev-chef.jpg", "Olives, bread and oil from across the coast."],
+    img: [ph("ui-g-table"), "Long tables by the water."], img2: ["/images/hotels/ev-chef.webp", "Olives, bread and oil from across the coast."],
     setting: { h: "The promenade", p: ["The marina promenade is the city's waterfront walk, lined with cafés and shade and open onto the berths of the international marina.",
       "On market evenings the stalls run along the water, with tables set between them and music at the head of the marina."] } },
   { title: "Seaside sculpture unveiling", location: "Beach promenade", date: "Fri 12 Feb 2027", hero: ev("sculpture"),
@@ -331,7 +331,7 @@ const events: EventDraft[] = [
       "Guests will be welcomed with dinner, music and views over the water.",
       "The gala introduces the hotel brands and hospitality partners who will welcome guests to the city."],
     programme: ["19:00 · Welcome drinks on the terrace", "20:00 · Dinner by the sea", "21:30 · Live music", "23:00 · Late evening on the beach"],
-    img: [ph("ui-v-lounge"), "Hospitality is permanent here."], img2: ["/images/hotels/beachfront-resort.jpg", "Dining rooms open to the sea air."],
+    img: [ph("ui-v-lounge"), "Hospitality is permanent here."], img2: ["/images/hotels/beachfront-resort.webp", "Dining rooms open to the sea air."],
     setting: { h: "The resort district", p: ["In the resort districts, hotels and residences share the same streets, so service is part of the neighbourhood rather than set apart from it.",
       "Hotels range from beachfront resorts to boutique addresses on the lagoons and at the head of the marina."] } },
   { title: "Marina regatta weekend", location: "International marina", date: "Sat 13 Feb 2027", hero: ev("regatta"),
@@ -340,7 +340,7 @@ const events: EventDraft[] = [
       "Spectators can follow the races from the promenade and the lighthouse.",
       "Classes for keelboats and dinghies give crews of every level a place on the start line."],
     programme: ["Saturday 09:00 · Skippers' briefing", "Saturday 10:30 · Coastal races", "Saturday 19:00 · Crew dinner on the quay", "Sunday 10:30 · Final races", "Sunday 16:00 · Prize-giving at the marina"],
-    img: [md("m04"), "Open water, minutes from the marina."], img2: ["/images/experiences/marina.jpg", "Berths for visiting yachts and residents' boats."],
+    img: [md("m04"), "Open water, minutes from the marina."], img2: ["/images/experiences/marina.webp", "Berths for visiting yachts and residents' boats."],
     setting: { h: "The marina", p: ["The marina sits at the head of the city's central axis, beside the lighthouse, with berths for visiting yachts and residents' boats.",
       "Its promenade gives spectators a view of the start and finish, and the quay fills with crews and guests each evening."] } },
   { title: "Full moon beach festival", location: "Beachfront", date: "Wed 10 Feb 2027", hero: ev("beach-festival"),
@@ -367,7 +367,7 @@ const events: EventDraft[] = [
       "Food stalls and the restaurants of the promenade stay open late, so the music can be heard from the berths, the quay and the lighthouse.",
       "It is the first of a season of music by the sea, part of the city's year-round calendar of culture."],
     programme: ["18:00 · Food stalls open", "18:45 · Opening set at sunset", "20:00 · Main concert on the quay", "22:00 · Late set by the lighthouse"],
-    img: ["/images/marina/hero.jpg", "Evenings on the water."], img2: [ph("ui-g-boardwalk"), "The boulevard runs down to the lighthouse and the quay."],
+    img: ["/images/marina/hero.webp", "Evenings on the water."], img2: [ph("ui-g-boardwalk"), "The boulevard runs down to the lighthouse and the quay."],
     setting: { h: "The quay", p: ["The quay runs along the head of the marina, between the berths and the lighthouse, with the promenade's restaurants behind it.",
       "On concert nights the stage faces the water, so the music carries across the marina and the boats become part of the audience."] } },
   { title: "Prime Minister's site visit", location: "Phase one site", date: "Aug 2026", hero: ph("ui-pm-visit"), past: true,

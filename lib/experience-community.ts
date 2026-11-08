@@ -12,12 +12,12 @@ import type { OverviewData } from "@/components/sections/Overview";
 import type { CommunityData } from "@/components/experience/ExperienceCommunity";
 import type { WeekData } from "@/components/experience/ExperienceWeek";
 
-const x = (f: string) => `/images/experiences/${f}.jpg`;   // brand: the -<role> files are brand-book photos
-const ph = (f: string) => `/images/photo/${f}.jpg`;
-const md = (f: string) => `/images/media/${f}.jpg`;
-const ev = (f: string) => `/images/events/${f}.jpg`;
+const x = (f: string) => `/images/experiences/${f}.webp`;   // brand: the -<role> files are brand-book photos
+const ph = (f: string) => `/images/photo/${f}.webp`;
+const md = (f: string) => `/images/media/${f}.webp`;
+const ev = (f: string) => `/images/events/${f}.webp`;
 /** Photos generated with Figma AI (28 Oct, client-approved) where no real photo fits; placeholders until shoots exist. */
-const gen = (f: string) => `/images/experiences/gen/${f}.jpg`;
+const gen = (f: string) => `/images/experiences/gen/${f}.webp`;
 
 /** What's there: the rows (title, line) and one photo per row, shown with the shared Landmarks section. */
 export type HereData = { tag: string; title: string; body: string; photo: string; alt: string; rows: [string, string][]; photos: string[] };
@@ -85,7 +85,7 @@ export const experienceCommunity: Record<string, ExperienceCommunityData> = {
         ["Golf & Spa Hotel", "A resort and spa framed by the course, for visiting players and guests."],
       ],
       // one photo per row, for the shared Landmarks section (lib/experience-detail: what's here)
-      photos: [gen("golf-course"), ph("ui-g-terraces"), gen("golf-academy"), gen("golf-practice"), "/images/hotels/golf-spa.jpg"] },
+      photos: [gen("golf-course"), ph("ui-g-terraces"), gen("golf-academy"), gen("golf-practice"), "/images/hotels/golf-spa.webp"] },
     community: { tag: "The golf community", title: "A club, not only a course",
       body: ["Homes in the golf community are set along the fairways, so the course is part of the view and the daily walk. Membership is planned for residents, with access for hotel guests and visiting players.",
         "The clubhouse brings the community together beyond the game: breakfast on the terrace, monthly medals, and dinners that run late into the evening."],
@@ -132,7 +132,7 @@ export const experienceCommunity: Record<string, ExperienceCommunityData> = {
   "retail-dining": {
     overview: { title: "Town centres made for walking",
       body: "Everyday shops, cafés and restaurants sit in walkable town centres, along a commercial boulevard and beside the water. Dining runs from the marina quay to the lagoon edge, so a good table is always close to home.",
-      photo: "/images/experiences/dining-table.jpg", alt: "A table laid by the water",
+      photo: "/images/experiences/dining-table.webp", alt: "A table laid by the water",
       points: [["Shops on foot", "Everyday shops and cafés sit in walkable town centres, under shaded arcades, so daily needs are met without getting into the car."], ["The boulevard", "The city's commercial street, lined with boutiques, restaurants and terraces, is the place for an evening out and a walk to the marina."], ["Tables by the water", "Dining runs from the marina quay to the lagoon edge, from a quick coffee in the morning to long dinners as the lights come on over the water."]] },
     here: { tag: "Where to go", title: "Shops and tables", body: "Daily needs close to home; the boulevard and the marina for an evening out.",
       photo: x("dining-evening"), alt: "A terrace strung with lights in the evening",
@@ -175,7 +175,7 @@ export const experienceCommunity: Record<string, ExperienceCommunityData> = {
   wellness: {
     overview: { title: "Wellness and longevity by the sea",
       body: "Wellness here starts outdoors: a swim in the lagoon, a walk along the shore, a slower pace through the day. Spas, clinics and studios are planned within reach of every neighbourhood, with 85 % of the city kept as open space.",
-      photo: "/images/photo/ui-v-lounger.jpg", alt: "A lounger by the sea",
+      photo: "/images/photo/ui-v-lounger.webp", alt: "A lounger by the sea",
       points: [["Wellness outdoors", "Wellness starts outside: a swim in the lagoon, a walk along the shore and a slower pace through the day, in a mild climate all year."], ["Care close to home", "Spas, clinics and studios are planned within reach of every neighbourhood, with preventive care, treatments and classes close to home."], ["Room to breathe", "Most of the city is kept as open space, with gardens, dunes and promenades that make quiet time outdoors part of every day."]] },
     here: { tag: "Facilities", title: "Places to restore", body: "Water, shade and open space, with care close to home.",
       photo: ph("ui-g-pool"), alt: "A pool among olive trees",
@@ -187,7 +187,7 @@ export const experienceCommunity: Record<string, ExperienceCommunityData> = {
         ["Clinics", "Neighbourhood clinics for everyday and preventive care."],
       ],
       // one photo per row, for the shared Landmarks section (lib/experience-detail: what's here)
-      photos: [ph("ui-g-pool"), ph("ui-sea-wide"), "/images/hotels/ev-yoga.jpg", ph("ui-v-turq"), gen("wellness-clinic")] },
+      photos: [ph("ui-g-pool"), ph("ui-sea-wide"), "/images/hotels/ev-yoga.webp", ph("ui-v-turq"), gen("wellness-clinic")] },
     community: { tag: "The wellness community", title: "A slower pace, shared",
       body: ["Wellness at Alam Al Roum is designed into ordinary days: streets with shade, routes that invite walking, and water within reach of every home. Practitioners, clinics and studios work together, so care and prevention sit side by side.",
         "Morning classes on the beach, swimming groups in the lagoons and seasonal retreats give the community a rhythm that carries on after summer."],
@@ -204,7 +204,7 @@ export const experienceCommunity: Record<string, ExperienceCommunityData> = {
   education: {
     overview: { title: "Schools for families who stay",
       body: "Nurseries and schools are planned within the neighbourhoods, so children can walk or cycle to class. A dedicated learning hub brings together after-school programmes, languages and the arts, and the coast's three thousand years of history give lessons a setting outside the classroom.",
-      photo: "/images/experiences/education-heritage.jpg", alt: "Learning from the coast's history",
+      photo: "/images/experiences/education-heritage.webp", alt: "Learning from the coast's history",
       points: [["Walk to school", "Nurseries and schools sit within the neighbourhoods, on shaded, car-free routes, so children can walk or cycle to class from home."], ["The learning hub", "After-school programmes, languages and the arts come together in one place, with studios, a library and space for clubs of every kind."], ["Lessons in history", "Three thousand years of the coast sit outside the classroom door, from the Roman port to the lighthouse, waiting to be walked and studied."]] },
     here: { tag: "Learning", title: "From nursery to the learning hub", body: "Every stage of learning, a short walk or ride from home.",
       photo: x("education-hub"), alt: "Arches and a stair in pale plaster",

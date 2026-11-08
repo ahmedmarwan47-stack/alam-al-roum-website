@@ -1,5 +1,5 @@
 /** Communities copy, from the Figma UI Design page (List Neighbourhoods/Communities • Desktop, 10921:7384). */
-const c = (f: string) => `/images/communities/${f}.jpg`;
+const c = (f: string) => `/images/communities/${f}.webp`;
 
 export const comHero = {
   pre: "Communities",

@@ -1,5 +1,5 @@
 /** Experiences & Lifestyle copy, from the Figma UI Design page (Experiences & Lifestyle • Desktop, 10921:7596). */
-const e = (f: string) => `/images/experiences/${f}.jpg`;
+const e = (f: string) => `/images/experiences/${f}.webp`;
 
 export const expHero = {
   pre: "Experiences & Lifestyle",

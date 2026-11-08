@@ -5,7 +5,7 @@ export const manifesto = {
   // two even lines (client edit 28 Oct): "The coast you remember / lived in all year round"
   line1: "The coast", accent: "you remember", line2: "lived in all year round",
   body: "Four seasons of sea, light and life. Alam Al Roum is built to be lived in all year, not visited for a summer.",
-  image: "/images/about/a-sea.jpg",
+  image: "/images/about/a-sea.webp",
 };
 
 /** UI / Section / Botanical Frame (10979:18297). The About instance overrides the copy to the line kept in `alt`. */
@@ -14,7 +14,7 @@ export const bloom = {
   title: "A city, not a resort",
   body: "“We are not building a summer destination. We are restoring a permanent city on a coast that has always been a landmark.”",
   alt: { title: "Life in bloom", body: "Shaded courtyards, olive trees and bougainvillea: the gardens are planted for the coast, green in every season." },
-  image: "/images/about/a-botanical.jpg",
+  image: "/images/about/a-botanical.webp",
 };
 
 /**
@@ -36,7 +36,7 @@ export const cityNumbers = {
 export const facts = {
   title: "A fully integrated coastal city",   // set as "A Fully Integrated / Coastal City"
   body: "Developed by Qatari Diar, Alam Al Roum brings together residential, hospitality, commercial, cultural and recreational destinations within a future-ready urban environment designed to evolve.",
-  image: "/images/about/a-courtyard.jpg",
+  image: "/images/about/a-courtyard.webp",
   /** The Merged window and the picture inside it, as [x, y, w, h] on the 1512 × 1024 frame; both open to the whole stage. */
   merged: { win: [316, 232, 880, 560], pic: [290, 215, 933, 594] },
 };
@@ -55,7 +55,7 @@ export const coin = {
   caption: "Once a beacon for Roman ships, soon the city’s point of arrival.",
   // Higgsfield sky-fall v2 (the marina lighthouse film used in Figma 11012:16013): clouds → crescent marina → the tower.
   // Played as the /seq/skyfall frame sequence (every 2nd frame of /video/grandeur-skyfall-v2.mp4, kept as its source).
-  poster: "/images/photo/grandeur-skyfall-v2-poster.jpg",
+  poster: "/images/photo/grandeur-skyfall-v2-poster.webp",
   render: "/images/about/a-coin.webp",
   mask: "/images/about/a-coin-mask.svg",
 };

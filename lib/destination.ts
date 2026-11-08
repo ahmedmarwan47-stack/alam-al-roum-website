@@ -1,12 +1,12 @@
 /** Destination copy, taken from the Figma UI Design page (Destination • Desktop, 10921:7791). */
 const d = (f: string) => `/images/destination/${f}`;
-const ph = (f: string) => `/images/photo/${f}.jpg`;
+const ph = (f: string) => `/images/photo/${f}.webp`;
 
 export const destHero = {
   pre: "Destination",
   title: [{ t: "Arrive by" }, { t: "Land, Sea, Air", i: true }, { t: "And the open land", br: true }],
   body: "On Egypt’s North Coast, 14 km from Marsa Matrouh and within five hours of Europe and the Gulf, Alam Al Roum sits where turquoise water meets open land.",
-  photo: d("hero-arrival.jpg"), alt: "A traveller arriving with a suitcase",
+  photo: d("hero-arrival.webp"), alt: "A traveller arriving with a suitcase",
 };
 
 export const inTown = {
@@ -14,9 +14,9 @@ export const inTown = {
   body: "A multi-layered transportation network connects destinations efficiently while prioritising accessibility, sustainability and ease of movement.",
   mask: d("coin-mask.svg"),
   modes: [
-    { tag: "Connected", title: "The Loop", body: "A continuous route linking every district, the marina and the town centres. Autonomous shuttles run the Loop through the day, with stops a short walk from every home, beach and lagoon promenade.", photo: d("transport-loop-shuttle.jpg") },
-    { tag: "Low impact", title: "Sustainable solutions", body: "Water taxis link the lagoon districts to the marina, alongside dedicated cycling routes and shaded pedestrian promenades. Shared micromobility, from bikes to e-scooters, covers the short trips in between.", photo: d("transport-water-taxi.jpg") },
-    { tag: "Planned ahead", title: "Smart mobility", body: "Movement around the city is planned from day one, so every home, beach and town centre stays close. Private vehicles enter through the seven gates on managed routes, keeping neighbourhood streets calm and walkable.", photo: d("transport-city-gate.jpg") },
+    { tag: "Connected", title: "The Loop", body: "A continuous route linking every district, the marina and the town centres. Autonomous shuttles run the Loop through the day, with stops a short walk from every home, beach and lagoon promenade.", photo: d("transport-loop-shuttle.webp") },
+    { tag: "Low impact", title: "Sustainable solutions", body: "Water taxis link the lagoon districts to the marina, alongside dedicated cycling routes and shaded pedestrian promenades. Shared micromobility, from bikes to e-scooters, covers the short trips in between.", photo: d("transport-water-taxi.webp") },
+    { tag: "Planned ahead", title: "Smart mobility", body: "Movement around the city is planned from day one, so every home, beach and town centre stays close. Private vehicles enter through the seven gates on managed routes, keeping neighbourhood streets calm and walkable.", photo: d("transport-city-gate.webp") },
   ],
 };
 
@@ -29,14 +29,14 @@ export const waterStrategy = {
     ["Marina basin", "Berths at the head of the central axis"], ["Ecological water systems", "Recycled water for every landscape"],
   ],
   cta: "Explore sustainability", href: "/sustainability",
-  video: "/video/destination-shore-loop.mp4", poster: d("shore.jpg"),
+  video: "/video/destination-shore-loop.mp4", poster: d("shore.webp"),
 };
 
 export const history = {
-  romans: { title: ["Since", "the", "Romans"], photo: d("romans-mosaic.jpg"), flower: d("bougainvillea.png"),
+  romans: { title: ["Since", "the", "Romans"], photo: d("romans-mosaic.webp"), flower: d("bougainvillea.png"),
     side: { title: "A Year-Around City", body: "A place of permanence, rooted in the history of a coastline that once guided sailors home." } },
-  coast: { title: "The coast that guided the Romans", photo: d("coast-guided.jpg") },
-  photo: d("terracotta-photo.jpg"),
+  coast: { title: "The coast that guided the Romans", photo: d("coast-guided.webp") },
+  photo: d("terracotta-photo.webp"),
   // stops on the 1218 × 273 coastline drawing (Figma 11134:16026)
   line: { svg: d("history-coastline.svg"), stop: d("history-stop.svg"), todayDot: d("history-stop-today.svg"), mark: d("history-mark.svg"),
     stops: [
@@ -50,7 +50,7 @@ export const history = {
 };
 
 export const archSea = {
-  video: "/video/destination-arch-sky.mp4", webm: "/video/destination-arch-sky.webm", poster: d("arch-sky-poster.jpg"),
+  video: "/video/destination-arch-sky.mp4", webm: "/video/destination-arch-sky.webm", poster: d("arch-sky-poster.webp"),
   clouds: d("clouds-top.png"),
 };
 

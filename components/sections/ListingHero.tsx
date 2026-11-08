@@ -11,7 +11,7 @@ export default function ListingHero({ title, body }: { title: string; body: stri
     // it runs up under the glass bar (the visual's white top shows through it); the copy is centred below the bar
     <section data-hero className="relative flex min-h-[416px] items-center justify-center overflow-hidden bg-white px-[var(--gutter)] pb-12 pt-[124px] md:min-h-[496px] lg:h-[586px]">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/images/hero-olive.jpg" srcSet={srcSet("/images/hero-olive.jpg")} alt="" className="pointer-events-none absolute inset-0 h-full w-full object-cover max-md:object-[85%_50%]" />
+      <img src="/images/hero-olive.webp" srcSet={srcSet("/images/hero-olive.webp")} alt="" className="pointer-events-none absolute inset-0 h-full w-full object-cover max-md:object-[85%_50%]" />
       {/* as in Figma, the block takes the one-line title's width (never narrower than 680 px); the intro keeps a
           reading measure inside it (600 px, two even lines) */}
       <div className="relative flex max-w-[768px] flex-col items-center gap-6 text-center text-black md:w-min md:min-w-[680px] md:max-w-none">

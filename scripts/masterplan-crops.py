@@ -16,7 +16,7 @@ Swapping in a new master image:
      (community pins) and lib/masterplan.ts (About places, community amenities), all in plan units.
   3. Run, from the repo root:
        ~/alam-elroum/docs/upscale/env/bin/python -I scripts/masterplan-crops.py
-     It writes public/images/masterplan/<name>.jpg and lib/masterplan-crops.json (paths carry a content hash, so
+     It writes public/images/masterplan/<name>.webp and lib/masterplan-crops.json (paths carry a content hash, so
      browsers fetch the new files). Small crops are upscaled with Real-ESRGAN x4plus when torch + spandrel and the
      model are available (--model, default ~/alam-elroum/docs/upscale/models/RealESRGAN_x4plus.pth), else Lanczos.
      No AI generation: crops and upscales of the client's own render only.
@@ -112,10 +112,10 @@ def main():
         if abs(k - 1) > 0.01:
             img = cv2.resize(img, (round(img.shape[1] * k), round(img.shape[0] * k)),
                              interpolation=cv2.INTER_AREA if k < 1 else cv2.INTER_LANCZOS4)
-        f = os.path.join(out_dir, f"{name}.jpg")
+        f = os.path.join(out_dir, f"{name}.webp")
         cv2.imwrite(f, img, [cv2.IMWRITE_JPEG_QUALITY, 84, cv2.IMWRITE_JPEG_PROGRESSIVE, 1])
         v = hashlib.md5(open(f, "rb").read()).hexdigest()[:8]
-        crops[name] = {"src": f"/images/masterplan/{name}.jpg?v={v}", "x": x, "y": y, "w": w, "h": h}
+        crops[name] = {"src": f"/images/masterplan/{name}.webp?v={v}", "x": x, "y": y, "w": w, "h": h}
         print(f"{name}: plan {x},{y} {w}x{h} -> px {px1 - px0}x{py1 - py0} -> {img.shape[1]}x{img.shape[0]}")
 
     v = hashlib.md5(open(a.master, "rb").read()).hexdigest()[:8]

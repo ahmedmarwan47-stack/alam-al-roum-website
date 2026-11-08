@@ -7,7 +7,7 @@ const img = (f: string) => `/images/about/${f}`;
  */
 export const story = {
   history: {
-    photo: img("b-story-history.jpg"),
+    photo: img("b-story-history.webp"),
     label: "The Story · History",
     line: "This Shoreline Guided Sailors Home",
     accent: "For Two Thousand Years.",
@@ -19,13 +19,13 @@ export const story = {
     lines: ["Built In Limestone,", "Open To The Sea,", "Made To Be Lived In."],
     body: "The Experience Centre is the first part of the city to stand: limestone walls, shaded courtyards and rooms that open onto the sea, built to be lived in every month of the year.",
     photos: [
-      { src: img("b-story-table.jpg"), alt: "A woman in a white dress walking barefoot on stone", x: 60, y: 300, w: 300, h: 400 },
-      { src: img("b-story-craft.jpg"), alt: "A man in a linen shirt aboard a boat", x: 1152, y: 200, w: 300, h: 400 },
-      { src: img("b-story-music.jpg"), alt: "A woman at the bow of a sailboat", x: 1092, y: 640, w: 360, h: 200 },
+      { src: img("b-story-table.webp"), alt: "A woman in a white dress walking barefoot on stone", x: 60, y: 300, w: 300, h: 400 },
+      { src: img("b-story-craft.webp"), alt: "A man in a linen shirt aboard a boat", x: 1152, y: 200, w: 300, h: 400 },
+      { src: img("b-story-music.webp"), alt: "A woman at the bow of a sailboat", x: 1092, y: 640, w: 360, h: 200 },
     ],
   },
   greatness: {
-    photo: img("b-story-sea.jpg"),
+    photo: img("b-story-sea.webp"),
     word: "The Sea",
     line: "Greatness Is What Remains",
     accent: "",
@@ -39,17 +39,17 @@ export const milestones = {
   title: "Phase one from agreement to handover",
   body: "The first phase is underway. Construction begins in 2026 and the first residents arrive in 2030.",
   items: [
-    { year: "2025", title: "Agreement signed", photo: img("b-ms-agreement.jpg"),
+    { year: "2025", title: "Agreement signed", photo: img("b-ms-agreement.webp"),
       body: "Qatari Diar and the Government of Egypt sign the agreement to develop 4,902 feddan of Mediterranean coast." },
-    { year: "2026", title: "Construction launches", photo: img("b-ms-construction.jpg"),
+    { year: "2026", title: "Construction launches", photo: img("b-ms-construction.webp"),
       body: "Phase one begins and breaks ground. Site works begin along the 7.2 km shoreline as the first district takes shape." },
-    { year: "2027", title: "Lagoons & infrastructure", photo: img("b-ms-lagoons.jpg"),
+    { year: "2027", title: "Lagoons & infrastructure", photo: img("b-ms-lagoons.webp"),
       body: "Roads, utilities and the swimmable lagoons advance, linking every district to the coast and the airport." },
-    { year: "2028", title: "Marina & golf", photo: img("b-ms-golf.jpg"),
+    { year: "2028", title: "Marina & golf", photo: img("b-ms-golf.webp"),
       body: "The marina basin and the 18-hole championship golf course take shape along the sea, ready for first play." },
-    { year: "2029", title: "First neighbourhoods", photo: img("b-ms-neighbourhoods.jpg"),
+    { year: "2029", title: "First neighbourhoods", photo: img("b-ms-neighbourhoods.webp"),
       body: "The first residential neighbourhoods near completion, with the town centre and beachfront opening nearby." },
-    { year: "2030", title: "First residents", photo: img("b-ms-residents.jpg"),
+    { year: "2030", title: "First residents", photo: img("b-ms-residents.webp"),
       body: "Handover to the clients begins. The first residents arrive, and Alam Al Roum opens its doors as a living city by the sea." },
   ],
 };
@@ -60,7 +60,7 @@ export const milestones = {
  * `tick` the leader length from the pin up to its label. Distances from the factsheet.
  */
 export const nearby = {
-  map: img("b-nearby-map.jpg"),
+  map: img("b-nearby-map.webp"),
   coinPair: img("b-coin-pair.svg"),
   tag: "Nearby",
   title: "Close To The Whole Coast",

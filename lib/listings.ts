@@ -2,8 +2,8 @@
 import { events as homeEvents } from "@/lib/content";
 import { writtenEvents, writtenStories, type Written } from "@/lib/articles";
 
-const ev = (f: string) => `/images/events/${f}.jpg`;
-const md = (f: string) => `/images/media/${f}.jpg`;
+const ev = (f: string) => `/images/events/${f}.webp`;
+const md = (f: string) => `/images/media/${f}.webp`;
 
 export type ListCard = { tag: string; meta: string; title: string; photo: string; href: string; slug?: string };
 
@@ -28,9 +28,9 @@ export const eventsPage = {
     ["Marina regatta weekend", ev("regatta")],
     ["Full moon beach festival", ev("beach-festival")],
     ["Coastal wellness retreat", ev("wellness-retreat")],
-    ["Music by the sea", "/images/photo/ui-g-music.jpg"],
+    ["Music by the sea", "/images/photo/ui-g-music.webp"],
   ].map(([title, photo]) => eventCard(title, photo)),
-  past: homeEvents.past.map(([, , title, p]) => eventCard(title, `/images/photo/${p}.jpg`)),
+  past: homeEvents.past.map(([, , title, p]) => eventCard(title, `/images/photo/${p}.webp`)),
 };
 
 const story = (tag: string, read: string, title: string, p: string): ListCard =>

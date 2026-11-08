@@ -11,9 +11,9 @@ import type { GalleryData } from "@/components/sections/Gallery";
 import { pageGallery } from "@/lib/content";
 import { communities } from "@/lib/communities";
 
-const n = (f: string) => `/images/neighbourhood/${f}.jpg`;
-const cm = (f: string) => `/images/communities/${f}.jpg`;
-const ph = (f: string) => `/images/photo/${f}.jpg`;
+const n = (f: string) => `/images/neighbourhood/${f}.webp`;
+const cm = (f: string) => `/images/communities/${f}.webp`;
+const ph = (f: string) => `/images/photo/${f}.webp`;
 
 export type Neighbourhood = {
   slug: string; hero: SingleHeroData; overview: OverviewData; units?: HotelsData; facilities?: LandmarksData;
@@ -56,11 +56,11 @@ const beachfront: Neighbourhood = {
 
 /** Each community's own photos for its gallery carousel (pageGallery adds the shared pool after them). */
 const shots: Record<string, string[]> = {
-  lagoon: [cm("pin-lagoon"), "/images/hotels/lagoon-retreat.jpg", "/images/sustainability/c2-large.jpg", ph("ui-v-ripples"), ph("ui-v-turq")],
-  "marina-boulevard": [cm("pin-marina"), "/images/marina/ev-regatta.jpg", ph("ui-g-table"), "/images/marina/ev-market.jpg", ph("ui-v-pavilion-dusk")],
-  resort: [cm("pin-resort"), "/images/hotels/beachfront-resort.jpg", ph("ui-g-interior"), "/images/hotels/lighthouse-hotel.jpg", ph("ui-g-pool")],
-  golf: [cm("pin-golf"), "/images/experiences/golf.jpg", "/images/hotels/golf-spa.jpg", ph("ui-g-terraces")],
-  "town-centre": ["/images/hotels/town-centre-suites.jpg", "/images/experiences/dining.jpg", ph("ui-expcenter-court"), ph("ui-g-music"), ph("ui-g-colonnade")],
+  lagoon: [cm("pin-lagoon"), "/images/hotels/lagoon-retreat.webp", "/images/sustainability/c2-large.webp", ph("ui-v-ripples"), ph("ui-v-turq")],
+  "marina-boulevard": [cm("pin-marina"), "/images/marina/ev-regatta.webp", ph("ui-g-table"), "/images/marina/ev-market.webp", ph("ui-v-pavilion-dusk")],
+  resort: [cm("pin-resort"), "/images/hotels/beachfront-resort.webp", ph("ui-g-interior"), "/images/hotels/lighthouse-hotel.webp", ph("ui-g-pool")],
+  golf: [cm("pin-golf"), "/images/experiences/golf.webp", "/images/hotels/golf-spa.webp", ph("ui-g-terraces")],
+  "town-centre": ["/images/hotels/town-centre-suites.webp", "/images/experiences/dining.webp", ph("ui-expcenter-court"), ph("ui-g-music"), ph("ui-g-colonnade")],
 };
 
 /**
@@ -93,7 +93,7 @@ const detail: Record<string, { line: string; overview: OverviewData }> = {
   golf: { line: "Homes framed by an 18-hole championship course by the sea: 980,000 square metres of greens, green all year.",
     overview: { tag: "Overview · Greens", title: "Eighteen holes by the sea, green all year",
       body: "Homes are framed by the fairways of a championship course by the Mediterranean, in a city built to be lived in all year.",
-      photo: "/images/experiences/gen/golf-course.jpg", alt: "The golf course by the sea",
+      photo: "/images/experiences/gen/golf-course.webp", alt: "The golf course by the sea",
       points: [["Homes on the fairways", "Villas and townhouses look across the greens to the sea, set back behind planting for privacy, with paths that lead straight to the course."],
         ["A clubhouse by the sea", "Dining, the lounge and members' evenings at the heart of the course. The clubhouse is a social centre for golfers, their families and their guests."],
         ["Green in every season", "A course kept for year-round play, watered with recycled water and planted with species suited to the coast, so it stays green without waste."]] } },

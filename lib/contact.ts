@@ -2,7 +2,7 @@
 export const sayHello = {
   title: "Let’s talk about what’s next.",
   body: "Tell us what you’re looking for, and we’ll help you find the right next step at Alam Al Roum.",
-  image: "/images/contact/say-hello.jpg",
+  image: "/images/contact/say-hello.webp",
   email: "info@alamalroumegypt.com",
   rows: [
     [["call", "HOTLINE", "16922", "tel:16922"], ["whatsapp", "WHATSAPP", "+20 120 001 6922", "https://wa.me/201200016922"], ["mail-01", "Email", "info@alamalroumegypt.com", "mailto:info@alamalroumegypt.com"]],
@@ -28,7 +28,7 @@ export const bookCall = {
 };
 
 export const locations = {
-  tag: "Find us", title: "Locations", map: "/images/contact/map.jpg",
+  tag: "Find us", title: "Locations", map: "/images/contact/map.webp",
   credit: "Sources: Esri, HERE, Garmin, USGS, Intermap, INCREMENT P, NRCan, Esri Japan, METI, Esri China (Hong Kong), Esri Korea, Esri (Thailand), NGCC, © OpenStreetMap contributors, and the GIS User Community",
   // each office's point as % of the map: the site on the coast, and the basemap's own Cairo and Doha city dots
   // (the pill's icon sits on the point, so the pill covers the basemap's printed name)
