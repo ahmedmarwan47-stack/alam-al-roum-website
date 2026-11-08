@@ -5,6 +5,7 @@ import Button from "@/components/ui/Button";
 import RevealText from "@/components/reveal/RevealText";
 import { grandeur, lighthouse } from "@/lib/content";
 import { srcSet } from "@/lib/img";
+import { frameLoader } from "@/lib/frames";
 
 const FRAMES = 185;
 /** 1920 × 1080 WebP frames on every screen: the frames are all held decoded, and at 4K that is ~6 GB, enough for
@@ -28,19 +29,18 @@ const SPEED = [140, 90, 170, 110, 60, 150, 80, 190, 70, 130, 100, 160];
 export default function ScrollStory() {
   const wrap = useRef<HTMLElement>(null), canvas = useRef<HTMLCanvasElement>(null), stageRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const c = canvas.current!, ctx = c.getContext("2d")!; const imgs: HTMLImageElement[] = []; let cur = 0;
+    const c = canvas.current!, ctx = c.getContext("2d")!; let cur = 0, shown = -1;
+    // the frame the scroll asks for, or the nearest one that has arrived (the film never freezes waiting on one)
     const draw = (i: number) => {
-      const img = imgs[i]; if (!img || !img.complete || !img.naturalWidth) return;
+      const f = frames.nearest(i); if (!f) return;
+      const [img] = f; shown = f[1];
       const s = Math.max(c.width / img.naturalWidth, c.height / img.naturalHeight), w = img.naturalWidth * s, h = img.naturalHeight * s;
       ctx.drawImage(img, (c.width - w) / 2, (c.height - h) / 2, w, h);
     };
     const size = () => { const r = c.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2); c.width = r.width * d; c.height = r.height * d; draw(cur); };
-    // frames are decoded ahead as they arrive, so the first pass through the film never waits on a decode
-    // the frames start downloading only as the section comes within two screens, so they never hold up the
-    // photos and films above it (the film is ~9 MB of frames)
-    const load = () => { for (let i = 0; i < FRAMES; i++) { const im = new Image(); im.decoding = "async"; im.src = src(i); im.onload = () => { im.decode?.().catch(() => {}); if (i === cur) draw(i); }; imgs.push(im); } };
-    const near = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { near.disconnect(); load(); } }, { rootMargin: "200% 0px" });
-    near.observe(wrap.current!);
+    // a frame that lands closer to where the scroll is than the one on screen replaces it
+    const frames = frameLoader(FRAMES, src, (i) => { if (shown < 0 || Math.abs(i - cur) < Math.abs(shown - cur)) draw(cur); });
+    const stopLoading = frames.startWhenNear(wrap.current!);
     size(); window.addEventListener("resize", size);
     const st = ScrollTrigger.create({
       trigger: wrap.current, start: "top top", end: "bottom bottom",
@@ -61,7 +61,7 @@ export default function ScrollStory() {
       tweens.push(gsap.to(cards.map((el) => el.firstElementChild), { x: 0, y: 0, duration: 1.4, ease: "siteOut", stagger: 0.03,
         scrollTrigger: { trigger: stage, start: "top 80%", toggleActions: "play none none none" } }));
     }
-    return () => { near.disconnect(); st.kill(); tweens.forEach((t) => { t.scrollTrigger?.kill(); t.kill(); }); window.removeEventListener("resize", size); };
+    return () => { stopLoading(); st.kill(); tweens.forEach((t) => { t.scrollTrigger?.kill(); t.kill(); }); window.removeEventListener("resize", size); };
   }, []);
 
   return (

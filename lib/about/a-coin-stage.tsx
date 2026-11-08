@@ -6,6 +6,7 @@ import { gsap, ScrollTrigger, reducedMotion, withHold } from "@/lib/gsap";
 import "@/lib/about/a-motion";
 import { coin as C } from "@/lib/about/a-content";
 import { BLOCK_FROM, BLOCK_TO } from "@/components/reveal/letters";
+import { frameLoader } from "@/lib/frames";
 
 /** Figma frame (UI / Section / Landmark Reveal): 1512 × 1024. */
 const FW = 1512, FH = 1024;
@@ -77,27 +78,23 @@ export default function CoinStage({ poster }: { poster?: string }) {
 
     // the film is scrubbed by the scroll: it starts when the flip ends and reaches its last frame at the end
     // of the pin; scrolling up plays it backwards. A frame is painted only when the frame index changes.
-    const ctx = v.getContext("2d")!, imgs: HTMLImageElement[] = [];
+    const ctx = v.getContext("2d")!;
     let cur = -1, want = 0, motionEnd = 1;
+    // the frame the scroll asks for, or the nearest one that has arrived (the film never freezes waiting on one)
     const paint = (i: number) => {
-      const img = imgs[i]; if (!img?.complete || !img.naturalWidth) return false;
+      const f = frames.nearest(i); if (!f) return false;
+      const [img] = f;
       const k = Math.max(v.width / img.naturalWidth, v.height / img.naturalHeight), iw = img.naturalWidth * k, ih = img.naturalHeight * k;
-      ctx.drawImage(img, (v.width - iw) / 2, (v.height - ih) / 2, iw, ih); cur = i; return true;
+      ctx.drawImage(img, (v.width - iw) / 2, (v.height - ih) / 2, iw, ih); cur = f[1]; return true;
     };
     const film = (t: number) => {
       want = Math.round(Math.min(Math.max((t - FLIP_END) / (motionEnd - FLIP_END), 0), 1) * (FRAMES - 1));
-      if (want !== cur) { paint(want); for (let k = 1; k <= 4; k++) imgs[want + k]?.decode?.().catch(() => {}); }   // the next few frames ready to paint
+      if (want !== cur) paint(want);
     };
     const size = () => { const d = Math.min(window.devicePixelRatio || 1, 2); v.width = v.offsetWidth * d; v.height = v.offsetHeight * d; cur = -1; paint(want); };
-    const load = () => {
-      for (let i = 0; i < FRAMES; i++) {
-        const im = new Image(); im.decoding = "async"; im.src = frameSrc(i);
-        im.onload = () => { if (i === want) paint(i); }; imgs.push(im);
-      }
-    };
-    // the frames load as the section comes near, not with the page
-    const near = new IntersectionObserver(([e]) => { if (e.isIntersecting) { near.disconnect(); load(); } }, { rootMargin: "200% 0px" });
-    near.observe(el);
+    // a frame that lands closer to where the scroll is than the one on screen replaces it
+    const frames = frameLoader(FRAMES, frameSrc, (i) => { if (cur < 0 || Math.abs(i - want) < Math.abs(cur - want)) paint(want); });
+    const stopLoading = frames.startWhenNear(el);
     size(); window.addEventListener("resize", size);
     const tl = gsap.timeline({ paused: true, defaults: { ease: "none" }, onUpdate: () => {
       pose.current.spin = tl.time() < 0.02 ? idlePose().spin : 0;   // idle turn at rest, the scroll drives it after
@@ -129,7 +126,7 @@ export default function CoinStage({ poster }: { poster?: string }) {
     else st = ScrollTrigger.create({ trigger: el, start: "top top", end: () => `+=${pinVh() * 100}%`, pin: true, scrub: 1, animation: tl, invalidateOnRefresh: true, onRefresh: draw });
     draw();
     window.addEventListener("resize", draw);
-    return () => { st?.kill(); tl.kill(); near.disconnect(); window.removeEventListener("resize", draw); window.removeEventListener("resize", size); };
+    return () => { st?.kill(); tl.kill(); stopLoading(); window.removeEventListener("resize", draw); window.removeEventListener("resize", size); };
   }, []);
 
   return (
