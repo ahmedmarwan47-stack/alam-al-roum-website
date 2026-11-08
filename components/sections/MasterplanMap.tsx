@@ -4,6 +4,7 @@ import Button from "@/components/ui/Button";
 import Drawer from "@/components/ui/Drawer";
 import Icon from "@/components/ui/Icon";
 import RevealImage from "@/components/reveal/RevealImage";
+import { srcSet } from "@/lib/img";
 
 export type MapPin = { title: string; body: string; x: number; y: number; photo: string; href?: string; side?: "left" | "right" };
 /** The box of the master plan a map shows, in plan units (lib/masterplan.ts); pins use the same units. */
@@ -84,7 +85,7 @@ export default function MasterplanMap({ image, pins: all, initial = 0, view = FU
     {d && <Drawer open={sheet} onClose={closeSheet} label={d.title}
       footer={d.href ? <div><Button label="Explore" href={d.href} size={54} variant="primary" /></div> : undefined}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={d.photo} alt={d.title} loading="lazy" className="h-[260px] w-full rounded-[2px] object-cover" />
+      <img src={d.photo} srcSet={srcSet(d.photo)} alt={d.title} loading="lazy" className="h-[260px] w-full rounded-[2px] object-cover" />
       <div className="flex flex-col gap-3">
         <h3 className="t-heading hd-32">{d.title}</h3>
         <p className="t-body b-16 text-limestone-800">{d.body}</p>
@@ -99,7 +100,7 @@ function PinCard({ p, className }: { p: MapPin; className: string }) {
   return (
     <div className={`flex-col gap-3 rounded-xl bg-limestone-50 p-3 pb-4 shadow-[0_16px_40px_rgb(0_0_0/.16)] animate-[pinCard_.3s_var(--ease-fig-out)_both] ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={p.photo} alt="" className="h-[150px] w-full rounded-lg object-cover" />
+      <img src={p.photo} srcSet={srcSet(p.photo)} alt="" className="h-[150px] w-full rounded-lg object-cover" />
       <span className="t-heading hd-20">{p.title}</span>
       <span className="t-body b-14 text-limestone-800">{p.body}</span>
       {p.href && <span><Button label="Explore" href={p.href} variant="outline" /></span>}

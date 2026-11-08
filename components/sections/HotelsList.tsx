@@ -5,6 +5,7 @@ import Drawer from "@/components/ui/Drawer";
 import Icon from "@/components/ui/Icon";
 import RevealImage from "@/components/reveal/RevealImage";
 import SectionTitle from "./SectionTitle";
+import { srcSet } from "@/lib/img";
 
 /** A drawer spec row: icon name, label, value. */
 export type Spec = [string, string, string];
@@ -53,13 +54,13 @@ export default function HotelsList({ data: D }: { data: HotelsData }) {
           : <div><Button label="Visit Website" href="#" size={54} variant="primary" /></div>}>
         <div className="flex flex-col gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={shots[shot]} alt={h.name} loading="lazy" className="h-[260px] w-full rounded-[2px] object-cover" />
+          <img src={shots[shot]} srcSet={srcSet(shots[shot])} alt={h.name} loading="lazy" className="h-[260px] w-full rounded-[2px] object-cover" />
           <div className="flex gap-2">
             {shots.map((s, k) => (
               <button key={s} onClick={() => setShot(k)} aria-label={`Photo ${k + 1}`}
                 className={`h-20 overflow-hidden rounded-[2px] transition-opacity duration-300 ${k === 0 ? "w-[148px] flex-none" : "min-w-0 flex-1"} ${k === shot ? "opacity-100" : "opacity-70 hover:opacity-100"}`}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={s} alt="" loading="lazy" className="h-full w-full object-cover" />
+                <img src={s} srcSet={srcSet(s)} alt="" loading="lazy" className="h-full w-full object-cover" />
               </button>))}
           </div>
         </div>

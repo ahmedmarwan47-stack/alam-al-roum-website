@@ -7,6 +7,7 @@ import Icon from "@/components/ui/Icon";
 import RevealText from "@/components/reveal/RevealText";
 import SectionTitle from "./SectionTitle";
 import { waysToLive } from "@/lib/content";
+import { srcSet } from "@/lib/img";
 
 type R = { title: string; body: string; photo: string };
 
@@ -27,7 +28,7 @@ function Row({ i, r, ghost }: { i: number; r: R; ghost?: boolean }) {
       {/* (the span, not the img, carries lg:hidden: globals.css sets img { display: block } outside any layer) */}
       <span className="block aspect-[210/267] w-[72px] flex-none overflow-hidden rounded md:w-[96px] lg:hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={r.photo} alt="" loading="lazy" className="h-full w-full object-cover" />
+        <img src={r.photo} srcSet={srcSet(r.photo)} alt="" loading="lazy" className="h-full w-full object-cover" />
       </span>
       <span className="flex min-w-0 flex-1 flex-col gap-1 lg:contents">
         <span className="t-label l-14 text-limestone-800 transition-colors duration-300 group-hover:text-teal-600 lg:w-[120px] lg:flex-none lg:group-hover:text-limestone-50">{num}</span>
@@ -98,7 +99,7 @@ export default function WaysToLive() {
         <div ref={card} className="pointer-events-none invisible absolute left-0 top-0 z-10 h-[267px] w-[210px] overflow-hidden rounded shadow-[0_30px_60px_rgb(1_15_26/.25)]">
           {rows.map((r, i) => (
             // eslint-disable-next-line @next/next/no-img-element
-            <img key={r.photo} src={r.photo} alt="" className="absolute inset-0 h-full w-full object-cover transition-opacity duration-300" style={{ opacity: i === active ? 1 : 0 }} />))}
+            <img key={r.photo} src={r.photo} srcSet={srcSet(r.photo)} alt="" className="absolute inset-0 h-full w-full object-cover transition-opacity duration-300" style={{ opacity: i === active ? 1 : 0 }} />))}
         </div>
         <div ref={ghost} className="pointer-events-none absolute inset-0 z-20 flex flex-col divide-y divide-transparent text-teal-200" style={{ clipPath: "inset(100%)" }}>
           {rows.map((r, i) => <div key={r.title}><Row i={i} r={r} ghost /></div>)}

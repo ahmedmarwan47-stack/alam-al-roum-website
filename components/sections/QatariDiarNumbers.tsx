@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
+import { srcSet } from "@/lib/img";
 
 const STATS = [
   { n: "20", title: ["20 Years", "of building"], body: "Two decades of landmark destinations, built across five continents and backed by the Qatar Investment Authority.", cta: "About Qatari Diar", photo: "/images/photo/ui-expcenter-day.jpg" },
@@ -30,7 +31,7 @@ function StackedStat({ x }: { x: (typeof STATS)[number] }) {
     <div ref={root} className="flex flex-col gap-6">
       <div className="relative w-full max-w-[620px]" style={{ aspectRatio: "890 / 580" }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={x.photo} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+        <img src={x.photo} srcSet={srcSet(x.photo)} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 flex justify-between bg-limestone-50 mix-blend-lighten">
           {x.n.split("").map((_, k) => (
             <div key={k} className="relative h-full w-1/2 overflow-hidden" style={{ containerType: "size" }}>
@@ -114,7 +115,7 @@ export default function QatariDiarNumbers() {
             <div className="relative w-full" style={{ aspectRatio: "890 / 580" }}>
               {STATS.map((x, k) => (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img key={x.photo} src={x.photo} alt="" className="absolute inset-[3px] h-[calc(100%-6px)] w-[calc(100%-6px)] object-cover transition-opacity duration-700" style={{ opacity: k === s ? 1 : 0 }} />))}
+                <img key={x.photo} src={x.photo} srcSet={srcSet(x.photo)} alt="" className="absolute inset-[3px] h-[calc(100%-6px)] w-[calc(100%-6px)] object-cover transition-opacity duration-700" style={{ opacity: k === s ? 1 : 0 }} />))}
               {/* Limestone sheet with black digits; lighten keeps the photo only where the digits are */}
               <div className="absolute inset-0 flex justify-between bg-limestone-50 mix-blend-lighten">
                 {[0, 1].map((k) => (

@@ -5,6 +5,7 @@ import { token } from "@/lib/about/a-motion";
 import RevealImage from "@/components/reveal/RevealImage";
 import RevealText from "@/components/reveal/RevealText";
 import { facts as F } from "@/lib/about/a-content";
+import { srcSet } from "@/lib/img";
 
 type Box = { left: string; top: string; width: string; height: string };
 const p = (v: number) => `${+(v * 100).toFixed(3)}%`;
@@ -67,7 +68,7 @@ export default function CoastalFacts() {
       <div ref={stage} className="relative hidden h-svh min-h-[640px] overflow-hidden lg:block">
         <div data-win className="absolute overflow-hidden" style={WIN}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={F.image} alt="The Experience Centre courtyard" className="absolute max-w-none object-cover" style={PIC} />
+          <img src={F.image} srcSet={srcSet(F.image)} alt="The Experience Centre courtyard" className="absolute max-w-none object-cover" style={PIC} />
         </div>
         <div data-dim className="pointer-events-none absolute inset-0 bg-black opacity-0" />
         <div data-ink className="absolute inset-0 text-deepsea-500">

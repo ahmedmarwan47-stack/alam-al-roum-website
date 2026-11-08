@@ -4,6 +4,7 @@ import { gsap, ScrollTrigger, reducedMotion, withHold } from "@/lib/gsap";
 import "@/lib/about/a-motion";
 import { blurIn } from "@/components/reveal/letters";
 import type { Seg } from "@/components/reveal/RevealText";
+import { srcSet } from "@/lib/img";
 
 export type PageHeroData = { pre: string; title: Seg[]; body: string; photo: string; alt?: string };
 
@@ -70,7 +71,7 @@ export default function PageHero({ data: H }: { data: PageHeroData }) {
           both (z-2). Wider than 1512 it stays 360 wide on the right content edge, and on a tall screen at most 300 tall */}
       <div ref={photo} data-reveal className="relative h-[calc(60vh+76px)] overflow-hidden lg:absolute lg:z-[1] lg:left-[calc(100%-max(4%,var(--gutter))-min(23.8%,360px))] lg:top-[calc(94.8%+4px-min(31.6%-24px,300px))] lg:h-[min(calc(31.6%-24px),300px)] lg:w-[min(23.8%,360px)] lg:rounded-[2px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={H.photo} alt={H.alt ?? ""} className="h-full w-full object-cover" />
+        <img src={H.photo} srcSet={srcSet(H.photo)} alt={H.alt ?? ""} className="h-full w-full object-cover" />
       </div>
       {copy(false)}
       <div ref={lit} aria-hidden className="pointer-events-none absolute inset-0 z-[2] hidden [clip-path:inset(calc(94.8%_+_4px_-_min(31.6%_-_24px,300px))_max(4%,var(--gutter))_calc(5.2%_-_4px)_calc(100%_-_max(4%,var(--gutter))_-_min(23.8%,360px)))] lg:block">

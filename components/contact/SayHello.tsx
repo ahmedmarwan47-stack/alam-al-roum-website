@@ -3,6 +3,7 @@ import Icon from "@/components/ui/Icon";
 import RevealText from "@/components/reveal/RevealText";
 import ContactForm from "./ContactForm";
 import { sayHello as S } from "@/lib/contact";
+import { srcSet } from "@/lib/img";
 
 /**
  * Contact · Say hello (Figma 11134:15381, the current version of 10921:9490): the infinity-pool photo under a
@@ -12,7 +13,7 @@ export default function SayHello() {
   return (
     <section data-hero className="relative overflow-hidden bg-deepsea-950 pb-20 pt-[156px] container-x">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={S.image} alt="" className="pointer-events-none absolute inset-0 h-full w-full object-cover" />
+      <img src={S.image} srcSet={srcSet(S.image)} alt="" className="pointer-events-none absolute inset-0 h-full w-full object-cover" />
       {/* Deep Sea wash, held at 56 %+ across the copy column so its 12 px labels pass AA on the bright water (measured);
           phones: the copy spans the full width, so the wash is even */}
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgb(1_15_26/.66)_0%,rgb(1_15_26/.58)_52%,rgb(1_15_26/.42)_100%)] max-md:bg-[linear-gradient(0deg,rgb(1_15_26/.64),rgb(1_15_26/.64))]" />

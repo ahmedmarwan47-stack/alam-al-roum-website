@@ -6,6 +6,7 @@ import RevealText from "@/components/reveal/RevealText";
 import GalleryCarousel from "./GalleryCarousel";
 import { gallery } from "@/lib/content";
 import type { Seg } from "@/components/reveal/RevealText";
+import { srcSet } from "@/lib/img";
 
 /** `rows` feed the Home wall; `layout: "carousel"` (the inside pages) shows `photos` (or the rows, in order) as a carousel. */
 export type GalleryData = { tag: string; title: Seg[]; rows: string[][]; layout?: "wall" | "carousel"; photos?: string[] };
@@ -61,7 +62,7 @@ function GalleryWall({ data: G }: { data: GalleryData }) {
             <div key={r} data-row className="flex min-h-0 flex-1 gap-[10px] will-change-transform">
               {Array.from({ length: COPIES }, () => row).flat().map((src, k) => (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img key={k} src={src} alt="" aria-hidden={k >= row.length} className="aspect-[300/320] h-full w-auto flex-none rounded object-cover" />))}
+                <img key={k} src={src} srcSet={srcSet(src)} alt="" aria-hidden={k >= row.length} className="aspect-[300/320] h-full w-auto flex-none rounded object-cover" />))}
             </div>))}
         </div>
       </RevealMask>

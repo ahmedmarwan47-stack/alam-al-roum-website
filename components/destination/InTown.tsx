@@ -4,6 +4,7 @@ import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 import SectionTitle from "@/components/sections/SectionTitle";
 import RevealText from "@/components/reveal/RevealText";
 import { inTown as T } from "@/lib/destination";
+import { srcSet } from "@/lib/img";
 
 /**
  * Transport · In town (Figma 11053:7173): one coin per mode. The coin stays on screen while three
@@ -43,7 +44,7 @@ export default function InTown() {
               <div ref={photos} className="absolute inset-0">
                 {T.modes.map((m, k) => (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img key={m.photo} src={m.photo} alt="" className="absolute inset-0 h-full w-full object-cover transition-[opacity,scale] duration-700 [transition-timing-function:var(--ease-site)]"
+                  <img key={m.photo} src={m.photo} srcSet={srcSet(m.photo)} alt="" className="absolute inset-0 h-full w-full object-cover transition-[opacity,scale] duration-700 [transition-timing-function:var(--ease-site)]"
                     style={{ opacity: k === active ? 1 : 0, scale: k === active ? "1" : "1.08" }} />
                 ))}
               </div>

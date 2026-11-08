@@ -4,6 +4,7 @@ import { gsap, reducedMotion } from "@/lib/gsap";
 import SectionTitle from "@/components/sections/SectionTitle";
 import Icon from "@/components/ui/Icon";
 import { milestones as M } from "@/lib/about/b-content";
+import { srcSet } from "@/lib/img";
 
 /**
  * Figma "UI / Milestone" (10979:18571…): 400 wide, 15 ticks 24 apart from x 24, ticks 56 at rest → 136 at the focus.
@@ -35,7 +36,7 @@ function Milestone({ i, active, onPick }: { i: number; active: boolean; onPick: 
         {/* never under 12 px on screen, however far the rail is scaled down to fit a short screen */}
         <p className="t-body b-16 text-limestone-800 [font-size:max(16px,calc(12px/var(--z,1)))]!">{m.body}</p>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={m.photo} alt={m.title} loading="lazy" className="aspect-[352/200] w-full rounded-lg object-cover" />
+        <img src={m.photo} srcSet={srcSet(m.photo)} alt={m.title} loading="lazy" className="aspect-[352/200] w-full rounded-lg object-cover" />
       </div>
     </div>);
 }

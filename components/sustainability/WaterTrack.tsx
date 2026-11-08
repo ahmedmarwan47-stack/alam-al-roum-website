@@ -1,6 +1,7 @@
 import PinnedTrack from "@/components/sections/PinnedTrack";
 import RevealText from "@/components/reveal/RevealText";
 import { waterTrack as W } from "@/lib/sustainability";
+import { srcSet } from "@/lib/img";
 
 /* eslint-disable @next/next/no-img-element */
 
@@ -9,7 +10,7 @@ function Panel({ photo, title, features, from }: { photo: string; title: string[
     // phones (below sm) stack the card the way Solène's phone cards do: the photo, nearly whole (4:5) and clear of
     // copy but for the title, which sits on a fade into the Deep Sea panel that carries the three features
     <div className="relative h-[80vh] overflow-hidden rounded-3xl max-sm:grid max-sm:h-auto max-sm:bg-deepsea-500 lg:h-[760px] lg:w-[1392px] lg:flex-none">
-      <img src={photo} alt="" className="absolute inset-0 h-full w-full object-cover max-sm:relative max-sm:col-start-1 max-sm:row-start-1 max-sm:aspect-[4/5] max-sm:h-auto" />
+      <img src={photo} srcSet={srcSet(photo)} alt="" className="absolute inset-0 h-full w-full object-cover max-sm:relative max-sm:col-start-1 max-sm:row-start-1 max-sm:aspect-[4/5] max-sm:h-auto" />
       <div className={`absolute inset-0 ${from === "top" ? "bg-gradient-to-t" : "bg-gradient-to-b"} from-deepsea-500/60 to-transparent max-sm:hidden`} />
       {/* tablets (sm to lg) keep the copy over the photo: a deeper shade behind it keeps it legible */}
       <div className="absolute inset-x-0 bottom-0 h-3/4 bg-gradient-to-t from-deepsea-950/80 via-deepsea-950/45 to-transparent max-sm:hidden lg:hidden" />

@@ -5,6 +5,7 @@ import Icon from "@/components/ui/Icon";
 import RevealText from "@/components/reveal/RevealText";
 import RevealMask from "@/components/reveal/RevealMask";
 import { landmarks } from "@/lib/content";
+import { srcSet } from "@/lib/img";
 
 export type LandmarksData = { title: string; body: string; rows: { title: string; body: string; large: string; inset: string }[] };
 
@@ -76,7 +77,7 @@ export default function Landmarks({ data = landmarks }: { data?: LandmarksData }
                   <div className="overflow-hidden">
                     <div className="mb-6 aspect-[4/3] overflow-hidden sm:aspect-[16/10]">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img ref={(el) => { panel.current[k] = el; }} src={r.large} alt={r.title} loading="lazy" className="h-full w-full object-cover" />
+                      <img ref={(el) => { panel.current[k] = el; }} src={r.large} srcSet={srcSet(r.large)} alt={r.title} loading="lazy" className="h-full w-full object-cover" />
                     </div>
                   </div>
                 </div>
@@ -90,13 +91,13 @@ export default function Landmarks({ data = landmarks }: { data?: LandmarksData }
           {L.rows.map((r, k) => (
             <div key={r.title} ref={(el) => { big.current[k] = el; }} className="absolute inset-0 overflow-hidden" style={{ zIndex: k === 0 ? 2 : 0 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={r.inset} alt="" className="h-full w-full scale-[1.08] object-cover blur-[12px] will-change-transform" />
+              <img src={r.inset} srcSet={srcSet(r.inset)} alt="" className="h-full w-full scale-[1.08] object-cover blur-[12px] will-change-transform" />
             </div>))}
           <div className="absolute left-[17%] top-[16%] z-10 h-[68%] w-[66%] shadow-[0_30px_80px_rgb(1_15_26/.28)]">
             {L.rows.map((r, k) => (
               <div key={r.inset} ref={(el) => { ins.current[k] = el; }} className="absolute inset-0" style={{ zIndex: k === 0 ? 2 : 0 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={r.inset} alt="" className="h-full w-full object-cover" />
+                <img src={r.inset} srcSet={srcSet(r.inset)} alt="" className="h-full w-full object-cover" />
               </div>))}
           </div>
         </div>

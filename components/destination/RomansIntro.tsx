@@ -5,6 +5,7 @@ import RevealText from "@/components/reveal/RevealText";
 import { blurIn } from "@/components/reveal/letters";
 import type { TrackEl } from "@/components/sections/PinnedTrack";
 import { history as H } from "@/lib/destination";
+import { srcSet } from "@/lib/img";
 
 /* eslint-disable @next/next/no-img-element */
 
@@ -50,10 +51,10 @@ export default function RomansIntro() {
         </h2>
         <div className="relative ml-auto h-[58svh] max-h-[560px] w-[84%] lg:absolute lg:left-[419px] lg:top-0 lg:ml-0 lg:h-full lg:max-h-none lg:w-[622px]">
           <div data-mosaic className="h-full w-full overflow-hidden">
-            <img src={R.photo} alt="A Roman mosaic of a ship" className="h-full w-full object-cover" />
+            <img src={R.photo} srcSet={srcSet(R.photo)} alt="A Roman mosaic of a ship" className="h-full w-full object-cover" />
           </div>
           <div data-flower-drift className="pointer-events-none absolute -bottom-6 left-[calc(-19.05%-var(--gutter))] w-[200px] origin-bottom-left lg:-bottom-20 lg:left-[calc(-419px-var(--gutter))] lg:w-[344px] lg:max-w-[60vw]">
-            <img data-flower src={R.flower} alt="" className="w-full origin-bottom-left animate-[sway_6s_ease-in-out_infinite]" />
+            <img data-flower src={R.flower} srcSet={srcSet(R.flower)} alt="" className="w-full origin-bottom-left animate-[sway_6s_ease-in-out_infinite]" />
           </div>
         </div>
       </div>

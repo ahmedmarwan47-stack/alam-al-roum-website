@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger, reducedMotion, withHold } from "@/lib/gsap";
 import { blurIn } from "@/components/reveal/letters";
 import { manifesto as M } from "@/lib/about/a-content";
+import { srcSet } from "@/lib/img";
 
 /**
  * UI / Headline / Accent. On load it plays the Figma states in order: Hidden → Line 1 (after 0.3 s) → Shown:
@@ -66,7 +67,7 @@ export default function Manifesto() {
       <div data-media data-reveal className="relative mx-[var(--gutter)] mb-16 aspect-[4/5] overflow-hidden md:aspect-[3/2] lg:absolute lg:inset-0 lg:z-[11] lg:m-0 lg:aspect-auto">
         <div data-clip className="absolute inset-0 overflow-hidden lg:[clip-path:inset(calc(100%_-_40px_-_min(15.87vw,240px))_max(3.97vw,var(--gutter))_40px_calc(100%_-_max(3.97vw,var(--gutter))_-_min(23.81vw,360px)))]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={M.image} alt="The Mediterranean off Alam Al Roum" className="h-full w-full object-cover" />
+          <img src={M.image} srcSet={srcSet(M.image)} alt="The Mediterranean off Alam Al Roum" className="h-full w-full object-cover" />
         </div>
       </div>
       {/* the light copy over the photo's shade, clipped to the photo's box: wherever the photo has reached a line, that

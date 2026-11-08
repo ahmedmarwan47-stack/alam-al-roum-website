@@ -6,6 +6,7 @@ import Icon from "@/components/ui/Icon";
 import { gsap, reducedMotion } from "@/lib/gsap";
 import { communities } from "@/lib/communities";
 import { experiences } from "@/lib/experiences";
+import { srcSet } from "@/lib/img";
 
 type Sub = "communities" | "experiences" | null;
 
@@ -100,7 +101,7 @@ export default function SiteMenu({ open, onClose }: { open: boolean; onClose: ()
             <Link key={slug} href={`/communities/${slug}`} onClick={onClose} className="group flex items-center gap-[14px]">
               <span className="relative h-[45px] w-[60px] flex-none overflow-hidden rounded-[2px]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={photoOf(slug)} alt="" style={{ transitionDelay: `${60 + k * 50}ms` }}
+                <img src={photoOf(slug)} srcSet={srcSet(photoOf(slug))} alt="" style={{ transitionDelay: `${60 + k * 50}ms` }}
                   className={`absolute inset-0 h-full w-full object-cover transition-transform duration-300 ${EASE} ${grown ? "scale-100" : "scale-0"}`} />
               </span>
               <span className="flex flex-col gap-0.5">
@@ -115,7 +116,7 @@ export default function SiteMenu({ open, onClose }: { open: boolean; onClose: ()
             <Link key={x.slug} href={`/experiences/${x.slug}`} onClick={onClose} className="group flex flex-col gap-2">
               <span className="relative aspect-[142/106] overflow-hidden rounded-[2px]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={x.photo} alt="" style={{ transitionDelay: `${60 + k * 30}ms` }}
+                <img src={x.photo} srcSet={srcSet(x.photo)} alt="" style={{ transitionDelay: `${60 + k * 30}ms` }}
                   className={`absolute inset-0 h-full w-full object-cover transition-transform duration-300 ${EASE} ${grown ? "scale-100" : "scale-0"}`} />
               </span>
               <span className="t-label l-12 text-deepsea-500">{x.title}</span>

@@ -2,6 +2,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { gsap } from "@/lib/gsap";
 import { whenSectionEnters } from "@/components/reveal/letters";
+import { srcSet } from "@/lib/img";
 
 const C = { x: 300, y: 420 };
 /**
@@ -82,7 +83,7 @@ export default function RadiusMap() {
           stone land with a faint relief from Sentinel-2 cloudless 2016 by EOX (CC BY 4.0), a light hairline coast;
           azimuthal equidistant on 27.90E 31.20N, 300 px = 3,300 km */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/images/basemap-flight.jpg" alt="" className="absolute inset-0 h-full w-full" />
+      <img src="/images/basemap-flight.jpg" srcSet={srcSet("/images/basemap-flight.jpg")} alt="" className="absolute inset-0 h-full w-full" />
       <svg viewBox="0 0 696 720" className="absolute inset-0 h-full w-full">
         <defs>
           <mask id={mask} maskUnits="userSpaceOnUse" x="0" y="0" width="696" height="720">

@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 import { BLOCK_FROM, BLOCK_TO } from "@/components/reveal/letters";
 import { story as S } from "@/lib/about/b-content";
+import { srcSet } from "@/lib/img";
 
 const FW = 1512, FH = 1024;                 // the motion-study frame
 const fy = (y: number) => `${(y / FH) * 100}%`;
@@ -119,7 +120,7 @@ export default function TheStory() {
       <div ref={stage} className="relative h-svh w-full overflow-hidden bg-limestone-500 lg:h-screen">
         {/* 1 · History */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={S.history.photo} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <img src={S.history.photo} srcSet={srcSet(S.history.photo)} alt="" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-deepsea-950/60" />
         <div data-h-text className="absolute bottom-20 left-[var(--gutter)] right-[var(--gutter)] flex flex-col gap-4 text-limestone-50">
           <span className="t-label l-14">{S.history.label}</span>
@@ -136,7 +137,7 @@ export default function TheStory() {
           <div key={p.src} data-photo className="absolute hidden overflow-hidden lg:block"
             style={photoBox(p)}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={p.src} alt={p.alt} loading="lazy" className="h-full w-full object-cover" />
+            <img src={p.src} srcSet={srcSet(p.src)} alt={p.alt} loading="lazy" className="h-full w-full object-cover" />
           </div>))}
         <div className="absolute inset-x-0 flex flex-col items-center gap-14 px-[var(--gutter)] text-center text-deepsea-500" style={{ top: fy(360) }}>
           <h3 data-c-head className="t-heading hd-56 leading-[1.25]!">
@@ -149,7 +150,7 @@ export default function TheStory() {
             {C.photos.map((p) => (
               <div key={p.src} data-photo className="aspect-[3/4] overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={p.src} alt={p.alt} loading="lazy" className="h-full w-full object-cover" />
+                <img src={p.src} srcSet={srcSet(p.src)} alt={p.alt} loading="lazy" className="h-full w-full object-cover" />
               </div>))}
           </div>
         </div>
@@ -157,7 +158,7 @@ export default function TheStory() {
         {/* 5–6 · Greatness: a dome cut from the photo, the word, then the headline and body */}
         <div data-dome="greatness" className="absolute inset-0" style={domeStyle}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={G.photo} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+          <img src={G.photo} srcSet={srcSet(G.photo)} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
           <div data-g-dim className="absolute inset-0 bg-gradient-to-b from-deepsea-950/15 to-deepsea-950/70" />
         </div>
         <div className="absolute left-[var(--gutter)] right-[var(--gutter)] flex flex-col text-limestone-50" style={{ top: fy(430) }}>

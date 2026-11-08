@@ -5,6 +5,7 @@ import { gsap, reducedMotion } from "@/lib/gsap";
 import { idlePose, type CoinPose } from "@/components/ui/Coin3D";
 import type { TrackEl } from "@/components/sections/PinnedTrack";
 import { history as H } from "@/lib/destination";
+import { srcSet } from "@/lib/img";
 
 /* eslint-disable @next/next/no-img-element */
 // each stop's wrapper fills the drawing (absolute inset-0): it is animated, and a transformed wrapper becomes the
@@ -66,15 +67,15 @@ export default function CoastHistory({ path }: { path: string }) {
         </svg>
         {L.stops.map((s) => (
           <div key={s.date} data-stop data-x={s.x} className="absolute inset-0">
-            <img src={L.stop} alt="" className="absolute h-[7px] w-[7px] -translate-x-1/2 -translate-y-1/2" style={{ left: pct(s.x, W), top: pct(s.y, Ht) }} />
+            <img src={L.stop} srcSet={srcSet(L.stop)} alt="" className="absolute h-[7px] w-[7px] -translate-x-1/2 -translate-y-1/2" style={{ left: pct(s.x, W), top: pct(s.y, Ht) }} />
             <div className="absolute flex w-[170px] -translate-x-1/2 flex-col items-center gap-1 text-center" style={{ left: pct(s.x, W), top: pct(s.ly, Ht) }}>
               <span className="t-label l-12 uppercase">{s.date}</span>
               <span className="t-text x-12 text-limestone-800">{s.text}</span>
             </div>
           </div>))}
         <div data-stop data-x={L.today.x} className="absolute inset-0">
-          <img src={L.mark} alt="" className="absolute h-14 w-14 -translate-x-1/2" style={{ left: pct(L.today.x, W), top: pct(64, Ht) }} />
-          <img src={L.todayDot} alt="" className="absolute h-[9px] w-[9px] -translate-x-1/2 -translate-y-1/2" style={{ left: pct(L.today.x, W), top: pct(L.today.y, Ht) }} />
+          <img src={L.mark} srcSet={srcSet(L.mark)} alt="" className="absolute h-14 w-14 -translate-x-1/2" style={{ left: pct(L.today.x, W), top: pct(64, Ht) }} />
+          <img src={L.todayDot} srcSet={srcSet(L.todayDot)} alt="" className="absolute h-[9px] w-[9px] -translate-x-1/2 -translate-y-1/2" style={{ left: pct(L.today.x, W), top: pct(L.today.y, Ht) }} />
           <div className="absolute flex -translate-x-1/2 flex-col items-center gap-1 whitespace-nowrap text-center" style={{ left: pct(L.today.x, W), top: pct(168, Ht) }}>
             <span className="t-label l-12 uppercase">{L.today.date}</span><span className="t-text x-12 text-limestone-800">{L.today.text}</span>
           </div>

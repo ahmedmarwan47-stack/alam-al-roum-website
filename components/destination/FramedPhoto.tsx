@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import { gsap, reducedMotion } from "@/lib/gsap";
 import type { TrackEl } from "@/components/sections/PinnedTrack";
+import { srcSet } from "@/lib/img";
 
 /**
  * The last panel of the history track (Figma 11134:16060): the photo alone, at the panel's full size (29 Oct review:
@@ -40,7 +41,7 @@ export default function FramedPhoto({ photo }: { photo: string }) {
   return (
     <div ref={root} className="relative lg:h-[min(844px,calc(100svh-160px))] lg:w-[596px]">
       <div data-photo className="h-[60vh] w-full overflow-hidden lg:h-full">
-        <img src={photo} alt="Life on the coast" className="h-full w-full object-cover" />
+        <img src={photo} srcSet={srcSet(photo)} alt="Life on the coast" className="h-full w-full object-cover" />
       </div>
     </div>
   );

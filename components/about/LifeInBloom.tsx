@@ -4,6 +4,7 @@ import { gsap, ScrollTrigger, reducedMotion, withHold } from "@/lib/gsap";
 import "@/lib/about/a-motion";
 import { blurIn } from "@/components/reveal/letters";
 import { bloom as B } from "@/lib/about/a-content";
+import { srcSet } from "@/lib/img";
 
 /**
  * UI / Section / Botanical Frame, scroll-scrubbed while pinned: Rest → Scrolled (Figma 1.2 s) → Full (1.3 s,
@@ -40,7 +41,7 @@ export default function LifeInBloom() {
     <section ref={root} className="relative h-svh min-h-[560px] overflow-hidden bg-limestone-50 lg:min-h-[640px]">
       <div data-clip className="absolute inset-0 overflow-hidden [clip-path:inset(22%_8%)] lg:[clip-path:inset(20%_16.93%)]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={B.image} alt="A shaded dining terrace open to the sea" className="h-full w-full object-cover" />
+        <img src={B.image} srcSet={srcSet(B.image)} alt="A shaded dining terrace open to the sea" className="h-full w-full object-cover" />
         <div data-dim className="absolute inset-0 bg-deepsea-600 opacity-25 max-lg:opacity-40" />
       </div>
       {/* the copy stays inside the framed photo at rest (light type, so it would vanish on the Limestone around it) */}

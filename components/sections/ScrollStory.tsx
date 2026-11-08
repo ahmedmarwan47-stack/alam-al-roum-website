@@ -4,6 +4,7 @@ import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 import Button from "@/components/ui/Button";
 import RevealText from "@/components/reveal/RevealText";
 import { grandeur, lighthouse } from "@/lib/content";
+import { srcSet } from "@/lib/img";
 
 const FRAMES = 185;
 /** 1920 × 1080 WebP frames on every screen: the frames are all held decoded, and at 4K that is ~6 GB, enough for
@@ -35,7 +36,11 @@ export default function ScrollStory() {
     };
     const size = () => { const r = c.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2); c.width = r.width * d; c.height = r.height * d; draw(cur); };
     // frames are decoded ahead as they arrive, so the first pass through the film never waits on a decode
-    for (let i = 0; i < FRAMES; i++) { const im = new Image(); im.decoding = "async"; im.src = src(i); im.onload = () => { im.decode?.().catch(() => {}); if (i === cur) draw(i); }; imgs.push(im); }
+    // the frames start downloading only as the section comes within two screens, so they never hold up the
+    // photos and films above it (the film is ~9 MB of frames)
+    const load = () => { for (let i = 0; i < FRAMES; i++) { const im = new Image(); im.decoding = "async"; im.src = src(i); im.onload = () => { im.decode?.().catch(() => {}); if (i === cur) draw(i); }; imgs.push(im); } };
+    const near = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { near.disconnect(); load(); } }, { rootMargin: "200% 0px" });
+    near.observe(wrap.current!);
     size(); window.addEventListener("resize", size);
     const st = ScrollTrigger.create({
       trigger: wrap.current, start: "top top", end: "bottom bottom",
@@ -56,7 +61,7 @@ export default function ScrollStory() {
       tweens.push(gsap.to(cards.map((el) => el.firstElementChild), { x: 0, y: 0, duration: 1.4, ease: "siteOut", stagger: 0.03,
         scrollTrigger: { trigger: stage, start: "top 80%", toggleActions: "play none none none" } }));
     }
-    return () => { st.kill(); tweens.forEach((t) => { t.scrollTrigger?.kill(); t.kill(); }); window.removeEventListener("resize", size); };
+    return () => { near.disconnect(); st.kill(); tweens.forEach((t) => { t.scrollTrigger?.kill(); t.kill(); }); window.removeEventListener("resize", size); };
   }, []);
 
   return (
@@ -78,7 +83,7 @@ export default function ScrollStory() {
             {c.kind === "image" ? (
               <div className="overflow-hidden rounded-lg" style={{ aspectRatio: `${c.w} / ${c.h}` }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={c.src} alt="" className="h-full w-full object-cover" />
+                <img src={c.src} srcSet={srcSet(c.src)} alt="" className="h-full w-full object-cover" />
               </div>
             ) : c.kind === "stat" ? (
               <div className="flex flex-col gap-3 rounded-lg bg-deepsea-500 px-4 py-[14px]">

@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { gsap, reducedMotion } from "@/lib/gsap";
 import RevealText from "@/components/reveal/RevealText";
 import { photoIn, PHOTO_FROM } from "@/components/reveal/letters";
+import { srcSet } from "@/lib/img";
 
 export type SingleHeroData = { eyebrow: string; name: string; line: string; photo: string; alt?: string; video?: string; facts?: [string, string][] };
 
@@ -28,7 +29,7 @@ export default function SingleHero({ data: H }: { data: SingleHeroData }) {
         {H.video
           ? <video className="h-full w-full object-cover" src={H.video} poster={H.photo} autoPlay muted loop playsInline aria-hidden />
           // eslint-disable-next-line @next/next/no-img-element
-          : <img src={H.photo} alt={H.alt ?? ""} className="h-full w-full object-cover" />}
+          : <img src={H.photo} srcSet={srcSet(H.photo)} alt={H.alt ?? ""} className="h-full w-full object-cover" />}
       </div>
       {/* the shade the copy sits on (measured for AA on the lightest photos), rising from the foot */}
       <div className="hero-foot-shade pointer-events-none absolute inset-0" />

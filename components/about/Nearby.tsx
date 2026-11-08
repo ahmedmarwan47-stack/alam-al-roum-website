@@ -5,6 +5,7 @@ import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 import RevealText from "@/components/reveal/RevealText";
 import { nearby as N } from "@/lib/about/b-content";
 import { COAST_EAST, COAST_WEST } from "@/lib/about/b-nearby-geo";
+import { srcSet } from "@/lib/img";
 
 const W = 1512, H = 1024;
 const pct = (v: number, of: number) => `${(v / of) * 100}%`;
@@ -108,7 +109,7 @@ export default function Nearby() {
           <div data-map className="relative w-[max(260vw,1000px)] max-w-[1512px] md:w-[170vw] lg:w-full lg:max-w-none"
             style={{ aspectRatio: `${W} / ${H}`, containerType: "inline-size" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={N.map} alt="Satellite map of Egypt's North Coast from Marsa Matrouh to Alexandria and Cairo" className="absolute inset-0 h-full w-full object-cover" />
+            <img src={N.map} srcSet={srcSet(N.map)} alt="Satellite map of Egypt's North Coast from Marsa Matrouh to Alexandria and Cairo" className="absolute inset-0 h-full w-full object-cover" />
             <span className={`absolute -translate-x-1/2 t-body text-limestone-300 ${CQ}`} style={{ left: pct(628, W), top: pct(120, H), ...cq(16, 10) }}>{N.sea}</span>
 
             <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 h-full w-full overflow-visible" aria-hidden>
