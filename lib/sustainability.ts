@@ -32,7 +32,7 @@ export const waterTrack = {
   living: { photo: s("water-living.webp"), title: ["Water you", "can live in"],
     features: [["Swimmable lagoons", "Calm, clean water for everyday swimming."], ["Canal promenade", "Walkable edges along the waterways."], ["Marina basin", "A sheltered harbour at the heart of the city."]] },
   statement2: { text: "Clean by nature.", accent: "Calm by design.", body: "The water system keeps the landscape, the lagoons and the public spaces working together." },
-  systems: { photo: s("water-systems.webp"), title: ["Water that looks after itself"],
+  systems: { photo: s("water-systems.webp"), title: ["Water that looks", "after itself"],
     features: [["Ecological water", "Natural filtration that keeps the lagoons healthy."], ["Greener landscape", "Water that supports the planting and public spaces."], ["Resilient community", "A system built to keep the city running well, season after season."]] },
 };
 
