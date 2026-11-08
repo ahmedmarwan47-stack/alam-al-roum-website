@@ -29,22 +29,29 @@ const SPEED = [140, 90, 170, 110, 60, 150, 80, 190, 70, 130, 100, 160];
 export default function ScrollStory() {
   const wrap = useRef<HTMLElement>(null), canvas = useRef<HTMLCanvasElement>(null), stageRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const c = canvas.current!, ctx = c.getContext("2d")!; let cur = 0, shown = -1;
-    // the frame the scroll asks for, or the nearest one that has arrived (the film never freezes waiting on one)
-    const draw = (i: number) => {
-      const f = frames.nearest(i); if (!f) return;
-      const [img] = f; shown = f[1];
+    const c = canvas.current!, ctx = c.getContext("2d")!; let pos = 0, shown = -1;
+    const cover = (img: HTMLImageElement, alpha: number) => {
       const s = Math.max(c.width / img.naturalWidth, c.height / img.naturalHeight), w = img.naturalWidth * s, h = img.naturalHeight * s;
-      ctx.drawImage(img, (c.width - w) / 2, (c.height - h) / 2, w, h);
+      ctx.globalAlpha = alpha; ctx.drawImage(img, (c.width - w) / 2, (c.height - h) / 2, w, h);
     };
-    const size = () => { const r = c.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2); c.width = r.width * d; c.height = r.height * d; draw(cur); };
+    // `p` is the film's position in frames, fractional: each frame covers only ~7 px of scroll, so a slow scroll would
+    // step through them (~17 a second); instead the next frame is blended over this one by the fraction, and the
+    // picture moves on every screen update. Frames not yet arrived fall back to the nearest one that has.
+    const draw = (p: number) => {
+      const i = Math.floor(p), t = p - i, a = frames.nearest(i); if (!a) return;
+      shown = a[1]; cover(a[0], 1);
+      const b = t > 0.02 && a[1] === i ? frames.nearest(i + 1) : undefined;
+      if (b && b[1] === i + 1) cover(b[0], t);
+      ctx.globalAlpha = 1;
+    };
+    const size = () => { const r = c.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2); c.width = r.width * d; c.height = r.height * d; draw(pos); };
     // a frame that lands closer to where the scroll is than the one on screen replaces it
-    const frames = frameLoader(FRAMES, src, (i) => { if (shown < 0 || Math.abs(i - cur) < Math.abs(shown - cur)) draw(cur); });
+    const frames = frameLoader(FRAMES, src, (i) => { if (shown < 0 || Math.abs(i - pos) < Math.abs(shown - pos) || i === Math.floor(pos) + 1) draw(pos); });
     const stopLoading = frames.startWhenNear(wrap.current!);
     size(); window.addEventListener("resize", size);
     const st = ScrollTrigger.create({
       trigger: wrap.current, start: "top top", end: "bottom bottom",
-      onUpdate: (self) => { const i = Math.round(self.progress * (FRAMES - 1)); if (i !== cur) { cur = i; draw(i); } },
+      onUpdate: (self) => { const p = self.progress * (FRAMES - 1); if (Math.abs(p - pos) > 0.01) { pos = p; draw(p); } },
     });
     // constellation: stacked behind the headline → scattered (once, as it comes in) → parallax drift (scrubbed)
     const stage = stageRef.current!;
