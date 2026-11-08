@@ -10,14 +10,16 @@ export default function Locations() {
   return (
     <section className="flex flex-col gap-10 bg-white py-[60px] container-x">
       <SectionTitle tag={L.tag} title={L.title} align="left" />
-      {/* full bleed on phones, where the strip is short; each pin is a point the labels hang from */}
-      <div className="relative -mx-[var(--gutter)] aspect-[2784/960] overflow-hidden md:mx-0">
+      {/* full bleed on phones, where the strip is short; each pin is a point the labels hang from. The map is the clean
+          basemap (no pins or credit baked in): the pins and the credit are drawn here. */}
+      <div className="relative -mx-[var(--gutter)] aspect-[2784/960] overflow-hidden [container-type:inline-size] md:mx-0">
         <RevealImage src={L.map} alt="Map of Egypt and the Gulf with the three Alam Al Roum offices" className="h-full w-full" />
         {L.pins.map(([name, x, y]) => (
           <span key={name} style={{ left: `${x}%`, top: `${y}%` }} className="absolute">
-            {/* md up: Figma's pill, its left edge on the spot */}
-            <span className="absolute left-0 top-0 hidden -translate-y-1/2 items-center gap-1.5 whitespace-nowrap rounded-full bg-white px-3 py-1.5 t-label l-12 text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)] md:flex">
-              <Icon name="location-01" size={14} />{name}
+            {/* md up: Figma's pill with its icon on the point, covering the basemap's own name for the city; it grows
+                with the map (12 px at Figma's 1392 px map) so it keeps covering that name at every width */}
+            <span className="absolute left-0 top-0 hidden -translate-x-[1.58em] -translate-y-1/2 items-center gap-[0.5em] whitespace-nowrap rounded-full bg-white px-[1em] py-[0.5em] t-label leading-[1.5] text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)] [font-size:clamp(11px,0.862cqw,18px)] md:flex">
+              <Icon name="location-01" className="!size-[1.17em]" />{name}
             </span>
             {/* phones: a dot on the spot and a small label above it (below for Cairo, so it clears the North Coast) */}
             <span className="absolute size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white ring-2 ring-black/70 md:hidden" />

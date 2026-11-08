@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import { gsap, reducedMotion } from "@/lib/gsap";
 import SectionTitle from "@/components/sections/SectionTitle";
 import Icon from "@/components/ui/Icon";
@@ -26,13 +26,14 @@ function Milestone({ i, active, onPick }: { i: number; active: boolean; onPick: 
       <span data-ms-line className="absolute left-0 top-0 h-[632px] w-px lg:h-[712px] origin-top bg-deepsea-500" style={{ transform: `scaleY(${268 / 632})` }} />
       <div className="flex flex-col gap-2 pl-4">
         <span className="t-text d-56 leading-[1.07] text-deepsea-500">{m.year}</span>
-        <span className="t-text x-16 text-limestone-800">{m.title}</span>
+        <span className="t-text x-16 text-limestone-800 [font-size:max(16px,calc(12px/var(--z,1)))]!">{m.title}</span>
       </div>
       <div className="flex h-[136px] items-center gap-6 pl-6 lg:gap-[34px]" aria-hidden>
         {Array.from({ length: TICKS }, (_, k) => <i key={k} data-ms-tick className="block h-[136px] w-px flex-none origin-center bg-deepsea-500" />)}
       </div>
       <div data-ms-detail className="flex flex-col gap-6 px-6 opacity-0">
-        <p className="t-body b-16 text-limestone-800">{m.body}</p>
+        {/* never under 12 px on screen, however far the rail is scaled down to fit a short screen */}
+        <p className="t-body b-16 text-limestone-800 [font-size:max(16px,calc(12px/var(--z,1)))]!">{m.body}</p>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={m.photo} alt={m.title} loading="lazy" className="aspect-[352/200] w-full rounded-lg object-cover" />
       </div>
@@ -57,13 +58,21 @@ export default function Milestones() {
 
   useEffect(() => {
     // below lg only the rail is scaled, to the screen's width (one 400 px milestone and a sliver of the next),
-    // so its copy never drops under 12 px
+    // so its copy never drops under 12 px; from lg the section is one screen tall and the rail is scaled to the height
+    // left under the title and the years (its tallest state is the 712 px line of the milestone in focus)
     const fit = () => {
       const lg = window.innerWidth >= 1024, gut = Math.min(60, Math.max(20, window.innerWidth * 0.0397));
-      setRailZoom(lg ? 1 : Math.min(1, (window.innerWidth - 2 * gut) / CARD));
+      if (!lg) { setRailZoom(Math.min(1, (window.innerWidth - 2 * gut) / CARD)); return; }
+      const t = track.current!, pad = parseFloat(getComputedStyle(t.parentElement!).paddingBottom) || 0;
+      // the rail's top on screen (offsetTop would be in its own zoomed pixels)
+      const top = t.getBoundingClientRect().top - root.current!.getBoundingClientRect().top;
+      setRailZoom(Math.min(1, Math.max(0.45, (window.innerHeight - top - pad) / 712)));
     };
     fit(); window.addEventListener("resize", fit);
-    return () => window.removeEventListener("resize", fit);
+    // the title's height moves the rail (its font arriving, its reveal, a rewrap): fit again whenever it changes
+    const ro = new ResizeObserver(fit); ro.observe(track.current!.parentElement!.firstElementChild!);
+    document.fonts?.ready.then(fit);
+    return () => { window.removeEventListener("resize", fit); ro.disconnect(); };
   }, []);
 
   useEffect(() => {
@@ -76,7 +85,9 @@ export default function Milestones() {
       const f = state.f, fx = f * C + C / 2;
       // lg: 2025 at the 60 px gutter (wider than 1512, on the 1392 content edge like every section) → 2030 in the
       // centre; where only one milestone fits (phones, tablets) the one in focus stays centred the whole way
-      const W = t.clientWidth, x0 = W < 2.5 * C ? W / 2 - C / 2 : Math.max(GUTTER, (W - 1392) / 2), x1 = W / 2 - ((N - 1) * C + C / 2);
+      // W in the rail's own (zoomed) pixels, from its width on screen; z turns the gutter and content edge into them
+      const z = parseFloat(t.style.zoom) || 1, Wv = t.getBoundingClientRect().width, W = Wv / z;
+      const x0 = W < 2.5 * C ? W / 2 - C / 2 : Math.max(GUTTER, (Wv - 1392) / 2) / z, x1 = W / 2 - ((N - 1) * C + C / 2);
       r.style.transform = `translate3d(${x0 + (x1 - x0) * (f / (N - 1))}px,0,0)`;
       cards.forEach((c, i) => {
         const near = Math.max(0, 1 - Math.abs(i - f));                 // 1 in focus → 0 one step away
@@ -130,8 +141,9 @@ export default function Milestones() {
   const prev = <button type="button" aria-label="Previous milestone" onClick={() => go.current(focus - 1)} disabled={focus === 0} className={arrow}><Icon name="arrow-left-01-sharp" /></button>;
   const next = <button type="button" aria-label="Next milestone" onClick={() => go.current(focus + 1)} disabled={focus === N - 1} className={arrow}><Icon name="arrow-right-01-sharp" /></button>;
   return (
-    <section ref={root} aria-label="Phase one timeline" className="relative overflow-hidden bg-limestone-50">
-      <div className="flex flex-col gap-8 py-20 lg:gap-12 lg:py-24">
+    // from lg one screen tall: the padding and gaps follow the screen's height and the rail is scaled to the rest
+    <section ref={root} aria-label="Phase one timeline" className="relative overflow-hidden bg-limestone-50 lg:h-svh">
+      <div className="flex flex-col gap-8 py-20 lg:gap-[clamp(16px,3.5svh,48px)] lg:py-[clamp(28px,6svh,96px)]">
         {/* 920 wide less the side padding (800 of copy at 1512); the padding stops at Figma's 60 px, so on wider screens
             the larger gutter does not squeeze the copy */}
         <SectionTitle tag={M.tag} title={M.title} body={M.body} className="mx-auto max-w-[920px] px-[min(var(--gutter),60px)]" />
@@ -153,7 +165,7 @@ export default function Milestones() {
         </div>
         <p aria-live="polite" className="sr-only">{M.items[focus].year}: {M.items[focus].title}. {M.items[focus].body}</p>
 
-        <div ref={track} className="touch-pan-y max-lg:select-none" style={{ zoom: railZoom }}>
+        <div ref={track} className="touch-pan-y max-lg:select-none" style={{ zoom: railZoom, "--z": railZoom } as CSSProperties}>
           <div ref={rail} className="flex w-max items-start will-change-transform">
             {M.items.map((m, i) => <Milestone key={m.year} i={i} active={i === focus} onPick={(k) => go.current(k)} />)}
           </div>

@@ -5,7 +5,6 @@ import { idlePose, COIN_FILL, type CoinPose } from "@/components/ui/Coin3D";
 import { gsap, ScrollTrigger, reducedMotion, withHold } from "@/lib/gsap";
 import "@/lib/about/a-motion";
 import { coin as C } from "@/lib/about/a-content";
-import { hiRes } from "@/lib/hi-res";
 import { BLOCK_FROM, BLOCK_TO } from "@/components/reveal/letters";
 
 /** Figma frame (UI / Section / Landmark Reveal): 1512 × 1024. */
@@ -18,10 +17,10 @@ const EDGE_ON = Math.PI * 3.5, TURNED = Math.PI * 4;
 const FLIP_END = 1.4;
 /** Coin centre at rest: Figma's 379.5 raised by 20 so the turning coin keeps ~40 px clear of the display word. */
 const COIN_CY = 359.5;
-/** The sky-fall film as a frame sequence (every 2nd frame of grandeur-skyfall-v2), drawn on a canvas:
- *  3840 × 2160 AVIF on sharp large screens (`hiRes`), 1920 × 1080 WebP elsewhere. */
+/** The sky-fall film as a frame sequence (every 2nd frame of grandeur-skyfall-v2, 1920 × 1080 WebP), drawn on a canvas.
+ *  1080p on every screen: the frames are held decoded, and at 4K that is ~4.8 GB (a 4K AVIF set is in docs/upscale). */
 const FRAMES = 145;
-const frameSrc = (i: number) => `/seq/${hiRes() ? "skyfall-4k" : "skyfall"}/${String(i + 1).padStart(4, "0")}.${hiRes() ? "avif" : "webp"}`;
+const frameSrc = (i: number) => `/seq/skyfall/${String(i + 1).padStart(4, "0")}.webp`;
 
 /**
  * UI / Section / Landmark Reveal (10979:18395), pinned and scrubbed as ONE continuous move (linear with the scroll,

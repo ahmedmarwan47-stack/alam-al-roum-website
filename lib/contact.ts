@@ -30,8 +30,9 @@ export const bookCall = {
 export const locations = {
   tag: "Find us", title: "Locations", map: "/images/contact/map.jpg",
   credit: "Sources: Esri, HERE, Garmin, USGS, Intermap, INCREMENT P, NRCan, Esri Japan, METI, Esri China (Hong Kong), Esri Korea, Esri (Thailand), NGCC, © OpenStreetMap contributors, and the GIS User Community",
-  // pin anchors as % of the map image, measured on the Figma frame
-  pins: [["North Coast", 19.3, 26.8], ["Cairo", 31.5, 37.8], ["Doha", 86.6, 74]] as [string, number, number][],
+  // each office's point as % of the map: the site on the coast, and the basemap's own Cairo and Doha city dots
+  // (the pill's icon sits on the point, so the pill covers the basemap's printed name)
+  pins: [["North Coast", 20.33, 27.3], ["Cairo", 31.14, 37.5], ["Doha", 87.54, 75.73]] as [string, number, number][],
   offices: [
     { label: "Sales office", city: "Cairo", address: "Qatari Diar Egypt, New Cairo, Egypt", phone: "Phone to be confirmed" },
     { label: "Site office & visits", city: "North Coast", address: "Alam Al Roum site office, North Coast, Egypt", phone: "16922" },

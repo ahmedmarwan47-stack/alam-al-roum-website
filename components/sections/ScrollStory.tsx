@@ -4,11 +4,11 @@ import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 import Button from "@/components/ui/Button";
 import RevealText from "@/components/reveal/RevealText";
 import { grandeur, lighthouse } from "@/lib/content";
-import { hiRes } from "@/lib/hi-res";
 
 const FRAMES = 185;
-/** 3840 × 2160 AVIF frames on sharp large screens (`hiRes`), 1920 × 1080 WebP elsewhere. */
-const src = (i: number) => `/seq/${hiRes() ? "marina-4k" : "marina-hd"}/${String(i + 1).padStart(4, "0")}.${hiRes() ? "avif" : "webp"}`;
+/** 1920 × 1080 WebP frames on every screen: the frames are all held decoded, and at 4K that is ~6 GB, enough for
+ *  Safari to reload the page (a 4K AVIF set is kept in docs/upscale/4k/seq-avif). */
+const src = (i: number) => `/seq/marina-hd/${String(i + 1).padStart(4, "0")}.webp`;
 const pct = (v: number, of: number) => `${(v / of) * 100}%`;
 const Bars = () => (
   <span className="flex h-7 items-end gap-[3px]">{[9, 15, 12, 20, 27].map((h, k) => <i key={k} className="block w-[6px] rounded-[1px] bg-deepsea-300" style={{ height: h }} />)}</span>
