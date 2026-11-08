@@ -16,8 +16,9 @@ const FULL: MapView = { x: 0, y: 0, w: 1512, h: 839 };
 type Item = { key: string; n: number; gate: boolean; pins: number[] };
 
 /**
- * Aerial masterplan with numbered Interactive-Hotspots pins (Figma Masterplan Pin): hover shows the name, click opens
- * the card. Highlights are limestone pins, gates smaller rust ones, each with its number.
+ * Aerial masterplan with Interactive-Hotspots pins (Figma Masterplan Pin): hover shows the name, click opens the card.
+ * Highlights are limestone pins, gates smaller rust ones. On desktop each pin is a plus that turns to a cross when open;
+ * below lg, where the map has its list, each pin shows its number instead.
  * Below lg (phones, tablets: touch, no hover) a floating card would cover its neighbours, so the map is followed by a
  * numbered list of its places, and a pin or a row opens that place in the bottom sheet (photo, text, Explore, and
  * previous / next through the list). A row also slides the map to its pin, and the chosen place stays highlighted on
@@ -112,7 +113,9 @@ export default function MasterplanMap({ image, pins: all, initial = 0, view = FU
               className={`relative grid -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full shadow-[0_2px_8px_rgb(1_15_26/.25)] transition-colors duration-[250ms] [transition-timing-function:var(--ease-fig-out)] max-lg:before:absolute max-lg:before:-inset-1 max-lg:before:rounded-full
                 ${gate ? "h-[22px] w-[22px] text-[11px] lg:h-[26px] lg:w-[26px] lg:text-[12px]" : "h-7 w-7 text-[13px] lg:h-8 lg:w-8 lg:text-[14px]"}
                 ${on ? "bg-deepsea-500 text-limestone-50 ring-2 ring-limestone-50" : gate ? "bg-rust-500 text-limestone-50 group-hover:bg-deepsea-500" : "bg-limestone-50 text-deepsea-500 group-hover:bg-deepsea-500 group-hover:text-limestone-50"}`}>
-              <span className="t-label leading-none tabular-nums">{it.n}</span>
+              {/* phones and tablets: the number, matching the list under the map; desktop has no list, so the plus */}
+              <span className="t-label leading-none tabular-nums lg:hidden">{it.n}</span>
+              <span className="grid place-items-center max-lg:hidden"><Icon name="plus-sign" size={gate ? 14 : 16} className={`transition-transform duration-300 [transition-timing-function:var(--ease-fig-out)] ${on ? "rotate-45" : ""}`} /></span>
             </button>
             {!on && <span className={`pointer-events-none absolute top-0 hidden -translate-y-1/2 whitespace-nowrap lg:block ${labelRight ? "left-7" : "right-full mr-7"} rounded-full bg-limestone-50 px-[14px] py-2 t-label l-14 shadow-[0_2px_10px_rgb(1_15_26/.18)] transition-opacity duration-[250ms] [transition-timing-function:var(--ease-fig-out)] ${labels ? "opacity-0 group-hover:opacity-100 xl:opacity-100" : "opacity-0 group-hover:opacity-100"}`}>{p.title}</span>}
             {on && !phone && <PinCard p={p} className={`absolute -top-[76px] hidden w-[300px] lg:flex ${right ? "left-7 origin-left" : "right-full mr-7 origin-right"}`} />}
