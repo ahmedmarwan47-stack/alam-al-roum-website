@@ -87,7 +87,6 @@ export default function CoastHistory({ path }: { path: string }) {
             <span className="t-label l-12 uppercase">{s.date}</span><span className="t-text x-12 text-limestone-800">{s.text}</span>
           </li>))}
       </ol>
-      <p className="t-text x-12 text-limestone-800">{L.caption}</p>
     </div>
   );
 }

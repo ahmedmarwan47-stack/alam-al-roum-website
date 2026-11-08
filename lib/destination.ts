@@ -39,7 +39,6 @@ export const history = {
   photo: d("terracotta-photo.jpg"),
   // stops on the 1218 × 273 coastline drawing (Figma 11134:16026)
   line: { svg: d("history-coastline.svg"), stop: d("history-stop.svg"), todayDot: d("history-stop-today.svg"), mark: d("history-mark.svg"),
-    caption: "Alam Al Roum: over three thousand years on this coast",
     stops: [
       { date: "C. 1270 BC", text: "Ramesses II builds a fortress at Zawiyet Umm el-Rakham", x: 85, y: 161.5, label: "above" as const, ly: 59.5 },
       { date: "331 BC", text: "Alexander the Great passes through Paraetonium on his way to Siwa", x: 305, y: 188, label: "below" as const, ly: 205.4 },
