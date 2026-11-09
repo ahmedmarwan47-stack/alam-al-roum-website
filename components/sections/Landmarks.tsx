@@ -9,7 +9,9 @@ import { landmarks } from "@/lib/content";
 export type LandmarksData = { title: string; body: string; rows: { title: string; body: string; large: string; inset: string }[] };
 
 /**
- * UI / Landmarks (Residence Types style, Figma 10979:15280): the list is driven by the scroll — the section pins and
+ * UI / Landmarks (Residence Types style, Figma 10979:15280): Figma's 1024 px height on desktop, growing if the copy needs more (so it keeps its
+ * vertical padding); the list is driven by the scroll — the section pins at its centre (the list stays in view on
+ * screens shorter than 1024) and
  * each row takes its turn as you scroll (about 60 % of a screen per row); the active row turns dark while the large
  * photo wipes up and the inset wipes down (1 s, cubic .165,.84,.44,1). Clicking a row scrolls to its turn.
  * Used on Home, Destination, Sustainability (commitments), the neighbourhoods (facilities) and the experiences.
@@ -21,7 +23,7 @@ export default function Landmarks({ data = landmarks }: { data?: LandmarksData }
   const n = L.rows.length;
   useEffect(() => {
     if (reducedMotion() || !window.matchMedia("(min-width: 1024px)").matches) return;
-    st.current = ScrollTrigger.create({ trigger: pin.current, start: "top top", end: () => `+=${window.innerHeight * 0.6 * n}`, pin: true,
+    st.current = ScrollTrigger.create({ trigger: pin.current, start: "center center", end: () => `+=${window.innerHeight * 0.6 * n}`, pin: true,
       onUpdate: (self) => setA(Math.min(n - 1, Math.floor(self.progress * n))) });
     return () => { st.current?.kill(); st.current = null; };
   }, [n]);
@@ -42,7 +44,7 @@ export default function Landmarks({ data = landmarks }: { data?: LandmarksData }
   }, [a]);
   return (
     <section className="bg-limestone-50">
-    <div ref={pin} className="flex flex-col bg-limestone-50 lg:h-svh lg:max-h-[1024px] lg:flex-row">
+    <div ref={pin} className="flex flex-col bg-limestone-50 lg:min-h-[1024px] lg:flex-row">
       <div className="flex flex-col justify-center gap-[60px] py-20 pl-[var(--gutter)] pr-[var(--gutter)] lg:w-1/2 lg:pr-24">
         <div className="flex flex-col gap-2">
           <RevealText as="h2" text={L.title} className="t-heading hd-40" />
