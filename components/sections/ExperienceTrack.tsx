@@ -79,7 +79,7 @@ export default function ExperienceTrack({ slider = false, title }: { slider?: bo
   return (
     <section className={`flex flex-col gap-10 overflow-hidden bg-white container-x ${slider ? "py-[60px]" : "py-20"}`}>
       <div className="flex max-w-[917px] flex-col gap-4">
-        <RevealText text={T.tag} className="t-label l-16" />
+        <RevealText text={T.tag} className="t-label l-tag" />
         <RevealText as="h2" segs={title ?? T.title} className="t-heading hd-56" delay={0.05} />
         <RevealText text={T.body} className="t-body b-18 opacity-70" delay={0.12} />
       </div>

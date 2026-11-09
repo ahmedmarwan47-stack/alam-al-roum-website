@@ -38,7 +38,7 @@ export default function CommunityCarousel({ items }: { items: Community[] }) {
     <section className="flex flex-col gap-10 overflow-hidden bg-white py-20 lg:gap-12">
       <div className="flex items-end justify-between gap-6 container-x">
         <div className="flex flex-col gap-4">
-          <RevealText text="Communities" className="t-label l-16" />
+          <RevealText text="Communities" className="t-label l-tag" />
           <RevealText as="h2" text="More communities" className="t-heading hd-48" delay={0.05} />
           <RevealText text="Each district has its own character. All share the sea." className="t-body b-18 text-limestone-800" delay={0.1} />
         </div>
@@ -51,13 +51,13 @@ export default function CommunityCarousel({ items }: { items: Community[] }) {
         className="flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-px-[var(--gutter)] px-[var(--gutter)] [scrollbar-width:none] lg:gap-6 [&::-webkit-scrollbar]:hidden">
         {items.map((c, k) => (
           <Link key={c.slug} href={`/communities/${c.slug}`} data-slide
-            className="group flex w-[72vw] flex-none snap-start flex-col gap-3 sm:w-[42vw] lg:w-[calc((min(100vw,1512px)-2*60px-2*24px)/3.25)]">
+            className="group flex w-[72vw] flex-none snap-start flex-col gap-3 max-md:gap-0 sm:w-[42vw] lg:w-[calc((min(100vw,1512px)-2*60px-2*24px)/3.25)]">
             <div className="aspect-[4/5] overflow-hidden">
               <RevealImage src={c.photo} alt={c.name} delay={Math.min(k, 3) * 0.08} className="h-full w-full"
                 imgClassName="transition-transform duration-[1.2s] [transition-timing-function:var(--ease-site)] group-hover:scale-[1.05]" />
             </div>
-            <span className="t-heading hd-24 pt-1 text-deepsea-500">{c.name}</span>
-            <span className="t-body b-14 text-limestone-800">{c.body}</span>
+            <span className="t-heading hd-24 pt-1 text-deepsea-500 max-md:mt-3 max-md:pt-0 max-md:text-[14px]! max-md:leading-5!">{c.name}</span>
+            <span className="t-body b-14 text-limestone-800 max-md:mt-1 max-md:text-[12px]! max-md:leading-[18px]!">{c.body}</span>
           </Link>))}
         {/* lets the track end on the right gutter, not the screen edge */}
         <div aria-hidden className="w-px flex-none" />

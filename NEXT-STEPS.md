@@ -1,4 +1,52 @@
-# Status — 27 Oct 2026
+# Status — 9 Nov 2026
+
+## Handoff — 9 Nov 2026 (phone responsiveness pass 3)
+
+### Rules the owner set (follow them)
+- **4 px type grid:** every font size and line height sits on the 4 px grid; only 14 px and 18 px may be off it. Never
+  suggest 13 / 15 / 17 px. Pairings in use: 12/16 or 12/18, 14/20, 16/24, 32/36.
+- **Phone cards in two-column grids:** title 14/20, secondary line 12/18; labels that explain a number 14/20.
+  Spacing photo → first line 12 px, line → line 4 px.
+- **Communities:** names are singular ("Beachfront community", "Lagoon neighbourhood", "Resort district"); one photo
+  per community everywhere = its own page's hero photo (`communityPhoto` in lib/communities.ts). Home keeps the Figma
+  coin design, the list page its grid; that's intended.
+- Segmented toggles: full width on phones; Map / Grid opens on **Grid**.
+- Phone screenshots of every change: `local-assets/responsive-qa/` (git-ignored).
+
+### Done this session (all below md / lg only; desktop unchanged unless noted)
+- `lib/breakpoints.ts` (`BP`, `MQ`, `matches`): every JS media query uses it. Button hovers gated to `(hover: hover)`.
+  Leftover `100vh` → `svh`.
+- Home: Grandeur Restored phone constellation (two card bands, centre of the lower band kept clear for the lighthouse
+  tower; `BANDS` in ScrollStory.tsx); Qatari Diar runs the pinned desktop animation on phones too; Ways to live rows
+  without numbers; Landmarks accordion opens the first row, one open at a time; Connectivity list before the visa
+  card (Home and Destination); CTA portal film cropped at 80 % on phones.
+- Type: `.l-tag` tagline class (14/20 phones, 16/24 up) on all 17 taglines; `.l-14` and `.b-14` line height 20 px.
+- Cards: community / hotel / event / story cards 14/12 on phones with 12/4 spacing; equal-size community and hotel
+  cards on phones (4:5 photos); event dates without weekday and with a 2-digit year ("10 Feb 27"); the place ends in
+  "…" when it doesn't fit (cards are `min-w-0` + `grid-cols-1` so the row can't widen the grid).
+- FAQ: no side padding on phones; "Read All FAQs" after the questions below lg.
+- About: pinned scenes ~40 % shorter on phones (page 18.3k → 15.4k px); city numbers 32/36 with 14/20 labels;
+  "A landmark restored" points stacked, body 16/24; Milestones sizes set as (on-screen size) / rail zoom (year 32/36,
+  text 14/20); Nearby map labels 12/16.
+- `SmoothScroll.tsx`: `ScrollTrigger.refresh()` whenever the page height changes (fixes entrances stuck at opacity 0,
+  e.g. the Milestones title on a phone).
+
+### Next (agreed with the owner, not started)
+1. **Full-bleed heroes on phones** (owner chose option A): About (Manifesto), Destination, Communities, Experiences
+   (PageHero) switch to Home's phone hero: full-screen photo, tag / title / body in Limestone at the bottom over a
+   soft shade. About's desktop end state already looks like this. Listing heroes (FAQ, Events, Media, Careers) stay.
+2. **Hero text sizes** — owner feels the descriptions take too much space. Measured at 375 px:
+   | Page | Title | Description |
+   |---|---|---|
+   | Home | 32.6/35.9 (off grid) | 16/24, 4 lines |
+   | About | 26/26 | 16/24, 3 lines |
+   | Destination | 26/29.7 (off grid) | 16/24, 4 lines (section 900 px) |
+   | Sustainability | 34/37.4 (off grid) | 18/27 (off grid), 5 lines |
+   | FAQ | 32/30.1 (off grid) | 16/24, 3 lines |
+   Proposal to put to the owner: titles 32/36 and descriptions 14/20 on phones, on the grid.
+3. **Nearby map (About) — owner chose option 1 only:** crop the phone swipe strip to the coast (a ~4:3 frame on the
+   coastline and pins instead of the full 1512 × 1024 drawing, which is ~660 px tall and mostly desert). No distance
+   list.
 
 ## 27 Oct — phone pass 2, articles and events
 - Shared phone rules (below lg; desktop unchanged): footer link groups are accordions; the CTA film sits on top and

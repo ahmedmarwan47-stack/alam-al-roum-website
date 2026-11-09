@@ -17,7 +17,7 @@ export default function Communities() {
       <SectionTitle tag={communities.tag} title={communities.title} />
       <div className="grid w-full grid-cols-2 gap-6 lg:grid-cols-4">
         {communities.items.map((c, k) => (
-          <Link key={c.name} href={`/communities/${c.slug}`} className="group flex flex-col gap-5">
+          <Link key={c.name} href={`/communities/${c.slug}`} className="group flex flex-col gap-5 max-md:gap-3">
             <RevealMask blur className="w-full" delay={k * 0.08}>
               <div className="relative aspect-square w-full overflow-hidden transition-transform duration-[.8s] [transition-timing-function:var(--ease-coin-spring)] group-hover:-rotate-[10deg]"
                 style={{ WebkitMask: "url(/images/coin-silhouette.svg) center / contain no-repeat", mask: "url(/images/coin-silhouette.svg) center / contain no-repeat" }}>
@@ -26,8 +26,9 @@ export default function Communities() {
               </div>
             </RevealMask>
             <div className="flex flex-col items-center gap-1 text-center">
-              <RevealText text={c.name} className="t-label l-18" />
-              <RevealText text={c.line} className="t-body b-16 text-limestone-800" delay={0.08} />
+              {/* phones (two narrow columns): name 14 / description 12, so the pair keeps a size step and wraps less */}
+              <RevealText text={c.name} className="t-label l-18 max-md:text-[14px]! max-md:leading-5!" />
+              <RevealText text={c.line} className="t-body b-16 text-limestone-800 max-md:text-[12px]! max-md:leading-[18px]!" delay={0.08} />
             </div>
           </Link>
         ))}

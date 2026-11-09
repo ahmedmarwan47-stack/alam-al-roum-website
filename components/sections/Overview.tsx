@@ -18,7 +18,7 @@ export default function Overview({ data: O }: { data: OverviewData }) {
     <section className="flex flex-col justify-center bg-white py-20 container-x lg:min-h-[70svh] lg:py-24">
       <div className="grid gap-x-6 gap-y-8 lg:grid-cols-12 lg:items-start">
         <div className="flex flex-col gap-4 lg:col-span-7">
-          <RevealText text={O.tag} className="t-label l-16" />
+          <RevealText text={O.tag} className="t-label l-tag" />
           <RevealText as="h2" {...(typeof O.title === "string" ? { text: O.title } : { segs: O.title })}
             className="t-heading hd-56l wrap-balance" delay={0.05} />
         </div>

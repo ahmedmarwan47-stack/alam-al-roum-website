@@ -72,7 +72,7 @@ function GalleryWall({ data: G }: { data: GalleryData }) {
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[22%] bg-gradient-to-b from-deepsea-800 to-transparent" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[22%] bg-[linear-gradient(to_bottom,rgb(17_12_7/0),rgb(17_12_7/.6))]" />
       <div className="absolute left-[var(--gutter)] top-1/2 flex -translate-y-1/2 flex-col gap-4 text-limestone-50">
-        <RevealText text={G.tag} className="t-label l-16" />
+        <RevealText text={G.tag} className="t-label l-tag" />
         <RevealText as="h2" segs={G.title} className="t-heading hd-48" delay={0.1} />
       </div>
     </section>

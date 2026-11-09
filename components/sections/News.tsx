@@ -13,7 +13,7 @@ export default function News() {
         <StoryCard {...card(N.items[0])} big ratio="aspect-[684/456]" />
         {/* Figma "Small cards": the pair sits at the foot of the lead story; as row subgrids the two share their
             photo, bar and title rows, so they stay in line even when one title wraps */}
-        <div className="grid grid-cols-2 gap-x-6 lg:self-end">{N.items.slice(1).map((it, k) => <StoryCard key={it.title} {...card(it)} ratio="aspect-[330/220]" delay={0.12 + k * 0.1} />)}</div>
+        <div className="grid grid-cols-2 gap-x-6 max-md:gap-x-4 lg:self-end">{N.items.slice(1).map((it, k) => <StoryCard key={it.title} {...card(it)} ratio="aspect-[330/220]" delay={0.12 + k * 0.1} />)}</div>
       </div>
       <Button label={N.cta} href="/media-center" variant="outline" />
     </section>

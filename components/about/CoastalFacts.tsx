@@ -6,6 +6,7 @@ import RevealImage from "@/components/reveal/RevealImage";
 import RevealText from "@/components/reveal/RevealText";
 import { facts as F } from "@/lib/about/a-content";
 import { srcSet } from "@/lib/img";
+import { MQ } from "@/lib/breakpoints";
 
 type Box = { left: string; top: string; width: string; height: string };
 const p = (v: number) => `${+(v * 100).toFixed(3)}%`;
@@ -44,7 +45,7 @@ export default function CoastalFacts() {
   useEffect(() => {
     const el = stage.current!, q = gsap.utils.selector(el);
     const mm = gsap.matchMedia();
-    mm.add("(min-width: 1024px)", () => {
+    mm.add(MQ.lg, () => {
       const box = (k: "left" | "top" | "width" | "height") => () => mergedPx(el)[k];
       const E = "power2.inOut";
       const tl = gsap.timeline({ paused: true })   // one eased opening with the scroll; a reading hold at the end

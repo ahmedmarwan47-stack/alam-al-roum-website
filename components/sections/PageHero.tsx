@@ -5,6 +5,7 @@ import "@/lib/about/a-motion";
 import { blurIn } from "@/components/reveal/letters";
 import type { Seg } from "@/components/reveal/RevealText";
 import { srcSet } from "@/lib/img";
+import { MQ, matches } from "@/lib/breakpoints";
 
 export type PageHeroData = { pre: string; title: Seg[]; body: string; photo: string; alt?: string };
 
@@ -33,7 +34,7 @@ export default function PageHero({ data: H }: { data: PageHeroData }) {
       .addLabel("shown", 0.5)
       .fromTo(el, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1 }, "shown")
       .fromTo(rule.current, { scaleX: 0 }, { scaleX: 1, duration: 1.1 }, "shown");
-    if (!window.matchMedia("(min-width: 1024px)").matches) return () => { intro.kill(); };
+    if (!matches(MQ.lg)) return () => { intro.kill(); };
     // the light layer's clip follows the photo's box exactly (both linear, from the same rect to the full wrap)
     const box = () => `inset(${el.offsetTop}px ${w.offsetWidth - el.offsetLeft - el.offsetWidth}px ${w.offsetHeight - el.offsetTop - el.offsetHeight}px ${el.offsetLeft}px)`;
     const tl = gsap.timeline({ paused: true, defaults: { ease: "none" } })
@@ -49,7 +50,7 @@ export default function PageHero({ data: H }: { data: PageHeroData }) {
   }, []);
   const copy = (light: boolean) => (
     <div aria-hidden={light || undefined} className={`relative flex flex-col gap-4 py-16 container-x lg:absolute lg:left-0 lg:top-[calc(30.3%+53px)] lg:py-0 ${light ? "text-limestone-50" : "text-deepsea-500"}`}>
-      <span data-pre={light ? undefined : ""} data-reveal={light ? undefined : ""} className="t-label l-16">{H.pre}</span>
+      <span data-pre={light ? undefined : ""} data-reveal={light ? undefined : ""} className="t-label l-tag">{H.pre}</span>
       {(() => {
         const Tag = light ? "div" : "h1";
         return (

@@ -5,6 +5,7 @@ import Drawer from "@/components/ui/Drawer";
 import Icon from "@/components/ui/Icon";
 import RevealImage from "@/components/reveal/RevealImage";
 import { srcSet } from "@/lib/img";
+import { MQ, matches } from "@/lib/breakpoints";
 
 /** `n` is the number drawn in the pin (default: its place among the map's pins); `kind: "gate"` draws a gate. */
 export type MapPin = { title: string; body: string; x: number; y: number; photo: string; href?: string; side?: "left" | "right"; n?: number; kind?: "gate" };
@@ -54,14 +55,14 @@ export default function MasterplanMap({ image, pins: all, initial = 0, view = FU
   const [phone, setPhone] = useState(false), [sheet, setSheet] = useState(false), [active, setActive] = useState<string | null>(null);
   const closeSheet = useCallback(() => setSheet(false), []);
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 1023px)"), sync = () => setPhone(mq.matches);
+    const mq = window.matchMedia(MQ.belowLg), sync = () => setPhone(mq.matches);
     sync(); mq.addEventListener("change", sync);
     return () => mq.removeEventListener("change", sync);
   }, []);
   // phones: open the swipeable strip on the pins (their span fits one screen at 180vw), or on the open community's pin
   const pan = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const sc = pan.current; if (!sc || !window.matchMedia("(max-width: 767px)").matches) return;
+    const sc = pan.current; if (!sc || !matches(MQ.belowMd)) return;
     const xs = pins.map((p) => fx(p) * sc.scrollWidth), mid = (Math.min(...xs) + Math.max(...xs)) / 2;
     const k = pins[initial] ? xs[initial] : mid, edge = 56;
     const c = k < mid - sc.clientWidth / 2 + edge || k > mid + sc.clientWidth / 2 - edge ? k : mid;

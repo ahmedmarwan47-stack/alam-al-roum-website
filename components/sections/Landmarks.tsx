@@ -14,13 +14,15 @@ export type LandmarksData = { title: string; body: string; rows: { title: string
  * Desktop: clicking a row makes it active — it turns dark while the backdrop wipes up and the inset wipes down
  * (1 s, cubic .165,.84,.44,1). The inset is the row's photo, large (66 % × 68 % of the column); the backdrop behind it
  * is the same photo, softly blurred. The section scrolls like any other, so the page never feels held.
- * Below lg the photo column goes, as on Ayana: the rows are an accordion, all closed, and tapping one opens its photo.
+ * Below lg the photo column goes, as on Ayana: the rows are an accordion, the first open, and tapping a row opens its
+ * photo and closes the one that was open (one at a time; tapping the open row closes it).
  * Used on Home, Destination, Sustainability (commitments), the neighbourhoods (facilities) and the experiences.
  */
 export default function Landmarks({ data = landmarks }: { data?: LandmarksData }) {
   const L = data;
   const [a, setA] = useState(0); const prev = useRef(0);
-  const [open, setOpen] = useState(-1);
+  // phones and tablets: one row open at a time, the first one from the start
+  const [open, setOpen] = useState(0); const opened = useRef(0);
   const big = useRef<(HTMLDivElement | null)[]>([]), ins = useRef<(HTMLDivElement | null)[]>([]);
   const panel = useRef<(HTMLImageElement | null)[]>([]);
   useEffect(() => {
@@ -31,8 +33,10 @@ export default function Landmarks({ data = landmarks }: { data?: LandmarksData }
     gsap.fromTo(ins.current[a], { clipPath: "inset(0% 0% 100% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1, ease: "slideWipe", delay: 0.08 });
     prev.current = a;
   }, [a]);
-  // the opened photo rises in from the bottom, settling from a slight zoom, while its row unfolds
+  // the opened photo rises in from the bottom, settling from a slight zoom, while its row unfolds (not for the row
+  // that is open from the start: its photo is simply there)
   useEffect(() => {
+    if (opened.current === open) return; opened.current = open;
     const img = panel.current[open];
     if (img) gsap.fromTo(img, { clipPath: "inset(100% 0% 0% 0%)", scale: 1.08 }, { clipPath: "inset(0% 0% 0% 0%)", scale: 1, duration: 0.9, ease: "slideWipe" });
   }, [open]);

@@ -4,6 +4,7 @@ import { gsap, ScrollTrigger, reducedMotion, withHold } from "@/lib/gsap";
 import { blurIn } from "@/components/reveal/letters";
 import { manifesto as M } from "@/lib/about/a-content";
 import { srcSet } from "@/lib/img";
+import { MQ } from "@/lib/breakpoints";
 
 /**
  * UI / Headline / Accent. On load it plays the Figma states in order: Hidden → Line 1 (after 0.3 s) → Shown:
@@ -24,7 +25,7 @@ export default function Manifesto() {
       .fromTo(q("[data-rule]"), { scaleX: 0 }, { scaleX: 1, duration: 1.1 }, "shown");
 
     const mm = gsap.matchMedia();
-    mm.add("(min-width: 1024px)", () => {
+    mm.add(MQ.lg, () => {
       // the small photo's box (Figma 360 × 240, gutter from the right, 40px above the bottom) as clip-path insets; wider
       // than 1512 it keeps Figma's 360 × 240 on the right content edge (the 1392 px measure every section keeps)
       const box = () => {

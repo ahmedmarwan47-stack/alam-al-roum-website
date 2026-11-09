@@ -7,6 +7,7 @@ import "@/lib/about/a-motion";
 import { coin as C } from "@/lib/about/a-content";
 import { BLOCK_FROM, BLOCK_TO } from "@/components/reveal/letters";
 import { frameLoader } from "@/lib/frames";
+import { MQ, matches } from "@/lib/breakpoints";
 
 /** Figma frame (UI / Section / Landmark Reveal): 1512 × 1024. */
 const FW = 1512, FH = 1024;
@@ -52,7 +53,7 @@ export default function CoinStage({ poster }: { poster?: string }) {
     // below lg the frame's contain scale leaves a portrait screen a tiny coin (67 px on a phone): there the coin rests
     // at 38 % of the width (≤ 200 px, ≤ 22 % of the height, so it stays clear of the word) and the window opens to 92 %
     // of the width (≤ 80 % of the height), so the reveal reads as a coin, not a dot
-    const small = () => !window.matchMedia("(min-width: 1024px)").matches;   // the lg breakpoint, scrollbar included
+    const small = () => !matches(MQ.lg);   // the lg breakpoint, scrollbar included
     const coinAt = (figma: number, ofW: number, px: number, ofH: number) =>
       small() ? Math.max(figma * fit(), Math.min(ofW * el.offsetWidth, px, ofH * el.offsetHeight)) : figma * fit();
     const rest = () => coinAt(260, 0.38, 200, 0.22);
@@ -119,8 +120,8 @@ export default function CoinStage({ poster }: { poster?: string }) {
     // the film reaches its last frame with the motion; then a reading hold on the finished copy before the pin lets go
     motionEnd = tl.duration();
     const vh = withHold(tl, 4.5, 0.8);
-    // below lg the same sequence plays over 60 % of the scroll (~3 screens instead of 5.3), so a phone isn't held long
-    const pinVh = () => (small() ? vh * 0.6 : vh);
+    // below lg the same sequence plays over 40 % of the scroll (~2.1 screens instead of 5.3), so a phone isn't held long
+    const pinVh = () => (small() ? vh * 0.4 : vh);
     let st: ScrollTrigger | undefined;
     if (reducedMotion()) { tl.progress(1); film(tl.time()); }
     else st = ScrollTrigger.create({ trigger: el, start: "top top", end: () => `+=${pinVh() * 100}%`, pin: true, scrub: 1, animation: tl, invalidateOnRefresh: true, onRefresh: draw });
@@ -155,11 +156,12 @@ export default function CoinStage({ poster }: { poster?: string }) {
       <div data-shade className="pointer-events-none absolute inset-0 opacity-0 lg:hidden"
         style={{ background: "linear-gradient(180deg, rgb(3 30 46 / .55), rgb(3 30 46 / .45) 60%, rgb(3 30 46 / .15))" }} />
 
-      {/* Beat 5 copy · Heading/80 (600 wide), Body/20 at 85% (520 wide), history points 260 + 32 + 260 */}
+      {/* Beat 5 copy · Heading/80 (600 wide), Body/20 at 85% (520 wide), history points 260 + 32 + 260. Phones: body
+          16 / 24 and the two points stacked full width (side by side they were ~150 px columns of 4–5 short lines) */}
       <div className="absolute left-[var(--gutter)] right-[var(--gutter)] top-[16%] flex max-w-[600px] flex-col gap-7 lg:top-[29.3%]">
         <h2 data-rise className="t-heading hd-80">{C.title}</h2>
-        <p data-rise className="max-w-[520px] t-body b-20 text-limestone-50/85">{C.body}</p>
-        <div data-points className="mt-5 grid max-w-[552px] grid-cols-2 gap-8">
+        <p data-rise className="max-w-[520px] t-body b-20 text-limestone-50/85 max-md:text-[16px]! max-md:leading-6!">{C.body}</p>
+        <div data-points className="mt-5 grid max-w-[552px] grid-cols-2 gap-8 max-md:grid-cols-1 max-md:gap-5">
           {C.points.map((x) => (
             <div key={x.title} className="flex flex-col gap-2 border-t border-deepsea-400 pt-4">
               <h3 className="t-heading hd-20">{x.title}</h3>

@@ -56,7 +56,7 @@ export default function GalleryCarousel({ tag, title, photos }: { tag: string; t
   return (
     <section className="flex flex-col gap-10 overflow-hidden bg-deepsea-600 py-20 text-limestone-50 lg:gap-12 lg:py-[120px]">
       <div className="flex flex-col gap-4 container-x">
-        <RevealText text={tag} className="t-label l-16" />
+        <RevealText text={tag} className="t-label l-tag" />
         <RevealText as="h2" segs={title} className="t-heading hd-48" delay={0.1} />
       </div>
       <div id={id} ref={track} role="region" aria-roledescription="carousel" aria-label={`${title.map((s) => s.t).join(" ")}, ${n} photos`} tabIndex={0}

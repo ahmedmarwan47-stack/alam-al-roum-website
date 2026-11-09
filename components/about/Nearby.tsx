@@ -16,7 +16,8 @@ const pct = (v: number, of: number) => `${(v / of) * 100}%`;
  */
 const cq = (px: number, min: number, minSm = 12) =>
   ({ "--cq": `${(px / W) * 100}cqw`, "--cq-min": `${min}px`, "--cq-min-sm": `${minSm}px`, lineHeight: 1.45 }) as CSSProperties;
-const CQ = "[font-size:max(var(--cq-min),var(--cq))] max-lg:[font-size:max(var(--cq-min-sm),var(--cq))]";
+// phones: the labels sit at their 12 px floor; a 16 px line keeps them on the 4 px grid (the inline 1.45 is for larger sizes)
+const CQ = "[font-size:max(var(--cq-min),var(--cq))] max-lg:[font-size:max(var(--cq-min-sm),var(--cq))] max-md:leading-4!";
 /** Below lg the strip follows the drawing's head and comes to rest centred here (frame x), with Alexandria and Cairo in view. */
 const REST_X = 1190;
 
@@ -100,7 +101,7 @@ export default function Nearby() {
       <div className="relative mx-[var(--gutter)] lg:mx-0">
         {/* below lg above the map; lg over the map at the bottom left (Figma), on the desert */}
         <div className="flex flex-col gap-5 pb-8 lg:pointer-events-none lg:absolute lg:bottom-[7%] lg:left-[var(--gutter)] lg:z-10 lg:gap-3 lg:pb-0">
-          <RevealText text={N.tag} className="t-label l-16 text-deepsea-500" />
+          <RevealText text={N.tag} className="t-label l-tag text-deepsea-500" />
           <RevealText as="h2" text={N.title} className="t-heading hd-48 text-deepsea-500" delay={0.05} />
         </div>
 

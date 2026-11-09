@@ -13,7 +13,8 @@ import { connectivity as c } from "@/lib/content";
  * screen height (the map is 696:720, so its width = the height left after the padding and the card × 696/720, at most
  * half the row), and the list rows are tighter, so the whole section fits 1440×900 and 1512×982 without scrolling.
  * Below lg the two columns dissolve (display: contents) and their blocks are re-ordered, so a phone reads the title
- * and body first, then the map (with the flight times listed under it), the visa card, the list and the button.
+ * and body first, then the map (with the flight times listed under it), the "Connected to Egypt" list, the
+ * Visiting Egypt card and the button.
  */
 export default function Connectivity({ tag, compact = false, visa = !compact }: { tag?: string; compact?: boolean; visa?: boolean }) {
   // the visa card's height on desktop (padding, label, one row of two points), plus the 16 px gap above it
@@ -25,7 +26,7 @@ export default function Connectivity({ tag, compact = false, visa = !compact }: 
           <RevealMask><RadiusMap /></RevealMask>
           <FlightTimes className="md:hidden" />
         </div>
-        {visa && <div className="flex flex-col gap-4 rounded-[20px] border border-limestone-50/15 bg-limestone-50/10 p-6 max-lg:order-4 lg:gap-3 lg:rounded-2xl lg:px-5 lg:py-4">
+        {visa && <div className={`flex flex-col gap-4 rounded-[20px] border border-limestone-50/15 bg-limestone-50/10 p-6 max-lg:order-5 lg:gap-3 lg:rounded-2xl lg:px-5 lg:py-4`}>
           <span className="flex items-center gap-[10px] t-label l-16 text-limestone-50/80 lg:text-[14px]! lg:leading-5!"><Icon name="airplane-landing-01" size={18} />{c.visa.label}</span>
           {/* side by side from sm; stacked on a phone, where two columns would be ~130px each */}
           <div className="flex flex-col gap-5 sm:flex-row sm:gap-7">
@@ -37,12 +38,12 @@ export default function Connectivity({ tag, compact = false, visa = !compact }: 
       </div>
       <div className={`flex flex-1 flex-col justify-center max-lg:contents ${compact ? "gap-10 lg:gap-[clamp(18px,3svh,28px)]" : "gap-8 lg:gap-[clamp(14px,2.6svh,24px)]"}`}>
         <div className="flex flex-col gap-4 max-lg:order-1 lg:gap-3">
-          <RevealText text={tag ?? c.tag} className="t-label l-16" />
+          <RevealText text={tag ?? c.tag} className="t-label l-tag" />
           <RevealText as="h2" text={c.title} className="t-heading hd-48" delay={0.05} />
         </div>
         <RevealText text={c.body} className={`t-body b-18 max-lg:order-2 max-lg:-mt-2 ${compact ? "" : "max-w-[607px] text-limestone-50/60"}`} delay={0.1} />
         {/* Home: a quiet sentence-case label. To Town: an uppercase label. Both: rules only between the rows */}
-        <div className={`flex flex-col max-lg:order-5 ${compact ? "" : "gap-4 lg:gap-2"}`}>
+        <div className={`flex flex-col max-lg:order-4 ${compact ? "" : "gap-4 lg:gap-2"}`}>
           <span className={compact ? "pb-4 t-label l-16 uppercase lg:pb-2" : "t-text x-16 text-limestone-50/60"}>{c.listLabel}</span>
           <div className="flex flex-col">
             {c.items.map((it, k) => (

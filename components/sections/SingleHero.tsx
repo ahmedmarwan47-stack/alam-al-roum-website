@@ -36,7 +36,7 @@ export default function SingleHero({ data: H }: { data: SingleHeroData }) {
       <div className="relative flex flex-col gap-5 container-x md:flex-row md:items-end md:justify-between md:gap-10">
         {/* wide enough for a two-word name on one line (Marina boulevard), so the eyebrow stays low in the shade */}
         <div className="flex max-w-[820px] flex-col gap-3">
-          <RevealText text={H.eyebrow} onLoad delay={0.2} className="t-label l-16" />
+          <RevealText text={H.eyebrow} onLoad delay={0.2} className="t-label l-tag" />
           <RevealText as="h1" text={H.name} onLoad delay={0.3} className="t-heading hd-80" />
           <RevealText text={H.line} onLoad delay={0.55} className="t-body b-20 wrap-balance max-w-[640px]" />
         </div>

@@ -5,16 +5,22 @@ import SectionTitle from "@/components/sections/SectionTitle";
 import Icon from "@/components/ui/Icon";
 import { milestones as M } from "@/lib/about/b-content";
 import { srcSet } from "@/lib/img";
+import { MQ, matches } from "@/lib/breakpoints";
 
 /**
  * Figma "UI / Milestone" (10979:18571…): 400 wide, 15 ticks 24 apart from x 24, ticks 56 at rest → 136 at the focus.
  * From lg up each milestone is 540 wide (29 Oct review), its ticks 34 apart, so the 15 still span it.
  */
 const CARD = 400, CARD_LG = 540, TICKS = 15, TICK_X0 = 24, TICK_GAP = 25, TICK_GAP_LG = 35, LOW = 56, HIGH = 136;
-const isLg = () => window.innerWidth >= 1024;
+const isLg = () => matches(MQ.lg);
 /** Half-width of the tick wave (px); Figma's 60 px gutter, where 2025 starts (the content edge on wider screens). */
 const SPREAD = 190, GUTTER = 60;
 const N = M.items.length;
+
+/** Phones: the rail is drawn at zoom --z, so these sizes are (size on screen) / z, landing on the 4 px grid on screen:
+ *  the year 32 / 36, its title and description 14 / 20 */
+const YEAR_SM = "max-md:[font-size:calc(32px/var(--z,1))]! max-md:[line-height:calc(36px/var(--z,1))]!";
+const TEXT_SM = "max-md:[font-size:calc(14px/var(--z,1))]! max-md:[line-height:calc(20px/var(--z,1))]!";
 
 /** One milestone: the year, the tick rhythm, then (when it is the one in focus) its long line, description and photo. */
 function Milestone({ i, active, onPick }: { i: number; active: boolean; onPick: (i: number) => void }) {
@@ -26,15 +32,15 @@ function Milestone({ i, active, onPick }: { i: number; active: boolean; onPick: 
       {/* the line: 268 tall at rest, 632 when in focus (Figma; 712 from lg, for the wider photo) — drawn full and scaled */}
       <span data-ms-line className="absolute left-0 top-0 h-[632px] w-px lg:h-[712px] origin-top bg-deepsea-500" style={{ transform: `scaleY(${268 / 632})` }} />
       <div className="flex flex-col gap-2 pl-4">
-        <span className="t-text d-56 leading-[1.07] text-deepsea-500">{m.year}</span>
-        <span className="t-text x-16 text-limestone-800 [font-size:max(16px,calc(12px/var(--z,1)))]!">{m.title}</span>
+        <span className={`t-text d-56 leading-[1.07] text-deepsea-500 ${YEAR_SM}`}>{m.year}</span>
+        <span className={`t-text x-16 text-limestone-800 [font-size:max(16px,calc(12px/var(--z,1)))]! ${TEXT_SM}`}>{m.title}</span>
       </div>
       <div className="flex h-[136px] items-center gap-6 pl-6 lg:gap-[34px]" aria-hidden>
         {Array.from({ length: TICKS }, (_, k) => <i key={k} data-ms-tick className="block h-[136px] w-px flex-none origin-center bg-deepsea-500" />)}
       </div>
       <div data-ms-detail className="flex flex-col gap-6 px-6 opacity-0">
         {/* never under 12 px on screen, however far the rail is scaled down to fit a short screen */}
-        <p className="t-body b-16 text-limestone-800 [font-size:max(16px,calc(12px/var(--z,1)))]!">{m.body}</p>
+        <p className={`t-body b-16 text-limestone-800 [font-size:max(16px,calc(12px/var(--z,1)))]! ${TEXT_SM}`}>{m.body}</p>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={m.photo} srcSet={srcSet(m.photo)} alt={m.title} loading="lazy" className="aspect-[352/200] w-full rounded-lg object-cover" />
       </div>
@@ -62,7 +68,7 @@ export default function Milestones() {
     // so its copy never drops under 12 px; from lg the section is one screen tall and the rail is scaled to the height
     // left under the title and the years (its tallest state is the 712 px line of the milestone in focus)
     const fit = () => {
-      const lg = window.innerWidth >= 1024, gut = Math.min(60, Math.max(20, window.innerWidth * 0.0397));
+      const lg = matches(MQ.lg), gut = Math.min(60, Math.max(20, window.innerWidth * 0.0397));
       if (!lg) { setRailZoom(Math.min(1, (window.innerWidth - 2 * gut) / CARD)); return; }
       const t = track.current!, pad = parseFloat(getComputedStyle(t.parentElement!).paddingBottom) || 0;
       // the rail's top on screen (offsetTop would be in its own zoomed pixels)

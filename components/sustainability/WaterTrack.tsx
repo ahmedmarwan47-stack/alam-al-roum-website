@@ -35,7 +35,7 @@ export default function WaterTrack() {
   return (
     <PinnedTrack className="bg-terracotta-500 text-limestone-50" trackClassName="gap-6 py-20 lg:h-screen lg:max-h-[920px] lg:[@media(min-height:1000px)]:max-h-none">
       <div className="flex flex-col items-center justify-center gap-6 py-16 text-center lg:h-[760px] lg:w-[1392px] lg:flex-none">
-        <span className="t-label l-16">{s1.tag}</span>
+        <span className="t-label l-tag">{s1.tag}</span>
         <p className="max-w-[1100px] t-heading hd-56l">{s1.text} {s1.accent}</p>
       </div>
       <Panel photo={W.living.photo} title={W.living.title} features={W.living.features} />

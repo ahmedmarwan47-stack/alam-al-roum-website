@@ -5,6 +5,7 @@ import "@/lib/about/a-motion";
 import { blurIn } from "@/components/reveal/letters";
 import { bloom as B } from "@/lib/about/a-content";
 import { srcSet } from "@/lib/img";
+import { MQ } from "@/lib/breakpoints";
 
 /**
  * UI / Section / Botanical Frame, scroll-scrubbed while pinned: Rest → Scrolled (Figma 1.2 s) → Full (1.3 s,
@@ -21,7 +22,7 @@ export default function LifeInBloom() {
     const copy = gsap.timeline({ paused: true }).add(blurIn(q("[data-title], [data-body]"), { stagger: 0.2 }));
     const copyST = ScrollTrigger.create({ trigger: el, start: "top 80%", once: true, onEnter: () => copy.play() });
     const mm = gsap.matchMedia();
-    mm.add({ lg: "(min-width: 1024px)", sm: "(max-width: 1023px)" }, (ctx) => {
+    mm.add({ lg: MQ.lg, sm: MQ.belowLg }, (ctx) => {
       const lg = ctx.conditions!.lg;
       // frame insets [top, side] per state; narrower sides below lg so the photo keeps some width
       const rest = lg ? [20, 16.93] : [22, 8], mid = lg ? [13, 10.32] : [14, 4];
@@ -30,7 +31,8 @@ export default function LifeInBloom() {
         .to(q("[data-clip]"), { clipPath: "inset(0% 0%)", duration: 1.3 }, 1.2)
         .fromTo(q("[data-clip] img"), { scale: 1.12 }, { scale: 1, duration: 2.5, ease: "none" }, 0)
         .to(q("[data-dim]"), { opacity: lg ? 0.3 : 0.45, duration: 1.3 }, 1.2);   // deeper below lg: the copy spans the narrow frame
-      const vh = withHold(tl, lg ? 1.5 : 1);
+      // below lg the same move over 0.6 of a screen plus a 0.3 hold (0.9 in all, was 1.5), so a phone isn't held long
+      const vh = lg ? withHold(tl, 1.5) : withHold(tl, 0.6, 0.3);
       const st = ScrollTrigger.create({ trigger: el, start: "top top", end: `+=${vh * 100}%`, pin: true, scrub: 1, animation: tl });
       return () => { st.kill(); tl.kill(); };
     });

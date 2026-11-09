@@ -20,8 +20,8 @@ const items: [string, string | Exclude<Sub, null>][] = [
 ];
 /** Column 2 · Communities (Figma 11012:14516): the four featured districts, with the menu's own short lines. */
 const featured: [string, string, string][] = [
-  ["beachfront", "Beachfront communities", "Shoreline · 7.2 km of sand"],
-  ["lagoon", "Lagoon neighbourhoods", "Waterways · 22 km of waterfront and lagoons"],
+  ["beachfront", "Beachfront community", "Shoreline · 7.2 km of sand"],
+  ["lagoon", "Lagoon neighbourhood", "Waterways · 22 km of waterfront and lagoons"],
   ["marina-boulevard", "Marina boulevard", "Waterfront · The social heart"],
   ["golf", "Golf community", "Greens · 18 holes by the sea"],
 ];

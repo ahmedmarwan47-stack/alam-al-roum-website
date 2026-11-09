@@ -5,6 +5,7 @@ import SectionTitle from "@/components/sections/SectionTitle";
 import RevealText from "@/components/reveal/RevealText";
 import { inTown as T } from "@/lib/destination";
 import { srcSet } from "@/lib/img";
+import { MQ, matches } from "@/lib/breakpoints";
 
 /**
  * Transport · In town (Figma 11053:7173): one coin per mode. The coin stays on screen while three
@@ -19,7 +20,7 @@ export default function InTown() {
   useEffect(() => {
     // below lg the coin rides in a band at the top of the screen, so a mode turns active at the middle of what is
     // left under it (65 %) rather than 75 %; a function so a resize across lg re-reads it on refresh
-    const line = () => (window.matchMedia("(min-width: 1024px)").matches ? "75%" : "65%");
+    const line = () => (matches(MQ.lg) ? "75%" : "65%");
     const sts = zones.current.map((z, k) => ScrollTrigger.create({
       trigger: z, start: () => `top ${line()}`, end: () => `bottom ${line()}`, onToggle: (s) => { if (s.isActive) setActive(k); },
     }));
@@ -57,7 +58,7 @@ export default function InTown() {
             return (
               <div key={m.title} ref={(el) => { zones.current[k] = el; }}
                 className={`flex flex-col justify-center gap-3 py-10 transition-opacity duration-500 lg:h-[720px] lg:py-0 ${k ? "border-t border-limestone-300" : ""} ${on ? "opacity-100" : "lg:opacity-35"}`}>
-                <span className="t-label l-16">{m.tag}</span>
+                <span className="t-label l-tag">{m.tag}</span>
                 <RevealText as="h3" text={m.title} className="t-heading hd-40" />
                 <p className="max-w-[560px] t-body b-16 text-limestone-800">{m.body}</p>
               </div>);

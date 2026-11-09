@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger, reducedMotion, HOLD_VH } from "@/lib/gsap";
+import { MQ, matches } from "@/lib/breakpoints";
 
 export type TrackEl = HTMLElement & { track?: gsap.core.Tween };
 
@@ -13,7 +14,7 @@ export default function PinnedTrack({ children, className = "", trackClassName =
   { children: React.ReactNode; className?: string; trackClassName?: string }) {
   const wrap = useRef<HTMLDivElement>(null), track = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (reducedMotion() || !window.matchMedia("(min-width: 1024px)").matches) return;
+    if (reducedMotion() || !matches(MQ.lg)) return;
     const el = track.current!;
     const dist = () => el.scrollWidth - window.innerWidth;
     // the pin runs a reading hold longer than the slide, so the last panel rests in view before the page moves on;

@@ -15,13 +15,14 @@ export default function Cta({ form }: { form?: string }) {
   return (
     <section className={`relative overflow-hidden bg-limestone-50 ${form ? "py-20 lg:flex lg:h-svh lg:min-h-[680px] lg:items-center lg:py-[clamp(24px,6svh,80px)]" : "h-[720px] max-lg:h-auto"}`}>
       {/* below lg the film sits on top, framed on the portal, and melts into the Limestone under the copy (a soft fade
-          in, a longer one out), so film and copy read as one block as on desktop, where the copy sits on the film */}
+          in, a longer one out), so film and copy read as one block as on desktop, where the copy sits on the film;
+          the crop is held at 80 % across, so the portal stands in the middle of the frame with both pillars whole */}
       <div className={`absolute inset-0 ${form ? "" : "max-lg:relative max-lg:h-[min(125vw,560px)]"}`}>
         {/* with the form: a still photo (29 Oct review), so nothing moves beside the fields; on a phone the children
             stay in frame (the photo is held to its right) */}
         {form
           ? <RevealImage src={C.still} blur className="absolute inset-0" imgClassName="object-[72%_50%] lg:object-center" />
-          : <RevealImage src={C.video} src4k={C.video4k} video blur className="absolute inset-0" imgClassName="max-lg:object-[68%_50%]" />}
+          : <RevealImage src={C.video} src4k={C.video4k} video blur className="absolute inset-0" imgClassName="max-lg:object-[80%_50%]" />}
         {!form && <>
           <div className="pointer-events-none absolute inset-x-0 top-0 h-[16%] bg-gradient-to-b from-limestone-50/80 to-limestone-50/0 lg:hidden" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-b from-limestone-50/0 via-limestone-50/70 via-60% to-limestone-50 lg:hidden" />

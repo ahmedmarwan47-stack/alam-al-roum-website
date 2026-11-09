@@ -50,7 +50,7 @@ export const communities = {
     { slug: "beachfront", name: "Beachfront community", line: "Shoreline · 7.2 km of Mediterranean sand", photo: ph("ui-g-beach") },
     { slug: "lagoon", name: "Lagoon neighbourhood", line: "Waterways · 22 km of waterfront and lagoons", photo: ph("ui-lagoon-clear") },
     { slug: "marina-boulevard", name: "Marina boulevard", line: "Waterfront · The social heart of the city", photo: ph("ui-g-boardwalk") },
-    { slug: "golf", name: "Golf community", line: "Greens · An 18-hole course by the sea", photo: ph("ui-g-terraces") },
+    { slug: "golf", name: "Golf community", line: "Greens · An 18-hole course by the sea", photo: "/images/experiences/gen/golf-course.webp" },
   ],
 };
 
@@ -59,11 +59,11 @@ export const masterplan = {
   body: "The masterplan extends from the Mediterranean inward, creating a seamless relationship between land and water.",
   // the image is the master plan (lib/masterplan.ts, fullPlan); pin centres in its 1512 × 839 plan units
   pins: [
-    { title: "Beachfront communities", body: "Homes set along 7.2 km of Mediterranean sand, with private beach clubs.", x: 1081, y: 293, photo: ph("ui-g-beach") },
-    { title: "Lagoon neighbourhoods", body: "Districts woven through 22 km of waterfront and lagoons, with water taxis to the marina.", x: 643, y: 316, photo: ph("ui-lagoon-clear") },
+    { title: "Beachfront community", body: "Homes set along 7.2 km of Mediterranean sand, with private beach clubs.", x: 1081, y: 293, photo: ph("ui-g-beach") },
+    { title: "Lagoon neighbourhood", body: "Districts woven through 22 km of waterfront and lagoons, with water taxis to the marina.", x: 643, y: 316, photo: ph("ui-lagoon-clear") },
     { title: "Marina boulevard", body: "An international marina and promenade, the social centre of the city.", x: 975, y: 361, photo: ph("ui-g-boardwalk") },
-    { title: "Resort districts", body: "Hotels and residences share the same streets. Service is permanent here.", x: 544, y: 437, photo: ph("ui-g-interior") },
-    { title: "Golf community", body: "Homes framed by an 18-hole championship course, green all year.", x: 1250, y: 165, photo: ph("ui-g-terraces") },
+    { title: "Resort district", body: "Hotels and residences share the same streets. Service is permanent here.", x: 544, y: 437, photo: ph("ui-v-lounge") },
+    { title: "Golf community", body: "Homes framed by an 18-hole championship course, green all year.", x: 1250, y: 165, photo: "/images/experiences/gen/golf-course.webp" },
   ],
 };
 

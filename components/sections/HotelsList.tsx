@@ -33,15 +33,17 @@ export default function HotelsList({ data: D }: { data: HotelsData }) {
   return (
     <section className="flex flex-col items-center gap-10 bg-white py-20 container-x">
       <SectionTitle tag={D.tag} title={D.title} body={D.body} bodyWidth={D.bodyWidth} className="max-w-[870px]" />
-      <div className={`grid w-full gap-x-3 gap-y-14 ${D.cols ? `${swipe} ${D.cols}` : "grid-cols-2 max-sm:gap-y-8 lg:grid-cols-[492fr_380fr_496fr]"}`}>
+      <div className={`grid w-full gap-x-3 gap-y-14 ${D.cols ? `${swipe} ${D.cols}` : "grid-cols-2 max-sm:gap-y-8 max-md:auto-rows-fr lg:grid-cols-[492fr_380fr_496fr]"}`}>
         {D.items.map((it, k) => (
-          <button key={it.name} onClick={() => show(k)} className="group flex flex-col gap-[10px] self-start text-left">
-            <div className="w-full overflow-hidden" style={{ aspectRatio: `${it.card.w} / ${it.card.h}` }}>
+          <button key={it.name} onClick={() => show(k)} className={`group flex flex-col gap-[10px] self-start text-left ${D.cols ? "" : "max-md:gap-0 max-md:self-stretch"}`}>
+            {/* the two-column phone grid: every photo one 4:5 frame and every card its row's height, as the communities */}
+            <div className={`w-full overflow-hidden ${D.cols ? "" : "max-md:aspect-[4/5]!"}`} style={{ aspectRatio: `${it.card.w} / ${it.card.h}` }}>
               <RevealImage src={it.photo} alt={it.name} delay={(k % 3) * 0.08} className="h-full w-full"
                 imgClassName="transition-transform duration-[1.2s] [transition-timing-function:var(--ease-site)] group-hover:scale-[1.05]" />
             </div>
-            <span className={`t-heading hd-24 text-black ${D.cols ? "" : "max-sm:text-[16px]! max-sm:leading-[22px]! max-sm:break-words"}`}>{it.name}</span>
-            <span className="t-body b-14 text-black/60">{it.type}</span>
+            {/* the two-column grid on phones: name 14 / type 12, as the community cards (the swipe track keeps its sizes) */}
+            <span className={`t-heading hd-24 text-black ${D.cols ? "" : "max-md:mt-3 max-md:text-[14px]! max-md:leading-5! max-sm:break-words"}`}>{it.name}</span>
+            <span className={`t-body b-14 text-black/60 ${D.cols ? "" : "max-md:mt-1 max-md:text-[12px]! max-md:leading-[18px]!"}`}>{it.type}</span>
           </button>))}
       </div>
       {/* Drawer (Figma 11128:14825 hotel · 11128:14826 unit type) */}

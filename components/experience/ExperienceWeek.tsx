@@ -15,7 +15,7 @@ export default function ExperienceWeek({ data: W }: { data: WeekData }) {
       <div className="mx-auto flex max-w-[1392px] flex-col gap-12">
         <div className="grid gap-4 lg:grid-cols-2 lg:items-end lg:gap-24">
           <div className="flex flex-col gap-4">
-            <RevealText text={W.tag} className="t-label l-16" />
+            <RevealText text={W.tag} className="t-label l-tag" />
             <RevealText as="h2" text={W.title} className="t-heading hd-48 [text-wrap:balance]" delay={0.05} />
           </div>
           <RevealText text={W.body} className="t-body b-18 max-w-[560px] text-limestone-800" delay={0.12} />

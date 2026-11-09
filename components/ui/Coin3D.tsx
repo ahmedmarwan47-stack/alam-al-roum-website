@@ -5,6 +5,7 @@ import { useGLTF } from "@react-three/drei";
 import { useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
 import * as THREE from "three";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
+import { MQ, matches } from "@/lib/breakpoints";
 
 /** The gold compass coin from the landing page (public/models/coin.glb). */
 export const COIN_URL = "/models/coin.glb";
@@ -75,7 +76,7 @@ export const COIN_FILL = 2.2 / (2 * CAM_Z * Math.tan((FOV / 2) * Math.PI / 180))
 
 /** A transparent canvas with the coin; size it with the wrapper (see COIN_FILL). */
 export default function Coin3D({ pose, active = true, className = "", maxDpr = 1.75 }: { pose: MutableRefObject<CoinPose>; active?: boolean; className?: string; maxDpr?: number }) {
-  const phone = typeof window !== "undefined" && window.matchMedia("(max-width: 1023px)").matches;
+  const phone = matches(MQ.belowLg);
   // render only while the coin is on screen: an off-screen loop would compete with the page's scroll animations
   const box = useRef<HTMLDivElement>(null), [seen, setSeen] = useState(false);
   useEffect(() => {

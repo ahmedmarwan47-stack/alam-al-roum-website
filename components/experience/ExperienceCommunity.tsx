@@ -18,7 +18,7 @@ export default function ExperienceCommunity({ data: C }: { data: CommunityData }
         </div>
         <div className="flex flex-col gap-10">
           <div className="flex flex-col gap-4">
-            <RevealText text={C.tag} className="t-label l-16 text-limestone-50/70" />
+            <RevealText text={C.tag} className="t-label l-tag text-limestone-50/70" />
             <RevealText as="h2" text={C.title} className="t-heading hd-48 [text-wrap:balance]" delay={0.05} />
             {C.body.map((p, k) => <RevealText key={k} text={p} className="t-body b-18 text-limestone-50/80" delay={0.12 + k * 0.05} />)}
           </div>

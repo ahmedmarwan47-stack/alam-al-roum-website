@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { gsap, reducedMotion } from "@/lib/gsap";
 import type { TrackEl } from "@/components/sections/PinnedTrack";
 import { srcSet } from "@/lib/img";
+import { MQ, matches } from "@/lib/breakpoints";
 
 /**
  * The last panel of the history track (Figma 11134:16060): the photo alone, at the panel's full size (29 Oct review:
@@ -19,7 +20,7 @@ export default function FramedPhoto({ photo }: { photo: string }) {
     const build = () => {
       if (tl) return;
       const track = el.closest<TrackEl>("[data-track]")?.track;
-      const desktop = window.matchMedia("(min-width: 1024px)").matches;
+      const desktop = matches(MQ.lg);
       if (desktop && !track) return;            // wait for the track (it dispatches track-ready)
       // the frame is the last panel, so its left edge never travels further than where the track stops (the right
       // content edge less its width): the entrance ends 40 px before that rest, or it would freeze half-way (28 Oct)

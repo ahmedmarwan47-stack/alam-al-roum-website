@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, type ReactNode, type TouchEvent } from "react";
 import Icon from "./Icon";
+import { MQ, matches } from "@/lib/breakpoints";
 
 /**
  * The Figma Drawer (10480:3695): docked right over a dimmed page, 560 wide, sliding in on the site ease. Below lg it
@@ -22,7 +23,7 @@ export default function Drawer({ open, onClose, label, children, footer }:
 
   // swipe down to dismiss (bottom sheet only): the sheet follows the finger, then closes past 90 px or a quick flick
   const panel = useRef<HTMLElement>(null), drag = useRef<{ y: number; t: number; dy: number } | null>(null);
-  const sheet = () => window.matchMedia("(width < 64rem)").matches;
+  const sheet = () => matches(MQ.belowLg);
   const start = (e: TouchEvent, handle = false) => {
     const el = panel.current; if (!el || !sheet() || (!handle && el.scrollTop > 0)) return;
     drag.current = { y: e.touches[0].clientY, t: performance.now(), dy: 0 };

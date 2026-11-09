@@ -2,6 +2,7 @@ import Link from "next/link";
 import Button from "@/components/ui/Button";
 import RevealImage from "@/components/reveal/RevealImage";
 import RevealText from "@/components/reveal/RevealText";
+import { cardDate, EVENT_DATE, EVENT_META_GAP_SM, EVENT_META_SM, EVENT_PLACE, EVENT_TITLE_GAP_SM, EVENT_TITLE_SM } from "./Cards";
 
 export type EventCard = { location: string; date: string; title: string; photo: string; href?: string };
 export type EventsHereData = { tag: string; title: string[]; items: EventCard[] };
@@ -15,15 +16,15 @@ export default function EventsHere({ data: E }: { data: EventsHereData }) {
   return (
     <section className="flex flex-col items-center gap-10 bg-[#0e0e0e] py-20 text-white container-x">
       <div className="flex flex-col items-center gap-4 text-center">
-        <RevealText text={E.tag} className="t-label l-16" />
+        <RevealText text={E.tag} className="t-label l-tag" />
         <h2 className="t-heading hd-48">{E.title.join(" ")}</h2>
       </div>
       <div className="grid w-full grid-cols-2 gap-4 lg:grid-cols-4 max-sm:-mx-[var(--gutter)] max-sm:w-auto max-sm:snap-x max-sm:snap-mandatory max-sm:auto-cols-[72vw] max-sm:grid-flow-col max-sm:grid-cols-none max-sm:grid-rows-[auto_auto_auto] max-sm:self-stretch max-sm:overflow-x-auto max-sm:scroll-px-[var(--gutter)] max-sm:px-[var(--gutter)] max-sm:[scrollbar-width:none] max-sm:[&::-webkit-scrollbar]:hidden max-sm:[&>a]:snap-start">
         {E.items.map((e, k) => (
-          <Link key={e.title} href={e.href ?? "/events"} className="group row-span-3 grid grid-rows-subgrid gap-y-4">
+          <Link key={e.title} href={e.href ?? "/events"} className="group row-span-3 grid min-w-0 grid-cols-1 grid-rows-subgrid gap-y-4">
             <RevealImage src={e.photo} alt={e.title} delay={k * 0.08} className="aspect-[336/376] w-full" imgClassName="transition-transform duration-[1.2s] [transition-timing-function:var(--ease-site)] group-hover:scale-105" />
-            <span className="flex items-center gap-3 self-start t-label l-14 text-white/60"><span>{e.location}</span><i className="h-[14px] w-px bg-white/30" /><span>{e.date}</span></span>
-            <RevealText text={e.title} className="self-start t-text x-20" delay={0.1 + k * 0.05} />
+            <span className={`flex max-w-full items-center gap-3 self-start t-label l-14 text-white/60 ${EVENT_META_SM} ${EVENT_META_GAP_SM}`}><span className={EVENT_PLACE}>{e.location}</span><i className="h-[14px] w-px flex-none bg-white/30" /><span className={EVENT_DATE}>{cardDate(e.date)}</span></span>
+            <RevealText text={e.title} className={`self-start t-text x-20 ${EVENT_TITLE_SM} ${EVENT_TITLE_GAP_SM}`} delay={0.1 + k * 0.05} />
           </Link>))}
       </div>
       <Button label="View all" href="/events" variant="outline-light" />

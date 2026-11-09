@@ -58,11 +58,15 @@ html.lenis, html.lenis body { height: auto; }
 .x-12 { font-size: 12px; line-height: 1.5; }
 .t-label { font-family: var(--font-haas); font-weight: 500; }
 .l-24 { font-size: clamp(18px, calc(18px + 6 * (100vw - 390px) / 1122), 24px); line-height: 1.5; } .l-18 { font-size: clamp(16px, calc(16px + 2 * (100vw - 390px) / 1122), 18px); line-height: 1.5; } .l-16 { font-size: 16px; line-height: 1.5; }
-.l-14 { font-size: 14px; line-height: 1.5; } .l-12 { font-size: 12px; line-height: 1.5; }
+.l-14 { font-size: 14px; line-height: 20px; }   /* 20, not 1.5 × 14 = 21: on the 4 px grid */ .l-12 { font-size: 12px; line-height: 1.5; }
+/* Section taglines (eyebrows): 16 / 24 from tablet up; 14 / 20 on phones, where the headings shrink to ~24 px and a 16 px
+   medium tagline would sit almost as heavy as the title. Stepped, not fluid, so it stays on the 4 px grid (14 / 16 only). */
+.l-tag { font-size: 16px; line-height: 24px; }
+@media (width < 48rem) { .l-tag { font-size: 14px; line-height: 20px; } }
 .t-body { font-family: var(--font-haas); font-weight: 400; }
 .t-serif { font-family: var(--font-immortel); font-weight: 400; }
 .b-20 { font-size: clamp(18px, calc(18px + 2 * (100vw - 390px) / 1122), 20px); line-height: 1.5; } .b-18 { font-size: clamp(16px, calc(16px + 2 * (100vw - 390px) / 1122), 18px); line-height: 1.5; }
-.b-16 { font-size: 16px; line-height: 1.5; } .b-14 { font-size: 14px; line-height: 1.5; } .b-12 { font-size: 12px; line-height: 1.5; }
+.b-16 { font-size: 16px; line-height: 1.5; } .b-14 { font-size: 14px; line-height: 20px; }   /* 20, not 21: on the 4 px grid */ .b-12 { font-size: 12px; line-height: 1.5; }
 /* Display sizes used once or twice (page titles in Immortel / Haas), on the same phone-to-desktop line */
 .d-120 { font-size: clamp(44px, calc(44px + 76 * (100vw - 390px) / 1122), 120px); } .d-68 { font-size: clamp(32px, calc(32px + 36 * (100vw - 390px) / 1122), 68px); } .d-60 { font-size: clamp(28px, calc(28px + 32 * (100vw - 390px) / 1122), 60px); }
 .d-56 { font-size: clamp(30px, calc(30px + 26 * (100vw - 390px) / 1122), 56px); } .d-36 { font-size: clamp(24px, calc(24px + 12 * (100vw - 390px) / 1122), 36px); } .d-32 { font-size: clamp(22px, calc(22px + 10 * (100vw - 390px) / 1122), 32px); }
@@ -88,9 +92,10 @@ html.js [data-reveal-img] { visibility: hidden; }
 .btn .btn-chip { position: relative; flex: none; overflow: hidden; border-radius: 6px; display: grid; place-items: center; transition: background-color .3s ease-out .15s, color .3s ease-out .15s; }
 .btn .btn-chip .icon { position: absolute; transition: transform .5s var(--ease-btn); }
 .btn .btn-chip .icon.b { transform: translate(-150%, 150%); }
-.btn:hover .btn-fill { transform: translateY(0); }
-.btn:hover .btn-chip .icon.a { transform: translate(150%, -150%); }
-.btn:hover .btn-chip .icon.b { transform: translate(0, 0); }
+/* Hover states only on devices that hover (as Tailwind v4's hover: does), so a tapped button on a phone doesn't stay filled */
+@media (hover: hover) { .btn:hover .btn-fill { transform: translateY(0); } }
+@media (hover: hover) { .btn:hover .btn-chip .icon.a { transform: translate(150%, -150%); } }
+@media (hover: hover) { .btn:hover .btn-chip .icon.b { transform: translate(0, 0); } }
 .btn-48 { height: 48px; padding: 0 8px 0 24px; gap: 20px; } .btn-48 .btn-chip { width: 32px; height: 32px; }
 .btn-54 { height: 54px; padding: 0 8px 0 26px; gap: 44px; } .btn-54 .btn-chip { width: 38px; height: 38px; }
 .btn-64 { height: 64px; padding: 0 8px 0 32px; gap: 18px; } .btn-64 .btn-chip { width: 48px; height: 48px; }
@@ -106,21 +111,21 @@ html.js [data-reveal-img] { visibility: hidden; }
 /* Primary Dark: Deep Sea → Limestone rises */
 .btn-primary { background: var(--color-deepsea-500); color: var(--color-limestone-500); }
 .btn-primary .btn-fill { background: var(--color-limestone-500); } .btn-primary .btn-chip { background: var(--color-limestone-500); color: var(--color-deepsea-500); }
-.btn-primary:hover { border-color: var(--color-limestone-500); } .btn-primary:hover .btn-label { color: var(--color-deepsea-500); }
-.btn-primary:hover .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); }
+@media (hover: hover) { .btn-primary:hover { border-color: var(--color-limestone-500); } .btn-primary:hover .btn-label { color: var(--color-deepsea-500); } }
+@media (hover: hover) { .btn-primary:hover .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); } }
 /* Primary Light (on dark): Deep Sea/50 → Limestone rises */
 .btn-light { background: var(--color-deepsea-50); color: var(--color-deepsea-500); border-color: var(--color-deepsea-200); }
 .btn-light .btn-fill { background: var(--color-deepsea-500); } .btn-light .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); }
-.btn-light:hover { border-color: var(--color-deepsea-500); } .btn-light:hover .btn-label { color: var(--color-limestone-500); }
-.btn-light:hover .btn-chip { background: var(--color-limestone-500); color: var(--color-deepsea-500); }
+@media (hover: hover) { .btn-light:hover { border-color: var(--color-deepsea-500); } .btn-light:hover .btn-label { color: var(--color-limestone-500); } }
+@media (hover: hover) { .btn-light:hover .btn-chip { background: var(--color-limestone-500); color: var(--color-deepsea-500); } }
 /* Secondary on light: Deep Sea outline → Deep Sea rises */
 .btn-outline { background: transparent; color: var(--color-deepsea-500); border-color: var(--color-deepsea-500); }
 .btn-outline .btn-fill { background: var(--color-deepsea-500); } .btn-outline .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); }
-.btn-outline:hover .btn-label { color: var(--color-limestone-500); } .btn-outline:hover .btn-chip { background: var(--color-limestone-500); color: var(--color-deepsea-500); }
+@media (hover: hover) { .btn-outline:hover .btn-label { color: var(--color-limestone-500); } .btn-outline:hover .btn-chip { background: var(--color-limestone-500); color: var(--color-deepsea-500); } }
 /* Secondary on dark: Limestone outline → Limestone rises */
 .btn-outline-light { background: transparent; color: var(--color-limestone-500); border-color: rgb(244 234 221 / .8); }
 .btn-outline-light .btn-fill { background: var(--color-limestone-500); } .btn-outline-light .btn-chip { background: var(--color-limestone-500); color: var(--color-deepsea-500); }
-.btn-outline-light:hover .btn-label { color: var(--color-deepsea-500); } .btn-outline-light:hover .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); }
+@media (hover: hover) { .btn-outline-light:hover .btn-label { color: var(--color-deepsea-500); } .btn-outline-light:hover .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); } }
 
 .container-x { padding-left: var(--gutter); padding-right: var(--gutter); }
 

@@ -4,13 +4,14 @@ import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 import { BLOCK_FROM, BLOCK_TO } from "@/components/reveal/letters";
 import { story as S } from "@/lib/about/b-content";
 import { srcSet } from "@/lib/img";
+import { MQ, matches } from "@/lib/breakpoints";
 
 const FW = 1512, FH = 1024;                 // the motion-study frame
 const fy = (y: number) => `${(y / FH) * 100}%`;
 /** The three Culture photos: one scale for their size and spacing, the smaller of the width's and the height's and never
  * above Figma's pixels, so a wide but short screen can't stack them into each other. They sit on the content edges,
  * centred on the height. */
-const K = `min(100vw / ${FW}, 100vh / ${FH}, 1px)`;
+const K = `min(100vw / ${FW}, 100svh / ${FH}, 1px)`;
 const photoBox = ({ x, y, w, h }: { x: number; y: number; w: number; h: number }): React.CSSProperties => ({
   [x < FW / 2 ? "left" : "right"]: "var(--gutter)", top: `calc(50% + ${y - FH / 2} * ${K})`, width: `calc(${w} * ${K})`, aspectRatio: `${w} / ${h}`,
 });
@@ -105,9 +106,9 @@ export default function TheStory() {
         .to($$("[data-g-text]"), { ...BLOCK_TO, duration: BLOCK, stagger: rm ? 0 : 0.12 }, t + GD - (rm ? 0 : 0.1))
         .to({}, { duration: rm ? 0.15 : HOLD });     // reading hold on the closing copy before the pin releases
 
-      // about one viewport of scroll per timeline second; below lg 60 % of that (~3.5 screens rather than 5.9), so a phone
+      // about one viewport of scroll per timeline second; below lg 36 % of that (~2.1 screens rather than 5.9), so a phone
       // is not held long on one section
-      const per = () => (window.matchMedia("(min-width: 1024px)").matches ? 1 : 0.6);
+      const per = () => (matches(MQ.lg) ? 1 : 0.36);
       ScrollTrigger.create({ trigger: st, start: "top top", end: () => `+=${H() * tl.duration() * per()}`, pin: true, scrub: rm ? true : 1,
         animation: tl, invalidateOnRefresh: true });
     }, st);
@@ -117,7 +118,7 @@ export default function TheStory() {
   const C = S.culture, G = S.greatness;
   return (
     <section aria-label="The Story" className="bg-limestone-500">
-      <div ref={stage} className="relative h-svh w-full overflow-hidden bg-limestone-500 lg:h-screen">
+      <div ref={stage} className="relative h-svh w-full overflow-hidden bg-limestone-500">
         {/* 1 · History */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={S.history.photo} srcSet={srcSet(S.history.photo)} alt="" className="absolute inset-0 h-full w-full object-cover" />

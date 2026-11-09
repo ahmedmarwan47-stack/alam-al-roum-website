@@ -20,7 +20,7 @@ export default function WaterStrategy() {
       <div className="relative flex justify-end px-[var(--gutter)] pb-[166px] pt-20 lg:min-h-[max(100svh,min(72.75vw,1100px))]">
         <div className="flex w-full max-w-[776px] flex-col items-start gap-10 rounded-2xl bg-limestone-500/85 p-6 text-deepsea-500 backdrop-blur-sm lg:rounded-none lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
           <div className="flex w-full flex-col gap-4">
-            <span className="t-label l-16">{W.tag}</span>
+            <span className="t-label l-tag">{W.tag}</span>
             <RevealText as="h2" segs={W.title} className="t-heading hd-56" delay={0.05} />
             <p className="t-body b-18 text-limestone-800">{W.body}</p>
           </div>

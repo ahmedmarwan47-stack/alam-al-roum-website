@@ -8,6 +8,7 @@ import RevealText from "@/components/reveal/RevealText";
 import SectionTitle from "./SectionTitle";
 import { waysToLive } from "@/lib/content";
 import { srcSet } from "@/lib/img";
+import { MQ } from "@/lib/breakpoints";
 
 type R = { title: string; body: string; photo: string };
 
@@ -31,7 +32,7 @@ function Row({ i, r, ghost }: { i: number; r: R; ghost?: boolean }) {
         <img src={r.photo} srcSet={srcSet(r.photo)} alt="" loading="lazy" className="h-full w-full object-cover" />
       </span>
       <span className="flex min-w-0 flex-1 flex-col gap-1 lg:contents">
-        <span className="t-label l-14 text-limestone-800 transition-colors duration-300 group-hover:text-teal-600 lg:w-[120px] lg:flex-none lg:group-hover:text-limestone-50">{num}</span>
+        <span className="t-label l-14 text-limestone-800 transition-colors duration-300 group-hover:text-teal-600 max-lg:hidden lg:w-[120px] lg:flex-none lg:group-hover:text-limestone-50">{num}</span>
         <span className="transition-transform duration-500 [transition-timing-function:var(--ease-site)] lg:flex-[0_0_42%] lg:group-hover:translate-x-2.5"><RevealText as="h3" text={r.title} className="t-heading hd-32" /></span>
         <span data-body className="pt-1 text-limestone-800 transition-[color,translate] duration-500 [transition-timing-function:var(--ease-site)] lg:flex-1 lg:basis-auto lg:pl-10 lg:pt-0 lg:group-hover:translate-x-2.5 lg:group-hover:text-limestone-50"><RevealText text={r.body} className="t-body b-16" delay={0.08} /></span>
       </span>
@@ -58,7 +59,7 @@ export default function WaysToLive() {
     if (reducedMotion()) return;
     // the photo is a desktop (lg, mouse) effect; below lg every row carries its own photo
     const mm = gsap.matchMedia();
-    mm.add("(min-width: 1024px) and (hover: hover)", () => {
+    mm.add(MQ.lgHover, () => {
       const W = 210, H = 267, GAP = 32;          // photo size; its distance from the description column
       const PULL = 0.05, MAX_X = 10, MAX_Y = 6;   // the magnet: 5 % of the cursor's offset, at most 10 px across / 6 px down
       gsap.set(c, { xPercent: -50, yPercent: -50, x: 0, y: 0, autoAlpha: 0, scale: 0.92 });
