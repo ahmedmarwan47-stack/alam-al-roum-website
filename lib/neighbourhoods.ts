@@ -174,11 +174,11 @@ const drafts: Record<string, Pick<Neighbourhood, "units" | "facilities"> & { fac
       ["Golf townhouse", "3 beds", "250 m²", "Garden · Course view", n("unit-townhouse"), "A three-bedroom townhouse with a garden opening onto the greens."],
       ["Clubhouse apartment", "2 beds", "135 m²", "Terrace · Course view", ex("golf-clubhouse-terrace"), "A two-bedroom apartment above the clubhouse terrace."],
     ], ho("golf-spa")),
-    facilities: facilities("The course sets the day: a clubhouse by the sea, an academy, a practice range and a fitness club.", [
+    facilities: facilities("The course sets the day: a clubhouse by the sea, an academy, a practice range and a sports club.", [
       ["Clubhouse", "Dining, the lounge and members' evenings", ex("golf-clubhouse-terrace")],
       ["Golf academy", "Lessons for every level, juniors included", ex("gen/golf-academy")],
       ["Practice range", "A driving range and putting greens", ex("gen/golf-practice")],
-      ["Fitness club", "Gym, studios and a pool", ex("gen/sports-fitness")],
+      ["Sports club", "Tennis and padel courts, a gym and a pool", ex("sports-courts")],
     ]),
   },
   "town-centre": {
