@@ -9,7 +9,7 @@ function Panel({ photo, title, features }: { photo: string; title: string[]; fea
   return (
     // phones (below sm) stack the card the way Solène's phone cards do: the photo, nearly whole (4:5) and clear of
     // copy but for the title, which sits on a fade into the Deep Sea panel that carries the three features
-    <div className="relative h-[80vh] overflow-hidden max-sm:grid max-sm:h-auto max-sm:bg-deepsea-500 lg:h-[760px] lg:w-[1392px] lg:flex-none">
+    <div className="relative h-[80vh] overflow-hidden rounded-2xl max-sm:grid max-sm:h-auto max-sm:bg-deepsea-500 lg:h-[min(760px,calc(100svh-160px))] lg:w-[1392px] lg:flex-none">
       <img src={photo} srcSet={srcSet(photo)} alt="" className="absolute inset-0 h-full w-full object-cover max-sm:relative max-sm:col-start-1 max-sm:row-start-1 max-sm:aspect-[4/5] max-sm:h-auto" />
       {/* Figma: Deep Sea at 60 %, darkest at the bottom behind the copy, on both panels */}
       <div className="absolute inset-0 bg-gradient-to-t from-deepsea-500/60 to-transparent max-sm:hidden" />
@@ -27,20 +27,21 @@ function Panel({ photo, title, features }: { photo: string; title: string[]; fea
 
 /**
  * Water strategy (Figma 11134:15173): four 1392 × 760 px panels on terracotta that scroll sideways while the section is
- * pinned. On screens taller than 1000 px the track takes the whole screen, so the panels sit in its middle with the
+ * pinned; on screens too short for 760 + 2 × 80 the panels get shorter, so the 80 px above and below them always stays.
+ * The photo cards have 16 px corners (owner's call, 9 Nov). On screens taller than 1000 px the track takes the whole screen, so the panels sit in its middle with the
  * terracotta above and below them (not all of it under them); up to 1000 px it keeps the 920 px cap.
  */
 export default function WaterTrack() {
   const s1 = W.statement1, s2 = W.statement2;
   return (
     <PinnedTrack className="bg-terracotta-500 text-limestone-50" trackClassName="gap-6 py-20 lg:h-screen lg:max-h-[920px] lg:[@media(min-height:1000px)]:max-h-none">
-      <div className="flex flex-col items-center justify-center gap-6 py-16 text-center lg:h-[760px] lg:w-[1392px] lg:flex-none">
+      <div className="flex flex-col items-center justify-center gap-6 py-16 text-center lg:h-[min(760px,calc(100svh-160px))] lg:w-[1392px] lg:flex-none">
         <span className="t-label l-tag">{s1.tag}</span>
         <p className="max-w-[1100px] t-heading hd-56l">{s1.text} {s1.accent}</p>
       </div>
       <Panel photo={W.living.photo} title={W.living.title} features={W.living.features} />
       {/* the second statement stands on the terracotta alone (the cut-out glasses were removed, client edit 28 Oct) */}
-      <div className="flex flex-col items-center justify-center gap-6 py-16 text-center lg:h-[760px] lg:w-[1392px] lg:flex-none lg:py-24">
+      <div className="flex flex-col items-center justify-center gap-6 py-16 text-center lg:h-[min(760px,calc(100svh-160px))] lg:w-[1392px] lg:flex-none lg:py-24">
         <p className="max-w-[1100px] t-heading hd-56l">{s2.text} {s2.accent}</p>
         <RevealText text={s2.body} className="t-body b-18 max-w-[720px]" />
       </div>

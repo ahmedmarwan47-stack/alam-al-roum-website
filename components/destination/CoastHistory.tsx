@@ -102,7 +102,7 @@ export default function CoastHistory({ path }: { path: string }) {
     <div data-pin className="flex flex-col items-center gap-8 lg:h-full lg:gap-10">
       <h2 className="max-w-[842px] text-center t-serif uppercase leading-none d-60">{H.coast.title}</h2>
       {/* the 3D coin sits where Figma's coin photo is (371 square) */}
-      <div className="aspect-square w-[min(56vw,32svh)] lg:h-[clamp(160px,calc(100svh-620px),371px)] lg:w-auto lg:flex-none">
+      <div className="aspect-square w-[min(56vw,32svh)] lg:h-[clamp(100px,calc(100svh-635px),371px)] lg:w-auto lg:flex-none">
         <Coin3D pose={pose} className="h-full w-full" />
       </div>
       {/* phones: the whole drawing at the screen's width, a little taller than desktop so its curves read */}

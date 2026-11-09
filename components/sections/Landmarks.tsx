@@ -42,7 +42,8 @@ export default function Landmarks({ data = landmarks }: { data?: LandmarksData }
   }, [open]);
   return (
     <section className="bg-limestone-50">
-    <div className="flex flex-col bg-limestone-50 lg:h-svh lg:max-h-[1024px] lg:flex-row">
+    {/* Figma's 1024 px on desktop, taller when the copy needs it, so its 80 px top and bottom never get eaten */}
+    <div className="flex flex-col bg-limestone-50 lg:min-h-[1024px] lg:flex-row">
       <div className="flex flex-col justify-center gap-10 py-16 pl-[var(--gutter)] pr-[var(--gutter)] lg:w-1/2 lg:gap-[60px] lg:py-20 lg:pr-24">
         <div className="flex flex-col gap-2">
           <RevealText as="h2" text={L.title} className="t-heading hd-40" />
