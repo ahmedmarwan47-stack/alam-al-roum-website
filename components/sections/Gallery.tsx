@@ -62,7 +62,7 @@ function GalleryWall({ data: G }: { data: GalleryData }) {
             <div key={r} data-row className="flex min-h-0 flex-1 gap-[10px] will-change-transform">
               {Array.from({ length: COPIES }, () => row).flat().map((src, k) => (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img key={k} src={src} srcSet={srcSet(src)} alt="" aria-hidden={k >= row.length} className="aspect-[300/320] h-full w-auto flex-none rounded object-cover" />))}
+                <img key={k} src={src} srcSet={srcSet(src)} alt="" aria-hidden={k >= row.length} className="aspect-[300/320] h-full w-auto flex-none object-cover" />))}
             </div>))}
         </div>
       </RevealMask>

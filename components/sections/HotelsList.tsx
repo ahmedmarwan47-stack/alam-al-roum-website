@@ -56,13 +56,13 @@ export default function HotelsList({ data: D }: { data: HotelsData }) {
           : <div><Button label="Visit Website" href="#" size={54} variant="primary" /></div>}>
         <div className="flex flex-col gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={shots[shot]} srcSet={srcSet(shots[shot])} alt={h.name} loading="lazy" className="h-[260px] w-full rounded-[2px] object-cover" />
+          <img src={shots[shot]} srcSet={srcSet(shots[shot])} alt={h.name} loading="lazy" className="h-[260px] w-full object-cover" />
           {/* the selected thumbnail is the wide one (9 Nov): the widths ease over as the selection moves (flex-grow
               1.8 against 1, so about 148 px of a 420 px row, as in Figma), on every screen size */}
           <div className="flex gap-2">
             {shots.map((s, k) => (
               <button key={s} onClick={() => setShot(k)} aria-label={`Photo ${k + 1}`} aria-pressed={k === shot}
-                className={`h-20 min-w-0 basis-0 overflow-hidden rounded-[2px] transition-[flex-grow,opacity] duration-500 [transition-timing-function:var(--ease-site)] motion-reduce:transition-none ${k === shot ? "grow-[1.8] opacity-100" : "grow opacity-70 hover:opacity-100"}`}>
+                className={`h-20 min-w-0 basis-0 overflow-hidden transition-[flex-grow,opacity] duration-500 [transition-timing-function:var(--ease-site)] motion-reduce:transition-none ${k === shot ? "grow-[1.8] opacity-100" : "grow opacity-70 hover:opacity-100"}`}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={s} srcSet={srcSet(s)} alt="" loading="lazy" className="h-full w-full object-cover" />
               </button>))}

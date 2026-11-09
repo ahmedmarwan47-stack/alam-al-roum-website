@@ -100,7 +100,7 @@ export default function MasterplanMap({ image, pins: all, initial = 0, view = FU
     {/* phones: the strip keeps the Home map's height (180vw at 1512:839), so a wider view is a longer strip */}
     <div ref={box} className="relative w-full max-md:w-[var(--strip)]"
       style={{ aspectRatio: `${view.w} / ${view.h}`, "--strip": `${(180 * phoneScale * (view.w / view.h)) / (1512 / 839)}vw` } as CSSProperties}>
-      <RevealImage src={image} className="absolute inset-0 rounded-lg" />
+      <RevealImage src={image} className="absolute inset-0" />
       {pins.map((p, k) => {
         const it = items.find((i) => i.key === itemOf[k])!, gate = it.gate;
         const on = phone ? active === it.key : open === k, px = fx(p) * w, right = px + 28 + 300 <= w - 12;
@@ -178,7 +178,7 @@ export default function MasterplanMap({ image, pins: all, initial = 0, view = FU
         </div>}
       </div>}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img key={d.photo} src={d.photo} srcSet={srcSet(d.photo)} alt={d.title} loading="lazy" className="h-[240px] w-full rounded-[2px] object-cover" />
+      <img key={d.photo} src={d.photo} srcSet={srcSet(d.photo)} alt={d.title} loading="lazy" className="h-[240px] w-full object-cover" />
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-3">
           <Num n={cur.n} gate={cur.gate} />
@@ -217,9 +217,9 @@ function Key({ className = "" }: { className?: string }) {
 /** Masterplan Pin · Active tooltip card: image, Heading/20 title, Body/14 description, Explore (0.3 s ease-out). */
 function PinCard({ p, className }: { p: MapPin; className: string }) {
   return (
-    <div className={`flex-col gap-3 rounded-xl bg-limestone-50 p-3 pb-4 shadow-[0_16px_40px_rgb(0_0_0/.16)] animate-[pinCard_.3s_var(--ease-fig-out)_both] ${className}`}>
+    <div className={`flex-col gap-3 rounded-lg bg-limestone-50 p-3 pb-4 shadow-[0_16px_40px_rgb(0_0_0/.16)] animate-[pinCard_.3s_var(--ease-fig-out)_both] ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={p.photo} srcSet={srcSet(p.photo)} alt="" className="h-[150px] w-full rounded-lg object-cover" />
+      <img src={p.photo} srcSet={srcSet(p.photo)} alt="" className="h-[150px] w-full object-cover" />
       <span className="t-heading hd-20">{p.title}</span>
       <span className="t-body b-14 text-limestone-800">{p.body}</span>
       {p.href && <span><Button label="Explore" href={p.href} variant="outline" /></span>}

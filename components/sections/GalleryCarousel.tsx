@@ -64,7 +64,7 @@ export default function GalleryCarousel({ tag, title, photos }: { tag: string; t
         className="relative flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-px-[var(--gutter)] px-[var(--gutter)] outline-none [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-solid focus-visible:-outline-offset-2 focus-visible:outline-limestone-50 lg:gap-4 [&::-webkit-scrollbar]:hidden">
         {photos.map((src, k) => (
           <div key={src + k} data-slide role="group" aria-roledescription="slide" aria-label={`${k + 1} of ${n}`}
-            className="aspect-[4/5] w-[84vw] flex-none snap-start snap-always overflow-hidden rounded sm:aspect-[3/2] sm:w-auto sm:h-[min(56svh,560px)] lg:h-[min(64svh,640px)]">
+            className="aspect-[4/5] w-[84vw] flex-none snap-start snap-always overflow-hidden sm:aspect-[3/2] sm:w-auto sm:h-[min(56svh,560px)] lg:h-[min(64svh,640px)]">
             <RevealImage src={src} delay={Math.min(k, 2) * 0.08} className="h-full w-full" />
           </div>))}
         <div ref={spacer} aria-hidden className="flex-none" />

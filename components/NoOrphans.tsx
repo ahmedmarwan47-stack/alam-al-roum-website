@@ -18,8 +18,10 @@ const blockOf = (el: Element): Element => {
 /**
  * Ties a block's last two words with a no-break space, so its last line never holds one word alone. Walks the
  * block's text backwards to the last space before its final word (which may sit in another text node, e.g. an
- * italic accent span) and swaps it for a no-break space. A two-word block is tied only while the pair still fits its
- * box (so a long two-word title in a narrow card can still wrap; re-checked on resize). Idempotent.
+ * italic accent span) and swaps it for a no-break space. The tie is kept only while the tied words still fit the
+ * block's box: if joining them would push past it (a large heading in a narrow column, e.g. "A landmark restored"
+ * at 80 px in 600 px, where it left "A" alone and ran "Landmark Restored" off the column), the space goes back.
+ * Re-checked on resize. Idempotent.
  */
 const tie = (block: Element) => {
   const texts: Text[] = [];
@@ -31,16 +33,8 @@ const tie = (block: Element) => {
   const all = texts.map((t) => t.data).join("");
   const words = (all.trim().match(/[^\s\u00a0]+/g) ?? []).length;
   if (words < 2) return;
-  const pair = words === 2;
-  if (pair && block.hasAttribute("data-tie2-off")) return;   // found not to fit; re-checked on the next resize
-  // a pair we tied earlier: untie it if it no longer fits (a resize), and stop there
-  if (pair && block.hasAttribute("data-tie2")) {
-    if (block.scrollWidth > block.clientWidth + 1) {
-      for (const t of texts) if (t.data.includes(NBSP)) { t.data = t.data.replace(NBSP, " "); break; }
-      block.removeAttribute("data-tie2");
-    }
-    return;
-  }
+  // already handled: tied by us, or found not to fit (a resize clears both and starts again)
+  if (block.hasAttribute("data-tie2") || block.hasAttribute("data-tie2-off")) return;
   let seenWord = false;
   for (let k = texts.length - 1; k >= 0; k--) {
     const t = texts[k], s = t.data;
@@ -49,12 +43,13 @@ const tie = (block: Element) => {
       if (c === NBSP) { if (seenWord) return; continue; }     // already tied (or a deliberate no-break space)
       if (/\s/.test(c)) {
         if (!seenWord) continue;                                // trailing space after the last word
+        // keep the words together only if they fit: undo the tie when it is what pushed the block wider than its box
+        // (a block not laid out yet, or one that already overflows for other reasons, e.g. a scaled rail, keeps it)
+        const before = block.scrollWidth;
         t.data = s.slice(0, i) + NBSP + s.slice(i + 1);
-        if (pair) {
-          // keep the pair together only if it fits; otherwise put the space back
-          if (block.scrollWidth > block.clientWidth + 1) { block.setAttribute("data-tie2-off", ""); t.data = s; }
-          else block.setAttribute("data-tie2", "");
-        }
+        const after = block.scrollWidth;
+        if (block.clientWidth > 0 && after > Math.max(before, block.clientWidth) + 1) { block.setAttribute("data-tie2-off", ""); t.data = s; }
+        else block.setAttribute("data-tie2", "");
         return;
       }
       seenWord = true;
@@ -76,6 +71,9 @@ export default function NoOrphans() {
       for (let n = walk.nextNode(); n; n = walk.nextNode()) {
         const p = n.parentElement;
         if (!p || !n.textContent?.trim() || SKIP.has(p.tagName) || p.closest("svg")) continue;
+        // a late-loading (Suspense) part is left alone until it has hydrated: editing its server HTML before React
+        // adopts it makes React throw a hydration mismatch and re-render it on the client
+        if (p.closest("[data-hydrate-late]:not([data-hydrated])")) continue;
         blocks.add(blockOf(p));
       }
       blocks.forEach(tie);
@@ -93,12 +91,22 @@ export default function NoOrphans() {
         roots.forEach((r) => { if (r.isConnected) run(r instanceof Element ? blockOf(r) : (r as ParentNode)); });
       });
     });
-    mo.observe(document.body, { subtree: true, childList: true, characterData: true });
-    // a resize changes what fits: re-check the tied pairs and tie any pair that fits now
+    mo.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["data-hydrated"] });
+    // a resize changes what fits: start again from untied text
     let rt: ReturnType<typeof setTimeout> | undefined;
     const onResize = () => {
       clearTimeout(rt);
-      rt = setTimeout(() => { document.querySelectorAll("[data-tie2-off]").forEach((b) => b.removeAttribute("data-tie2-off")); run(document.body); }, 200);
+      rt = setTimeout(() => {
+        // undo our ties (the last no-break space in each tied block) and decide again at the new width
+        document.querySelectorAll("[data-tie2]").forEach((b) => {
+          const w = document.createTreeWalker(b, NodeFilter.SHOW_TEXT), ts: Text[] = [];
+          for (let n = w.nextNode(); n; n = w.nextNode()) ts.push(n as Text);
+          for (let k = ts.length - 1; k >= 0; k--) { const i = ts[k].data.lastIndexOf(NBSP); if (i >= 0) { ts[k].data = ts[k].data.slice(0, i) + " " + ts[k].data.slice(i + 1); break; } }
+          b.removeAttribute("data-tie2");
+        });
+        document.querySelectorAll("[data-tie2-off]").forEach((b) => b.removeAttribute("data-tie2-off"));
+        run(document.body);
+      }, 200);
     };
     window.addEventListener("resize", onResize);
     return () => { mo.disconnect(); window.removeEventListener("resize", onResize); clearTimeout(rt); };

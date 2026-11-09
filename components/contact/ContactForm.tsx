@@ -1,5 +1,5 @@
 "use client";
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useSearchParams } from "next/navigation";
 import Button from "@/components/ui/Button";
 import Icon from "@/components/ui/Icon";
@@ -23,9 +23,12 @@ export default function ContactForm() {
     const body = [`Name: ${d.get("name")}`, `Email: ${d.get("email")}`, `Phone: ${d.get("phone")}`, "", `${d.get("message")}`].join("\n");
     window.location.href = `mailto:${sayHello.email}?subject=${encodeURIComponent(`${interest} — website enquiry`)}&body=${encodeURIComponent(body)}`;
   };
+  // tell NoOrphans this late-loading (Suspense) part has hydrated, so it may now tie its text
+  const form = useRef<HTMLFormElement>(null);
+  useEffect(() => { form.current?.closest("[data-hydrate-late]")?.setAttribute("data-hydrated", ""); }, []);
   return (
-    <form onSubmit={send} className="flex w-full flex-col gap-10 rounded-[30px] bg-[rgba(10,10,10,0.4)] p-5 backdrop-blur-[16px] sm:p-7 lg:w-[588px] lg:flex-none">
-      <span className="t-heading text-white d-32 leading-[1.25]">{F.title}</span>
+    <form ref={form} onSubmit={send} className="flex w-full flex-col gap-10 rounded-lg bg-[rgba(10,10,10,0.4)] p-5 backdrop-blur-[16px] sm:p-7 lg:w-[588px] lg:flex-none">
+      <span className="t-heading text-white d-32 [line-height:round(nearest,1.25em,4px)]">{F.title}</span>
       <div className="flex flex-col gap-7">
         <label className={line}><span className={label}>{F.fields.name[0]}</span><input name="name" required autoComplete="name" placeholder={F.fields.name[1]} className={input} /></label>
         <label className={line}><span className={label}>{F.fields.email[0]}</span><input name="email" type="email" required autoComplete="email" placeholder={F.fields.email[1]} className={input} /></label>

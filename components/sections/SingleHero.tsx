@@ -43,7 +43,7 @@ export default function SingleHero({ data: H }: { data: SingleHeroData }) {
         {H.facts && (
           // Figma Fact card: frosted glass, 300 px, three stacked facts with hairline dividers; phones: one strip,
           // the facts side by side. The Limestone tint (`.glass-card`) is dense enough for Deep Sea text on any photo
-          <div className="glass-card grid flex-none grid-cols-3 gap-3 rounded-2xl p-4 text-deepsea-500 md:flex md:w-[300px] md:flex-col md:gap-4 md:p-6">
+          <div className="glass-card grid flex-none grid-cols-3 gap-3 rounded-lg p-4 text-deepsea-500 md:flex md:w-[300px] md:flex-col md:gap-4 md:p-6">
             {H.facts.map(([v, l], k) => (
               <div key={l} className="flex flex-col gap-4">
                 {k > 0 && <i className="hidden h-px w-full bg-deepsea-500/20 md:block" />}

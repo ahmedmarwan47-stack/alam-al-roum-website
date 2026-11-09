@@ -23,7 +23,7 @@ export default function RegisterForm({ about }: { about: string }) {
   };
   return (
     <form onSubmit={send} className="relative flex w-full max-w-[588px] flex-col gap-8 rounded-lg bg-white p-5 shadow-[0_8px_32px_rgb(1_15_26/.08)] sm:p-7 lg:shadow-none lg:gap-[clamp(20px,4svh,40px)] lg:p-[clamp(20px,2.85svh,28px)]">
-      <span className="t-heading text-deepsea-950 d-32 leading-[1.25]">Register Interest</span>
+      <span className="t-heading text-deepsea-950 d-32 [line-height:round(nearest,1.25em,4px)]">Register Interest</span>
       <div className="flex flex-col gap-5 lg:gap-[clamp(12px,2.85svh,28px)]">
         <label className={line}><span className={label}>Your name</span><input name="name" required autoComplete="name" placeholder="Your full name" className={input} /></label>
         <label className={line}><span className={label}>Email</span><input name="email" type="email" required autoComplete="email" placeholder="name@email.com" className={input} /></label>

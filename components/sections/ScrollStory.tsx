@@ -20,7 +20,7 @@ const Bars = () => (
 /** One constellation card: a photo, a Figma stat tile ($29.7Bn, 22 km …) or a chip */
 const Card = ({ c, fill = false }: { c: GrandeurCard; fill?: boolean }) =>
   c.kind === "image" ? (
-    <div className="overflow-hidden rounded-lg" style={{ aspectRatio: `${c.w} / ${c.h}` }}>
+    <div className="overflow-hidden" style={{ aspectRatio: `${c.w} / ${c.h}` }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={c.src} srcSet={srcSet(c.src)} alt="" className="h-full w-full object-cover" />
     </div>
@@ -30,10 +30,10 @@ const Card = ({ c, fill = false }: { c: GrandeurCard; fill?: boolean }) =>
     <div className={`@container flex flex-col gap-3 ${fill ? "h-full justify-between" : ""} rounded-lg bg-deepsea-500 px-4 py-[14px] text-left max-lg:gap-2 max-lg:px-3 max-lg:py-[10px]`}>
       <span className="t-label l-12 text-deepsea-200">{c.label}</span>
       <span className="flex items-end justify-between"><span className="whitespace-nowrap t-text x-28 text-limestone-50">{c.value}</span><span className="hidden @min-[100px]:block"><Bars /></span></span>
-      <span className="t-text x-12 text-deepsea-200 @max-[96px]:hidden">{c.note}</span>
+      <span className="t-text x-12 text-deepsea-200 @max-[120px]:hidden">{c.note}</span>
     </div>
   ) : (
-    <span className={`inline-flex items-center gap-2 whitespace-nowrap rounded-md px-[14px] py-2 t-label l-12 ${c.dark ? "bg-deepsea-500 text-limestone-50" : "bg-limestone-100 text-deepsea-500"}`}>
+    <span className={`inline-flex items-center gap-2 whitespace-nowrap rounded px-[14px] py-2 t-label l-12 ${c.dark ? "bg-deepsea-500 text-limestone-50" : "bg-limestone-100 text-deepsea-500"}`}>
       <i className={`block h-2 w-2 rounded-full ${c.dark ? "bg-limestone-50" : "bg-deepsea-600"}`} />{c.label}
     </span>
   );

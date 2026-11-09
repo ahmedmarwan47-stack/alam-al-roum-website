@@ -26,7 +26,7 @@ export default function Connectivity({ tag, compact = false, visa = !compact }: 
           <RevealMask><RadiusMap /></RevealMask>
           <FlightTimes className="md:hidden" />
         </div>
-        {visa && <div className={`flex flex-col gap-3 rounded-2xl border border-limestone-50/15 bg-limestone-50/10 p-4 max-lg:order-5 lg:gap-3 lg:rounded-2xl lg:px-5 lg:py-4`}>
+        {visa && <div className={`flex flex-col gap-3 rounded-lg border border-limestone-50/15 bg-limestone-50/10 p-4 max-lg:order-5 lg:gap-3 lg:px-5 lg:py-4`}>
           <span className="flex items-center gap-2 t-label l-14 text-limestone-50/80 lg:text-[14px]! lg:leading-5!"><Icon name="airplane-landing-01" size={16} />{c.visa.label}</span>
           {/* side by side from sm; stacked on a phone, where two columns would be ~130px each */}
           <div className="flex flex-col gap-3 sm:flex-row sm:gap-7">

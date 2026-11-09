@@ -9,7 +9,7 @@ function Panel({ photo, title, features }: { photo: string; title: string[]; fea
   return (
     // phones (below sm) stack the card the way Solène's phone cards do: the photo, nearly whole (4:5) and clear of
     // copy but for the title, which sits on a fade into the Deep Sea panel that carries the three features
-    <div className="relative h-[80vh] overflow-hidden rounded-xl max-sm:grid max-sm:h-auto max-sm:bg-deepsea-500 lg:h-[760px] lg:w-[1392px] lg:flex-none">
+    <div className="relative h-[80vh] overflow-hidden max-sm:grid max-sm:h-auto max-sm:bg-deepsea-500 lg:h-[760px] lg:w-[1392px] lg:flex-none">
       <img src={photo} srcSet={srcSet(photo)} alt="" className="absolute inset-0 h-full w-full object-cover max-sm:relative max-sm:col-start-1 max-sm:row-start-1 max-sm:aspect-[4/5] max-sm:h-auto" />
       {/* Figma: Deep Sea at 60 %, darkest at the bottom behind the copy, on both panels */}
       <div className="absolute inset-0 bg-gradient-to-t from-deepsea-500/60 to-transparent max-sm:hidden" />

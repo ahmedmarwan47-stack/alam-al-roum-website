@@ -18,7 +18,7 @@ export default function Locations() {
           <span key={name} style={{ left: `${x}%`, top: `${y}%` }} className="absolute">
             {/* md up: Figma's pill with its icon on the point, covering the basemap's own name for the city; it grows
                 with the map (12 px at Figma's 1392 px map) so it keeps covering that name at every width */}
-            <span className="absolute left-0 top-0 hidden -translate-x-[1.58em] -translate-y-1/2 items-center gap-[0.5em] whitespace-nowrap rounded-full bg-white px-[1em] py-[0.5em] t-label leading-[1.5] text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)] [font-size:clamp(12px,0.862cqw,18px)] md:flex">
+            <span className="absolute left-0 top-0 hidden -translate-x-[1.58em] -translate-y-1/2 items-center gap-[0.5em] whitespace-nowrap rounded-full bg-white px-[1em] py-[0.5em] t-label [line-height:round(nearest,1.5em,4px)] text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)] [font-size:round(nearest,clamp(12px,0.862cqw,18px),2px)] md:flex">
               <Icon name="location-01" className="!size-[1.17em]" />{name}
             </span>
             {/* phones: a dot on the spot and a small label above it (below for Cairo, so it clears the North Coast) */}

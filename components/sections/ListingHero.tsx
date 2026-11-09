@@ -15,7 +15,7 @@ export default function ListingHero({ title, body }: { title: string; body: stri
       {/* as in Figma, the block takes the one-line title's width (never narrower than 680 px); the intro keeps a
           reading measure inside it (600 px, two even lines) */}
       <div className="relative flex max-w-[768px] flex-col items-center gap-6 text-center text-black md:w-min md:min-w-[680px] md:max-w-none">
-        <RevealText as="h1" text={title} onLoad delay={0.2} className="t-serif capitalize d-68 leading-[0.94] hero-t md:whitespace-nowrap" />
+        <RevealText as="h1" text={title} onLoad delay={0.2} className="t-serif capitalize d-68 [line-height:round(nearest,0.94em,4px)] hero-t md:whitespace-nowrap" />
         <RevealText text={body} onLoad delay={0.4} className="t-body b-18 hero-b wrap-balance w-full max-w-[600px]" />
       </div>
     </section>

@@ -20,7 +20,7 @@ export default function SayHello() {
       <div className="relative flex flex-col gap-10 lg:flex-row lg:items-stretch">
         <div className="flex flex-col justify-between gap-16 text-white lg:flex-1">
           <div className="flex flex-col gap-10">
-            <RevealText as="h1" text={S.title} onLoad delay={0.15} className="t-label capitalize d-68 leading-[0.94] max-w-[525px]" />
+            <RevealText as="h1" text={S.title} onLoad delay={0.15} className="t-label capitalize d-68 [line-height:round(nearest,0.94em,4px)] max-w-[525px]" />
             <RevealText text={S.body} onLoad delay={0.3} className="t-text x-18 wrap-balance max-w-[504px]" />
           </div>
           {/* Figma "Contact grid": the first row holds three cells, then one full-width row per office; rules only between
@@ -39,7 +39,8 @@ export default function SayHello() {
               </div>))}
           </div>
         </div>
-        <div id="contact-form" className="scroll-mt-24 lg:flex-none"><Suspense><ContactForm /></Suspense></div>
+        {/* data-hydrate-late: NoOrphans leaves the form alone until it has hydrated (it streams in after the page) */}
+        <div id="contact-form" data-hydrate-late className="scroll-mt-24 lg:flex-none"><Suspense><ContactForm /></Suspense></div>
       </div>
     </section>
   );

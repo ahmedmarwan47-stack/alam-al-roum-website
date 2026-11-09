@@ -26,7 +26,7 @@ export default function BookCall() {
     <section className="flex flex-col items-center gap-12 bg-limestone-50 py-[60px] container-x">
       <SectionTitle tag={B.tag} title={B.title} />
       {/* below lg the three panes stack: event info, the month, then the day's slots two by two */}
-      <div className="w-full max-w-[890px] overflow-hidden rounded-xl border border-deepsea-500/10 bg-white text-deepsea-500 shadow-[0_24px_60px_-30px_rgba(7,41,60,0.25)]">
+      <div className="w-full max-w-[890px] overflow-hidden rounded-lg border border-deepsea-500/10 bg-white text-deepsea-500 shadow-[0_24px_60px_-30px_rgba(7,41,60,0.25)]">
         <div className="flex flex-col lg:flex-row">
           <div className="flex flex-col gap-5 border-b border-deepsea-500/10 px-6 py-7 lg:w-[274px] lg:flex-none lg:border-b-0 lg:border-r">
             <span aria-hidden className="grid size-[51px] place-items-center rounded-full bg-deepsea-500 t-label l-16 text-limestone-50">{B.host.split(" ").map((w) => w[0]).join("")}</span>
@@ -46,21 +46,21 @@ export default function BookCall() {
                 const open = B.open.includes(n), on = n === day;
                 return (
                   <button key={n} disabled={!open} onClick={() => setDay(n)}
-                    className={`grid h-11 place-items-center rounded-md t-body b-14 transition-colors ${on ? "bg-deepsea-500 text-limestone-50" : open ? "bg-limestone-300 text-deepsea-500 hover:bg-limestone-500" : "text-limestone-600"}`}>{n}</button>);
+                    className={`grid h-11 place-items-center rounded-lg t-body b-14 transition-colors ${on ? "bg-deepsea-500 text-limestone-50" : open ? "bg-limestone-300 text-deepsea-500 hover:bg-limestone-500" : "text-limestone-600"}`}>{n}</button>);
               })}
             </div>
           </div>
           <div className="flex flex-1 flex-col gap-3 border-t border-deepsea-500/10 px-5 py-7 lg:border-l lg:border-t-0">
             <div className="flex items-center justify-between pb-1">
               <span className="t-label l-14">{weekday} <span className="text-limestone-700">{day}</span></span>
-              <span className="flex rounded-md border border-deepsea-500/15 p-[3px] t-label l-12">
+              <span className="flex rounded-lg border border-deepsea-500/15 p-[3px] t-label l-12">
                 {["12h", "24h"].map((f, k) => <button key={f} onClick={() => setH24(k === 1)} className={`rounded px-1.5 py-0.5 max-lg:px-3 max-lg:py-2 ${h24 === (k === 1) ? "bg-limestone-300" : "text-limestone-700"}`}>{f}</button>)}
               </span>
             </div>
             <div className="grid grid-cols-2 gap-2 lg:flex lg:flex-col lg:gap-3">
             {B.times.map((t, k) => (
               <a key={t} href="#contact-form" onClick={() => setSlot(k)}
-                className={`flex h-[46px] items-center justify-center gap-2 rounded-md border t-label l-14 transition-colors ${slot === k ? "border-deepsea-500 bg-deepsea-500 text-limestone-50" : "border-deepsea-500/15 hover:border-deepsea-500"}`}>
+                className={`flex h-[46px] items-center justify-center gap-2 rounded-lg border t-label l-14 transition-colors ${slot === k ? "border-deepsea-500 bg-deepsea-500 text-limestone-50" : "border-deepsea-500/15 hover:border-deepsea-500"}`}>
                 {slot !== k && <i className="size-1.5 rounded-full bg-teal-500" />}{h24 ? to24(t) : t}
               </a>))}
             </div>

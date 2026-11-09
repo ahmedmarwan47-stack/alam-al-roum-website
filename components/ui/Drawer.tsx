@@ -45,7 +45,7 @@ export default function Drawer({ open, onClose, label, children, footer }:
       <aside ref={panel} role="dialog" aria-modal="true" aria-label={label} data-lenis-prevent
         onTouchStart={(e) => start(e)} onTouchMove={move} onTouchEnd={end} onTouchCancel={end}
         className={`absolute inset-y-0 right-0 flex w-full max-w-[560px] flex-col justify-between gap-10 overflow-y-auto bg-limestone-50 p-5 transition-transform duration-500 [transition-timing-function:var(--ease-site)] sm:p-7 ${open ? "translate-x-0" : "translate-x-full"}
-          max-lg:top-auto max-lg:bottom-0 max-lg:overscroll-contain max-lg:max-h-[88svh] max-lg:max-w-none max-lg:justify-start max-lg:gap-8 max-lg:rounded-t-2xl max-lg:pt-0 ${footer ? "max-lg:pb-0" : ""} max-lg:translate-x-0 ${open ? "max-lg:translate-y-0" : "max-lg:translate-y-full"}`}>
+          max-lg:top-auto max-lg:bottom-0 max-lg:overscroll-contain max-lg:max-h-[88svh] max-lg:max-w-none max-lg:justify-start max-lg:gap-8 max-lg:rounded-t-lg max-lg:pt-0 ${footer ? "max-lg:pb-0" : ""} max-lg:translate-x-0 ${open ? "max-lg:translate-y-0" : "max-lg:translate-y-full"}`}>
         <div className="flex flex-col gap-6">
           {/* sheet: the drag handle, and the close button beside it as a 44 px target */}
           <div onTouchStart={(e) => { e.stopPropagation(); start(e, true); }}

@@ -127,7 +127,7 @@ export default function TheStory() {
           <span className="t-label l-14">{S.history.label}</span>
           <h2 className="flex flex-col">
             <span className="t-heading hd-56">{S.history.line}</span>
-            <span className="t-accent hd-56 leading-[1.071]!">{S.history.accent}</span>
+            <span className="t-accent hd-56 [line-height:round(nearest,1.071em,4px)]!">{S.history.accent}</span>
           </h2>
         </div>
 
@@ -141,7 +141,7 @@ export default function TheStory() {
             <img src={p.src} srcSet={srcSet(p.src)} alt={p.alt} loading="lazy" className="h-full w-full object-cover" />
           </div>))}
         <div className="absolute inset-x-0 flex flex-col items-center gap-14 px-[var(--gutter)] text-center text-deepsea-500" style={{ top: fy(360) }}>
-          <h3 data-c-head className="t-heading hd-56 leading-[1.25]!">
+          <h3 data-c-head className="t-heading hd-56 [line-height:round(nearest,1.25em,4px)]!">
             {C.lines.map((line) => <span key={line} className="block">{line}</span>)}
           </h3>
           <p data-c-body className="max-w-[560px] t-body b-18">{C.body}</p>
@@ -165,7 +165,7 @@ export default function TheStory() {
         <div className="absolute left-[var(--gutter)] right-[var(--gutter)] flex flex-col text-limestone-50" style={{ top: fy(430) }}>
           <span data-g-text data-no-blur className="self-start t-accent hd-56">{G.word}</span>
           <h2 className="mt-[30px] flex flex-col">
-            <span data-g-text className="t-heading hd-80">{G.line}</span>
+            <span data-g-text className="t-heading hd-56">{G.line}</span>   {/* Heading/56, as the Shoreline beat (9 Nov) */}
             {G.accent && <span data-g-text className="t-accent hd-56">{G.accent}</span>}
           </h2>
           <p data-g-text className="mt-8 max-w-[520px] t-body b-18">{G.body}</p>

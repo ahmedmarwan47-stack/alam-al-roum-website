@@ -77,7 +77,7 @@ export default function PageHero({ data: H }: { data: PageHeroData }) {
       {/* slot from Figma (1512 × 760 under the bar): left 1092, top 480, 360 × 240, sitting on the rule. Phones: the photo
           fills the screen (Home's phone hero), up under the bar, and the copy sits at its foot in Limestone over the shade. From lg the photo lies over the dark copy (z-1), the light layer over
           both (z-2). Wider than 1512 it stays 360 wide on the right content edge, and on a tall screen at most 300 tall */}
-      <div ref={photo} data-reveal className="absolute inset-0 overflow-hidden lg:inset-auto lg:z-[1] lg:left-[calc(100%-max(4%,var(--gutter))-min(23.8%,360px))] lg:top-[calc(94.8%+4px-min(31.6%-24px,300px))] lg:h-[min(calc(31.6%-24px),300px)] lg:w-[min(23.8%,360px)] lg:rounded-[2px]">
+      <div ref={photo} data-reveal className="absolute inset-0 overflow-hidden lg:inset-auto lg:z-[1] lg:left-[calc(100%-max(4%,var(--gutter))-min(23.8%,360px))] lg:top-[calc(94.8%+4px-min(31.6%-24px,300px))] lg:h-[min(calc(31.6%-24px),300px)] lg:w-[min(23.8%,360px)]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={H.photo} srcSet={srcSet(H.photo)} alt={H.alt ?? ""} className="h-full w-full object-cover" />
       </div>

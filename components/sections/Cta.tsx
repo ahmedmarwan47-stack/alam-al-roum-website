@@ -38,7 +38,7 @@ export default function Cta({ form }: { form?: string }) {
       {form ? <div className="relative w-full container-x max-lg:-mt-16"><RegisterForm about={form} /></div> : (
         <div className="relative flex h-full flex-col justify-center gap-10 container-x max-lg:-mt-24 max-lg:gap-8 max-lg:pb-8">
           <div className="flex max-w-[768px] flex-col gap-6">
-            <RevealText as="h2" segs={C.title} className="t-heading hd-80 [&_.t-accent]:text-[.95em]" />
+            <RevealText as="h2" segs={C.title} className="t-heading hd-80 [&_.t-accent]:[font-size:round(nearest,.95em,4px)]" />
             <RevealText text={C.body} className="t-body b-20 max-w-[420px] text-limestone-800" delay={0.1} />
           </div>
           <div><Button label={C.cta} href="/contact" size={64} variant="primary" /></div>

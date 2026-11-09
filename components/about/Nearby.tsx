@@ -15,9 +15,9 @@ const pct = (v: number, of: number) => `${(v / of) * 100}%`;
  * Use with the CQ class, which reads the two variables.
  */
 const cq = (px: number, min: number, minSm = 12) =>
-  ({ "--cq": `${(px / W) * 100}cqw`, "--cq-min": `${min}px`, "--cq-min-sm": `${minSm}px`, lineHeight: 1.45 }) as CSSProperties;
+  ({ "--cq": `${(px / W) * 100}cqw`, "--cq-min": `${min}px`, "--cq-min-sm": `${minSm}px`, lineHeight: "round(nearest, 1.45em, 4px)" }) as CSSProperties;
 // phones: the labels sit at their 12 px floor; a 16 px line keeps them on the 4 px grid (the inline 1.45 is for larger sizes)
-const CQ = "[font-size:max(var(--cq-min),var(--cq))] max-lg:[font-size:max(var(--cq-min-sm),var(--cq))] max-md:leading-4!";
+const CQ = "[font-size:round(nearest,max(var(--cq-min),var(--cq)),2px)] max-lg:[font-size:round(nearest,max(var(--cq-min-sm),var(--cq)),2px)] max-md:leading-4!";
 /**
  * Phones (below md, 9 Nov): the whole drawing fits the screen width, full bleed, with no swiping; each pin shows only
  * its distance (no place names, which could not clear each other at this size). Where two distances would still touch,
@@ -194,8 +194,8 @@ export default function Nearby() {
               <span aria-hidden className="block aspect-[591/271] w-[max(34px,4.5cqw)] bg-limestone-50 max-md:w-6"
                 style={{ WebkitMask: `url(${N.coinPair}) center / contain no-repeat`, mask: `url(${N.coinPair}) center / contain no-repeat` }} />
               <span className="flex flex-col">
-                <span className={`t-heading text-limestone-50 ${CQ}`} style={{ ...cq(16, 12, 12), lineHeight: 1.5 }}>{N.origin.name}</span>
-                <span className={`t-text text-limestone-300 max-md:hidden ${CQ}`} style={{ ...cq(14, 12), lineHeight: 1.5 }}>{N.origin.note}</span>
+                <span className={`t-heading text-limestone-50 ${CQ}`} style={{ ...cq(16, 12, 12), lineHeight: "round(nearest, 1.5em, 4px)" }}>{N.origin.name}</span>
+                <span className={`t-text text-limestone-300 max-md:hidden ${CQ}`} style={{ ...cq(14, 12), lineHeight: "round(nearest, 1.5em, 4px)" }}>{N.origin.note}</span>
               </span>
             </div>
           </div>

@@ -17,10 +17,11 @@ const isLg = () => matches(MQ.lg);
 const SPREAD = 190, GUTTER = 60;
 const N = M.items.length;
 
-/** Phones: the rail is drawn at zoom --z, so these sizes are (size on screen) / z, landing on the 4 px grid on screen:
- *  the year 32 / 36, its title and description 14 / 20 */
-const YEAR_SM = "max-md:[font-size:calc(32px/var(--z,1))]! max-md:[line-height:calc(36px/var(--z,1))]!";
-const TEXT_SM = "max-md:[font-size:calc(14px/var(--z,1))]! max-md:[line-height:calc(20px/var(--z,1))]!";
+/** The rail is drawn at zoom --z at every width, so these sizes are (size on screen) / z, landing on the 4 px grid on
+ *  screen (9 Nov: desktop too, where the zoom had left the year at 38.78 px): the year 40 / 44 (32 / 36 on phones),
+ *  its title and description 14 / 20 */
+const YEAR = "[font-size:calc(40px/var(--z,1))] [line-height:calc(44px/var(--z,1))] max-md:[font-size:calc(32px/var(--z,1))]! max-md:[line-height:calc(36px/var(--z,1))]!";
+const TEXT = "[font-size:calc(14px/var(--z,1))]! [line-height:calc(20px/var(--z,1))]!";
 
 /** One milestone: the year, the tick rhythm, then (when it is the one in focus) its long line, description and photo. */
 function Milestone({ i, active, onPick }: { i: number; active: boolean; onPick: (i: number) => void }) {
@@ -32,17 +33,17 @@ function Milestone({ i, active, onPick }: { i: number; active: boolean; onPick: 
       {/* the line: 268 tall at rest, 632 when in focus (Figma; 712 from lg, for the wider photo) — drawn full and scaled */}
       <span data-ms-line className="absolute left-0 top-0 h-[632px] w-px lg:h-[712px] origin-top bg-deepsea-500" style={{ transform: `scaleY(${268 / 632})` }} />
       <div className="flex flex-col gap-2 pl-4">
-        <span className={`t-text d-56 leading-[1.07] text-deepsea-500 ${YEAR_SM}`}>{m.year}</span>
-        <span className={`t-text x-16 text-limestone-800 [font-size:max(16px,calc(12px/var(--z,1)))]! ${TEXT_SM}`}>{m.title}</span>
+        <span className={`t-text text-deepsea-500 ${YEAR}`}>{m.year}</span>
+        <span className={`t-text x-16 text-limestone-800 ${TEXT}`}>{m.title}</span>
       </div>
       <div className="flex h-[136px] items-center gap-6 pl-6 lg:gap-[34px]" aria-hidden>
         {Array.from({ length: TICKS }, (_, k) => <i key={k} data-ms-tick className="block h-[136px] w-px flex-none origin-center bg-deepsea-500" />)}
       </div>
       <div data-ms-detail className="flex flex-col gap-6 px-6 opacity-0">
-        {/* never under 12 px on screen, however far the rail is scaled down to fit a short screen */}
-        <p className={`t-body b-16 text-limestone-800 [font-size:max(16px,calc(12px/var(--z,1)))]! ${TEXT_SM}`}>{m.body}</p>
+        {/* 14 / 20 on screen, however far the rail is scaled down to fit a short screen */}
+        <p className={`t-body b-16 text-limestone-800 ${TEXT}`}>{m.body}</p>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={m.photo} srcSet={srcSet(m.photo)} alt={m.title} loading="lazy" className="aspect-[352/200] w-full rounded-lg object-cover" />
+        <img src={m.photo} srcSet={srcSet(m.photo)} alt={m.title} loading="lazy" className="aspect-[352/200] w-full object-cover" />
       </div>
     </div>);
 }
@@ -162,7 +163,7 @@ export default function Milestones() {
             {M.items.map((m, i) => (
               <button key={m.year} ref={(b) => { years.current[i] = b; }} type="button" onClick={() => go.current(i)}
                 aria-current={i === focus ? "step" : undefined} aria-label={`${m.year}: ${m.title}`}
-                className={`group relative h-11 rounded-md t-text x-16 tabular-nums transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deepsea-500 lg:px-4 ${i === focus ? "text-deepsea-500" : "text-limestone-800 hover:text-deepsea-500"}`}>
+                className={`group relative h-11 rounded-lg t-text x-16 tabular-nums transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deepsea-500 lg:px-4 ${i === focus ? "text-deepsea-500" : "text-limestone-800 hover:text-deepsea-500"}`}>
                 {m.year}
                 {/* the active year's underline */}
                 <span aria-hidden className={`absolute inset-x-2 bottom-1 h-px origin-center bg-deepsea-500 transition-transform duration-500 [transition-timing-function:var(--ease-site)] lg:inset-x-4 ${i === focus ? "scale-x-100" : "scale-x-0 group-hover:scale-x-50"}`} />

@@ -105,6 +105,23 @@
     12–16 pages at 375 / 768 / 1024 / 1440: none left (an email's deliberate break after "@" and hyphen breaks aside).
 22. **Keep Reading (article pages):** a swipe row on phones, as an event's More events.
 23. **Job detail facts:** two by two on phones too (16/24 over 14/20).
+24. **Corner radius system (owner chose):** photos square (0), every button, field, card and panel 8 px (`rounded-lg`),
+    chips 4 px, the button's inner chip 6 px, pins and round buttons full. Was 11 values (0/1/2/4/6/8/12/16/20/30 px).
+    Before/after per type: `local-assets/responsive-qa/2026-11-09-radius/*-compare.jpg`.
+25. **About "A landmark restored":** one line when the screen has room (`lg:w-max`, capped at the screen), 32/36 on
+    phones; it was "A / Landmark Restored" because NoOrphans tied a pair that could not fit the 600 px column.
+    NoOrphans now undoes a tie that widens its block, redoes all ties on resize, and leaves late-loading (Suspense)
+    parts alone until they hydrate (`data-hydrate-late` / `data-hydrated`, Contact form), which removed a hydration
+    mismatch on /contact.
+26. **4 px rule, site-wide:** the 22 fluid type classes (`clamp()`) are now fixed steps on the grid at 768 / 1024 /
+    1280 / 1440 px with px line heights (globals.css, "Type steps"); multiplier leadings use
+    `round(nearest, Xem, 4px)`; scaled map labels (flight map, Nearby, Contact pills) snap with `round()` and never go
+    under 12 px (the flight map's laptop floor was 9–11 px); Milestones sizes are on-screen values at every width;
+    "Greatness Is What Remains" is Heading/56 like the Shoreline beat; the CTA italic snaps to the grid; Grandeur stat
+    notes hide below 120 px. Rendered scan of 14 pages at 375 / 768 / 1024 / 1440: no off-grid size or line height,
+    nothing under 12 px, no off-system radius, no orphans, no horizontal scroll (Qatari Diar's decorative numerals
+    exempt).
+27. **Standing rules** for every project are saved in ~/.claude/CLAUDE.md (owner's request).
 - Screenshots: `local-assets/responsive-qa/2026-11-09-heroes/`.
 
 ## 27 Oct — phone pass 2, articles and events

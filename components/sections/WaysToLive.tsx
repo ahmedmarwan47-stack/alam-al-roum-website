@@ -27,7 +27,7 @@ function Row({ i, r, ghost }: { i: number; r: R; ghost?: boolean }) {
       {/* below lg there is no cursor to carry the photo, so each row shows its own; from lg the copy column dissolves
           (display: contents) and number, title and body are the row's own flex items, as in Figma */}
       {/* (the span, not the img, carries lg:hidden: globals.css sets img { display: block } outside any layer) */}
-      <span className="block aspect-[210/267] w-[72px] flex-none overflow-hidden rounded md:w-[96px] lg:hidden">
+      <span className="block aspect-[210/267] w-[72px] flex-none overflow-hidden md:w-[96px] lg:hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={r.photo} srcSet={srcSet(r.photo)} alt="" loading="lazy" className="h-full w-full object-cover" />
       </span>
@@ -97,7 +97,7 @@ export default function WaysToLive() {
       <div ref={list} className="relative flex flex-col">
         {/* rules only between the rows: none above the first, none under the last */}
         <div className="flex flex-col divide-y divide-limestone-600">{rows.map((r, i) => <Row key={r.title} i={i} r={r} />)}</div>
-        <div ref={card} className="pointer-events-none invisible absolute left-0 top-0 z-10 h-[267px] w-[210px] overflow-hidden rounded shadow-[0_30px_60px_rgb(1_15_26/.25)]">
+        <div ref={card} className="pointer-events-none invisible absolute left-0 top-0 z-10 h-[267px] w-[210px] overflow-hidden shadow-[0_30px_60px_rgb(1_15_26/.25)]">
           {rows.map((r, i) => (
             // eslint-disable-next-line @next/next/no-img-element
             <img key={r.photo} src={r.photo} srcSet={srcSet(r.photo)} alt="" className="absolute inset-0 h-full w-full object-cover transition-opacity duration-300" style={{ opacity: i === active ? 1 : 0 }} />))}

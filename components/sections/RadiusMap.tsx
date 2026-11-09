@@ -22,10 +22,12 @@ const CITIES = [
 const RINGS: [number, string, number, number][] = [[91, "1000 km", 345, 330], [182, "2000 km", 384, 248], [272.5, "3000 km", 422, 165]];
 const pct = (v: number, of: number) => `${(v / of) * 100}%`;
 /**
- * Type sized to the map (Figma px at its 696 width), with a floor. Below lg the floor is 12px (the site's minimum);
- * from lg it is the original 9–11px (a laptop-width map is only ~470px wide), set through the --rm-* variables.
+ * Type sized to the map (Figma px at its 696 width), snapped to the type steps with a 12px floor at every width
+ * (9 Nov: the laptop floor used to be 9–11px, under the site's 12px minimum).
  */
-const fs = (px: number, min: number) => ({ fontSize: `max(${min >= 12 ? "12px" : `var(--rm-${min})`}, ${(px / 696) * 100}cqw)`, lineHeight: px === 16 ? 1.5 : px === 14 ? 1.43 : 1.33 });
+// sizes scale with the map but snap to the type steps (12 / 14 / 16 px, never under 12) and the line heights to the
+// 4 px grid (owner's rules, 9 Nov); `min` is kept for the call sites, the floor is 12 everywhere now
+const fs = (px: number, _min: number) => ({ fontSize: `round(nearest, max(12px, ${(px / 696) * 100}cqw), 2px)`, lineHeight: `round(nearest, ${px === 16 ? 1.5 : px === 14 ? 1.43 : 1.33}em, 4px)` });
 /** Phones: the map is ~350px wide, too small for name and time at 12px, so the times are listed under it. */
 const HIDE_ON_PHONE = "max-md:hidden";
 const SHADOW = "text-shadow-[0_1px_3px_rgb(1_15_26/0.9),0_1px_10px_rgb(1_15_26/0.6)]";
@@ -78,7 +80,7 @@ export default function RadiusMap() {
     return () => { off(); tl.kill(); ro.disconnect(); };
   }, []);
   return (
-    <div ref={root} data-flight-map className="relative overflow-hidden rounded-[20px] bg-[#1E3A44] [--rm-10:12px] [--rm-11:12px] [--rm-9:12px] lg:[--rm-10:10px] lg:[--rm-11:11px] lg:[--rm-9:9px]" style={{ aspectRatio: "696 / 720", containerType: "inline-size" }}>
+    <div ref={root} data-flight-map className="relative overflow-hidden rounded-lg bg-[#1E3A44]" style={{ aspectRatio: "696 / 720", containerType: "inline-size" }}>
       {/* Muted cartographic basemap (29 Oct review, to sit in the red sections without being red): a deep teal sea, warm
           stone land with a faint relief from Sentinel-2 cloudless 2016 by EOX (CC BY 4.0), a light hairline coast;
           azimuthal equidistant on 27.90E 31.20N, 300 px = 3,300 km */}
