@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger, reducedMotion, withHold } from "@/lib/gsap";
 import "@/lib/about/a-motion";
-import { blurIn } from "@/components/reveal/letters";
+import { blurIn, onceInView } from "@/components/reveal/letters";
 import { bloom as B } from "@/lib/about/a-content";
 import { srcSet } from "@/lib/img";
 import { MQ } from "@/lib/breakpoints";
@@ -20,7 +20,7 @@ export default function LifeInBloom() {
     const el = root.current!, q = gsap.utils.selector(el);
     // entrance: the copy blurs in once the section lands
     const copy = gsap.timeline({ paused: true }).add(blurIn(q("[data-title], [data-body]"), { stagger: 0.2 }));
-    const copyST = ScrollTrigger.create({ trigger: el, start: "top 80%", once: true, onEnter: () => copy.play() });
+    const copyIn = onceInView(el, "top 80%", () => copy.play());
     const mm = gsap.matchMedia();
     mm.add({ lg: MQ.lg, sm: MQ.belowLg }, (ctx) => {
       const lg = ctx.conditions!.lg;
@@ -36,7 +36,7 @@ export default function LifeInBloom() {
       const st = ScrollTrigger.create({ trigger: el, start: "top top", end: `+=${vh * 100}%`, pin: true, scrub: 1, animation: tl });
       return () => { st.kill(); tl.kill(); };
     });
-    return () => { mm.revert(); copyST.kill(); copy.kill(); };
+    return () => { mm.revert(); copyIn(); copy.kill(); };
   }, []);
 
   return (

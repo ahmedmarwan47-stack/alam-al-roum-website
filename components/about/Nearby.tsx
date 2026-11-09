@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import type { CSSProperties } from "react";
+import { onceInView } from "@/components/reveal/letters";
 import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 import RevealText from "@/components/reveal/RevealText";
 import { nearby as N } from "@/lib/about/b-content";
@@ -121,12 +122,12 @@ export default function Nearby() {
     const pic = map.querySelector("img")!;
     let wait = 0, dead = false;
     const play = () => { clearTimeout(wait); if (!dead && !tl.isActive() && tl.progress() === 0) tl.play(); };
-    const st = ScrollTrigger.create({ trigger: strip, start: "top 65%", once: true, onEnter: () => {
+    const stIn = onceInView(strip, "top 65%", () => {
       wait = window.setTimeout(play, 1500);          // never wait long on a slow photo
       pic.decode().then(play, play);
-    } });
+    });
     return () => {
-      dead = true; st.kill(); tl.kill(); clearTimeout(wait); off();
+      dead = true; stIn(); tl.kill(); clearTimeout(wait); off();
       strip.removeEventListener("pointerdown", mine); strip.removeEventListener("wheel", mine);
     };
   }, []);

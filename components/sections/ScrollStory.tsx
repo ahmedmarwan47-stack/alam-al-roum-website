@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { onceInView } from "@/components/reveal/letters";
 import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 import Button from "@/components/ui/Button";
 import RevealText from "@/components/reveal/RevealText";
@@ -125,11 +126,12 @@ export default function ScrollStory() {
           gsap.fromTo(el, { y: 0 }, { y: -Number(el.dataset.v), ease: "none",
             scrollTrigger: { trigger: stage, start: "top bottom", end: "bottom top", scrub: 1 } });
         });
-        ScrollTrigger.create({ trigger: stage, start: "top 75%", once: true, onEnter: () => {
+        // the cards start hidden, so this goes through onceInView (a ScrollTrigger plus a visibility fail-safe)
+        return onceInView(stage, "top 75%", () => {
           const inner = cards.map((el) => el.firstElementChild as HTMLElement);
           inner.forEach((el, k) => gsap.set(el, gather(cards[k])));
           gsap.to(inner, { x: 0, y: 0, opacity: 1, scale: 1, duration: 1.4, ease: "siteOut", stagger: 0.04, delay: 0.2 });
-        } });
+        });
       });
     }
     return () => { mm.revert(); stopLoading(); st.kill(); window.removeEventListener("resize", size); };

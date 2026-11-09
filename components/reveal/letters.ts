@@ -39,10 +39,26 @@ export const mediaBlurIn = (el: Element, { delay = 0 } = {}) =>
  * viewport), so every block of a section is in place together by the time you reach it, rather than each one
  * waiting for its own spot on screen. Plays at once if the page is already past that point.
  */
-export const whenSectionEnters = (el: Element, play: () => void) => {
-  let done = false;
-  const go = () => { if (!done) { done = true; play(); } };
-  const st = ScrollTrigger.create({ trigger: el.closest("section, header, footer") ?? el, start: "top 85%", once: true, onEnter: go });
+export const whenSectionEnters = (el: Element, play: () => void) => onceInView(el.closest("section, header, footer") ?? el, "top 85%", play);
+
+/**
+ * Plays `play` once, when `trigger` reaches `start` (a ScrollTrigger start such as "top 80%"). Every entrance that
+ * starts from a hidden state goes through here, never through a bare `once` ScrollTrigger: see the fail-safe below.
+ * Returns the cleanup.
+ */
+export const onceInView = (trigger: Element, start: string, play: () => void) => {
+  let done = false, io: IntersectionObserver | undefined;
+  const sec = trigger;
+  const go = () => { if (!done) { done = true; play(); io?.disconnect(); } };
+  const st = ScrollTrigger.create({ trigger: sec, start, once: true, onEnter: go });
   const id = requestAnimationFrame(() => { if (st.scroll() >= st.start) go(); });
-  return () => { cancelAnimationFrame(id); st.kill(); };
+  // fail-safe (9 Nov, the About timeline title stayed at opacity 0 on the live site): a ScrollTrigger start measured
+  // while the page was still settling (pinned scenes, fonts, a restored scroll position) can miss its moment, and a
+  // `once` trigger never fires again. The browser's own visibility check plays the entrance whenever the section is
+  // actually on screen, so text can never stay hidden in view.
+  if (!done) {
+    io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) go(); }, { rootMargin: "0px 0px -15% 0px" });
+    io.observe(sec);
+  }
+  return () => { cancelAnimationFrame(id); st.kill(); io?.disconnect(); };
 };

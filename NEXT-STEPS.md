@@ -122,6 +122,11 @@
     nothing under 12 px, no off-system radius, no orphans, no horizontal scroll (Qatari Diar's decorative numerals
     exempt).
 27. **Standing rules** for every project are saved in ~/.claude/CLAUDE.md (owner's request).
+28. **Entrances fail-safe:** the About timeline title, tag and intro stayed at opacity 0 on the live site (a `once`
+    ScrollTrigger measured while the page settled never fired). `onceInView()` (components/reveal/letters.ts) pairs
+    the trigger with an IntersectionObserver; every hidden-start entrance uses it (RevealText via
+    `whenSectionEnters`, Romans title, Life in Bloom copy, Grandeur phone cards, Nearby drawing). Stepped audit of
+    Home, About, Destination at 1440: nothing left hidden on screen.
 - Screenshots: `local-assets/responsive-qa/2026-11-09-heroes/`.
 
 ## 27 Oct — phone pass 2, articles and events

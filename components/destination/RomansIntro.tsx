@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 import RevealText from "@/components/reveal/RevealText";
-import { blurIn } from "@/components/reveal/letters";
+import { blurIn, onceInView } from "@/components/reveal/letters";
 import type { TrackEl } from "@/components/sections/PinnedTrack";
 import { history as H } from "@/lib/destination";
 import { srcSet } from "@/lib/img";
@@ -27,7 +27,7 @@ export default function RomansIntro() {
       .fromTo(img, { scale: 1.25, yPercent: 8 }, { scale: 1, yPercent: 0 }, 0)
       .fromTo(q("[data-flower]"), { scale: 0.6, rotation: -24, yPercent: 30, opacity: 0 }, { scale: 1, rotation: 0, yPercent: 0, opacity: 1, ease: "power2.out" }, 0.15);
     const title = blurIn(q("[data-title]"), { duration: 1.2 }).pause();
-    const titleST = ScrollTrigger.create({ trigger: sec, start: "top 85%", once: true, onEnter: () => title.play() });
+    const titleIn = onceInView(sec, "top 85%", () => title.play());
     // while the track slides, the flower turns and lifts a little more (on the outer layer; the sway is CSS)
     let drift: gsap.core.Tween | undefined;
     // below lg there is no sideways track: the flower makes the same turn as the panel scrolls up the page (9 Nov)
@@ -42,7 +42,7 @@ export default function RomansIntro() {
     const track = el.closest("[data-track]");
     build();
     track?.addEventListener("track-ready", build);
-    return () => { track?.removeEventListener("track-ready", build); rise.scrollTrigger?.kill(); rise.kill(); titleST.kill(); title.kill(); drift?.scrollTrigger?.kill(); drift?.kill(); };
+    return () => { track?.removeEventListener("track-ready", build); rise.scrollTrigger?.kill(); rise.kill(); titleIn(); title.kill(); drift?.scrollTrigger?.kill(); drift?.kill(); };
   }, []);
   const R = H.romans;
   // below lg the title stands above the mosaic (no overlap at phone size) and the flower sits on the mosaic's lower corner
