@@ -6,7 +6,7 @@ import { waterTrack as W } from "@/lib/sustainability";
 
 function Panel({ photo, title, features, from }: { photo: string; title: string[]; features: string[][]; from: "top" | "bottom" }) {
   return (
-    <div className="relative h-[80vh] overflow-hidden rounded-3xl lg:h-[760px] lg:w-[1392px] lg:flex-none">
+    <div className="relative h-[80vh] overflow-hidden rounded-[40px] lg:h-[min(760px,calc(100svh-160px))] lg:w-[1392px] lg:flex-none">
       <img src={photo} alt="" className="absolute inset-0 h-full w-full object-cover" />
       <div className={`absolute inset-0 ${from === "top" ? "bg-gradient-to-t" : "bg-gradient-to-b"} from-deepsea-500/60 to-transparent`} />
       <div className="absolute inset-x-6 bottom-6 flex flex-col gap-6 text-limestone-50 lg:inset-x-12 lg:bottom-12 lg:flex-row lg:items-end lg:justify-between">
@@ -19,17 +19,17 @@ function Panel({ photo, title, features, from }: { photo: string; title: string[
   );
 }
 
-/** Water strategy (Figma 11134:15173): four 1392 px panels on terracotta that scroll sideways while the section is pinned. */
+/** Water strategy (Figma 11134:15173): four 1392 px panels on terracotta that scroll sideways while the section is pinned; the panels are 760 tall, less on shorter screens so the 80 px above and below always stays. */
 export default function WaterTrack() {
   const s1 = W.statement1, s2 = W.statement2;
   return (
-    <PinnedTrack className="bg-terracotta-500 text-limestone-50" trackClassName="gap-6 py-20 lg:h-screen lg:max-h-[920px]">
-      <div className="flex flex-col items-center justify-center gap-6 py-16 text-center lg:h-[760px] lg:w-[1392px] lg:flex-none">
+    <PinnedTrack className="bg-terracotta-500 text-limestone-50" trackClassName="gap-6 py-20 lg:h-svh lg:max-h-[920px]">
+      <div className="flex flex-col items-center justify-center gap-6 py-16 text-center lg:h-[min(760px,calc(100svh-160px))] lg:w-[1392px] lg:flex-none">
         <span className="t-label l-16">{s1.tag}</span>
         <p className="max-w-[1100px] t-heading hd-56">{s1.text} <span className="text-deepsea-200">{s1.accent}</span></p>
       </div>
       <Panel photo={W.living.photo} title={W.living.title} features={W.living.features} from="top" />
-      <div className="relative flex flex-col items-center justify-center gap-6 py-24 text-center lg:h-[760px] lg:w-[1392px] lg:flex-none">
+      <div className="relative flex flex-col items-center justify-center gap-6 py-24 text-center lg:h-[min(760px,calc(100svh-160px))] lg:w-[1392px] lg:flex-none">
         <img src={s2.cups} alt="" className="pointer-events-none absolute left-0 top-0 w-[clamp(140px,19vw,293px)]" />
         <p className="relative max-w-[1100px] t-heading hd-56">{s2.text} <span className="text-deepsea-200">{s2.accent}</span></p>
         <RevealText text={s2.body} className="relative t-body b-18 max-w-[720px]" />
