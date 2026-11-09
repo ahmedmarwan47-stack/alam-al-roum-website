@@ -11,7 +11,7 @@ export default function RoleList() {
   const [d, setD] = useState<string>(departments[0]);
   const list = d === departments[0] ? roles : roles.filter((r) => r.dept === d);
   return (
-    <section className="flex flex-col gap-10 bg-white pt-20 pb-[120px] container-x">
+    <section className="flex flex-col gap-10 bg-limestone-50 pt-20 pb-[120px] container-x">
       {/* phones: one row of chips that scrolls sideways to the screen edges, instead of wrapping */}
       <FilterChips options={departments} value={d} onChange={setD}
         className="max-sm:-mx-[var(--gutter)] max-sm:flex-nowrap max-sm:overflow-x-auto max-sm:px-[var(--gutter)] max-sm:[scrollbar-width:none] max-sm:[&::-webkit-scrollbar]:hidden max-sm:[&>button]:flex-none max-sm:[&>button]:whitespace-nowrap" />

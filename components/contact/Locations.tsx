@@ -8,7 +8,7 @@ const maps = (q: string) => `https://www.google.com/maps/search/?api=1&query=${e
 /** Locations (Figma 10921:9743): the regional map with three pins, then one column per office. */
 export default function Locations() {
   return (
-    <section className="flex flex-col gap-10 bg-white py-[60px] container-x">
+    <section className="flex flex-col gap-10 bg-limestone-50 py-[60px] container-x">
       <SectionTitle tag={L.tag} title={L.title} align="left" />
       {/* full bleed on phones, where the strip is short; each pin is a point the labels hang from. The map is the clean
           basemap (no pins or credit baked in): the pins and the credit are drawn here. */}

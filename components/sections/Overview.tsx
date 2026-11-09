@@ -15,7 +15,7 @@ export type OverviewData = { tag: string; title: string | Seg[]; body: string; f
 export default function Overview({ data: O }: { data: OverviewData }) {
   const facts = O.facts ?? [];
   return (
-    <section className="flex flex-col justify-center bg-white py-20 container-x lg:min-h-[70svh] lg:py-24">
+    <section className="flex flex-col justify-center bg-limestone-50 py-20 container-x lg:min-h-[70svh] lg:py-24">
       <div className="grid gap-x-6 gap-y-8 lg:grid-cols-12 lg:items-start">
         <div className="flex flex-col gap-4 lg:col-span-7">
           <RevealText text={O.tag} className="t-label l-tag" />

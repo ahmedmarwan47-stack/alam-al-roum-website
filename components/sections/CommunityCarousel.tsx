@@ -35,7 +35,7 @@ export default function CommunityCarousel({ items }: { items: Community[] }) {
   };
   const btn = "grid h-11 w-11 place-items-center rounded-full border border-deepsea-500/30 text-deepsea-500 transition-[background-color,color,opacity] duration-300 hover:bg-deepsea-500 hover:text-limestone-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deepsea-500 disabled:pointer-events-none disabled:opacity-30";
   return (
-    <section className="flex flex-col gap-10 overflow-hidden bg-white py-20 lg:gap-12">
+    <section className="flex flex-col gap-10 overflow-hidden bg-limestone-50 py-20 lg:gap-12">
       <div className="flex items-end justify-between gap-6 container-x">
         <div className="flex flex-col gap-4">
           <RevealText text="Communities" className="t-label l-tag" />

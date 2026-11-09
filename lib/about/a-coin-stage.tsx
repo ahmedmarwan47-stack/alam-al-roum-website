@@ -159,9 +159,9 @@ export default function CoinStage({ poster }: { poster?: string }) {
       {/* Beat 5 copy · Heading/80 (600 wide), Body/20 at 85% (520 wide), history points 260 + 32 + 260. Phones: body
           16 / 24 and the two points stacked full width (side by side they were ~150 px columns of 4–5 short lines) */}
       <div className="absolute left-[var(--gutter)] right-[var(--gutter)] top-[16%] flex max-w-[600px] flex-col gap-7 lg:top-[29.3%]">
-        {/* the headline may run past the 600 px column when the screen has room, so it sits on one line (no orphan,
-            9 Nov); on a narrower screen it wraps as in Figma */}
-        <h2 data-rise className="t-heading hd-80 max-md:text-[32px]! max-md:leading-9! lg:w-max lg:max-w-[calc(100vw-2*var(--gutter))]">{C.title}</h2>
+        {/* the owner's break (9 Nov), as in Figma: "A landmark" / "restored", at every width (a deliberate design break
+            wins over the no-orphans rule) */}
+        <h2 data-rise className="t-heading hd-80 max-md:text-[32px]! max-md:leading-9!">{C.title.replace(/ (\S+)$/, "")}<br />{C.title.match(/\S+$/)![0]}</h2>
         <p data-rise className="max-w-[520px] t-body b-20 text-limestone-50/85 max-md:text-[16px]! max-md:leading-6!">{C.body}</p>
         <div data-points className="mt-5 grid max-w-[552px] grid-cols-2 gap-8 max-md:grid-cols-1 max-md:gap-5">
           {C.points.map((x) => (

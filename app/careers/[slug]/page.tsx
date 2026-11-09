@@ -38,7 +38,7 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
   return (
     <main>
       <Navbar />
-      <section className="mt-[76px] flex flex-col items-center gap-6 bg-white px-[var(--gutter)] py-[60px] text-center text-black">
+      <section className="mt-[76px] flex flex-col items-center gap-6 bg-limestone-50 px-[var(--gutter)] py-[60px] text-center text-black">
         <span className="t-label l-12 text-black/60">Careers</span>
         <RevealText as="h1" text={r.title} onLoad delay={0.15} className="t-serif capitalize d-68 leading-[1]" />
         <RevealText text={r.lede} onLoad delay={0.3} className="t-body b-18 text-black/70" />

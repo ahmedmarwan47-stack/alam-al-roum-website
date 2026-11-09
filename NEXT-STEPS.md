@@ -127,6 +127,15 @@
     the trigger with an IntersectionObserver; every hidden-start entrance uses it (RevealText via
     `whenSectionEnters`, Romans title, Life in Bloom copy, Grandeur phone cards, Nearby drawing). Stepped audit of
     Home, About, Destination at 1440: nothing left hidden on screen.
+29. **About "In numbers":** no rules; each figure counts up from 0 to its value as the section arrives (format kept,
+    width reserved by the invisible final value, screen readers get the final value, static with reduced motion).
+30. **About "A landmark / restored":** forced onto two lines at every width (`<br />`), the owner's break, as in
+    Figma; it overrides the no-orphans rule (item 25's one-line version is reverted).
+31. **One page colour:** 13 sections were pure white beside Limestone 50 ones (a visible band, e.g. around "Where to
+    stay" on /experiences/hotels); every section is Limestone 50 now, and the listing hero's olive artwork is
+    multiplied onto it so its white fade matches.
+32. **"Life in the community" cards (experience pages), phones:** photo → title 12 px, title → text 4 px; one column
+    is a plain stack (the row subgrid leaked the list's 48 px gap into the card); from sm the subgrid aligns titles.
 - Screenshots: `local-assets/responsive-qa/2026-11-09-heroes/`.
 
 ## 27 Oct — phone pass 2, articles and events

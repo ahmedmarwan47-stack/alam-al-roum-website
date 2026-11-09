@@ -63,7 +63,7 @@ export default function CommunitiesExplorer() {
   const GRID = S.toggle.indexOf("Grid");
   const [view, setView] = useState(GRID);
   return (
-    <section className="flex flex-col items-center gap-10 bg-white pt-20">
+    <section className="flex flex-col items-center gap-10 bg-limestone-50 pt-20">
       <SectionTitle tag={S.tag} title={S.title} body={S.body} className="container-x" />
       <SegmentedToggle options={S.toggle} value={view} onChange={setView} className="max-md:w-[calc(100%-2*var(--gutter))]" />
       {view !== GRID

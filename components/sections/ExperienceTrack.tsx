@@ -86,7 +86,7 @@ function Slider({ grid = false }: { grid?: boolean }) {
  */
 export default function ExperienceTrack({ slider = false, title }: { slider?: boolean; title?: typeof T.title }) {
   return (
-    <section className={`flex flex-col gap-10 overflow-hidden bg-white container-x ${slider ? "py-[60px]" : "py-20"}`}>
+    <section className={`flex flex-col gap-10 overflow-hidden bg-limestone-50 container-x ${slider ? "py-[60px]" : "py-20"}`}>
       <div className="flex max-w-[917px] flex-col gap-4">
         <RevealText text={T.tag} className="t-label l-tag" />
         <RevealText as="h2" segs={title ?? T.title} className="t-heading hd-56" delay={0.05} />

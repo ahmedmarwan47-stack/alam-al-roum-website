@@ -31,7 +31,7 @@ export default function HotelsList({ data: D }: { data: HotelsData }) {
   const close = useCallback(() => setOpen(false), []);
   const show = (k: number) => { setShot(0); setLast(k); setOpen(true); };
   return (
-    <section className="flex flex-col items-center gap-10 bg-white py-20 container-x">
+    <section className="flex flex-col items-center gap-10 bg-limestone-50 py-20 container-x">
       <SectionTitle tag={D.tag} title={D.title} body={D.body} bodyWidth={D.bodyWidth} className="max-w-[870px]" />
       <div className={`grid w-full gap-x-3 gap-y-14 ${D.cols ? `${swipe} ${D.cols}` : "grid-cols-2 max-sm:gap-y-8 max-md:auto-rows-fr lg:grid-cols-[492fr_380fr_496fr]"}`}>
         {D.items.map((it, k) => (

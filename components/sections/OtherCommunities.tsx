@@ -11,7 +11,7 @@ import { districtPins, planViews } from "@/lib/masterplan";
 export function CommunityOnMasterplan({ slug, title, body }: { slug: string; title: string; body: string }) {
   const view = planViews[slug] ?? planViews.communities;
   return (
-    <section className="flex flex-col gap-10 bg-white pt-20">
+    <section className="flex flex-col gap-10 bg-limestone-50 pt-20">
       <SectionTitle tag="Masterplan" title={title} body={body} className="container-x" />
       <MasterplanMap image={view.src} view={view} pins={districtPins[slug] ?? []} initial={-1} labels />
     </section>
