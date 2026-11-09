@@ -9,7 +9,7 @@ import { landmarks } from "@/lib/content";
 export type LandmarksData = { title: string; body: string; rows: { title: string; body: string; large: string; inset: string }[] };
 
 /**
- * UI / Landmarks (Residence Types style, Figma 10979:15280): Figma's 1024 px height on desktop (so the copy keeps its
+ * UI / Landmarks (Residence Types style, Figma 10979:15280): Figma's 1024 px height on desktop, growing if the copy needs more (so it keeps its
  * vertical padding); the list is driven by the scroll — the section pins at its centre (the list stays in view on
  * screens shorter than 1024) and
  * each row takes its turn as you scroll (about 60 % of a screen per row); the active row turns dark while the large
@@ -44,7 +44,7 @@ export default function Landmarks({ data = landmarks }: { data?: LandmarksData }
   }, [a]);
   return (
     <section className="bg-limestone-50">
-    <div ref={pin} className="flex flex-col bg-limestone-50 lg:h-[1024px] lg:flex-row">
+    <div ref={pin} className="flex flex-col bg-limestone-50 lg:min-h-[1024px] lg:flex-row">
       <div className="flex flex-col justify-center gap-[60px] py-20 pl-[var(--gutter)] pr-[var(--gutter)] lg:w-1/2 lg:pr-24">
         <div className="flex flex-col gap-2">
           <RevealText as="h2" text={L.title} className="t-heading hd-40" />
