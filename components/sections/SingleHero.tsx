@@ -37,8 +37,8 @@ export default function SingleHero({ data: H }: { data: SingleHeroData }) {
         {/* wide enough for a two-word name on one line (Marina boulevard), so the eyebrow stays low in the shade */}
         <div className="flex max-w-[820px] flex-col gap-3">
           <RevealText text={H.eyebrow} onLoad delay={0.2} className="t-label l-tag" />
-          <RevealText as="h1" text={H.name} onLoad delay={0.3} className="t-heading hd-80" />
-          <RevealText text={H.line} onLoad delay={0.55} className="t-body b-20 wrap-balance max-w-[640px]" />
+          <RevealText as="h1" text={H.name} onLoad delay={0.3} className="t-heading hd-80 hero-t" />
+          <RevealText text={H.line} onLoad delay={0.55} className="t-body b-20 hero-b wrap-balance max-w-[640px]" />
         </div>
         {H.facts && (
           // Figma Fact card: frosted glass, 300 px, three stacked facts with hairline dividers; phones: one strip,

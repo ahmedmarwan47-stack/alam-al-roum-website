@@ -6,6 +6,7 @@ import { blurIn } from "@/components/reveal/letters";
 import type { TrackEl } from "@/components/sections/PinnedTrack";
 import { history as H } from "@/lib/destination";
 import { srcSet } from "@/lib/img";
+import { MQ, matches } from "@/lib/breakpoints";
 
 /* eslint-disable @next/next/no-img-element */
 
@@ -29,6 +30,9 @@ export default function RomansIntro() {
     const titleST = ScrollTrigger.create({ trigger: sec, start: "top 85%", once: true, onEnter: () => title.play() });
     // while the track slides, the flower turns and lifts a little more (on the outer layer; the sway is CSS)
     let drift: gsap.core.Tween | undefined;
+    // below lg there is no sideways track: the flower makes the same turn as the panel scrolls up the page (9 Nov)
+    if (!matches(MQ.lg)) drift = gsap.to(q("[data-flower-drift]"), { rotation: 10, yPercent: -12, ease: "none",
+      scrollTrigger: { trigger: el, start: "top 40%", end: "bottom top", scrub: 1 } });
     const build = () => {
       const track = el.closest<TrackEl>("[data-track]");
       if (drift || !track?.track) return;
@@ -58,7 +62,8 @@ export default function RomansIntro() {
           </div>
         </div>
       </div>
-      <div className="flex max-w-[360px] flex-col gap-3 t-body lg:w-[321px] lg:flex-none">
+      {/* the statement is desktop only (9 Nov): on a phone the panel goes straight from the mosaic to the coastline */}
+      <div className="flex max-w-[360px] flex-col gap-3 t-body max-lg:hidden lg:w-[321px] lg:flex-none">
         <RevealText text={R.side.title} className="d-36 leading-none" />
         <RevealText text={R.side.body} className="b-20" delay={0.08} />
       </div>

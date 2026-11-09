@@ -19,7 +19,9 @@ type Item = { key: string; n: number; gate: boolean; pins: number[] };
 /**
  * Aerial masterplan with Interactive-Hotspots pins (Figma Masterplan Pin): hover shows the name, click opens the card.
  * Highlights are limestone pins, gates smaller rust ones. On desktop each pin is a plus that turns to a cross when open;
- * below lg, where the map has its list, each pin shows its number instead.
+ * below lg, where the map has its list, each highlight shows its number instead and a gate is a plain rust dot.
+ * Below lg the gates are one place ("City gates", one row and one sheet, 9 Nov): seven chips with the same text read
+ * as noise, and their numbers clashed with the highlights' 1–7 on the map.
  * Below lg (phones, tablets: touch, no hover) a floating card would cover its neighbours, so the map is followed by a
  * numbered list of its places, and a pin or a row opens that place in the bottom sheet (photo, text, Explore, and
  * previous / next through the list). A row also slides the map to its pin, and the chosen place stays highlighted on
@@ -39,7 +41,8 @@ export default function MasterplanMap({ image, pins: all, initial = 0, view = FU
     const byKey = new Map<string, Item>(), itemOf: string[] = [];
     let auto = 0;
     pins.forEach((p, k) => {
-      const gate = p.kind === "gate", n = p.n ?? (gate ? k + 1 : ++auto), key = `${gate ? "g" : "p"}${n}`;
+      // all the gates are one place, keyed "g"
+      const gate = p.kind === "gate", n = gate ? 0 : p.n ?? ++auto, key = gate ? "g" : `p${n}`;
       itemOf.push(key);
       const it = byKey.get(key);
       if (it) it.pins.push(k); else byKey.set(key, { key, n, gate, pins: [k] });
@@ -81,7 +84,8 @@ export default function MasterplanMap({ image, pins: all, initial = 0, view = FU
   const tap = (k: number) => { if (phone) show(itemOf[k], false); else setOpen(open === k ? -1 : k); };
   const at = items.findIndex((i) => i.key === active), cur = items[at];
   const step = (by: number) => { const next = items[(at + by + items.length) % items.length]; setActive(next.key); reveal(next.pins[0]); };
-  const d = cur ? pins[cur.pins[0]] : undefined;
+  const first = cur ? pins[cur.pins[0]] : undefined;
+  const d = first && cur?.gate ? { ...first, title: GATES_TITLE, body: `The city's ${cur.pins.length} gates, each staffed around the clock.` } : first;
 
   // the card and the hover label open to the right of a pin unless that would run past the map's edge
   const box = useRef<HTMLDivElement>(null), [w, setW] = useState(1512);
@@ -112,10 +116,10 @@ export default function MasterplanMap({ image, pins: all, initial = 0, view = FU
                 width from its centre: a label or card on the left hangs off its left edge (right-full), 28px clear */}
             <button onClick={() => tap(k)} aria-label={gate ? p.title : `${it.n}. ${p.title}`}
               className={`relative grid -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full shadow-[0_2px_8px_rgb(1_15_26/.25)] transition-colors duration-[250ms] [transition-timing-function:var(--ease-fig-out)] max-lg:before:absolute max-lg:before:-inset-1 max-lg:before:rounded-full
-                ${gate ? "h-[22px] w-[22px] text-[11px] lg:h-[26px] lg:w-[26px] lg:text-[12px]" : "h-7 w-7 text-[13px] lg:h-8 lg:w-8 lg:text-[14px]"}
+                ${gate ? "h-4 w-4 lg:h-[26px] lg:w-[26px]" : "h-7 w-7 text-[12px] lg:h-8 lg:w-8 lg:text-[14px]"}
                 ${on ? "bg-deepsea-500 text-limestone-50 ring-2 ring-limestone-50" : gate ? "bg-rust-500 text-limestone-50 group-hover:bg-deepsea-500" : "bg-limestone-50 text-deepsea-500 group-hover:bg-deepsea-500 group-hover:text-limestone-50"}`}>
               {/* phones and tablets: the number, matching the list under the map; desktop has no list, so the plus */}
-              <span className="t-label leading-none tabular-nums lg:hidden">{it.n}</span>
+              {!gate && <span className="t-label leading-none tabular-nums lg:hidden">{it.n}</span>}
               <span className="grid place-items-center max-lg:hidden"><Icon name="plus-sign" size={gate ? 14 : 16} className={`transition-transform duration-300 [transition-timing-function:var(--ease-fig-out)] ${on ? "rotate-45" : ""}`} /></span>
             </button>
             {!on && <span className={`pointer-events-none absolute top-0 hidden -translate-y-1/2 whitespace-nowrap lg:block ${labelRight ? "left-7" : "right-full mr-7"} rounded-full bg-limestone-50 px-[14px] py-2 t-label l-14 shadow-[0_2px_10px_rgb(1_15_26/.18)] transition-opacity duration-[250ms] [transition-timing-function:var(--ease-fig-out)] ${labels ? "opacity-0 group-hover:opacity-100 xl:opacity-100" : "opacity-0 group-hover:opacity-100"}`}>{p.title}</span>}
@@ -125,17 +129,18 @@ export default function MasterplanMap({ image, pins: all, initial = 0, view = FU
       })}
     </div>
     </div>
-    {/* desktop: the key, when the map has gates */}
-    {gates.length > 0 && <Key className="mt-4 hidden px-[var(--gutter)] lg:flex" />}
+    {/* desktop: no key under the map (removed 9 Nov at the owner's request; phones keep it above the list) */}
 
     {/* phones and tablets: the numbered list of the map's places; a row opens the place in the sheet */}
     <div className="mt-4 px-[var(--gutter)] lg:hidden">
-      <p className="t-label l-14 text-limestone-800"><span className="md:hidden">Swipe the map, or pick a place below</span><span className="hidden md:inline">Tap a pin or pick a place below</span></p>
-      <ol className="mt-4 border-t border-deepsea-500/10">
+      {/* the key in place of an instruction (9 Nov): what a white numbered pin and a rust dot are */}
+      {gates.length > 0 && <Key />}
+      {/* rules only between the rows: none above the first, none under the last (9 Nov) */}
+      <ol className="mt-4">
         {places.map((it) => {
           const p = pins[it.pins[0]], on = active === it.key;
           return (
-            <li key={it.key} className="border-b border-deepsea-500/10">
+            <li key={it.key} className="border-b border-deepsea-500/10 last:border-b-0">
               <button onClick={() => show(it.key, true)} className={`flex min-h-14 w-full items-center gap-4 py-3 text-left transition-colors ${on ? "text-deepsea-500" : "text-limestone-900"}`}>
                 <Num n={it.n} on={on} />
                 <span className="flex-1 t-body b-16">{p.title}</span>
@@ -144,18 +149,22 @@ export default function MasterplanMap({ image, pins: all, initial = 0, view = FU
             </li>
           );
         })}
+        {gates.map((it) => {
+          const on = active === it.key;
+          return (
+            <li key={it.key} className="border-b border-deepsea-500/10 last:border-b-0">
+              <button onClick={() => show(it.key, true)} className={`flex min-h-14 w-full items-center gap-4 py-3 text-left transition-colors ${on ? "text-deepsea-500" : "text-limestone-900"}`}>
+                <Num n={0} gate on={on} />
+                <span className="flex flex-1 flex-col gap-1">
+                  <span className="t-body b-16">{GATES_TITLE}</span>
+                  <span className="t-label l-12 text-limestone-800">{it.pins.length} entrances</span>
+                </span>
+                <Icon name="arrow-right-01-sharp" size={18} className="flex-none text-deepsea-500/60" />
+              </button>
+            </li>
+          );
+        })}
       </ol>
-      {gates.length > 0 && <div className="mt-6 flex flex-col gap-3">
-        <Key />
-        <div className="flex flex-wrap gap-2">
-          {gates.map((it) => (
-            <button key={it.key} onClick={() => show(it.key, true)}
-              className={`flex h-11 items-center gap-2 rounded-full border pl-1.5 pr-4 t-label l-14 transition-colors ${active === it.key ? "border-deepsea-500 text-deepsea-500" : "border-deepsea-500/15 text-limestone-900"}`}>
-              <Num n={it.n} gate on={active === it.key} />Gate {it.n}
-            </button>
-          ))}
-        </div>
-      </div>}
     </div>
 
     {/* phones and tablets: the place in the bottom sheet (the Figma Drawer, as on the hotel and unit cards) */}
@@ -173,7 +182,7 @@ export default function MasterplanMap({ image, pins: all, initial = 0, view = FU
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-3">
           <Num n={cur.n} gate={cur.gate} />
-          <span className="t-label l-14 text-limestone-800">{cur.gate ? "Gate" : "On the masterplan"}{cur.pins.length > 1 ? ` · marked in ${cur.pins.length} places` : ""}</span>
+          <span className="t-label l-14 text-limestone-800">{cur.gate ? `${cur.pins.length} entrances, the rust dots on the map` : `On the masterplan${cur.pins.length > 1 ? ` · marked in ${cur.pins.length} places` : ""}`}</span>
         </div>
         <h3 className="t-heading hd-32">{d.title}</h3>
         <p className="t-body b-16 text-limestone-800">{d.body}</p>
@@ -183,11 +192,15 @@ export default function MasterplanMap({ image, pins: all, initial = 0, view = FU
   );
 }
 
-/** The pin's number badge, for the list, the gate chips and the sheet. */
+const GATES_TITLE = "City gates";
+
+/** The pin's badge for the list and the sheet: a highlight's number, or the gates' rust dot (as drawn on the map). */
 function Num({ n, gate = false, on = false }: { n: number; gate?: boolean; on?: boolean }) {
+  if (gate) return (
+    <span className="grid size-8 flex-none place-items-center"><span className={`size-4 rounded-full ${on ? "bg-deepsea-500" : "bg-rust-500"}`} /></span>);
   return (
-    <span className={`grid flex-none place-items-center rounded-full t-label leading-none tabular-nums ${gate ? "size-8 text-[12px]" : "size-8 text-[13px]"}
-      ${on ? "bg-deepsea-500 text-limestone-50" : gate ? "bg-rust-500 text-limestone-50" : "border border-deepsea-500/20 bg-limestone-50 text-deepsea-500"}`}>{n}</span>
+    <span className={`grid size-8 flex-none place-items-center rounded-full t-label text-[12px] leading-none tabular-nums
+      ${on ? "bg-deepsea-500 text-limestone-50" : "border border-deepsea-500/20 bg-limestone-50 text-deepsea-500"}`}>{n}</span>
   );
 }
 

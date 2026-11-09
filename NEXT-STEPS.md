@@ -3,7 +3,7 @@
 ## Handoff — 9 Nov 2026 (phone responsiveness pass 3)
 
 ### Rules the owner set (follow them)
-- **4 px type grid:** every font size and line height sits on the 4 px grid; only 14 px and 18 px may be off it. Never
+- **4 px type grid:** every font size and line height sits on the 4 px grid; only 14 px and 18 px may be off it; nothing under 12 px. Never
   suggest 13 / 15 / 17 px. Pairings in use: 12/16 or 12/18, 14/20, 16/24, 32/36.
 - **Phone cards in two-column grids:** title 14/20, secondary line 12/18; labels that explain a number 14/20.
   Spacing photo → first line 12 px, line → line 4 px.
@@ -31,22 +31,81 @@
 - `SmoothScroll.tsx`: `ScrollTrigger.refresh()` whenever the page height changes (fixes entrances stuck at opacity 0,
   e.g. the Milestones title on a phone).
 
-### Next (agreed with the owner, not started)
-1. **Full-bleed heroes on phones** (owner chose option A): About (Manifesto), Destination, Communities, Experiences
-   (PageHero) switch to Home's phone hero: full-screen photo, tag / title / body in Limestone at the bottom over a
-   soft shade. About's desktop end state already looks like this. Listing heroes (FAQ, Events, Media, Careers) stay.
-2. **Hero text sizes** — owner feels the descriptions take too much space. Measured at 375 px:
-   | Page | Title | Description |
-   |---|---|---|
-   | Home | 32.6/35.9 (off grid) | 16/24, 4 lines |
-   | About | 26/26 | 16/24, 3 lines |
-   | Destination | 26/29.7 (off grid) | 16/24, 4 lines (section 900 px) |
-   | Sustainability | 34/37.4 (off grid) | 18/27 (off grid), 5 lines |
-   | FAQ | 32/30.1 (off grid) | 16/24, 3 lines |
-   Proposal to put to the owner: titles 32/36 and descriptions 14/20 on phones, on the grid.
-3. **Nearby map (About) — owner chose option 1 only:** crop the phone swipe strip to the coast (a ~4:3 frame on the
-   coastline and pins instead of the full 1512 × 1024 drawing, which is ~660 px tall and mostly desert). No distance
-   list.
+### Done after the handoff (9 Nov, same day)
+1. **Full-bleed heroes below lg:** About (Manifesto), Destination, Communities, Experiences (PageHero) now open like
+   Home on phones and tablets: full-screen photo, tag / title / body in Limestone 48 px from the foot over
+   `.hero-film-shade`; the photo fades in from a 1.08 zoom, then the copy blurs in. Desktop (lg) is unchanged.
+2. **Hero type on phones:** `.hero-t` (32/36) and `.hero-b` (14/20) in globals.css, on every hero: Home, PageHero,
+   Manifesto, SingleHero (Sustainability, community and experience pages), ListingHero (FAQ, Events, Media, Careers).
+3. **Nearby map below lg:** the strip is a 4:3 window (`CAM` in Nearby.tsx). The camera holds the coast band, glides
+   down the road to Cairo as it draws, and rests with Cairo and its label in full (`REST_X` 1260); once swiped it
+   follows the strip (coast west of x 1000, Cairo east of 1200). No distance list.
+4. **Masterplan gates below lg (owner disliked the 7 gate chips):** the gates are one place, "City gates": one row
+   at the end of the list and one sheet; on the map they are plain rust dots, so only highlights carry numbers.
+   Desktop keeps its plus pins and the Highlights · Gates key.
+5. **Nearby camera fix:** the camera is re-placed by a ResizeObserver (it was left at 0 after a resize, cutting off
+   the "You are here" badge), and its quickTo tween is killed on cleanup.
+6. **Nearby on phones (below md), owner's call:** the whole map fits the screen width, full bleed, no swipe, no
+   tan section background; pins show distances only (no names, no "Mediterranean Sea"); Alamein gets a longer leader
+   and Cairo's distance sits left of its pin (`PHONE` in Nearby.tsx); the "You are here" badge is smaller and stacked, logo above the name, no "You are here" (coin 24 px,
+   text 12/18). Tablets keep the 4:3 swipe strip with the camera; desktop is unchanged.
+7. **Nearby spacing:** the section has no vertical padding of its own below lg, so the gaps to Milestones above and
+   the visa FAQ below are the site's 80 px (they were 160 px: its 80 stacked on the neighbours' 80).
+8. **Masterplan list header:** "Swipe the map, or pick a place below" is replaced by the Highlights · Gates key
+   (below lg, maps with gates); the City gates row reads "7 entrances".
+9. **Visa card (Connectivity, below lg):** 16 px padding, label 14/20 with a 16 px icon, headings 18/24, body 14/20,
+   tighter gaps (227 px tall on a 375 px phone, was ~290). Desktop unchanged.
+10. **12 px floor (owner rule: never below 12 px):** Nearby's desktop label floors 9–11 → 12, the Contact map credit
+    10 → 12/16 and its city pills' clamp floor 11 → 12, masterplan pin numbers 13 → 12 (13 was off the 4 px grid).
+    Audited Home, About, Contact at 375 / 768 / 1024: nothing renders under 12 px.
+11. **Destination phone motion, closer to desktop:** Water strategy below lg has no card (copy on the sand, film at
+    `object-[40%_50%]`, facts in two columns, 18/24 over 14/20 on phones; 1250 → 867 px tall). In Town fades the
+    inactive modes to 35 % on phones too. History below lg: the timeline's rail draws downward with the scroll and each
+    date rises in as it is reached (CoastHistory), the coin turns as the panel passes, the flower drifts (RomansIntro).
+    Then replaced, same day, at the owner's request ("match the drawing animation"): below lg the coast panel pins
+    (`[data-pin]`, +180 %) and plays the real coastline drawing, 1100 px wide in a full-bleed window that slides left
+    as the line draws, stops rising in as reached, coin turning. "A Year-Around City" is hidden below lg.
+    Then (owner: "all of it in the viewport like desktop"): no sliding; the whole drawing at the screen's width
+    (aspect 335/150), dates only on the line (alternately above/below), each stop's text in one caption under the
+    drawing as the line reaches it. The dash and the stop timings use the line's on-screen length (non-scaling-stroke
+    measures dashes on screen, and the drawing is squeezed far more across than down).
+12. **In Town below lg:** no sticky band; the coin and the text pin together, centred (`pinSpacing: true`, the
+    section is a flex column), and the scroll cross-fades the modes (photo from a 1.08 zoom, text blurs out up/in).
+    Hero, To Town, Arch, Landmarks, FAQ, CTA already matched.
+13. **Phone menu:** a slide-in page per group was tried and reverted at the owner's request; the inline accordion
+    stays, flush left with its heading.
+14. **Register Interest form below lg (neighbourhood CTA):** the photo is a band on top (min(100vw, 480px), the
+    children in view) and the card rises 64 px over it with a soft shadow, instead of a full-height card framing a
+    thin strip of photo; fields tighter (label → field 4 px, 12 px under, 20 px apart; message 80 px); inputs stay
+    16 px so iOS does not zoom on focus. Card 731 → 607 px. Desktop unchanged.
+15. **Drawer thumbnails (HotelsList, hotel and unit drawers):** the selected thumbnail is the wide one, easing over
+    (flex-grow 1.8 vs 1, 500 ms) on every screen size; it was always the first.
+16. **Experiences page:** a grid at every size: two columns below lg (name 14/20 over note 12/18 on phones), three
+    from lg; no swipe track or controls. Detail pages keep their slider.
+17. **Masterplan key:** the Highlights · Gates key under the desktop map is removed; phones keep it above the list.
+18. **Experience cards:** the "Explore" chip is now a round arrow only (36 px phones, 40 px up).
+
+19. **Community pages all alike (owner chose draft placeholders):** Lagoon, Marina boulevard, Resort, Golf and Town
+    centre now have hero facts, Unit types (3 each, same drawer) and Landmarks and leisure (4 rows), from `drafts`
+    in lib/neighbourhoods.ts. **Everything below is DRAFT, to replace with client content before launch.**
+    | Community | Hero facts | Unit types (beds · from · outdoor) | Facilities |
+    |---|---|---|---|
+    | Lagoon | 22 km waterfront and lagoons · 5 min water taxi to the marina · 3 unit types | Lagoon villa 4 · 380 m² · private deck, lagoon access; Waterside townhouse 3 · 240 m² · garden, lagoon view; Lagoon apartment 2 · 130 m² · terrace over the water | Swimmable lagoons, Water-taxi stops, Lagoon promenade, Kids' club |
+    | Marina boulevard | 2 marinas · 5 min walk to the town centre · 3 | Marina apartment 2 · 150 m² · balcony, marina view; Boulevard duplex 3 · 220 m² · terrace; Marina penthouse 4 · 320 m² · roof terrace, sea view | Marina berths, Yacht club, Dining on the quay, Market square |
+    | Resort | 24/7 concierge · all-year pools, spas, dining · 3 | Serviced suite 1 · 85 m²; Serviced apartment 2 · 140 m² · pool access; Resort villa 4 · 400 m² · private pool | Hotel spa, Pools, Beach club, Residents' lounge |
+    | Golf | 18 holes · 98 hectares of greens (from the 980,000 m² line) · 3 | Fairway villa 5 · 480 m² · private pool; Golf townhouse 3 · 250 m² · garden; Clubhouse apartment 2 · 135 m² · terrace | Clubhouse, Golf academy, Practice range, Fitness club |
+    | Town centre | 5 min walk to errands · all-day cafés and dining · 3 | Boulevard apartment 2 · 120 m²; Town loft 1 · 85 m²; Courtyard townhouse 3 · 210 m² | Shopping arcades, Dining, Events centre, Nursery and school |
+    Photos are reused from the hotels, marina, experiences, sustainability and Beachfront sets (some repeat across pages).
+20. **Masterplan phone list:** no rule above the first row or under the last (City gates).
+21. **No orphans, site-wide (owner rule):** `text-wrap: pretty` on body (globals.css) plus components/NoOrphans.tsx
+    (mounted in app/layout.tsx): after hydration and on every DOM change it ties each text block's last two words with a
+    no-break space (3+ words always; 2-word blocks only while the pair fits its box, re-checked on resize). Fixes that
+    the audit turned up: footer links no longer wrap ("Media / Center"), In Town's text column at lg is
+    `1fr` beside a `min(656px, 45%)` coin (was 208 px at 1024), Water strategy fact titles 16/24 on phones. Audited
+    12–16 pages at 375 / 768 / 1024 / 1440: none left (an email's deliberate break after "@" and hyphen breaks aside).
+22. **Keep Reading (article pages):** a swipe row on phones, as an event's More events.
+23. **Job detail facts:** two by two on phones too (16/24 over 14/20).
+- Screenshots: `local-assets/responsive-qa/2026-11-09-heroes/`.
 
 ## 27 Oct — phone pass 2, articles and events
 - Shared phone rules (below lg; desktop unchanged): footer link groups are accordions; the CTA film sits on top and

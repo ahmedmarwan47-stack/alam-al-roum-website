@@ -1,7 +1,9 @@
 /**
  * Neighbourhood detail pages (Figma "Neighbourhood Detail • Desktop", 10921:9807).
- * Beachfront is fully designed in Figma; the other five communities use the same template,
- * filled from their community card (no unit types or facilities until those are designed).
+ * Beachfront is fully designed in Figma; the other five communities use the same template, filled from their
+ * community card plus DRAFT unit types, facilities and hero facts (9 Nov, owner's call, so every page has the same
+ * sections): every figure and line in `drafts` below is a placeholder to replace with the client's content before
+ * launch, and the photos are reused from the site's other sets. The full list is in NEXT-STEPS.md.
  */
 import type { SingleHeroData } from "@/components/sections/SingleHero";
 import type { OverviewData } from "@/components/sections/Overview";
@@ -106,13 +108,103 @@ const detail: Record<string, { line: string; overview: OverviewData }> = {
         ["Evenings on the boulevard", "Dining and the waterfront tables stay busy into the night, with music, markets and a long walk to the marina to close the day."]] } },
 };
 
+// ── DRAFT content for the five communities without a Figma design (placeholders, not client figures) ──
+const ex = (f: string) => `/images/experiences/${f}.webp`, ho = (f: string) => `/images/hotels/${f}.webp`;
+const ma = (f: string) => `/images/marina/${f}.webp`, su = (f: string) => `/images/sustainability/${f}.webp`;
+type Unit = [name: string, beds: string, area: string, outdoor: string, photo: string, body: string];
+/** Three unit cards in Beachfront's shape (same drawer, specs and actions). */
+const units = (where: string, body: string, list: Unit[], extra: string): HotelsData => ({
+  tag: "Residences", title: "Unit types", body, cols: "sm:grid-cols-3", bodyWidth: 560, kind: "unit", extra: [extra],
+  items: list.map(([name, beds, area, outdoor, photo, text]) => ({
+    name, type: `${beds} · From ${area} · ${outdoor}`, photo, card: { w: 456, h: 684 }, body: text,
+    specs: [["bed", "Bedrooms", beds.replace(/beds?$/, (w) => (w === "beds" ? "bedrooms" : "bedroom"))], ["ruler", "Built-up area", `From ${area}`], ["terrace", "Outdoor", outdoor], ["location-01", "Neighbourhood", where]],
+  })),
+});
+/** Four Landmarks rows; one photo serves as both the backdrop and the inset. */
+const facilities = (body: string, rows: [string, string, string][]): LandmarksData => ({
+  title: "Landmarks and leisure", body, rows: rows.map(([title, text, photo]) => ({ title, body: text, large: photo, inset: photo })),
+});
+const drafts: Record<string, Pick<Neighbourhood, "units" | "facilities"> & { facts: [string, string][] }> = {
+  lagoon: {
+    facts: [["22 km", "Waterfront and lagoons"], ["5 min", "Water taxi to the marina"], ["3", "Unit types"]],
+    units: units("Lagoon neighbourhood", "Three ways to live on the water. Each with its own floor plans, specifications, and brochure.", [
+      ["Lagoon villa", "4 beds", "380 m²", "Private deck · Lagoon access", n("unit-villa"), "A four-bedroom villa with a private deck stepping down into the lagoon."],
+      ["Waterside townhouse", "3 beds", "240 m²", "Garden · Lagoon view", n("unit-townhouse"), "A three-bedroom townhouse with a garden on the water's edge."],
+      ["Lagoon apartment", "2 beds", "130 m²", "Terrace over the water", ho("lagoon-retreat"), "A two-bedroom apartment with a terrace above the lagoon promenade."],
+    ], su("c2-large")),
+    facilities: facilities("Life on the water is walkable: swimmable lagoons, water-taxi stops, shaded promenades and a kids' club.", [
+      ["Swimmable lagoons", "Clear, calm water at the garden's edge", su("c2-large")],
+      ["Water-taxi stops", "Boats to the marina and the town centres", ma("h1-large")],
+      ["Lagoon promenade", "Shaded walks and bridges between districts", ph("ui-g-boardwalk")],
+      ["Kids' club", "Supervised play and a splash park", n("f4-large")],
+    ]),
+  },
+  "marina-boulevard": {
+    facts: [["2", "Marinas, international and local"], ["5 min", "Walk to the town centre"], ["3", "Unit types"]],
+    units: units("Marina boulevard", "Three ways to live on the quay. Each with its own floor plans, specifications, and brochure.", [
+      ["Marina apartment", "2 beds", "150 m²", "Balcony · Marina view", ho("marina-hotel"), "A two-bedroom apartment with a balcony over the berths."],
+      ["Boulevard duplex", "3 beds", "220 m²", "Terrace over the promenade", ph("ui-g-terraces"), "A three-bedroom duplex with a terrace above the promenade."],
+      ["Marina penthouse", "4 beds", "320 m²", "Roof terrace · Sea view", ex("hotels-suite"), "A four-bedroom penthouse with a roof terrace over the marina and the sea."],
+    ], ma("h2-large")),
+    facilities: facilities("Everything happens on the waterfront: berths, the yacht club, dining on the quay and a weekly market.", [
+      ["Marina berths", "International and local berths, with services", ma("h1-large")],
+      ["Yacht club", "Sailing school, charters and regattas", ex("marina-sailing")],
+      ["Dining on the quay", "Cafés and restaurants from morning to late", ex("dining-evening")],
+      ["Market square", "Weekly markets and music on the promenade", ma("ev-market")],
+    ]),
+  },
+  resort: {
+    facts: [["24/7", "Concierge and housekeeping"], ["All year", "Pools, spas and dining"], ["3", "Unit types"]],
+    units: units("Resort district", "Three ways to live with hotel service. Each with its own floor plans, specifications, and brochure.", [
+      ["Serviced suite", "1 bed", "85 m²", "Balcony · Hotel services", ph("ui-v-lounge"), "A one-bedroom suite with the hotel's housekeeping, dining and concierge."],
+      ["Serviced apartment", "2 beds", "140 m²", "Terrace · Pool access", ex("hotels-pool"), "A two-bedroom apartment beside the hotel pools, with hotel services."],
+      ["Resort villa", "4 beds", "400 m²", "Private pool · Hotel services", n("unit-villa"), "A four-bedroom villa with a private pool, served by the hotel."],
+    ], ho("beachfront-resort")),
+    facilities: facilities("Hotel life all year: a spa, pools, a beach club and a residents' lounge with a concierge.", [
+      ["Hotel spa", "Treatment rooms, hammam and rest areas", ex("wellness-rest")],
+      ["Pools", "Lap and leisure pools, open in every season", ph("ui-g-pool")],
+      ["Beach club", "Cabanas, a pool and dining on the sand", n("f1-large")],
+      ["Residents' lounge", "Concierge, dining and a quiet place to work", ph("ui-g-interior")],
+    ]),
+  },
+  golf: {
+    facts: [["18", "Holes by the sea"], ["98", "Hectares of greens"], ["3", "Unit types"]],
+    units: units("Golf community", "Three ways to live on the course. Each with its own floor plans, specifications, and brochure.", [
+      ["Fairway villa", "5 beds", "480 m²", "Private pool · Course view", n("unit-villa"), "A five-bedroom villa on the fairway, with a private pool and views to the sea."],
+      ["Golf townhouse", "3 beds", "250 m²", "Garden · Course view", n("unit-townhouse"), "A three-bedroom townhouse with a garden opening onto the greens."],
+      ["Clubhouse apartment", "2 beds", "135 m²", "Terrace · Course view", ex("golf-clubhouse-terrace"), "A two-bedroom apartment above the clubhouse terrace."],
+    ], ho("golf-spa")),
+    facilities: facilities("The course sets the day: a clubhouse by the sea, an academy, a practice range and a fitness club.", [
+      ["Clubhouse", "Dining, the lounge and members' evenings", ex("golf-clubhouse-terrace")],
+      ["Golf academy", "Lessons for every level, juniors included", ex("gen/golf-academy")],
+      ["Practice range", "A driving range and putting greens", ex("gen/golf-practice")],
+      ["Fitness club", "Gym, studios and a pool", ex("gen/sports-fitness")],
+    ]),
+  },
+  "town-centre": {
+    facts: [["5 min", "Walk to daily errands"], ["All day", "Cafés and dining"], ["3", "Unit types"]],
+    units: units("Town centre", "Three ways to live above the boulevard. Each with its own floor plans, specifications, and brochure.", [
+      ["Boulevard apartment", "2 beds", "120 m²", "Balcony over the boulevard", ho("town-centre-suites"), "A two-bedroom apartment with a balcony over the commercial boulevard."],
+      ["Town loft", "1 bed", "85 m²", "Double-height living", ph("ui-g-interior"), "A one-bedroom loft with double-height living above the shops."],
+      ["Courtyard townhouse", "3 beds", "210 m²", "Private courtyard", ph("ui-expcenter-court"), "A three-bedroom townhouse around its own shaded courtyard."],
+    ], ph("ui-g-colonnade")),
+    facilities: facilities("Daily life on foot: arcades of shops, dining, an events centre and a nursery and school.", [
+      ["Shopping arcades", "Shops and boutiques under shaded colonnades", ph("ui-g-colonnade")],
+      ["Dining", "Cafés, bakeries and waterfront tables", ex("dining-table")],
+      ["Events centre", "Concerts, talks and exhibitions", ex("gen/culture-events-centre")],
+      ["Nursery and school", "Early years to secondary, within a short walk", ex("gen/education-nursery")],
+    ]),
+  },
+};
+
 const fromCard = (slug: string): Neighbourhood => {
   const c = communities.find((x) => x.slug === slug)!;
   const short = c.name.replace(/ (communities|neighbourhoods|districts|community|quarter)$/i, "");
   return {
     slug,
-    hero: { eyebrow: "Neighbourhood", name: short, line: detail[slug]?.line ?? c.line, photo: c.photo, alt: c.name },
+    hero: { eyebrow: "Neighbourhood", name: short, line: detail[slug]?.line ?? c.line, photo: c.photo, alt: c.name, facts: drafts[slug]?.facts },
     overview: detail[slug]?.overview ?? { tag: "Overview", title: c.name, body: c.body },
+    units: drafts[slug]?.units, facilities: drafts[slug]?.facilities,
     masterplan: { title: `${short} on the masterplan`, body: c.line },
     gallery: pageGallery(short, shots[slug]),
   };

@@ -28,7 +28,7 @@ const Group = ({ title, children }: { title: string; children: ReactNode }) => {
     </div>
   );
 };
-const Links = ({ items }: { items: string[] }) => items.map((i) => <Link key={i} href={routes[i] ?? "#"} className="t-text x-16 hover:opacity-60">{i}</Link>);
+const Links = ({ items }: { items: string[] }) => items.map((i) => <Link key={i} href={routes[i] ?? "#"} className="t-text x-16 whitespace-nowrap hover:opacity-60">{i}</Link>);   // short labels: never split ("Media / Center")
 
 const contactHref = (icon: string, t: string) =>
   icon === "call" ? `tel:${t}` : icon === "whatsapp" ? `https://wa.me/${t.replace(/\D/g, "")}` : icon === "mail-01" ? `mailto:${t}` : routes[t] ?? "#";

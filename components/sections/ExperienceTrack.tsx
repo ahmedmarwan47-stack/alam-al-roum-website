@@ -9,21 +9,29 @@ import { track as T, experiences } from "@/lib/experiences";
 type X = (typeof experiences)[number];
 
 /** One tall card: photo (mask reveal, slow hover zoom) with the Explore chip, then name + fact. `num` adds the slider's index. */
-function Card({ x, delay, num, className = "" }: { x: X; delay: number; num?: number; className?: string }) {
+/** `grid`: a card of the Experiences page grid, which is two columns below lg, so the phone card rules apply there
+ *  (name 14/20 over the note 12/18, photo → name 12 px, 4 px between the lines). */
+function Card({ x, delay, num, grid = false, className = "" }: { x: X; delay: number; num?: number; grid?: boolean; className?: string }) {
   return (
-    <Link href={`/experiences/${x.slug}`} className={`group flex flex-col gap-4 ${className}`}>
+    <Link href={`/experiences/${x.slug}`} className={`group flex flex-col ${grid ? "gap-3 md:gap-4" : "gap-4"} ${className}`}>
       <div className="relative aspect-[448/587] overflow-hidden">
         <RevealImage src={x.photo} alt={x.title} delay={delay} className="h-full w-full"
           imgClassName="transition-transform duration-[1.2s] [transition-timing-function:var(--ease-site)] group-hover:scale-[1.06]" />
         {num !== undefined && <span className="absolute left-4 top-4 t-label l-12 text-black">{String(num).padStart(2, "0")}</span>}
-        <span className="absolute bottom-4 right-4 flex items-center gap-[6px] rounded-full bg-white px-[14px] py-2 t-label l-12 text-black transition-transform duration-500 [transition-timing-function:var(--ease-site)] group-hover:-translate-y-1">
-          {T.cta}<Icon name="arrow-up-right" size={14} />
+        {/* the arrow alone (9 Nov: no "Explore" word); the card's name labels the link */}
+        <span aria-hidden className="absolute bottom-3 right-3 grid size-9 place-items-center rounded-full bg-white text-black transition-transform duration-500 [transition-timing-function:var(--ease-site)] group-hover:-translate-y-1 md:bottom-4 md:right-4 md:size-10">
+          <Icon name="arrow-up-right" size={16} />
         </span>
       </div>
-      <div className="flex items-baseline justify-between gap-4 text-black">
-        <span className="t-heading hd-24">{x.title}</span>
-        <span className="t-body b-14 text-right opacity-60">{x.note}</span>
-      </div>
+      {grid
+        ? <div className="flex min-w-0 flex-col gap-1 text-black md:flex-row md:items-baseline md:justify-between md:gap-4">
+            <span className="t-heading hd-24 max-md:text-[14px]! max-md:leading-5!">{x.title}</span>
+            <span className="t-body b-14 opacity-60 max-md:text-[12px]! max-md:leading-[18px]! md:text-right">{x.note}</span>
+          </div>
+        : <div className="flex items-baseline justify-between gap-4 text-black">
+            <span className="t-heading hd-24">{x.title}</span>
+            <span className="t-body b-14 text-right opacity-60">{x.note}</span>
+          </div>}
     </Link>
   );
 }
@@ -31,8 +39,8 @@ function Card({ x, delay, num, className = "" }: { x: X; delay: number; num?: nu
 /**
  * Detail pages (Figma 11128:14102): the same cards on one horizontal track, 440 px wide, with a progress bar
  * (the visible share of the track, moving with it) and round prev / next controls that step one card at a time.
- * `grid` (the Experiences page): below lg the cards swipe on this track, as The Drop does on a phone; from lg up the
- * same rail is the three-column grid and the controls hide.
+ * `grid` (the Experiences page): a grid at every size (9 Nov), two columns below lg and three from lg, with no
+ * controls; the detail pages keep the swipe track.
  */
 function Slider({ grid = false }: { grid?: boolean }) {
   const rail = useRef<HTMLDivElement>(null);
@@ -52,12 +60,13 @@ function Slider({ grid = false }: { grid?: boolean }) {
   return (
     <>
       <div ref={rail} onScroll={update}
-        className={`-mx-[var(--gutter)] flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-px-[var(--gutter)] px-[var(--gutter)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${grid ? "lg:mx-0 lg:grid lg:grid-cols-3 lg:overflow-visible lg:px-0" : ""}`}>
+        className={grid ? "grid grid-cols-2 gap-x-3 gap-y-8 md:gap-x-6 md:gap-y-10 lg:grid-cols-3 lg:gap-6"
+          : "-mx-[var(--gutter)] flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-px-[var(--gutter)] px-[var(--gutter)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"}>
         {experiences.map((x, k) => grid
-          ? <Card key={x.slug} x={x} delay={(k % 3) * 0.08} className="w-[min(440px,78vw)] flex-none snap-start lg:w-auto" />
+          ? <Card key={x.slug} x={x} grid delay={(k % 2) * 0.08} className="min-w-0" />
           : <div key={x.slug} className="w-[min(440px,78vw)] flex-none snap-start"><Card x={x} delay={Math.min(k, 3) * 0.08} num={k + 1} /></div>)}
       </div>
-      <div className={`flex items-center gap-10 ${grid ? "lg:hidden" : ""}`}>
+      {!grid && <div className="flex items-center gap-10">
         <div className="relative h-[2px] flex-1 overflow-hidden bg-black/15">
           <span className="absolute inset-y-0 left-0 bg-black transition-transform duration-300" style={{ width: `${bar.w * 100}%`, transform: `translateX(${(bar.x / bar.w) * 100}%)` }} />
         </div>
@@ -65,7 +74,7 @@ function Slider({ grid = false }: { grid?: boolean }) {
           <button type="button" aria-label="Previous" onClick={() => step(-1)} disabled={bar.start} className={btn}><Icon name="arrow-left-01-sharp" /></button>
           <button type="button" aria-label="Next" onClick={() => step(1)} disabled={bar.end} className={btn}><Icon name="arrow-right-01-sharp" /></button>
         </div>
-      </div>
+      </div>}
     </>
   );
 }

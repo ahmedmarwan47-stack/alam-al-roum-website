@@ -18,14 +18,14 @@ export default function Locations() {
           <span key={name} style={{ left: `${x}%`, top: `${y}%` }} className="absolute">
             {/* md up: Figma's pill with its icon on the point, covering the basemap's own name for the city; it grows
                 with the map (12 px at Figma's 1392 px map) so it keeps covering that name at every width */}
-            <span className="absolute left-0 top-0 hidden -translate-x-[1.58em] -translate-y-1/2 items-center gap-[0.5em] whitespace-nowrap rounded-full bg-white px-[1em] py-[0.5em] t-label leading-[1.5] text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)] [font-size:clamp(11px,0.862cqw,18px)] md:flex">
+            <span className="absolute left-0 top-0 hidden -translate-x-[1.58em] -translate-y-1/2 items-center gap-[0.5em] whitespace-nowrap rounded-full bg-white px-[1em] py-[0.5em] t-label leading-[1.5] text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)] [font-size:clamp(12px,0.862cqw,18px)] md:flex">
               <Icon name="location-01" className="!size-[1.17em]" />{name}
             </span>
             {/* phones: a dot on the spot and a small label above it (below for Cairo, so it clears the North Coast) */}
             <span className="absolute size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white ring-2 ring-black/70 md:hidden" />
             <span className={`absolute -translate-x-1/2 whitespace-nowrap rounded-full bg-white px-2 py-0.5 t-label l-12 text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)] md:hidden ${name === "Cairo" ? "top-2" : "bottom-2"}`}>{name}</span>
           </span>))}
-        <span className="absolute inset-x-0 bottom-0 hidden bg-white/70 px-2 py-1 t-text text-[10px] leading-3 truncate max-lg:text-[12px] max-lg:leading-4 text-black/80 md:block">{L.credit}</span>
+        <span className="absolute inset-x-0 bottom-0 hidden bg-white/70 px-2 py-1 t-text text-[12px] leading-4 truncate text-black/80 md:block">{L.credit}</span>
       </div>
       <div className="grid gap-10 md:grid-cols-3 md:gap-6">
         {L.offices.map((o) => (

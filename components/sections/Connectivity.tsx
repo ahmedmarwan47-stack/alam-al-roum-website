@@ -26,13 +26,13 @@ export default function Connectivity({ tag, compact = false, visa = !compact }: 
           <RevealMask><RadiusMap /></RevealMask>
           <FlightTimes className="md:hidden" />
         </div>
-        {visa && <div className={`flex flex-col gap-4 rounded-[20px] border border-limestone-50/15 bg-limestone-50/10 p-6 max-lg:order-5 lg:gap-3 lg:rounded-2xl lg:px-5 lg:py-4`}>
-          <span className="flex items-center gap-[10px] t-label l-16 text-limestone-50/80 lg:text-[14px]! lg:leading-5!"><Icon name="airplane-landing-01" size={18} />{c.visa.label}</span>
+        {visa && <div className={`flex flex-col gap-3 rounded-2xl border border-limestone-50/15 bg-limestone-50/10 p-4 max-lg:order-5 lg:gap-3 lg:rounded-2xl lg:px-5 lg:py-4`}>
+          <span className="flex items-center gap-2 t-label l-14 text-limestone-50/80 lg:text-[14px]! lg:leading-5!"><Icon name="airplane-landing-01" size={16} />{c.visa.label}</span>
           {/* side by side from sm; stacked on a phone, where two columns would be ~130px each */}
-          <div className="flex flex-col gap-5 sm:flex-row sm:gap-7">
+          <div className="flex flex-col gap-3 sm:flex-row sm:gap-7">
             {c.visa.points.map(([h, b], k) => (
-              <div key={h} className={`flex flex-1 flex-col gap-2 lg:gap-1 ${k ? "relative border-t border-limestone-50/20 pt-5 sm:border-t-0 sm:pt-0 sm:before:absolute sm:before:-left-[14.5px] sm:before:inset-y-0 sm:before:w-px sm:before:bg-limestone-50/20" : ""}`}>
-                <RevealText text={h} className="t-heading hd-24 lg:text-[20px]! lg:leading-7!" /><RevealText text={b} className="t-body b-16 text-limestone-50/80 lg:text-[14px]! lg:leading-5!" delay={0.08} /></div>))}
+              <div key={h} className={`flex flex-1 flex-col gap-1 ${k ? "relative border-t border-limestone-50/20 pt-3 sm:border-t-0 sm:pt-0 sm:before:absolute sm:before:-left-[14.5px] sm:before:inset-y-0 sm:before:w-px sm:before:bg-limestone-50/20" : ""}`}>
+                <RevealText text={h} className="t-heading text-[18px] leading-6 lg:text-[20px]! lg:leading-7!" /><RevealText text={b} className="t-body b-14 text-limestone-50/80 lg:text-[14px]! lg:leading-5!" delay={0.08} /></div>))}
           </div>
         </div>}
       </div>

@@ -51,11 +51,11 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
           </div>
           <Button label="Apply For This Role" href={apply} variant="light" className="self-start lg:self-auto" />
         </div>
-        <dl className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <dl className="grid grid-cols-2 gap-x-4 gap-y-6 md:gap-x-6 lg:grid-cols-4">
           {r.facts.map(([k, v]) => (
-            // stacked (phones) or two by two (tablets): rules only between the rows; one row from lg, each fact under its cap
-            <div key={k} className="flex flex-col gap-3 border-t border-white/40 pt-6 max-sm:first:border-t-0 max-sm:first:pt-0 sm:max-lg:[&:nth-child(-n+2)]:border-t-0 sm:max-lg:[&:nth-child(-n+2)]:pt-0">
-              <dt className="t-heading hd-20">{k}</dt><dd className="t-body b-16 text-white/80">{v}</dd>
+            // two by two below lg, phones included (9 Nov): rules only between the rows; one row from lg, each fact under its cap
+            <div key={k} className="flex min-w-0 flex-col gap-1 border-t border-white/40 pt-6 max-lg:[&:nth-child(-n+2)]:border-t-0 max-lg:[&:nth-child(-n+2)]:pt-0 md:gap-3">
+              <dt className="t-heading hd-20 max-md:text-[16px]! max-md:leading-6!">{k}</dt><dd className="t-body b-16 text-white/80 max-md:text-[14px]! max-md:leading-5!">{v}</dd>
             </div>))}
         </dl>
       </section>

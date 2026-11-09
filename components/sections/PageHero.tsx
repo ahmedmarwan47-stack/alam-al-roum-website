@@ -29,12 +29,19 @@ export default function PageHero({ data: H }: { data: PageHeroData }) {
   useEffect(() => {
     const el = photo.current!, w = wrap.current!, q = gsap.utils.selector(w);
     if (reducedMotion()) return;
-    const intro = gsap.timeline({ delay: 0.3, defaults: { ease: "aSettle" } })
-      .add(blurIn(q("[data-pre], h1, [data-body]")))
+    const lg = matches(MQ.lg);
+    const intro = gsap.timeline({ delay: 0.3, defaults: { ease: "aSettle" } });
+    // below lg the photo is the full-screen backdrop: it fades in and settles from a slight zoom, then the copy blurs in over it
+    if (!lg) {
+      intro.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 1.1 }, 0)
+        .fromTo(el.querySelector("img"), { scale: 1.08 }, { scale: 1, duration: 1.6 }, 0)
+        .add(blurIn(q("[data-pre], h1, [data-body]")), 0.35);
+      return () => { intro.kill(); };
+    }
+    intro.add(blurIn(q("[data-pre], h1, [data-body]")))
       .addLabel("shown", 0.5)
       .fromTo(el, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1 }, "shown")
       .fromTo(rule.current, { scaleX: 0 }, { scaleX: 1, duration: 1.1 }, "shown");
-    if (!matches(MQ.lg)) return () => { intro.kill(); };
     // the light layer's clip follows the photo's box exactly (both linear, from the same rect to the full wrap)
     const box = () => `inset(${el.offsetTop}px ${w.offsetWidth - el.offsetLeft - el.offsetWidth}px ${w.offsetHeight - el.offsetTop - el.offsetHeight}px ${el.offsetLeft}px)`;
     const tl = gsap.timeline({ paused: true, defaults: { ease: "none" } })
@@ -49,31 +56,33 @@ export default function PageHero({ data: H }: { data: PageHeroData }) {
     return () => { intro.kill(); st.kill(); tl.kill(); };
   }, []);
   const copy = (light: boolean) => (
-    <div aria-hidden={light || undefined} className={`relative flex flex-col gap-4 py-16 container-x lg:absolute lg:left-0 lg:top-[calc(30.3%+53px)] lg:py-0 ${light ? "text-limestone-50" : "text-deepsea-500"}`}>
+    <div aria-hidden={light || undefined} className={`relative flex flex-col gap-4 container-x max-lg:absolute max-lg:inset-x-0 max-lg:bottom-12 max-lg:z-[1] lg:absolute lg:left-0 lg:top-[calc(30.3%+53px)] ${light ? "text-limestone-50" : "text-deepsea-500 max-lg:text-limestone-50"}`}>
       <span data-pre={light ? undefined : ""} data-reveal={light ? undefined : ""} className="t-label l-tag">{H.pre}</span>
       {(() => {
         const Tag = light ? "div" : "h1";
         return (
-          <Tag data-reveal={light ? undefined : ""} className="t-heading hd-56 max-w-[1000px]">
+          <Tag data-reveal={light ? undefined : ""} className="t-heading hd-56 hero-t max-w-[1000px]">
             {H.title.map((s, k) => (
               <Fragment key={k}>{s.br && <br />}{k > 0 && !s.br && " "}{s.i ? <span className="t-accent">{s.t}</span> : s.t}</Fragment>))}
           </Tag>);
       })()}
-      <div data-body={light ? undefined : ""} data-reveal={light ? undefined : ""} className={light ? "text-limestone-50/90" : "text-limestone-800"}>
-        <p className="t-body b-18 wrap-balance max-w-[520px]">{H.body}</p></div>
+      <div data-body={light ? undefined : ""} data-reveal={light ? undefined : ""} className={light ? "text-limestone-50/90" : "text-limestone-800 max-lg:text-limestone-50/90"}>
+        <p className="t-body b-18 hero-b wrap-balance max-w-[520px]">{H.body}</p></div>
     </div>
   );
   return (
     // the pinned node is the inner div, so GSAP's pin-spacer never wraps the element React owns
     <section data-hero>
-    <div ref={wrap} className="relative overflow-hidden bg-limestone-50 lg:h-[100svh] lg:min-h-[716px]">
+    <div ref={wrap} className="relative h-[100svh] min-h-[636px] overflow-hidden bg-limestone-50 lg:min-h-[716px]">
       {/* slot from Figma (1512 × 760 under the bar): left 1092, top 480, 360 × 240, sitting on the rule. Phones: the photo
-          runs up under the bar, the copy below it. From lg the photo lies over the dark copy (z-1), the light layer over
+          fills the screen (Home's phone hero), up under the bar, and the copy sits at its foot in Limestone over the shade. From lg the photo lies over the dark copy (z-1), the light layer over
           both (z-2). Wider than 1512 it stays 360 wide on the right content edge, and on a tall screen at most 300 tall */}
-      <div ref={photo} data-reveal className="relative h-[calc(60vh+76px)] overflow-hidden lg:absolute lg:z-[1] lg:left-[calc(100%-max(4%,var(--gutter))-min(23.8%,360px))] lg:top-[calc(94.8%+4px-min(31.6%-24px,300px))] lg:h-[min(calc(31.6%-24px),300px)] lg:w-[min(23.8%,360px)] lg:rounded-[2px]">
+      <div ref={photo} data-reveal className="absolute inset-0 overflow-hidden lg:inset-auto lg:z-[1] lg:left-[calc(100%-max(4%,var(--gutter))-min(23.8%,360px))] lg:top-[calc(94.8%+4px-min(31.6%-24px,300px))] lg:h-[min(calc(31.6%-24px),300px)] lg:w-[min(23.8%,360px)] lg:rounded-[2px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={H.photo} srcSet={srcSet(H.photo)} alt={H.alt ?? ""} className="h-full w-full object-cover" />
       </div>
+      {/* below lg: the shade the copy sits on (Home's, `.hero-film-shade`) */}
+      <div className="hero-film-shade pointer-events-none absolute inset-0 lg:hidden" />
       {copy(false)}
       <div ref={lit} aria-hidden className="pointer-events-none absolute inset-0 z-[2] hidden [clip-path:inset(calc(94.8%_+_4px_-_min(31.6%_-_24px,300px))_max(4%,var(--gutter))_calc(5.2%_-_4px)_calc(100%_-_max(4%,var(--gutter))_-_min(23.8%,360px)))] lg:block">
         {/* the shade under the light copy (`.hero-side-shade`, held dark across the copy column) */}

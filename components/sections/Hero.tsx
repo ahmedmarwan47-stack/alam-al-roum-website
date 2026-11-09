@@ -12,9 +12,9 @@ export default function Hero() {
       <div className="hero-film-shade pointer-events-none absolute inset-0" />
       <div className="absolute inset-x-0 bottom-[84px] flex items-end justify-between container-x">
         <div className="flex max-w-[716px] flex-col gap-5 md:max-w-none">
-          <RevealText as="h1" segs={hero.title} onLoad delay={0.75} className="t-heading x-80 md:whitespace-nowrap" />
+          <RevealText as="h1" segs={hero.title} onLoad delay={0.75} className="t-heading x-80 hero-t md:whitespace-nowrap" />
           {/* a comfortable measure: two even lines of about 65 characters on desktop */}
-          <RevealText text={hero.body} onLoad delay={1.05} className="t-body b-18 wrap-balance max-w-[560px]" />
+          <RevealText text={hero.body} onLoad delay={1.05} className="t-body b-18 hero-b wrap-balance max-w-[560px]" />
           <div className="pt-1"><Button label={hero.cta} href="/contact" size={64} variant="light" /></div>
         </div>
         <div className="hidden flex-col items-end gap-[10px] md:flex">

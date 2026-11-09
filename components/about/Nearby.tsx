@@ -11,15 +11,28 @@ const W = 1512, H = 1024;
 const pct = (v: number, of: number) => `${(v / of) * 100}%`;
 /**
  * Type sized in container units so labels scale with the map like the SVG, never below a readable floor
- * (`min` from lg up, `minSm` below lg, where the map is a narrow strip and Figma's floors fell to 9–10 px).
+ * (`min` from lg up, `minSm` below lg; never under 12 px, the site's floor for any text).
  * Use with the CQ class, which reads the two variables.
  */
 const cq = (px: number, min: number, minSm = 12) =>
   ({ "--cq": `${(px / W) * 100}cqw`, "--cq-min": `${min}px`, "--cq-min-sm": `${minSm}px`, lineHeight: 1.45 }) as CSSProperties;
 // phones: the labels sit at their 12 px floor; a 16 px line keeps them on the 4 px grid (the inline 1.45 is for larger sizes)
 const CQ = "[font-size:max(var(--cq-min),var(--cq))] max-lg:[font-size:max(var(--cq-min-sm),var(--cq))] max-md:leading-4!";
-/** Below lg the strip follows the drawing's head and comes to rest centred here (frame x), with Alexandria and Cairo in view. */
-const REST_X = 1190;
+/**
+ * Phones (below md, 9 Nov): the whole drawing fits the screen width, full bleed, with no swiping; each pin shows only
+ * its distance (no place names, which could not clear each other at this size). Where two distances would still touch,
+ * a pin gets a longer leader on phones (`tick`) or its distance sits to the left of the leader (`end`).
+ */
+const PHONE: Record<string, { tick?: number; end?: boolean }> = { Alamein: { tick: 230 }, Cairo: { end: true } };
+/** Below lg the strip follows the drawing's head and comes to rest centred here (frame x, clamped to the strip's end): Cairo and its label in full (and Alexandria too on a tablet). */
+const REST_X = 1260;
+/**
+ * Below lg the strip is a 4:3 window on the drawing (9 Nov), not its full height (mostly desert): the camera holds the
+ * coast band (frame y), then glides down the road to Cairo. While the drawing plays it follows the road's progress;
+ * once the visitor swipes, it follows the strip's position (the coast west of x0, Cairo east of x1).
+ */
+const CAM = { coast: 315, cairo: 690, x0: 1000, x1: 1200 };
+const smooth = (f: number) => { const c = Math.min(1, Math.max(0, f)); return c * c * (3 - 2 * c); };
 
 /**
  * Nearby, after the Figma "UI / Coastline drawing (Nearby)" prototype. Not pinned and not tied to the scroll
@@ -38,7 +51,31 @@ export default function Nearby() {
     const roadClip = el.querySelector("[data-road-clip]")!;
     const strip = el.querySelector<HTMLElement>("[data-strip]")!, map = el.querySelector<HTMLElement>("[data-map]")!;
     const pins = N.places.map((_, k) => ({ dot: q(`[data-dot="${k}"]`), tick: q(`[data-tick="${k}"]`), label: q(`[data-label="${k}"]`) }));
-    if (reducedMotion()) return;
+
+    // the camera (below lg): a vertical offset on the map inside the 4:3 strip; none from lg, where the map is whole
+    const camY = gsap.quickTo(map, "y", { duration: 0.6, ease: "power3.out" });
+    const camAt = (cy: number) => {
+      const mh = map.offsetHeight, sh = strip.clientHeight, sc = map.offsetWidth / W;
+      return mh <= sh + 1 ? 0 : -Math.min(mh - sh, Math.max(0, cy * sc - sh / 2));
+    };
+    const byX = () => {
+      const cx = (strip.scrollLeft + strip.clientWidth / 2) / (map.offsetWidth / W);
+      return CAM.coast + smooth((cx - CAM.x0) / (CAM.x1 - CAM.x0)) * (CAM.cairo - CAM.coast);
+    };
+    // `road`: how far down the road the drawing's camera has gone (0 coast … 1 Cairo), set while it plays
+    let own = false, road = 0;
+    const roadY = () => CAM.coast + smooth(road) * (CAM.cairo - CAM.coast);
+    // where the camera should be now: the strip's position once swiped (or with reduced motion), else the drawing's
+    const target = () => (own || reducedMotion() ? byX() : roadY());
+    const onScroll = () => { if (own || reducedMotion()) camY(camAt(byX())); };
+    // re-placed whenever the strip or the map changes size (a rotation, a resize across lg, late CSS), not just on load
+    // (through camY, with the start set to the end: a jump; a gsap.set would be undone by camY's running tween)
+    const ro = new ResizeObserver(() => { const y = camAt(target()); camY(y, y); });
+    ro.observe(strip); ro.observe(map);
+    strip.addEventListener("scroll", onScroll, { passive: true });
+    // camY's tween is killed too, or a leftover one (a remount) would pull the map back to its own end value
+    const off = () => { strip.removeEventListener("scroll", onScroll); ro.disconnect(); camY.tween.kill(); };
+    if (reducedMotion()) return off;
 
     // pathLength="1" on both halves, so dashoffset 1 → 0 draws them from Alam Al Roum outward
     gsap.set([west, east], { attr: { "stroke-dasharray": 1, "stroke-dashoffset": 1 } });
@@ -68,11 +105,12 @@ export default function Nearby() {
     });
 
     // below lg: the strip keeps the line's head at ~60 % of its width, then rests centred on REST_X, until it is touched
-    let own = false;
     const mine = () => { own = true; };
     const pan = () => {
       if (own || strip.scrollWidth <= strip.clientWidth + 1) return;
       const t = tl.time(), mw = map.offsetWidth, sw = strip.clientWidth;
+      road = (t - ROAD_AT) / ROAD;
+      camY(camAt(roadY()));
       const head = t < T0 ? N.origin.x : east.getPointAtLength(Math.min(1, (t - T0) / EAST) * east.getTotalLength()).x;
       const rest = (REST_X / W) * mw - sw / 2;
       strip.scrollLeft = Math.min(strip.scrollWidth - sw, Math.max(0, Math.min(rest, (head / W) * mw - 0.6 * sw)));
@@ -88,7 +126,7 @@ export default function Nearby() {
       pic.decode().then(play, play);
     } });
     return () => {
-      dead = true; st.kill(); tl.kill(); clearTimeout(wait);
+      dead = true; st.kill(); tl.kill(); clearTimeout(wait); off();
       strip.removeEventListener("pointerdown", mine); strip.removeEventListener("wheel", mine);
     };
   }, []);
@@ -97,21 +135,25 @@ export default function Nearby() {
   return (
     // lg: full width, edge to edge; the section takes the map's own 1512 × 1024 proportions, so nothing is cropped at
     // any screen shape and the drawing keeps its margins from every edge (the title sits on the desert, bottom left)
-    <section ref={root} className="relative bg-limestone-500 py-20 lg:py-0">
-      <div className="relative mx-[var(--gutter)] lg:mx-0">
+    // no vertical padding of its own: on the page colour the neighbours' 80 px already give the site's 80 px gap
+    <section ref={root} className="relative lg:bg-limestone-500">
+      {/* the map runs edge to edge at every size (9 Nov); below lg only the title keeps the gutter */}
+      <div className="relative">
         {/* below lg above the map; lg over the map at the bottom left (Figma), on the desert */}
-        <div className="flex flex-col gap-5 pb-8 lg:pointer-events-none lg:absolute lg:bottom-[7%] lg:left-[var(--gutter)] lg:z-10 lg:gap-3 lg:pb-0">
+        <div className="flex flex-col gap-5 px-[var(--gutter)] pb-8 lg:px-0 lg:pointer-events-none lg:absolute lg:bottom-[7%] lg:left-[var(--gutter)] lg:z-10 lg:gap-3 lg:pb-0">
           <RevealText text={N.tag} className="t-label l-tag text-deepsea-500" />
           <RevealText as="h2" text={N.title} className="t-heading hd-48 text-deepsea-500" delay={0.05} />
         </div>
 
-        {/* below lg: a swipeable strip (wide enough on a phone that the 12 px labels clear each other's leaders) */}
-        <div data-strip className="overflow-x-auto rounded-lg [scrollbar-width:none] lg:overflow-hidden lg:rounded-none">
-          <div data-map className="relative w-[max(260vw,1000px)] max-w-[1512px] md:w-[170vw] lg:w-full lg:max-w-none"
+        {/* phones: the whole map at the screen's width (PHONE). Tablets: a swipeable 4:3 window, its camera on the
+            coast and then the road to Cairo (CAM). lg: the whole map, labels in full */}
+        <div data-strip className="overflow-x-auto overflow-y-hidden [scrollbar-width:none] md:max-lg:aspect-[4/3] lg:overflow-hidden">
+          <div data-map className="relative w-full md:w-[170vw] md:max-w-[1512px] lg:w-full lg:max-w-none"
             style={{ aspectRatio: `${W} / ${H}`, containerType: "inline-size" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={N.map} srcSet={srcSet(N.map)} alt="Satellite map of Egypt's North Coast from Marsa Matrouh to Alexandria and Cairo" className="absolute inset-0 h-full w-full object-cover" />
-            <span className={`absolute -translate-x-1/2 t-body text-limestone-300 ${CQ}`} style={{ left: pct(628, W), top: pct(120, H), ...cq(16, 10) }}>{N.sea}</span>
+            {/* not on phones (9 Nov) */}
+            <span className={`absolute -translate-x-1/2 whitespace-nowrap t-body text-limestone-300 max-md:hidden ${CQ}`} style={{ left: pct(628, W), top: pct(120, H), ...cq(16, 12) }}>{N.sea}</span>
 
             <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 h-full w-full overflow-visible" aria-hidden>
               <defs>
@@ -122,30 +164,38 @@ export default function Nearby() {
                 <path data-east d={COAST_EAST} pathLength={1} />
               </g>
               <line clipPath="url(#b-nearby-road)" x1={N.road.x1} y1={N.road.y1} x2={N.road.x2} y2={N.road.y2} className="stroke-limestone-50" strokeWidth={2.5} strokeDasharray="6 6" />
-              {N.places.map((p, k) => (
+              {N.places.map((p, k) => {
+                const t = PHONE[p.name]?.tick;
+                return (
                 <g key={p.name}>
-                  <line data-tick={k} x1={p.x} y1={p.y - 3} x2={p.x} y2={p.y - 3 - p.tick} className="stroke-limestone-300" strokeWidth={1.5} />
+                  <line data-tick={k} x1={p.x} y1={p.y - 3} x2={p.x} y2={p.y - 3 - p.tick} className={`stroke-limestone-300 ${t ? "max-md:hidden" : ""}`} strokeWidth={1.5} />
+                  {t && <line data-tick={k} x1={p.x} y1={p.y - 3} x2={p.x} y2={p.y - 3 - t} className="stroke-limestone-300 md:hidden" strokeWidth={1.5} />}
                   <circle data-dot={k} cx={p.x} cy={p.y} r={9} className="fill-limestone-50" />
-                </g>))}
+                </g>);
+              })}
               {/* Alam Al Roum: ring, dot and the leader down to the badge */}
               <circle data-origin cx={ox} cy={oy} r={18.75} fill="none" className="stroke-limestone-50" strokeWidth={2.5} />
               <circle data-origin cx={ox} cy={oy} r={11} className="fill-limestone-50" />
               <line data-badge x1={ox} y1={oy + 14} x2={ox} y2={376} className="stroke-limestone-50" strokeWidth={1.5} />
             </svg>
 
-            {N.places.map((p, k) => (
-              <span key={p.name} data-label={k} className="absolute flex flex-col whitespace-nowrap"
-                style={{ left: pct(p.x - 4, W), bottom: pct(H - (p.y - 16 - p.tick), H) }}>
-                <span className={`t-label text-limestone-50 ${CQ}`} style={cq(16, 10)}>{p.name}</span>
-                <span className={`t-text text-limestone-300 ${CQ}`} style={cq(14, 9)}>{p.km}</span>
-              </span>))}
+            {N.places.map((p, k) => {
+              const ph = PHONE[p.name] ?? {};
+              return (
+              <span key={p.name} data-label={k} className={`absolute flex flex-col whitespace-nowrap bottom-[var(--b)] max-md:bottom-[var(--b-sm)] ${ph.end ? "max-md:-translate-x-full max-md:items-end max-md:pr-1" : ""}`}
+                style={{ left: pct(p.x - 4, W), "--b": pct(H - (p.y - 16 - p.tick), H), "--b-sm": pct(H - (p.y - 16 - (ph.tick ?? p.tick)), H) } as CSSProperties}>
+                <span className={`t-label text-limestone-50 max-md:hidden ${CQ}`} style={cq(16, 12)}>{p.name}</span>
+                <span className={`t-text text-limestone-300 max-md:font-medium max-md:text-limestone-50 ${CQ}`} style={cq(14, 12)}>{p.km}</span>
+              </span>);
+            })}
 
-            <div data-badge className="absolute flex items-center gap-[0.8cqw] rounded-full bg-deepsea-500 py-[0.66cqw] pl-[0.66cqw] pr-[1.2cqw]" style={{ left: pct(88.7, W), top: pct(376, H) }}>
-              <span aria-hidden className="block aspect-[591/271] w-[max(34px,4.5cqw)] bg-limestone-50"
+            {/* phones: logo on top, the name under it (no "You are here"), left-aligned so the leader comes down onto the logo */}
+            <div data-badge className="absolute flex items-center gap-[0.8cqw] rounded-full bg-deepsea-500 py-[0.66cqw] pl-[0.66cqw] pr-[1.2cqw] max-md:flex-col max-md:items-start max-md:gap-1 max-md:rounded-lg max-md:p-2" style={{ left: pct(88.7, W), top: pct(376, H) }}>
+              <span aria-hidden className="block aspect-[591/271] w-[max(34px,4.5cqw)] bg-limestone-50 max-md:w-6"
                 style={{ WebkitMask: `url(${N.coinPair}) center / contain no-repeat`, mask: `url(${N.coinPair}) center / contain no-repeat` }} />
               <span className="flex flex-col">
-                <span className={`t-heading text-limestone-50 ${CQ}`} style={{ ...cq(16, 11, 13), lineHeight: 1.5 }}>{N.origin.name}</span>
-                <span className={`t-text text-limestone-300 ${CQ}`} style={{ ...cq(14, 9), lineHeight: 1.5 }}>{N.origin.note}</span>
+                <span className={`t-heading text-limestone-50 ${CQ}`} style={{ ...cq(16, 12, 12), lineHeight: 1.5 }}>{N.origin.name}</span>
+                <span className={`t-text text-limestone-300 max-md:hidden ${CQ}`} style={{ ...cq(14, 12), lineHeight: 1.5 }}>{N.origin.note}</span>
               </span>
             </div>
           </div>

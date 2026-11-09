@@ -27,8 +27,10 @@ html.lenis, html.lenis body { height: auto; }
 @layer base { img, video, canvas { display: block; } }
 
 /* ── No orphans (as in Figma): no word left alone on a block's last line. RevealText also ties each block's last
-   two words with a no-break space, for browsers without text-wrap: pretty ── */
-:is(p, li, dt, dd, blockquote, figcaption, label, h1, h2, h3, h4, h5, h6, [data-reveal]) { text-wrap: pretty; }
+   two words with a no-break space, for browsers without text-wrap: pretty ──
+   Owner rule (9 Nov): never an orphan anywhere on the site, so it is set on body and inherited by every element (spans,
+   buttons, card captions, labels included); blocks that ask for even lines (.wrap-balance) keep balance. */
+body, :is(p, li, dt, dd, blockquote, figcaption, label, h1, h2, h3, h4, h5, h6, [data-reveal]) { text-wrap: pretty; }
 /* hero subtitles: even lines (a Tailwind [text-wrap:balance] would lose to the unlayered rule above) */
 .wrap-balance { text-wrap: balance; }
 
@@ -63,6 +65,12 @@ html.lenis, html.lenis body { height: auto; }
    medium tagline would sit almost as heavy as the title. Stepped, not fluid, so it stays on the 4 px grid (14 / 16 only). */
 .l-tag { font-size: 16px; line-height: 24px; }
 @media (width < 48rem) { .l-tag { font-size: 14px; line-height: 20px; } }
+/* Hero type on phones (9 Nov): every page hero's title 32/36 and description 14/20, on the 4 px grid, so the opening
+   screen is the photo, not the paragraph. Set with !important to win over the fluid sizes and per-hero leadings. */
+@media (width < 48rem) {
+  .hero-t { font-size: 32px !important; line-height: 36px !important; }
+  .hero-b { font-size: 14px !important; line-height: 20px !important; }
+}
 .t-body { font-family: var(--font-haas); font-weight: 400; }
 .t-serif { font-family: var(--font-immortel); font-weight: 400; }
 .b-20 { font-size: clamp(18px, calc(18px + 2 * (100vw - 390px) / 1122), 20px); line-height: 1.5; } .b-18 { font-size: clamp(16px, calc(16px + 2 * (100vw - 390px) / 1122), 18px); line-height: 1.5; }

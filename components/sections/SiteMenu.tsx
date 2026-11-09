@@ -93,7 +93,8 @@ export default function SiteMenu({ open, onClose }: { open: boolean; onClose: ()
   const toggle = (s: Exclude<Sub, null>) => { setGrown(false); setSub((v) => (v === s ? null : s)); };
 
   const second = (which: Exclude<Sub, null>, inline = false) => (
-    <div className={`flex flex-col gap-6 ${inline ? "pb-4 pl-5 pt-2" : "px-6 pb-6 pt-10"}`}>
+    // inline (phone accordion): flush left with its heading (9 Nov), no indent
+    <div className={`flex flex-col gap-6 ${inline ? "pb-4 pt-2" : "px-6 pb-6 pt-10"}`}>
       {!inline && <span className="t-body b-20 text-deepsea-500">{which === "communities" ? "Communities" : "Experiences & Lifestyle"}</span>}
       {which === "communities" ? (
         <div className="flex flex-col gap-[25px]">

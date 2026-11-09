@@ -4,7 +4,7 @@ import { gsap, ScrollTrigger, reducedMotion, withHold } from "@/lib/gsap";
 import { blurIn } from "@/components/reveal/letters";
 import { manifesto as M } from "@/lib/about/a-content";
 import { srcSet } from "@/lib/img";
-import { MQ } from "@/lib/breakpoints";
+import { MQ, matches } from "@/lib/breakpoints";
 
 /**
  * UI / Headline / Accent. On load it plays the Figma states in order: Hidden → Line 1 (after 0.3 s) → Shown:
@@ -17,8 +17,16 @@ export default function Manifesto() {
   useEffect(() => {
     const el = root.current!, q = gsap.utils.selector(el);
     if (reducedMotion()) return;
-    const intro = gsap.timeline({ delay: 0.3, defaults: { ease: "aSettle" } })
-      .add(blurIn(q("h1")))
+    const intro = gsap.timeline({ delay: 0.3, defaults: { ease: "aSettle" } });
+    // below lg the photo is the full-screen backdrop (as PageHero): it fades in from a slight zoom, the copy blurs in over it
+    if (!matches(MQ.lg)) {
+      intro.fromTo(q("[data-media]"), { opacity: 0 }, { opacity: 1, duration: 1.1 }, 0)
+        .fromTo(q("[data-clip] img"), { scale: 1.08 }, { scale: 1, duration: 1.6 }, 0)
+        .add(blurIn(q("h1")), 0.35)
+        .add(blurIn(q("[data-body]")), 0.65);
+      return () => { intro.kill(); };
+    }
+    intro.add(blurIn(q("h1")))
       .addLabel("shown", "-=0.6")
       .add(blurIn(q("[data-body]")), "shown")
       .fromTo(q("[data-media]"), { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1 }, "shown")
@@ -47,30 +55,33 @@ export default function Manifesto() {
   }, []);
 
   const copy = (light: boolean) => (
-    <div aria-hidden={light || undefined} className={`relative z-10 flex flex-col gap-3 py-16 container-x lg:absolute lg:inset-0 lg:justify-center lg:py-0 lg:pt-[76px] ${light ? "text-limestone-50" : "text-deepsea-500"}`}>
+    <div aria-hidden={light || undefined} className={`relative z-10 flex flex-col gap-3 container-x max-lg:absolute max-lg:inset-x-0 max-lg:bottom-12 max-lg:z-[13] lg:absolute lg:inset-0 lg:justify-center lg:pt-[76px] ${light ? "text-limestone-50" : "text-deepsea-500 max-lg:text-limestone-50"}`}>
       {(() => {
         const Tag = light ? "div" : "h1";
         return (
-          <Tag data-reveal={light ? undefined : ""} className="t-heading hd-56 leading-none!" style={{ textTransform: "capitalize" }}>
+          <Tag data-reveal={light ? undefined : ""} className="t-heading hd-56 hero-t lg:leading-none!" style={{ textTransform: "capitalize" }}>
             <span className="block">{M.line1} <span className="t-accent" style={{ textTransform: "capitalize" }}>{M.accent}</span></span>
             <span className="block">{M.line2}</span>
           </Tag>);
       })()}
-      <p data-body={light ? undefined : ""} data-reveal={light ? undefined : ""} className={`t-body b-18 wrap-balance max-w-[520px] ${light ? "text-limestone-50/90" : ""}`}>{M.body}</p>
+      <p data-body={light ? undefined : ""} data-reveal={light ? undefined : ""} className={`t-body b-18 hero-b wrap-balance max-w-[520px] ${light ? "text-limestone-50/90" : "max-lg:text-limestone-50/90"}`}>{M.body}</p>
     </div>
   );
   return (
-    // phones: copy under the glass bar, then the photo; from lg the hero runs up under the bar and pins at the top
-    <section ref={root} data-hero className="relative mt-[76px] overflow-hidden bg-limestone-50 lg:mt-0 lg:h-svh lg:min-h-[716px]">
+    // the hero runs up under the bar; below lg the photo fills the screen with the copy at its foot (Home's phone hero),
+    // from lg it pins at the top
+    <section ref={root} data-hero className="relative h-svh min-h-[636px] overflow-hidden bg-limestone-50 lg:min-h-[716px]">
       {copy(false)}
 
-      {/* photo: in the flow below lg (portrait on a phone, so the opening screen is copy + photo), a clipped full-bleed layer from lg up */}
-      <div data-media data-reveal className="relative mx-[var(--gutter)] mb-16 aspect-[4/5] overflow-hidden md:aspect-[3/2] lg:absolute lg:inset-0 lg:z-[11] lg:m-0 lg:aspect-auto">
+      {/* photo: the full-screen backdrop below lg, a clipped full-bleed layer from lg up */}
+      <div data-media data-reveal className="absolute inset-0 overflow-hidden lg:z-[11]">
         <div data-clip className="absolute inset-0 overflow-hidden lg:[clip-path:inset(calc(100%_-_40px_-_min(15.87vw,240px))_max(3.97vw,var(--gutter))_40px_calc(100%_-_max(3.97vw,var(--gutter))_-_min(23.81vw,360px)))]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={M.image} srcSet={srcSet(M.image)} alt="The Mediterranean off Alam Al Roum" className="h-full w-full object-cover" />
         </div>
       </div>
+      {/* below lg: the shade the copy sits on (Home's, `.hero-film-shade`) */}
+      <div className="hero-film-shade pointer-events-none absolute inset-0 z-[12] lg:hidden" />
       {/* the light copy over the photo's shade, clipped to the photo's box: wherever the photo has reached a line, that
           line is light on shade, elsewhere it stays dark on Limestone (never dark copy on the photo) */}
       <div data-lit aria-hidden className="pointer-events-none absolute inset-0 z-[12] hidden [clip-path:inset(calc(100%_-_40px_-_min(15.87vw,240px))_max(3.97vw,var(--gutter))_40px_calc(100%_-_max(3.97vw,var(--gutter))_-_min(23.81vw,360px)))] lg:block">

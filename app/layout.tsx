@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { haas, immortel } from "./fonts";
 import SmoothScroll from "@/components/SmoothScroll";
+import NoOrphans from "@/components/NoOrphans";
 import BlurInOut from "@/components/BlurInOut";
 import "./globals.css";
 
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <head><script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} /></head>
       <body>
         <SmoothScroll />
+        <NoOrphans />
         {children}
         <BlurInOut />
       </body>
