@@ -30,7 +30,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
   return (
     <main>
       <Navbar />
-      <DetailHeader tag={e.tag} date={e.date} title={e.title} sub={e.sub} back={{ label: "Events", href: "/events" }} />
+      <DetailHeader tag={e.tag} date={e.date} title={e.title} sub={e.sub} kind="event" back={{ label: "Events", href: "/events" }} />
       <div className="container-x">
         {/* phones: a 4:3 crop, as the 1392 × 640 banner would be a thin strip there */}
         <div className="aspect-[4/3] overflow-hidden sm:aspect-[1392/640]"><RevealImage src={e.hero} alt={e.title} onLoad className="h-full w-full" /></div>
