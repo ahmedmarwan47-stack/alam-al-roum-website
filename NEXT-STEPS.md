@@ -1,5 +1,11 @@
 # Status — 9 Nov 2026
 
+## Review fixes — 10 Nov 2026 (Malak's prototype comments)
+- **Needs the client:** unit renders for every community's Unit types cards. Until then the cards show six DRAFT
+  AI images generated in Figma (`public/images/units/`: villa-pool, villa-interior, townhouse-row, townhouse-front,
+  apartment-living, apartment-marina), shared out across the six communities in `lib/neighbourhoods.ts` (`un`).
+- Left as is on purpose: the About coastline map draw (intended); Town centre "motion hint" comment (owner: later).
+
 ## Handoff — 9 Nov 2026 (phone responsiveness pass 3)
 
 ### Rules the owner set (follow them)

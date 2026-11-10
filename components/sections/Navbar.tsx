@@ -62,7 +62,7 @@ export default function Navbar() {
         {/* phones: the menu icon alone (a 44 px target, its glyph on the gutter), as on Discovery Land; the word from 640 up.
             SiteMenu's CLOSE copies this box exactly (MENU_BTN), so it opens where the cursor already is */}
         <button onClick={() => setOpen(true)} aria-expanded={open} aria-controls="site-menu" className={`${MENU_BTN} transition-colors duration-500 group-data-[over=media]/bar:text-limestone-50 group-data-[over=media]/bar:drop-shadow-[0_1px_6px_rgb(1_15_26/.45)]`}>
-          <Icon name="menu-01" size={24} /><span className="max-sm:sr-only">{nav.menu}</span></button>
+          <Icon name="menu-01" size={28} /><span className="max-sm:sr-only">{nav.menu}</span></button>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <Link href="/" className="absolute left-1/2 -translate-x-1/2 max-lg:py-[14px]"><img src="/images/logotype.svg" alt="Alam Al Roum" width={255} height={22} className="h-auto w-[150px] transition-[filter] duration-500 group-data-[over=media]/bar:brightness-0 group-data-[over=media]/bar:invert group-data-[over=media]/bar:drop-shadow-[0_1px_6px_rgb(1_15_26/.45)] md:w-[200px] lg:w-[255px]" /></Link>
         {/* the full register button from tablet up; below that, its arrow chip alone, so menu / logo / register stay balanced */}

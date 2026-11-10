@@ -85,11 +85,11 @@ export const waysToLive = {
 
 export const connectivity = {
   tag: "Destination & Connectivity", title: "A city connected by land, sea, and air",
-  body: "The city moves at its own pace, yet the world remains close. Six capitals sit within a five-hour flight, and the coastal road, two airports and a marina link it to the rest of Egypt.",
+  body: "The city moves at its own pace, yet the world remains close. The coastal road, two airports and a marina link it to the rest of Egypt and beyond.",
   listLabel: "Connected to Egypt",
   items: [
     ["International Coastal Road", "Direct access from Cairo and the wider Egyptian network.", "road"],
-    ["Ras El Hekma Airport", "The nearest international gateway, minutes away.", "airplane-landing-01"],
+    ["Ras El Hekma Airport", "The nearest international gateway.", "airplane-landing-01"],
     ["Marsa Matrouh International Airport", "Established regional air access.", "airplane-take-off-01"],
     ["Future High-Speed Rail", "Integration into the national rail network under development.", "train-01"],
     ["Integrated Marina", "International yachting access connecting the Mediterranean network.", "sailboat-offshore"],

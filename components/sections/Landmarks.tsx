@@ -11,7 +11,7 @@ export type LandmarksData = { title: string; body: string; rows: { title: string
 
 /**
  * UI / Landmarks (Residence Types style, Figma 10979:15280; pattern from Ayana Residences' "Residence Types").
- * Desktop: clicking a row makes it active — it turns dark while the backdrop wipes up and the inset wipes down
+ * Desktop: hovering a row (after a 140 ms pause) or clicking it makes it active — it turns dark while the backdrop wipes up and the inset wipes down
  * (1 s, cubic .165,.84,.44,1). The inset is the row's photo, large (66 % × 68 % of the column); the backdrop behind it
  * is the same photo, softly blurred. The section scrolls like any other, so the page never feels held.
  * Below lg the photo column goes, as on Ayana: the rows are an accordion, the first open, and tapping a row opens its
@@ -25,6 +25,12 @@ export default function Landmarks({ data = landmarks }: { data?: LandmarksData }
   const [open, setOpen] = useState(0); const opened = useRef(0);
   const big = useRef<(HTMLDivElement | null)[]>([]), ins = useRef<(HTMLDivElement | null)[]>([]);
   const panel = useRef<(HTMLImageElement | null)[]>([]);
+  // desktop (10 Nov review): resting the mouse on a row switches it, after a short pause so a pointer passing over
+  // the rows on its way elsewhere doesn't fire a wipe for each one; a click (and the keyboard) still switches at once
+  const intent = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const hoverRow = (k: number) => { clearTimeout(intent.current); intent.current = setTimeout(() => setA(k), 140); };
+  const leaveRow = () => clearTimeout(intent.current);
+  useEffect(() => () => clearTimeout(intent.current), []);
   useEffect(() => {
     if (prev.current === a) return;
     big.current.forEach((el, k) => gsap.set(el, { zIndex: k === a ? 2 : k === prev.current ? 1 : 0 }));
@@ -54,7 +60,7 @@ export default function Landmarks({ data = landmarks }: { data?: LandmarksData }
           {L.rows.map((r, k) => {
             const on = k === a;
             return (
-              <button key={r.title} onClick={() => setA(k)} aria-pressed={on}
+              <button key={r.title} onClick={() => { clearTimeout(intent.current); setA(k); }} onMouseEnter={() => hoverRow(k)} onMouseLeave={leaveRow} aria-pressed={on}
                 className={`flex items-center gap-10 p-6 text-left [&:not(:last-child)]:border-b transition-colors duration-500 ${on ? "border-deepsea-500 bg-deepsea-500 text-limestone-50" : "border-limestone-600 hover:bg-limestone-100"}`}>
                 <span className={`t-label l-12 ${on ? "text-deepsea-200" : ""}`}>({String(k + 1).padStart(2, "0")})</span>
                 <span className="flex flex-1 flex-col gap-2">

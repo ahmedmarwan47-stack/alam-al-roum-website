@@ -201,6 +201,15 @@ html.js [data-reveal-img] { visibility: hidden; }
 .btn-light .btn-fill { background: var(--color-deepsea-500); } .btn-light .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); }
 @media (hover: hover) { .btn-light:hover { border-color: var(--color-deepsea-500); } .btn-light:hover .btn-label { color: var(--color-limestone-500); } }
 @media (hover: hover) { .btn-light:hover .btn-chip { background: var(--color-limestone-500); color: var(--color-deepsea-500); } }
+/* Two buttons that sit on pictures keep their old hover fills (10 Nov review) and take an edge that stands out from
+   what is behind them, kept light (10 Nov): on the dark hero film (`btn-on-film`) the Deep Sea fill rises inside a 1 px
+   Limestone edge at 50 %; on the pale CTA film (`btn-on-pale`) the Limestone fill rises inside a 1 px Deep Sea edge at
+   35 %. A soft shadow lifts both */
+@media (hover: hover) {
+  .btn-light.btn-on-film:hover { border-color: rgb(251 250 248 / .5); box-shadow: 0 6px 24px rgb(1 15 26 / .35); }
+  .btn-primary.btn-on-pale:hover { border-color: rgb(7 41 60 / .35); box-shadow: 0 6px 24px rgb(1 15 26 / .18); }
+}
+
 /* Secondary on light: Deep Sea outline → Deep Sea rises */
 .btn-outline { background: transparent; color: var(--color-deepsea-500); border-color: var(--color-deepsea-500); }
 .btn-outline .btn-fill { background: var(--color-deepsea-500); } .btn-outline .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); }

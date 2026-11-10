@@ -16,6 +16,8 @@ import { communities } from "@/lib/communities";
 const n = (f: string) => `/images/neighbourhood/${f}.webp`;
 const cm = (f: string) => `/images/communities/${f}.webp`;
 const ph = (f: string) => `/images/photo/${f}.webp`;
+/** DRAFT unit renders, AI-generated in Figma (10 Nov; file "Alam Al Roum — Unit type images") until the client's arrive */
+const un = (f: string) => `/images/units/${f}.webp`;
 
 export type Neighbourhood = {
   slug: string; hero: SingleHeroData; overview: OverviewData; units?: HotelsData; facilities?: LandmarksData;
@@ -33,16 +35,18 @@ const beachfront: Neighbourhood = {
       ["Low-rise by the sea", "Terraces and roofs stay low, so every street keeps its view of the horizon. Limestone, shade and sea breeze set the pace of the district."],
       ["Private beach clubs", "Cabanas, pools and dining on the sand, for residents and their guests. Each club runs through the year, with its own events and a quiet place to work."]] },
   // drawer copy follows the Figma unit drawer (11128:14826), with each unit's figures from its card
+  // DRAFT photos (10 Nov review: the unit cards showed lifestyle shots): six AI-generated unit images (`un`), shared out
+  // across every community's cards until the client sends the unit renders; logged in NEXT-STEPS.md
   units: { tag: "Residences", title: "Unit types", body: "Three ways to live on the shore. Each with its own floor plans, specifications, and brochure.",
     cols: "sm:grid-cols-3", bodyWidth: 560, kind: "unit", extra: [n("f1-inset")],
     items: [
-      { name: "Beach villa", type: "4 beds · From 420 m² · Private pool · Sea view", photo: n("unit-villa"), card: { w: 456, h: 684 },
+      { name: "Beach villa", type: "4 beds · From 420 m² · Private pool · Sea view", photo: un("villa-pool"), card: { w: 456, h: 684 },
         body: "A four-bedroom villa with a private pool facing the sea, set along the beachfront promenade.",
         specs: [["bed", "Bedrooms", "4 bedrooms"], ["ruler", "Built-up area", "From 420 m²"], ["terrace", "Outdoor", "Private pool · Sea view"], ["location-01", "Neighbourhood", "Beachfront communities"]] },
-      { name: "Shoreline townhouse", type: "3 beds · From 260 m² · Roof terrace · Garden", photo: n("unit-townhouse"), card: { w: 456, h: 684 },
+      { name: "Shoreline townhouse", type: "3 beds · From 260 m² · Roof terrace · Garden", photo: un("townhouse-row"), card: { w: 456, h: 684 },
         body: "A three-bedroom townhouse with a roof terrace and garden, a short walk from the sand.",
         specs: [["bed", "Bedrooms", "3 bedrooms"], ["ruler", "Built-up area", "From 260 m²"], ["terrace", "Outdoor", "Roof terrace · Garden"], ["location-01", "Neighbourhood", "Beachfront communities"]] },
-      { name: "Terrace apartment", type: "2 beds · From 140 m² · Sea-facing terrace", photo: n("unit-apartment"), card: { w: 456, h: 684 },
+      { name: "Terrace apartment", type: "2 beds · From 140 m² · Sea-facing terrace", photo: un("apartment-living"), card: { w: 456, h: 684 },
         body: "A two-bedroom apartment with a sea-facing terrace above the promenade.",
         specs: [["bed", "Bedrooms", "2 bedrooms"], ["ruler", "Built-up area", "From 140 m²"], ["terrace", "Outdoor", "Sea-facing terrace"], ["location-01", "Neighbourhood", "Beachfront communities"]] },
     ] },
@@ -128,9 +132,9 @@ const drafts: Record<string, Pick<Neighbourhood, "units" | "facilities"> & { fac
   lagoon: {
     facts: [["22 km", "Waterfront and lagoons"], ["5 min", "Water taxi to the marina"], ["3", "Unit types"]],
     units: units("Lagoon neighbourhood", "Three ways to live on the water. Each with its own floor plans, specifications, and brochure.", [
-      ["Lagoon villa", "4 beds", "380 m²", "Private deck · Lagoon access", n("unit-villa"), "A four-bedroom villa with a private deck stepping down into the lagoon."],
-      ["Waterside townhouse", "3 beds", "240 m²", "Garden · Lagoon view", n("unit-townhouse"), "A three-bedroom townhouse with a garden on the water's edge."],
-      ["Lagoon apartment", "2 beds", "130 m²", "Terrace over the water", ho("lagoon-retreat"), "A two-bedroom apartment with a terrace above the lagoon promenade."],
+      ["Lagoon villa", "4 beds", "380 m²", "Private deck · Lagoon access", un("villa-interior"), "A four-bedroom villa with a private deck stepping down into the lagoon."],
+      ["Waterside townhouse", "3 beds", "240 m²", "Garden · Lagoon view", un("townhouse-front"), "A three-bedroom townhouse with a garden on the water's edge."],
+      ["Lagoon apartment", "2 beds", "130 m²", "Terrace over the water", un("apartment-living"), "A two-bedroom apartment with a terrace above the lagoon promenade."],
     ], su("c2-large")),
     facilities: facilities("Life on the water is walkable: swimmable lagoons, water-taxi stops, shaded promenades and a kids' club.", [
       ["Swimmable lagoons", "Clear, calm water at the garden's edge", su("c2-large")],
@@ -142,9 +146,9 @@ const drafts: Record<string, Pick<Neighbourhood, "units" | "facilities"> & { fac
   "marina-boulevard": {
     facts: [["2", "Marinas, international and local"], ["5 min", "Walk to the town centre"], ["3", "Unit types"]],
     units: units("Marina boulevard", "Three ways to live on the quay. Each with its own floor plans, specifications, and brochure.", [
-      ["Marina apartment", "2 beds", "150 m²", "Balcony · Marina view", ho("marina-hotel"), "A two-bedroom apartment with a balcony over the berths."],
-      ["Boulevard duplex", "3 beds", "220 m²", "Terrace over the promenade", ph("ui-g-terraces"), "A three-bedroom duplex with a terrace above the promenade."],
-      ["Marina penthouse", "4 beds", "320 m²", "Roof terrace · Sea view", ex("hotels-suite"), "A four-bedroom penthouse with a roof terrace over the marina and the sea."],
+      ["Marina apartment", "2 beds", "150 m²", "Balcony · Marina view", un("apartment-marina"), "A two-bedroom apartment with a balcony over the berths."],
+      ["Boulevard duplex", "3 beds", "220 m²", "Terrace over the promenade", un("townhouse-row"), "A three-bedroom duplex with a terrace above the promenade."],
+      ["Marina penthouse", "4 beds", "320 m²", "Roof terrace · Sea view", un("villa-interior"), "A four-bedroom penthouse with a roof terrace over the marina and the sea."],
     ], ma("h2-large")),
     facilities: facilities("Everything happens on the waterfront: berths, the yacht club, dining on the quay and a weekly market.", [
       ["Marina berths", "International and local berths, with services", ma("h1-large")],
@@ -156,9 +160,9 @@ const drafts: Record<string, Pick<Neighbourhood, "units" | "facilities"> & { fac
   resort: {
     facts: [["24/7", "Concierge and housekeeping"], ["All year", "Pools, spas and dining"], ["3", "Unit types"]],
     units: units("Resort district", "Three ways to live with hotel service. Each with its own floor plans, specifications, and brochure.", [
-      ["Serviced suite", "1 bed", "85 m²", "Balcony · Hotel services", ph("ui-v-lounge"), "A one-bedroom suite with the hotel's housekeeping, dining and concierge."],
-      ["Serviced apartment", "2 beds", "140 m²", "Terrace · Pool access", ex("hotels-pool"), "A two-bedroom apartment beside the hotel pools, with hotel services."],
-      ["Resort villa", "4 beds", "400 m²", "Private pool · Hotel services", n("unit-villa"), "A four-bedroom villa with a private pool, served by the hotel."],
+      ["Serviced suite", "1 bed", "85 m²", "Balcony · Hotel services", un("apartment-living"), "A one-bedroom suite with the hotel's housekeeping, dining and concierge."],
+      ["Serviced apartment", "2 beds", "140 m²", "Terrace · Pool access", un("apartment-marina"), "A two-bedroom apartment beside the hotel pools, with hotel services."],
+      ["Resort villa", "4 beds", "400 m²", "Private pool · Hotel services", un("villa-pool"), "A four-bedroom villa with a private pool, served by the hotel."],
     ], ho("beachfront-resort")),
     facilities: facilities("Hotel life all year: a spa, pools, a beach club and a residents' lounge with a concierge.", [
       ["Hotel spa", "Treatment rooms, hammam and rest areas", ex("wellness-rest")],
@@ -170,9 +174,9 @@ const drafts: Record<string, Pick<Neighbourhood, "units" | "facilities"> & { fac
   golf: {
     facts: [["18", "Holes by the sea"], ["98", "Hectares of greens"], ["3", "Unit types"]],
     units: units("Golf community", "Three ways to live on the course. Each with its own floor plans, specifications, and brochure.", [
-      ["Fairway villa", "5 beds", "480 m²", "Private pool · Course view", n("unit-villa"), "A five-bedroom villa on the fairway, with a private pool and views to the sea."],
-      ["Golf townhouse", "3 beds", "250 m²", "Garden · Course view", n("unit-townhouse"), "A three-bedroom townhouse with a garden opening onto the greens."],
-      ["Clubhouse apartment", "2 beds", "135 m²", "Terrace · Course view", ex("golf-clubhouse-terrace"), "A two-bedroom apartment above the clubhouse terrace."],
+      ["Fairway villa", "5 beds", "480 m²", "Private pool · Course view", un("villa-pool"), "A five-bedroom villa on the fairway, with a private pool and views to the sea."],
+      ["Golf townhouse", "3 beds", "250 m²", "Garden · Course view", un("townhouse-front"), "A three-bedroom townhouse with a garden opening onto the greens."],
+      ["Clubhouse apartment", "2 beds", "135 m²", "Terrace · Course view", un("apartment-living"), "A two-bedroom apartment above the clubhouse terrace."],
     ], ho("golf-spa")),
     facilities: facilities("The course sets the day: a clubhouse by the sea, an academy, a practice range and a sports club.", [
       ["Clubhouse", "Dining, the lounge and members' evenings", ex("golf-clubhouse-terrace")],
@@ -184,9 +188,9 @@ const drafts: Record<string, Pick<Neighbourhood, "units" | "facilities"> & { fac
   "town-centre": {
     facts: [["5 min", "Walk to daily errands"], ["All day", "Cafés and dining"], ["3", "Unit types"]],
     units: units("Town centre", "Three ways to live above the boulevard. Each with its own floor plans, specifications, and brochure.", [
-      ["Boulevard apartment", "2 beds", "120 m²", "Balcony over the boulevard", ho("town-centre-suites"), "A two-bedroom apartment with a balcony over the commercial boulevard."],
-      ["Town loft", "1 bed", "85 m²", "Double-height living", ph("ui-g-interior"), "A one-bedroom loft with double-height living above the shops."],
-      ["Courtyard townhouse", "3 beds", "210 m²", "Private courtyard", ph("ui-expcenter-court"), "A three-bedroom townhouse around its own shaded courtyard."],
+      ["Boulevard apartment", "2 beds", "120 m²", "Balcony over the boulevard", un("apartment-marina"), "A two-bedroom apartment with a balcony over the commercial boulevard."],
+      ["Town loft", "1 bed", "85 m²", "Double-height living", un("villa-interior"), "A one-bedroom loft with double-height living above the shops."],
+      ["Courtyard townhouse", "3 beds", "210 m²", "Private courtyard", un("townhouse-front"), "A three-bedroom townhouse around its own shaded courtyard."],
     ], ph("ui-g-colonnade")),
     facilities: facilities("Daily life on foot: arcades of shops, dining, an events centre and a nursery and school.", [
       ["Shopping arcades", "Shops and boutiques under shaded colonnades", ph("ui-g-colonnade")],

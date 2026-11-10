@@ -122,7 +122,10 @@ export default function MasterplanMap({ image, pins: all, initial = 0, view = FU
               {!gate && <span className="t-label leading-none tabular-nums lg:hidden">{it.n}</span>}
               <span className="grid place-items-center max-lg:hidden"><Icon name="plus-sign" size={gate ? 14 : 16} className={`transition-transform duration-300 [transition-timing-function:var(--ease-fig-out)] ${on ? "rotate-45" : ""}`} /></span>
             </button>
-            {!on && <span className={`pointer-events-none absolute top-0 hidden -translate-y-1/2 whitespace-nowrap lg:block ${labelRight ? "left-7" : "right-full mr-7"} rounded-full bg-limestone-50 px-[14px] py-2 t-label l-14 shadow-[0_2px_10px_rgb(1_15_26/.18)] transition-opacity duration-[250ms] [transition-timing-function:var(--ease-fig-out)] ${labels ? "opacity-0 group-hover:opacity-100 xl:opacity-100" : "opacity-0 group-hover:opacity-100"}`}>{p.title}</span>}
+            {/* the name opens the card too (10 Nov review), whenever it shows: on hover, and from xl on maps with `labels`;
+                hidden, it takes no pointer, so it can't catch the cursor over the plan. It repeats the pin's button, so
+                it stays out of the tab order and the accessibility tree */}
+            {!on && <button type="button" tabIndex={-1} aria-hidden onClick={() => tap(k)} className={`pointer-events-none absolute top-0 hidden -translate-y-1/2 cursor-pointer whitespace-nowrap lg:block ${labelRight ? "left-7" : "right-full mr-7"} rounded-full bg-limestone-50 px-[14px] py-2 text-deepsea-500 t-label l-14 shadow-[0_2px_10px_rgb(1_15_26/.18)] transition-[opacity,background-color,color] duration-[250ms] [transition-timing-function:var(--ease-fig-out)] hover:bg-deepsea-500 hover:text-limestone-50 group-hover:pointer-events-auto ${labels ? "opacity-0 group-hover:opacity-100 xl:pointer-events-auto xl:opacity-100" : "opacity-0 group-hover:opacity-100"}`}>{p.title}</button>}
             {on && !phone && <PinCard p={p} className={`absolute -top-[76px] hidden w-[300px] lg:flex ${right ? "left-7 origin-left" : "right-full mr-7 origin-right"}`} />}
           </div>
         );

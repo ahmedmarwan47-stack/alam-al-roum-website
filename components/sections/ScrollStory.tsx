@@ -98,6 +98,14 @@ export default function ScrollStory() {
     });
     // constellation: stacked behind the headline → scattered (once, as it comes in) → parallax drift (scrubbed)
     const stage = stageRef.current!;
+    // the drift stops 40 px short of the hero (10 Nov review: the top cards rose over the hero): a card's upward travel
+    // is capped at its resting distance from the stage's top edge (the hero's foot) less 40 px, measured without
+    // its own drift, so it holds on every refresh and resize
+    const GAP = 40;
+    const room = (el: HTMLElement) => {
+      const top = el.getBoundingClientRect().top - stage.getBoundingClientRect().top - Number(gsap.getProperty(el, "y"));
+      return Math.max(0, top - GAP);
+    };
     const mm = gsap.matchMedia();
     if (!reducedMotion()) {
       mm.add(MQ.lg, () => {
@@ -106,7 +114,7 @@ export default function ScrollStory() {
         cards.forEach((el, k) => {
           const c = grandeur.cards[k];
           gsap.set(el.firstElementChild, { x: () => (c.sx - c.x) * unit(), y: () => (c.sy - c.y) * unit() });
-          gsap.fromTo(el, { y: 0 }, { y: () => -SPEED[k] * unit() * 1.5, ease: "none",
+          gsap.fromTo(el, { y: 0 }, { y: () => -Math.min(SPEED[k] * unit() * 1.5, room(el)), ease: "none",
             scrollTrigger: { trigger: stage, start: "top bottom", end: "bottom top", scrub: 1, invalidateOnRefresh: true } });
         });
         gsap.to(cards.map((el) => el.firstElementChild), { x: 0, y: 0, duration: 1.4, ease: "siteOut", stagger: 0.03,
@@ -123,8 +131,8 @@ export default function ScrollStory() {
         };
         gsap.set(cards.map((el) => el.firstElementChild), { opacity: 0, scale: 0.8 });
         cards.forEach((el) => {
-          gsap.fromTo(el, { y: 0 }, { y: -Number(el.dataset.v), ease: "none",
-            scrollTrigger: { trigger: stage, start: "top bottom", end: "bottom top", scrub: 1 } });
+          gsap.fromTo(el, { y: 0 }, { y: () => -Math.min(Number(el.dataset.v), room(el)), ease: "none",
+            scrollTrigger: { trigger: stage, start: "top bottom", end: "bottom top", scrub: 1, invalidateOnRefresh: true } });
         });
         // the cards start hidden, so this goes through onceInView (a ScrollTrigger plus a visibility fail-safe)
         return onceInView(stage, "top 75%", () => {

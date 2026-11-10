@@ -15,11 +15,11 @@ export default function Hero() {
           <RevealText as="h1" segs={hero.title} onLoad delay={0.75} className="t-heading x-80 hero-t md:whitespace-nowrap" />
           {/* a comfortable measure: two even lines of about 65 characters on desktop */}
           <RevealText text={hero.body} onLoad delay={1.05} className="t-body b-18 hero-b wrap-balance max-w-[560px]" />
-          <div className="pt-1"><Button label={hero.cta} href="/contact" size={64} variant="light" /></div>
+          <div className="pt-1"><Button label={hero.cta} href="/contact" size={64} variant="light" className="btn-on-film" /></div>
         </div>
         <div className="hidden flex-col items-end gap-[10px] md:flex">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/qatari-diar.png" alt="Qatari Diar" width={60} height={60} />
+          <img src="/images/qatari-diar.png" alt="Qatari Diar" width={76} height={76} />
           <span className="t-label l-18">{hero.proof}</span>
         </div>
       </div>

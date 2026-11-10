@@ -42,7 +42,9 @@ function Card({ x, delay, num, grid = false, className = "" }: { x: X; delay: nu
  * `grid` (the Experiences page): a grid at every size (9 Nov), two columns below lg and three from lg, with no
  * controls; the detail pages keep the swipe track.
  */
-function Slider({ grid = false }: { grid?: boolean }) {
+function Slider({ grid = false, exclude }: { grid?: boolean; exclude?: string }) {
+  // a detail page leaves its own experience out of "more experiences"
+  const list = exclude ? experiences.filter((x) => x.slug !== exclude) : experiences;
   const rail = useRef<HTMLDivElement>(null);
   const [bar, setBar] = useState({ w: 0.3, x: 0, start: true, end: false });
   const update = useCallback(() => {
@@ -62,7 +64,7 @@ function Slider({ grid = false }: { grid?: boolean }) {
       <div ref={rail} onScroll={update}
         className={grid ? "grid grid-cols-2 gap-x-3 gap-y-8 md:gap-x-6 md:gap-y-10 lg:grid-cols-3 lg:gap-6"
           : "-mx-[var(--gutter)] flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-px-[var(--gutter)] px-[var(--gutter)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"}>
-        {experiences.map((x, k) => grid
+        {list.map((x, k) => grid
           ? <Card key={x.slug} x={x} grid delay={(k % 2) * 0.08} className="min-w-0" />
           : <div key={x.slug} className="w-[min(440px,78vw)] flex-none snap-start"><Card x={x} delay={Math.min(k, 3) * 0.08} num={k + 1} /></div>)}
       </div>
@@ -84,7 +86,7 @@ function Slider({ grid = false }: { grid?: boolean }) {
  * out as a 3-column grid (a swipe track below lg); detail pages pass `slider` for the horizontal track. Each photo opens with the
  * mask reveal, then slowly scales on hover while the Explore chip lifts.
  */
-export default function ExperienceTrack({ slider = false, title }: { slider?: boolean; title?: typeof T.title }) {
+export default function ExperienceTrack({ slider = false, title, exclude }: { slider?: boolean; title?: typeof T.title; exclude?: string }) {
   return (
     <section className={`flex flex-col gap-10 overflow-hidden bg-limestone-50 container-x ${slider ? "py-[60px]" : "py-20"}`}>
       <div className="flex max-w-[917px] flex-col gap-4">
@@ -92,7 +94,7 @@ export default function ExperienceTrack({ slider = false, title }: { slider?: bo
         <RevealText as="h2" segs={title ?? T.title} className="t-heading hd-56" delay={0.05} />
         <RevealText text={T.body} className="t-body b-18 opacity-70" delay={0.12} />
       </div>
-      <Slider grid={!slider} />
+      <Slider grid={!slider} exclude={exclude} />
     </section>
   );
 }

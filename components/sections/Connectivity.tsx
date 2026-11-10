@@ -17,22 +17,25 @@ import { connectivity as c } from "@/lib/content";
  * Visiting Egypt card and the button.
  */
 export default function Connectivity({ tag, compact = false, visa = !compact }: { tag?: string; compact?: boolean; visa?: boolean }) {
-  // the visa card's height on desktop (padding, label, one row of two points), plus the 16 px gap above it
-  const col = { "--conn-pad": "clamp(32px, 5.4svh, 48px)", "--visa-h": visa ? "160px" : "0px", "--conn-w": "min(50%, calc((100svh - 2 * var(--conn-pad) - var(--visa-h)) * 696 / 720))" } as CSSProperties;
+  // the visa block's height on desktop (label, figures, two lines of text), plus the 24 px gap above it (10 Nov review)
+  const col = { "--conn-pad": "clamp(32px, 5.4svh, 48px)", "--visa-h": visa ? "144px" : "0px", "--conn-w": "min(50%, calc((100svh - 2 * var(--conn-pad) - var(--visa-h)) * 696 / 720))" } as CSSProperties;
   return (
     <section className={`flex flex-col gap-10 bg-terracotta-500 py-20 text-limestone-50 container-x lg:min-h-svh lg:flex-row lg:items-center lg:py-[clamp(32px,5.4svh,48px)] ${compact ? "lg:gap-[72px]" : "lg:gap-14"}`}>
-      <div className="flex flex-col gap-10 max-lg:contents lg:w-[var(--conn-w)] lg:flex-none lg:gap-4" style={col}>
+      <div className="flex flex-col gap-10 max-lg:contents lg:w-[var(--conn-w)] lg:flex-none lg:gap-6" style={col}>
         <div className="flex flex-col gap-6 max-lg:order-3">
           <RevealMask><RadiusMap /></RevealMask>
           <FlightTimes className="md:hidden" />
         </div>
-        {visa && <div className={`flex flex-col gap-3 rounded-lg border border-limestone-50/15 bg-limestone-50/10 p-4 max-lg:order-5 lg:gap-3 lg:px-5 lg:py-4`}>
-          <span className="flex items-center gap-2 t-label l-14 text-limestone-50/80 lg:text-[14px]! lg:leading-5!"><Icon name="airplane-landing-01" size={16} />{c.visa.label}</span>
-          {/* side by side from sm; stacked on a phone, where two columns would be ~130px each */}
-          <div className="flex flex-col gap-3 sm:flex-row sm:gap-7">
+        {/* Visiting Egypt (10 Nov review: the glass card with its icon read as generic UI): no box (and no rule above it), a plain
+            label and two facts set like the site's numbers; 24 px under the block above at every size (the section's
+            40 px gap less 16 below lg), the figure large and its line under it */}
+        {visa && <div className="flex flex-col gap-4 max-lg:order-5 max-lg:-mt-4 lg:gap-3">
+          <span className="t-label l-14 uppercase text-limestone-50/60">{c.visa.label}</span>
+          <div className="grid grid-cols-2 gap-6 lg:gap-8">
             {c.visa.points.map(([h, b], k) => (
-              <div key={h} className={`flex flex-1 flex-col gap-1 ${k ? "relative border-t border-limestone-50/20 pt-3 sm:border-t-0 sm:pt-0 sm:before:absolute sm:before:-left-[14.5px] sm:before:inset-y-0 sm:before:w-px sm:before:bg-limestone-50/20" : ""}`}>
-                <RevealText text={h} className="t-heading text-[18px] leading-6 lg:text-[20px]! lg:leading-7!" /><RevealText text={b} className="t-body b-14 text-limestone-50/80 lg:text-[14px]! lg:leading-5!" delay={0.08} /></div>))}
+              <div key={h} className="flex flex-col gap-1">
+                <RevealText text={h} className="t-heading text-[24px] leading-8 lg:text-[32px] lg:leading-9" delay={k * 0.06} />
+                <RevealText text={b} className="t-body b-14 text-limestone-50/70 lg:text-[14px]! lg:leading-5!" delay={0.08 + k * 0.06} /></div>))}
           </div>
         </div>}
       </div>

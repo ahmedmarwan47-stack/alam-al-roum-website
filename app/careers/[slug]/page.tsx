@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Navbar from "@/components/sections/Navbar";
 import Button from "@/components/ui/Button";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 import RevealText from "@/components/reveal/RevealText";
 import Cta from "@/components/sections/Cta";
 import Footer from "@/components/sections/Footer";
@@ -39,7 +40,7 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
     <main>
       <Navbar />
       <section className="mt-[76px] flex flex-col items-center gap-6 bg-limestone-50 px-[var(--gutter)] py-[60px] text-center text-black">
-        <span className="t-label l-12 text-black/60">Careers</span>
+        <Breadcrumb parent="Careers" href="/careers" current={r.title} />
         <RevealText as="h1" text={r.title} onLoad delay={0.15} className="t-serif capitalize d-68 leading-[1]" />
         <RevealText text={r.lede} onLoad delay={0.3} className="t-body b-18 text-black/70" />
       </section>

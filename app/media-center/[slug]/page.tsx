@@ -25,7 +25,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   return (
     <main>
       <Navbar />
-      <DetailHeader tag={a.tag} date={a.date} title={a.title} sub={a.sub} />
+      <DetailHeader tag={a.tag} date={a.date} title={a.title} sub={a.sub} back={{ label: "Media Center", href: "/media-center" }} />
       <div className="container-x">
         {/* phones: a 4:3 crop, as the 1392 × 640 banner would be a thin strip there */}
         <div className="aspect-[4/3] overflow-hidden sm:aspect-[1392/640]"><RevealImage src={a.hero} alt={a.title} onLoad className="h-full w-full" /></div>

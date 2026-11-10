@@ -12,7 +12,8 @@ type Sub = "communities" | "experiences" | null;
 
 /** The bar's MENU button box. CLOSE uses the same classes, in a row with the bar's height and side padding, so it sits
  *  exactly where MENU was (same x / y, typeface, size, weight, colour; the 24 px menu glyph becomes a 24 px ×). */
-export const MENU_BTN = "flex items-center gap-2 text-deepsea-500 t-label l-18 max-sm:-ml-[10px] max-sm:size-11 max-sm:justify-center";
+/* a step up from the label scale (10 Nov review: MENU read small): icon 28, word 18/28 → 20/28 from lg; CLOSE shares it */
+export const MENU_BTN = "flex items-center gap-2 text-deepsea-500 t-label text-[18px] leading-7 lg:text-[20px] max-sm:-ml-[8px] max-sm:size-11 max-sm:justify-center";
 
 const items: [string, string | Exclude<Sub, null>][] = [
   ["Home", "/"], ["About", "/about"], ["Destination", "/destination"], ["Communities", "communities"],
@@ -141,7 +142,7 @@ export default function SiteMenu({ open, onClose }: { open: boolean; onClose: ()
                 hairline is an inset shadow, so it takes no height from the row) */}
             <div className="flex h-[76px] flex-none items-center px-5 shadow-[inset_0_-1px_0_rgb(7_41_60/0.15)] md:px-10">
               <button data-close onClick={onClose} className={MENU_BTN}>
-                <span data-x className="flex"><Icon name="cancel-01" size={24} /></span><span className="max-sm:sr-only">CLOSE</span>
+                <span data-x className="flex"><Icon name="cancel-01" size={28} /></span><span className="max-sm:sr-only">CLOSE</span>
               </button>
             </div>
             {/* the links share CLOSE's left edge (the bar's gutter) */}
