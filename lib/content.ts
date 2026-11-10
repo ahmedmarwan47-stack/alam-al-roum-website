@@ -12,7 +12,7 @@ export const hero = {
   // two even lines (the second 88 % of the first): "the coast was a line" (brand manifesto), restored to a circle
   title: [{ t: "A coastline restored" }, { t: "from line to", br: true }, { t: "Circle", i: true }],
   body: "7.2 kilometres of shoreline, a restored lighthouse, and a city built for those who return. On Egypt's North Coast, by Qatari Diar.",
-  cta: "Register interest", proof: "Backed by Qatari Diar",
+  cta: "Register interest", proof: ["Backed by", "Qatari Diar"],
 };
 
 export type GrandeurCard = { kind: "image" | "stat" | "chip"; src?: string; label?: string; value?: string; note?: string; dark?: boolean;

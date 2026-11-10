@@ -30,7 +30,7 @@ export default function BlurInOut() {
       }
       // films marked data-media-blur (the footer's) only blur in; other photos sweep; text blurs in
       const kind = (el: HTMLElement) => (el.hasAttribute("data-media-blur") ? "soft" : el.tagName === "IMG" || el.tagName === "VIDEO" ? "photo" : "text");
-      picked.forEach((el) => gsap.set(el, { soft: MEDIA_BLUR_FROM, photo: PHOTO_FROM, text: BLOCK_FROM }[kind(el)]));
+      picked.forEach((el) => gsap.set(el, { ...{ soft: MEDIA_BLUR_FROM, photo: PHOTO_FROM, text: BLOCK_FROM }[kind(el)] }));
       const offs = picked.map((el) => whenSectionEnters(el, () => { ({ soft: mediaBlurIn, photo: photoIn, text: blurIn }[kind(el)](el)); }));
       ScrollTrigger.refresh();
       kill = () => { offs.forEach((off) => off()); gsap.set(picked, { clearProps: "opacity,filter,transform,clipPath" }); };

@@ -28,7 +28,7 @@ export default function CityNumbers() {
   useEffect(() => {
     const el = root.current; if (!el || reducedMotion()) return;
     const blocks = el.querySelectorAll("[data-fig]");
-    gsap.set(blocks, BLOCK_FROM);
+    gsap.set(blocks, { ...BLOCK_FROM });
     const counters = [...el.querySelectorAll<HTMLElement>("[data-count]")].map((c) => ({ c, p: parse(c.dataset.count!) }));
     counters.forEach(({ c, p }) => { if (p) c.textContent = fmt(p, 0); });
     const tweens: gsap.core.Tween[] = [];

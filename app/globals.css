@@ -201,13 +201,25 @@ html.js [data-reveal-img] { visibility: hidden; }
 .btn-light .btn-fill { background: var(--color-deepsea-500); } .btn-light .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); }
 @media (hover: hover) { .btn-light:hover { border-color: var(--color-deepsea-500); } .btn-light:hover .btn-label { color: var(--color-limestone-500); } }
 @media (hover: hover) { .btn-light:hover .btn-chip { background: var(--color-limestone-500); color: var(--color-deepsea-500); } }
-/* Two buttons that sit on pictures keep their old hover fills (10 Nov review) and take an edge that stands out from
-   what is behind them, kept light (10 Nov): on the dark hero film (`btn-on-film`) the Deep Sea fill rises inside a 1 px
-   Limestone edge at 50 %; on the pale CTA film (`btn-on-pale`) the Limestone fill rises inside a 1 px Deep Sea edge at
-   35 %. A soft shadow lifts both */
+/* Two buttons on pictures (10 Nov review).
+   Hero, on the dark film (`btn-on-film`): the default stays; on hover a white fill rises (no stroke), so it lightens
+   rather than sinking into the film. Label and chip stay Deep Sea.
+   CTA, on the pale film (`btn-on-pale`): a slightly lighter Deep Sea at rest (halfway to Deep Sea 400) that darkens
+   to Deep Sea 800 on hover; label and chip keep their colours */
+/* at rest a touch darker than Deep Sea 50 (halfway to Deep Sea 100), so the white hover reads as a change */
+.btn-light.btn-on-film { background: color-mix(in srgb, var(--color-deepsea-50), var(--color-deepsea-100)); }
+.btn-light.btn-on-film .btn-fill { background: #fff; }
 @media (hover: hover) {
-  .btn-light.btn-on-film:hover { border-color: rgb(251 250 248 / .5); box-shadow: 0 6px 24px rgb(1 15 26 / .35); }
-  .btn-primary.btn-on-pale:hover { border-color: rgb(7 41 60 / .35); box-shadow: 0 6px 24px rgb(1 15 26 / .18); }
+  .btn-light.btn-on-film:hover { border-color: #fff; }
+  .btn-light.btn-on-film:hover .btn-label { color: var(--color-deepsea-500); }
+  .btn-light.btn-on-film:hover .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); }
+}
+.btn-primary.btn-on-pale { background: color-mix(in srgb, var(--color-deepsea-500), var(--color-deepsea-400)); }
+.btn-primary.btn-on-pale .btn-fill { background: var(--color-deepsea-800); }
+@media (hover: hover) {
+  .btn-primary.btn-on-pale:hover { border-color: var(--color-deepsea-800); }
+  .btn-primary.btn-on-pale:hover .btn-label { color: var(--color-limestone-500); }
+  .btn-primary.btn-on-pale:hover .btn-chip { background: var(--color-limestone-500); color: var(--color-deepsea-500); }
 }
 
 /* Secondary on light: Deep Sea outline → Deep Sea rises */

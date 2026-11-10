@@ -16,7 +16,7 @@ export default function RevealText({ as = "p", segs, text, className = "", onLoa
   const root = useRef<HTMLElement>(null);
   useEffect(() => {
     const el = root.current; if (!el || reducedMotion()) return;
-    gsap.set(el, BLOCK_FROM);
+    gsap.set(el, { ...BLOCK_FROM });
     if (onLoad) { const t = blurIn(el, { delay }); return () => { t.kill(); }; }
     return whenSectionEnters(el, () => blurIn(el, { delay }));
   }, [onLoad, delay]);

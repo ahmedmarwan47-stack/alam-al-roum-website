@@ -71,17 +71,17 @@ export default function TheStory() {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { duration: D, ease } });
       // state 1, set inside the timeline so a resize (invalidateOnRefresh) re-measures from a clean start
-      tl.set($("[data-dome=culture]"), DOME.below, 0)
+      tl.set($("[data-dome=culture]"), { ...DOME.below }, 0)
         .set(gDome$, { p: 0, onComplete: () => domeAt(gDome, 0) }, 0)
         .set($("[data-c-word]"), { top: fy(1180) }, 0)
         .set($("[data-h-text]"), { y: 0, autoAlpha: 1 }, 0)
-        .set([$("[data-c-head]"), $("[data-c-body]")], BLOCK_FROM, 0)
+        .set([$("[data-c-head]"), $("[data-c-body]")], { ...BLOCK_FROM }, 0)
         .set(photos, { y: 60, autoAlpha: 0 }, 0)
-        .set($$("[data-g-text]"), BLOCK_FROM, 0)
+        .set($$("[data-g-text]"), { ...BLOCK_FROM }, 0)
         .set($("[data-g-dim]"), { autoAlpha: 0 }, 0);
       let t = 0;
       // 1 → 2 · Culture rises
-      tl.to($("[data-dome=culture]"), DOME.risen, t)
+      tl.to($("[data-dome=culture]"), { ...DOME.risen }, t)
         .to($("[data-c-word]"), { top: fy(640) }, t)
         .fromTo($("[data-c-word]"), WORD_FROM, { ...WORD_TO, duration: D * 0.5 }, t + D * 0.3)
         .to($("[data-h-text]"), { y: -60, autoAlpha: 0.4 }, t);
@@ -89,7 +89,7 @@ export default function TheStory() {
       // headline and then the paragraph blur in (one block each, the site's text entrance) and the photos rise into place
       t += STEP;
       const IN = rm ? 0 : 0.55, BLOCK = rm ? 0.001 : 0.8;
-      tl.to($("[data-dome=culture]"), DOME.cover, t)
+      tl.to($("[data-dome=culture]"), { ...DOME.cover }, t)
         .to($("[data-c-word]"), { top: fy(210), duration: D * 0.7 }, t)
         .to($("[data-h-text]"), { y: -80, autoAlpha: 0 }, t)
         .to($("[data-c-head]"), { ...BLOCK_TO, duration: BLOCK }, t + IN)

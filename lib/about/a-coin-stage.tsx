@@ -114,8 +114,8 @@ export default function CoinStage({ poster }: { poster?: string }) {
       .to(q("[data-tick]"), { y: 96, duration: 1.3 }, 2.4)
       // 4 · Restored
       .to(q("[data-shade]"), { opacity: 1, duration: 1.5 }, 3.7)
-      .fromTo(q("[data-rise]"), BLOCK_FROM, { ...BLOCK_TO, duration: 1.0, stagger: 0.15 }, 3.9)
-      .fromTo(q("[data-points]"), BLOCK_FROM, { ...BLOCK_TO, duration: 1.0 }, 4.3)
+      .fromTo(q("[data-rise]"), { ...BLOCK_FROM }, { ...BLOCK_TO, duration: 1.0, stagger: 0.15 }, 3.9)
+      .fromTo(q("[data-points]"), { ...BLOCK_FROM }, { ...BLOCK_TO, duration: 1.0 }, 4.3)
       .to(q("[data-tick]"), { y: 192, duration: 1.5 }, 3.7);
     // the film reaches its last frame with the motion; then a reading hold on the finished copy before the pin lets go
     motionEnd = tl.duration();
