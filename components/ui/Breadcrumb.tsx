@@ -9,9 +9,9 @@ import Icon from "./Icon";
 export default function Breadcrumb({ parent, href, current, className = "" }: { parent: string; href: string; current: string; className?: string }) {
   return (
     <nav aria-label="Breadcrumb" className={`flex max-w-full min-w-0 ${className}`}>
-      <ol className="flex min-w-0 items-center gap-2 t-label l-14 text-black/60">
+      <ol className="flex min-w-0 items-center gap-2 t-label l-14 text-deepsea-500/60">
         <li className="flex-none">
-          <Link href={href} className="group/bc -my-3 flex items-center gap-2 py-3 text-black transition-opacity hover:opacity-60">
+          <Link href={href} className="group/bc -my-3 flex items-center gap-2 py-3 text-deepsea-500 transition-opacity hover:opacity-60">
             <Icon name="arrow-left-01-sharp" size={16} className="transition-transform duration-300 group-hover/bc:-translate-x-1" />{parent}
           </Link>
         </li>

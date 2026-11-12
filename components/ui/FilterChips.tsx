@@ -13,7 +13,7 @@ export default function FilterChips({ options, value, onChange, className = "" }
     <div role="tablist" className={`flex flex-wrap gap-3 ${className} max-lg:-mx-[var(--gutter)] max-lg:flex-nowrap max-lg:justify-start max-lg:overflow-x-auto max-lg:overscroll-x-contain max-lg:px-[var(--gutter)] max-lg:scroll-px-[var(--gutter)] max-lg:snap-x max-lg:[scrollbar-width:none] max-lg:[&::-webkit-scrollbar]:hidden ${centred ? "max-lg:[&>button:first-child]:ml-auto max-lg:[&>button:last-child]:mr-auto" : ""}`}>
       {options.map((x) => (
         <button key={x} role="tab" aria-selected={value === x} onClick={() => onChange(x)}
-          className={`rounded-full border px-5 py-[10px] t-label l-14 transition-colors duration-300 max-lg:flex-none max-lg:snap-start max-lg:whitespace-nowrap ${value === x ? "border-[#121212] bg-[#121212] text-white" : "border-black/20 text-[#121212] hover:border-black/50"}`}>{x}</button>))}
+          className={`rounded-full border px-5 py-[10px] t-label l-14 transition-colors duration-300 max-lg:flex-none max-lg:snap-start max-lg:whitespace-nowrap ${value === x ? "border-[#121212] bg-[#121212] text-white" : "border-deepsea-500/20 text-[#121212] hover:border-deepsea-500/50"}`}>{x}</button>))}
     </div>
   );
 }

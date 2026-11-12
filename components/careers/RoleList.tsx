@@ -18,10 +18,10 @@ export default function RoleList() {
       <div className="flex flex-col gap-4">
         {list.length ? list.map((r) => (
           <article key={r.slug} className="flex flex-col justify-between gap-6 bg-limestone-100 p-5 sm:p-7 lg:flex-row lg:items-end">
-            <div className="flex max-w-[720px] flex-col gap-4 text-black">
-              <span className="t-label l-12 text-black/60">{r.dept}</span>
+            <div className="flex max-w-[720px] flex-col gap-4 text-deepsea-500">
+              <span className="t-label l-12 text-deepsea-500/60">{r.dept}</span>
               <RevealText as="h2" text={r.title} className="t-heading hd-32" />
-              <p className="t-body b-16 text-black/80">{r.body}</p>
+              <p className="t-body b-16 text-deepsea-500/80">{r.body}</p>
               <div className="flex flex-wrap gap-x-5 gap-y-2 t-text x-16 sm:gap-7">
                 {([["location-01", r.location], ["briefcase-01", r.type], ["clock-01", r.mode]] as const).map(([i, t]) => (
                   <span key={i} className="flex items-center gap-2"><Icon name={i} size={20} />{t}</span>))}

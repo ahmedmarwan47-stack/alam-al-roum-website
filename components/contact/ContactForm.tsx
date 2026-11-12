@@ -36,7 +36,7 @@ export default function ContactForm() {
         <label className={line}><span className={label}>{F.fields.interest[0]}</span>
           <span className="relative flex items-center">
             <select value={interest} onChange={(e) => setInterest(e.target.value)} className={`${input} cursor-pointer appearance-none pr-8`}>
-              {F.interests.map((i) => <option key={i} className="text-black">{i}</option>)}
+              {F.interests.map((i) => <option key={i} className="text-deepsea-500">{i}</option>)}
             </select>
             <Icon name="arrow-down-01-sharp" size={20} className="pointer-events-none absolute right-0 text-white" />
           </span>

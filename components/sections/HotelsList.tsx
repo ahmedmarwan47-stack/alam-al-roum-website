@@ -42,8 +42,8 @@ export default function HotelsList({ data: D }: { data: HotelsData }) {
                 imgClassName="transition-transform duration-[1.2s] [transition-timing-function:var(--ease-site)] group-hover:scale-[1.05]" />
             </div>
             {/* the two-column grid on phones: name 14 / type 12, as the community cards (the swipe track keeps its sizes) */}
-            <span className={`t-heading hd-24 text-black ${D.cols ? "" : "max-md:mt-3 max-md:text-[14px]! max-md:leading-5! max-sm:break-words"}`}>{it.name}</span>
-            <span className={`t-body b-14 text-black/60 ${D.cols ? "" : "max-md:mt-1 max-md:text-[12px]! max-md:leading-[18px]!"}`}>{it.type}</span>
+            <span className={`t-heading hd-24 text-deepsea-500 ${D.cols ? "" : "max-md:mt-3 max-md:text-[14px]! max-md:leading-5! max-sm:break-words"}`}>{it.name}</span>
+            <span className={`t-body b-14 text-deepsea-500/60 ${D.cols ? "" : "max-md:mt-1 max-md:text-[12px]! max-md:leading-[18px]!"}`}>{it.type}</span>
           </button>))}
       </div>
       {/* Drawer (Figma 11128:14825 hotel · 11128:14826 unit type) */}
@@ -75,7 +75,7 @@ export default function HotelsList({ data: D }: { data: HotelsData }) {
         {h.specs && (
           <div className="flex flex-col">
             {h.specs.map(([icon, label, value], k) => (
-              <div key={label} className={`flex items-start justify-between gap-4 py-3 ${k < h.specs!.length - 1 ? "border-b border-black/15" : ""}`}>
+              <div key={label} className={`flex items-start justify-between gap-4 py-3 ${k < h.specs!.length - 1 ? "border-b border-deepsea-500/15" : ""}`}>
                 <span className="flex items-center gap-2 t-label l-14 text-limestone-700"><Icon name={icon} size={24} />{label}</span>
                 <span className="t-text x-16 text-right">{value}</span>
               </div>))}

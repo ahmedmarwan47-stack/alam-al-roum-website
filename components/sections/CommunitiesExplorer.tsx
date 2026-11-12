@@ -19,7 +19,7 @@ export function SegmentedToggle({ options, value, onChange, className = "max-md:
         style={{ transform: `translateX(${value * 100}%)` }} />
       {options.map((o, k) => (
         <button key={o} role="tab" aria-selected={k === value} onClick={() => onChange(k)}
-          className={`relative h-12 w-[clamp(120px,24vw,180px)] max-md:w-auto max-md:flex-1 t-label l-16 transition-colors duration-[350ms] ${k === value ? "text-white" : "text-black/60"}`}>{o}</button>
+          className={`relative h-12 w-[clamp(120px,24vw,180px)] max-md:w-auto max-md:flex-1 t-label l-16 transition-colors duration-[350ms] ${k === value ? "text-white" : "text-deepsea-500/60"}`}>{o}</button>
       ))}
     </div>
   );
@@ -45,8 +45,8 @@ export function CommunityGrid({ items, className = "" }: { items: Community[]; c
                 imgClassName="transition-transform duration-[1.2s] [transition-timing-function:var(--ease-site)] group-hover:scale-[1.05]" />
             </div>
             {/* phones: name 14 / line 12, as the Home community cards */}
-            <span className="t-heading hd-24 text-black max-md:mt-3 max-md:text-[14px]! max-md:leading-5! max-sm:break-words">{c.name}</span>
-            <span className="t-body b-14 text-black/60 max-md:mt-1 max-md:text-[12px]! max-md:leading-[18px]!">{c.body}</span>
+            <span className="t-heading hd-24 text-deepsea-500 max-md:mt-3 max-md:text-[14px]! max-md:leading-5! max-sm:break-words">{c.name}</span>
+            <span className="t-body b-14 text-deepsea-500/60 max-md:mt-1 max-md:text-[12px]! max-md:leading-[18px]!">{c.body}</span>
           </Link>);
       })}
     </div>

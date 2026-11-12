@@ -12,7 +12,8 @@ const fig = (h: string) => (/^\d/.test(h) ? "normal-case!" : "");
 
 /**
  * Destination · "A city shaped by Water" (#65, 12 Nov review): the Limestone of the section above carries on and slowly gives way to a still photo of the sea seen
- * from above, as if falling from the land into the water; the copy sits on the sea, in Limestone. Nothing moves.
+ * from above, as if falling from the land into the water; the copy sits on the sea, in Limestone. Nothing moves: the photo is
+ * kept out of the site-wide photo sweep (data-no-blur, BlurInOut).
  * Matches the Figma section (Destination • Desktop, 11545:12304): 1294 tall at 1512, 80 px below the copy, 40 between
  * blocks; the fade is a long, eased gradient (many stops, so it never bands) from Limestone 500 to clear over the top
  * 38 %, and a Deep Sea shade (0 → 55 → 90 %) over the lower 60 % keeps the copy legible.
@@ -21,7 +22,7 @@ export default function WaterFall() {
   return (
     <section data-nav="light" className="relative overflow-hidden bg-limestone-500">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={SEA} srcSet={srcSet(SEA)} alt="The sea seen from above" className="absolute inset-0 h-full w-full object-cover" />
+      <img data-no-blur src={SEA} srcSet={srcSet(SEA)} alt="The sea seen from above" className="absolute inset-0 h-full w-full object-cover" />
       {/* Limestone → sea: solid at the top, eased out over the upper 38 % (Figma 11545:12304: 497 of 1294) */}
       <div aria-hidden className="pointer-events-none absolute inset-x-0 -top-px h-[38.4%]"
         style={{ background: "linear-gradient(to bottom, #F4EADD 0%, #F4EADD 14%, rgb(244 234 221 / .94) 24%, rgb(244 234 221 / .8) 34%, rgb(244 234 221 / .6) 44%, rgb(244 234 221 / .38) 56%, rgb(244 234 221 / .18) 70%, rgb(244 234 221 / .06) 84%, rgb(244 234 221 / 0) 100%)" }} />

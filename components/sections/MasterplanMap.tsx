@@ -3,7 +3,6 @@ import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties }
 import Button from "@/components/ui/Button";
 import Drawer from "@/components/ui/Drawer";
 import Icon from "@/components/ui/Icon";
-import RevealImage from "@/components/reveal/RevealImage";
 import { srcSet } from "@/lib/img";
 import { MQ, matches } from "@/lib/breakpoints";
 
@@ -100,7 +99,9 @@ export default function MasterplanMap({ image, pins: all, initial = 0, view = FU
     {/* phones: the strip keeps the Home map's height (180vw at 1512:839), so a wider view is a longer strip */}
     <div ref={box} className="relative w-full max-md:w-[var(--strip)]"
       style={{ aspectRatio: `${view.w} / ${view.h}`, "--strip": `${(180 * phoneScale * (view.w / view.h)) / (1512 / 839)}vw` } as CSSProperties}>
-      <RevealImage src={image} className="absolute inset-0" />
+      {/* 12 Nov review: the plan simply sits there (no wipe-up and zoom-settle entrance, and out of the site-wide photo sweep) */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img data-no-blur src={image} srcSet={srcSet(image)} alt="The Alam Al Roum masterplan" className="absolute inset-0 h-full w-full object-cover" />
       {pins.map((p, k) => {
         const it = items.find((i) => i.key === itemOf[k])!, gate = it.gate;
         const on = phone ? active === it.key : open === k, px = fx(p) * w, right = px + 28 + 300 <= w - 12;

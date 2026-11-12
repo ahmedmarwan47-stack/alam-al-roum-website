@@ -19,7 +19,7 @@ export default function DetailHeader({ tag, date, title, sub, back, kind = "stor
       {back && <Breadcrumb parent={back.label} href={back.href} current={title} />}
       <RevealText as="h1" text={title} onLoad delay={0.15} className="t-heading hd-48 text-deepsea-500" />
       {sub && <RevealText text={sub} onLoad delay={0.3} className="t-body b-18 text-limestone-800" />}
-      <span className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 t-label l-14 text-black/70">
+      <span className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 t-label l-14 text-deepsea-500/70">
         <span className="flex items-center gap-2"><Icon name={kind === "event" ? "location-01" : "tag-01"} size={16} />{tag}</span>
         <i className="h-[14px] w-px bg-black/30" />
         <span className="flex items-center gap-2"><Icon name="calendar-03" size={16} />{date}</span>

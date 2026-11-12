@@ -18,18 +18,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 const Numbered = ({ title, items }: { title: string; items: string[] }) => (
   <div className="flex flex-col gap-6 lg:flex-row lg:gap-0">
-    <RevealText as="h2" text={title} className="t-heading hd-32 text-black lg:w-[480px] lg:flex-none" />
+    <RevealText as="h2" text={title} className="t-heading hd-32 text-deepsea-500 lg:w-[480px] lg:flex-none" />
     <ol className="flex flex-1 flex-col">
       {items.map((t, k) => (
-        <li key={t} className="flex items-baseline gap-5 border-b border-black/10 py-4 first:pt-0 last:border-0">
-          <span className="t-label l-12 text-black/60">{String(k + 1).padStart(2, "0")}</span>
-          <span className="t-body b-18 text-black">{t}</span>
+        <li key={t} className="flex items-baseline gap-5 border-b border-deepsea-500/10 py-4 first:pt-0 last:border-0">
+          <span className="t-label l-12 text-deepsea-500/60">{String(k + 1).padStart(2, "0")}</span>
+          <span className="t-body b-18 text-deepsea-500">{t}</span>
         </li>))}
     </ol>
   </div>
 );
 
-/** Job detail (Figma "Job Detail • Desktop"): banner, terracotta position details, then responsibilities / requirements / offer. */
+/** Job detail (Figma "Job Detail • Desktop"): banner, deep sea position details (12 Nov: no burgundy), then responsibilities / requirements / offer. */
 export default async function JobPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const role = roles.find((x) => x.slug === slug);
@@ -39,12 +39,13 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
   return (
     <main>
       <Navbar />
-      <section className="mt-[76px] flex flex-col items-center gap-6 bg-limestone-50 px-[var(--gutter)] py-[60px] text-center text-black">
+      <section className="mt-[76px] flex flex-col items-center gap-6 bg-limestone-50 px-[var(--gutter)] py-[60px] text-center text-deepsea-500">
         <Breadcrumb parent="Careers" href="/careers" current={r.title} />
-        <RevealText as="h1" text={r.title} onLoad delay={0.15} className="t-serif capitalize d-68 leading-[1]" />
-        <RevealText text={r.lede} onLoad delay={0.3} className="t-body b-18 text-black/70" />
+        {/* 12 Nov review: the site's heading face in Deep Sea (as the listing heroes), not black Immortel */}
+        <RevealText as="h1" text={r.title} onLoad delay={0.15} className="t-heading capitalize hd-56" />
+        <RevealText text={r.lede} onLoad delay={0.3} className="t-body b-18 text-limestone-800" />
       </section>
-      <section className="flex flex-col gap-16 bg-terracotta-500 py-20 text-white container-x">
+      <section className="flex flex-col gap-16 bg-deepsea-500 py-20 text-white container-x">
         <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-center">
           <div className="flex max-w-[460px] flex-col gap-6">
             <RevealText as="h2" text="Position details" className="t-heading hd-48" />
@@ -64,8 +65,8 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
         {r.responsibilities && <Numbered title="Responsibilities" items={r.responsibilities} />}
         {r.requirements && <Numbered title="Requirements" items={r.requirements} />}
         <div className="flex flex-col gap-6 lg:flex-row lg:gap-0">
-          <RevealText as="h2" text="What we offer" className="t-heading hd-32 text-black lg:w-[480px] lg:flex-none" />
-          <div className="flex flex-col items-start gap-8"><p className="t-body b-18 text-black/70">{offer}</p><Button label="Apply For This Role" href={apply} /></div>
+          <RevealText as="h2" text="What we offer" className="t-heading hd-32 text-deepsea-500 lg:w-[480px] lg:flex-none" />
+          <div className="flex flex-col items-start gap-8"><p className="t-body b-18 text-deepsea-500/70">{offer}</p><Button label="Apply For This Role" href={apply} /></div>
         </div>
       </section>
       <Cta />

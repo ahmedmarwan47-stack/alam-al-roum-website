@@ -17,18 +17,18 @@ function Card({ x, delay, num, grid = false, className = "" }: { x: X; delay: nu
       <div className={`relative overflow-hidden ${grid ? "aspect-[448/587] lg:aspect-[4/3]" : "aspect-[448/587]"}`}>
         <RevealImage src={x.photo} alt={x.title} delay={delay} className="h-full w-full"
           imgClassName="transition-transform duration-[1.2s] [transition-timing-function:var(--ease-site)] group-hover:scale-[1.06]" />
-        {num !== undefined && <span className="absolute left-4 top-4 t-label l-12 text-black">{String(num).padStart(2, "0")}</span>}
+        {num !== undefined && <span className="absolute left-4 top-4 t-label l-12 text-deepsea-500">{String(num).padStart(2, "0")}</span>}
         {/* the arrow alone (9 Nov: no "Explore" word); the card's name labels the link */}
-        <span aria-hidden className="absolute bottom-3 right-3 grid size-9 place-items-center rounded-full bg-white text-black transition-transform duration-500 [transition-timing-function:var(--ease-site)] group-hover:-translate-y-1 md:bottom-4 md:right-4 md:size-10">
+        <span aria-hidden className="absolute bottom-3 right-3 grid size-9 place-items-center rounded-full bg-white text-deepsea-500 transition-transform duration-500 [transition-timing-function:var(--ease-site)] group-hover:-translate-y-1 md:bottom-4 md:right-4 md:size-10">
           <Icon name="arrow-up-right" size={16} />
         </span>
       </div>
       {grid
-        ? <div className="flex min-w-0 flex-col gap-1 text-black md:flex-row md:items-baseline md:justify-between md:gap-4">
+        ? <div className="flex min-w-0 flex-col gap-1 text-deepsea-500 md:flex-row md:items-baseline md:justify-between md:gap-4">
             <span className="t-heading hd-24 max-md:text-[14px]! max-md:leading-5!">{x.title}</span>
             <span className="t-body b-14 opacity-60 max-md:text-[12px]! max-md:leading-[18px]! md:text-right">{x.note}</span>
           </div>
-        : <div className="flex items-baseline justify-between gap-4 text-black">
+        : <div className="flex items-baseline justify-between gap-4 text-deepsea-500">
             <span className="t-heading hd-24">{x.title}</span>
             <span className="t-body b-14 text-right opacity-60">{x.note}</span>
           </div>}
@@ -59,7 +59,7 @@ function Slider({ grid = false, exclude }: { grid?: boolean; exclude?: string })
     const card = r.firstElementChild as HTMLElement | null;
     r.scrollBy({ left: dir * ((card?.offsetWidth ?? 440) + 24), behavior: "smooth" });
   };
-  const btn = "grid h-11 w-11 place-items-center rounded-full border border-black/30 text-black transition-opacity duration-300 disabled:opacity-30";
+  const btn = "grid h-11 w-11 place-items-center rounded-full border border-deepsea-500/30 text-deepsea-500 transition-opacity duration-300 disabled:opacity-30";
   return (
     <>
       <div ref={rail} onScroll={update}
