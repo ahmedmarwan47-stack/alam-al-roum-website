@@ -5,6 +5,7 @@ import CityNumbers from "@/components/about/CityNumbers";
 import CoastalFacts from "@/components/about/CoastalFacts";
 import CoinReveal from "@/components/about/CoinReveal";
 import TheStory from "@/components/about/TheStory";
+import HistoryTrack from "@/components/destination/HistoryTrack";
 import Milestones from "@/components/about/Milestones";
 import Masterplan from "@/components/sections/Masterplan";
 import Nearby from "@/components/about/Nearby";
@@ -29,6 +30,8 @@ export default function About() {
       <CoinReveal />
       <CoastalFacts />
       <TheStory />
+      {/* 12 Nov review (#66): Since the Romans, moved here from Destination, after the shoreline's story */}
+      <HistoryTrack />
       <Masterplan places />
       <Milestones />
       <Nearby />

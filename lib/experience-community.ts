@@ -46,7 +46,7 @@ export const experienceCommunity: Record<string, ExperienceCommunityData> = {
     community: { tag: "The beach community", title: "A shore that belongs to the neighbourhoods",
       body: ["Beachfront communities open straight onto the sand, and every other neighbourhood is a short walk or ride away. The shore works as the city's front garden: morning swims, afternoon shade and evenings on the promenade.",
         "Residents' beach clubs give each community its own place by the sea, with family days, swim lessons and a calendar that carries on after summer."],
-      photos: [x("beach-lagoon-deck"), ph("ui-v-parasol")], alt: ["A swimmer on a deck over clear lagoon water", "A striped parasol against the sky"],
+      photos: ["/images/communities/beachfront.webp", ph("cta-form-kids")], focus: ["", "object-[92%_50%]"], alt: ["The shore seen from above", "Two children running along the shore"],
       points: [["Swim school", "Lessons in the lagoons for every age"], ["Beach care", "Clean-ups and dune planting each season"], ["Family days", "Games, food and music on the sand"], ["Sunset sessions", "Evenings on the promenade all year"]] },
     week: { tag: "On the shore", title: WEEK, body: "The beach keeps its own rhythm, from the first swimmers at sunrise to music on the promenade at dusk.",
       items: [

@@ -2,9 +2,7 @@ import Navbar from "@/components/sections/Navbar";
 import PageHero from "@/components/sections/PageHero";
 import InTown from "@/components/destination/InTown";
 import Connectivity from "@/components/sections/Connectivity";
-import WaterStrategy from "@/components/destination/WaterStrategy";
-import HistoryTrack from "@/components/destination/HistoryTrack";
-import ArchSea from "@/components/destination/ArchSea";
+import WaterFall from "@/components/destination/WaterFall";
 import Landmarks from "@/components/sections/Landmarks";
 import Faq from "@/components/sections/Faq";
 import Cta from "@/components/sections/Cta";
@@ -21,9 +19,9 @@ export default function Destination() {
       <PageHero data={destHero} />
       <InTown />
       <Connectivity tag="To Town" compact visa />
-      <WaterStrategy />
-      <HistoryTrack />
-      <ArchSea />
+      {/* #65 (12 Nov): the water section on a still sea, the limestone above falling into it (Figma 11545:12304) */}
+      <WaterFall />
+      {/* 12 Nov review: Since the Romans (the history track) moved to About (#66); the mirror-arch sea section removed (#67) */}
       <Landmarks />
       <Faq data={destFaq} />
       <Cta />
