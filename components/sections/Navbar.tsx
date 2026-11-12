@@ -4,7 +4,7 @@ import Link from "next/link";
 import Button from "@/components/ui/Button";
 import Icon from "@/components/ui/Icon";
 import { nav } from "@/lib/content";
-import SiteMenu, { MENU_BTN } from "./SiteMenu";
+import SiteMenu, { MENU_BTN, MenuGlyph } from "./SiteMenu";
 
 /** Bar height; every hero runs up under it. */
 const BAR_H = 76;
@@ -62,13 +62,20 @@ export default function Navbar() {
         {/* phones: the menu icon alone (a 44 px target, its glyph on the gutter), as on Discovery Land; the word from 640 up.
             SiteMenu's CLOSE copies this box exactly (MENU_BTN), so it opens where the cursor already is */}
         <button onClick={() => setOpen(true)} aria-expanded={open} aria-controls="site-menu" className={`${MENU_BTN} transition-colors duration-500 group-data-[over=media]/bar:text-limestone-50 group-data-[over=media]/bar:drop-shadow-[0_1px_6px_rgb(1_15_26/.45)]`}>
-          <Icon name="menu-01" size={28} /><span className="max-sm:sr-only">{nav.menu}</span></button>
+          <MenuGlyph open={open} /><span className="max-sm:sr-only">{nav.menu}</span></button>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <Link href="/" className="absolute left-1/2 -translate-x-1/2 max-lg:py-[14px]"><img src="/images/logotype.svg" alt="Alam Al Roum" width={255} height={22} className="h-auto w-[150px] transition-[filter] duration-500 group-data-[over=media]/bar:brightness-0 group-data-[over=media]/bar:invert group-data-[over=media]/bar:drop-shadow-[0_1px_6px_rgb(1_15_26/.45)] md:w-[200px] lg:w-[255px]" /></Link>
         {/* the full register button from tablet up; below that, its arrow chip alone, so menu / logo / register stay balanced */}
-        <div className="hidden md:block"><Button label={nav.cta} href="/contact" size={48} variant="primary" compact /></div>
-        <Link href="/contact" aria-label={nav.cta} className="grid size-10 place-items-center rounded-lg bg-deepsea-500 text-limestone-500 md:hidden">
-          <Icon name="arrow-up-right" size={20} /></Link>
+        {/* 12 Nov review: the Qatari Diar mark sits in the bar, before the button (it left the Home hero): the brand's own
+            reverse logo (copper, from qataridiar.com), the same over photos and on the light bar. From tablet up only: on
+            phones the bar keeps menu / wordmark / arrow, and the mark is in the footer */}
+        <div className="flex items-center md:gap-6">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/qatari-diar-reverse.png" alt="Qatari Diar" width={44} height={44} className="hidden size-11 md:block" />
+          <div className="hidden md:block"><Button label={nav.cta} href="/contact" size={48} variant="primary" compact /></div>
+          <Link href="/contact" aria-label={nav.cta} className="grid size-10 place-items-center rounded-lg bg-deepsea-500 text-limestone-500 md:hidden">
+            <Icon name="arrow-up-right" size={20} /></Link>
+        </div>
       </header>
       <SiteMenu open={open} onClose={close} />
     </>

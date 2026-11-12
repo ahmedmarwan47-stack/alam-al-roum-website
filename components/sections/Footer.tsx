@@ -35,24 +35,25 @@ const contactHref = (icon: string, t: string) =>
 
 /**
  * Footer (Figma "Footer" 10921:11186 · Home 10970:12490): newsletter row, links, legal row, wordmark.
- * Every page uses Figma's plain Limestone footer (Theme=Light, 885 tall): no lagoon film behind it (29 Oct review).
+ * 12 Nov review: on Deep Sea with Limestone type; the wordmark smaller, with the brand's coin pair on its right; the
+ * phone and e-mail lines without their icons (only the social icons stay).
  */
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-limestone-50 text-deepsea-500">
+    <footer className="relative overflow-hidden bg-deepsea-500 text-limestone-50">
       <div className="relative flex flex-col pt-10 container-x">
         <div className="flex flex-col justify-between gap-8 py-10 lg:flex-row lg:items-center">
           <div className="flex flex-col gap-2"><RevealText text={F.newsTitle} className="t-text x-28" /><span className="t-text x-16">{F.newsBody}</span></div>
           <div className="flex w-full max-w-[453px] flex-col gap-3">
-            <form className="flex h-16 items-center gap-2 rounded-lg border border-limestone-600 bg-limestone-100 py-2 pl-5 pr-2">
+            <form className="flex h-16 items-center gap-2 rounded-lg border border-limestone-50/25 bg-deepsea-600 py-2 pl-5 pr-2">
               {/* min-w-0: the field gives way on a phone, so the Subscribe button keeps its chip inside the box */}
-              <input type="email" aria-label={F.placeholder} placeholder={F.placeholder} className="min-w-0 flex-1 bg-transparent t-text x-16 text-deepsea-500 outline-none placeholder:text-limestone-800" />
-              <Button label={F.subscribe} variant="primary" compact />
+              <input type="email" aria-label={F.placeholder} placeholder={F.placeholder} className="min-w-0 flex-1 bg-transparent t-text x-16 text-limestone-50 outline-none placeholder:text-limestone-50/60" />
+              <Button label={F.subscribe} variant="light" compact />
             </form>
             <span className="t-text x-12">{F.consent}</span>
           </div>
         </div>
-        <div className="h-px bg-limestone-600" />
+        <div className="h-px bg-limestone-50/20" />
         <div className="flex flex-col justify-between gap-10 pt-[50px] lg:flex-row">
           <div className="flex flex-col gap-6">
             <p className="t-text x-28">{F.address.map((l) => <span key={l} className="block">{l}</span>)}</p>
@@ -62,11 +63,11 @@ export default function Footer() {
           </div>
           {/* phones: the three groups stack as accordion rows (the Contact column used to run off-screen), with rules
               only between the rows */}
-          <div className="flex flex-col max-md:divide-y max-md:divide-deepsea-500/20 md:flex-row md:gap-[120px]">
+          <div className="flex flex-col max-md:divide-y max-md:divide-limestone-50/20 md:flex-row md:gap-[120px]">
             <Group title="Discover"><Links items={F.discover} /></Group>
             <Group title="More"><Links items={F.more} /></Group>
             <Group title="Contact">
-              {F.contact.map(([ic, t]) => { const h = contactHref(ic, t), C = h.startsWith("/") ? Link : "a"; return <C key={t} href={h} className="flex items-center gap-2 t-text x-16">{ic && <Icon name={ic} size={18} />}{t}</C>; })}
+              {F.contact.map(([ic, t]) => { const h = contactHref(ic, t), C = h.startsWith("/") ? Link : "a"; return <C key={t} href={h} className="flex items-center gap-2 t-text x-16">{ic && ic !== "call" && ic !== "mail-01" && <Icon name={ic} size={18} />}{t}</C>; })}
               {/* touch screens: 40 px targets round each icon, the first glyph still on the column edge */}
               <div className="flex gap-2 max-lg:-ml-[10px] max-lg:gap-0">{["whatsapp", "facebook-01", "instagram", "tiktok"].map((i) => <a key={i} href="#" aria-label={i.replace("-01", "")} className="max-lg:grid max-lg:size-10 max-lg:place-items-center"><Icon name={i} size={20} /></a>)}</div>
             </Group>
@@ -74,16 +75,20 @@ export default function Footer() {
         </div>
         {/* phones: the Qatari Diar mark and copyright first, the credit under them, all on the left */}
         <div className={`flex items-end justify-between pb-2 max-md:flex-col-reverse max-md:items-start max-md:gap-4 pt-[50px]`}>
-          <span className="t-body b-12 text-limestone-950">{F.credit}</span>
+          <span className="t-body b-12 text-limestone-50/70">{F.credit}</span>
           <div className="flex flex-col items-end gap-4 max-md:items-start">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/qatari-diar.png" alt="Qatari Diar" width={64} height={64} />
-            <span className="t-body b-12 text-limestone-950 max-md:text-pretty">{F.copyright}</span>
+            <img src="/images/qatari-diar-reverse.png" alt="Qatari Diar" width={64} height={64} />
+            <span className="t-body b-12 text-limestone-50/70 max-md:text-pretty">{F.copyright}</span>
           </div>
         </div>
-        <div className="h-px bg-deepsea-600" />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/images/wordmark.svg" alt="Alam Al Roum" className="w-full pb-10 pt-6" />
+        <div className="h-px bg-limestone-50/20" />
+        {/* the wordmark at about half the row (was full width), the coin pair on the right at its height */}
+        <div className="flex items-center justify-between gap-6 pb-10 pt-8">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/wordmark.svg" alt="Alam Al Roum" className="w-[min(560px,62%)] brightness-0 invert" />
+          <span aria-hidden className="block h-[clamp(28px,4.2vw,48px)] bg-limestone-50" style={{ aspectRatio: "591 / 271", mask: "url(/images/icon-pair.svg) center / contain no-repeat", WebkitMask: "url(/images/icon-pair.svg) center / contain no-repeat" }} />
+        </div>
       </div>
     </footer>
   );

@@ -5,7 +5,8 @@ import RegisterForm from "./RegisterForm";
 import { cta as C } from "@/lib/content";
 
 /**
- * CTA / Live Greatness (Figma 10921:12607): the portal film under a white radial vignette; left-aligned copy
+ * CTA / Live Greatness (Figma 10921:12607): a still of the portal film (12 Nov review: static, from the 4K master)
+ * under a white radial vignette; left-aligned copy
  * (Live 80 / Greatness 76 italic), 720 px. Neighbourhood pages pass `form` (Figma 11128:16156): a full-bleed photo
  * (the brand's children on the shore, extended to 16:9 so they run clear of the panel) with the Register Interest
  * panel in place of the copy and no vignette; from lg the section is one screen tall and the panel's spacing follows
@@ -24,7 +25,7 @@ export default function Cta({ form }: { form?: string }) {
             stay in frame (the photo is held to its right) */}
         {form
           ? <RevealImage src={C.still} blur className="absolute inset-0" imgClassName="object-[72%_50%] lg:object-center" />
-          : <RevealImage src={C.video} src4k={C.video4k} video blur className="absolute inset-0" imgClassName="max-lg:object-[80%_50%]" />}
+          : <RevealImage src={C.photo} blur className="absolute inset-0" imgClassName="max-lg:object-[80%_50%]" />}
         {!form && <>
           <div className="pointer-events-none absolute inset-x-0 top-0 h-[16%] bg-gradient-to-b from-limestone-50/80 to-limestone-50/0 lg:hidden" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-b from-limestone-50/0 via-limestone-50/70 via-60% to-limestone-50 lg:hidden" />

@@ -262,6 +262,9 @@ html.js [data-reveal-img] { visibility: hidden; }
    top and right of the film stay clear */
 .hero-film-shade { background: linear-gradient(0deg, rgb(1 15 26 / .74) 0%, rgb(1 15 26 / .52) 36%, rgb(1 15 26 / 0) 64%),
   linear-gradient(90deg, rgb(1 15 26 / .38) 0%, rgb(1 15 26 / .26) 45%, rgb(1 15 26 / 0) 72%); }
+/* PageHero (12 Nov review): the static full-bleed photo with its copy at the foot; a lighter fade than Home's, only
+   as deep as the white copy needs, held to the lower half */
+.hero-page-shade { background: linear-gradient(0deg, rgb(1 15 26 / .56) 0%, rgb(1 15 26 / .32) 30%, rgb(1 15 26 / 0) 58%); }
 /* PageHero at full bleed: the shade is held across the copy column (gutter + 600 px) and clears to the right */
 .hero-side-shade { background: linear-gradient(90deg, rgb(1 15 26 / .86) 0, rgb(1 15 26 / .66) calc(var(--gutter) + 600px), rgb(1 15 26 / 0) calc(var(--gutter) + 1000px)); }
 @media (width < 48rem) { .hero-foot-shade { background: linear-gradient(0deg, rgb(1 15 26 / .82) 0%, rgb(1 15 26 / .64) 64%, rgb(1 15 26 / 0) 94%); } }

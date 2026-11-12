@@ -37,7 +37,7 @@ export function FlightTimes({ className = "" }: { className?: string }) {
   return (
     <ul className={`grid grid-cols-3 gap-x-4 gap-y-4 ${className}`}>
       {CITIES.map((c) => (
-        <li key={c.n} className="flex flex-col"><span className="t-label l-16">{c.n}</span><span className="t-label l-14 text-limestone-50/70">{c.t}</span></li>))}
+        <li key={c.n} className="flex flex-col"><span className="t-label l-16">{c.n}</span><span className="t-label l-14 opacity-70">{c.t}</span></li>))}
     </ul>
   );
 }
