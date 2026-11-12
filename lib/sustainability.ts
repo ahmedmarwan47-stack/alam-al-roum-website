@@ -2,13 +2,16 @@
 const s = (f: string) => `/images/sustainability/${f}`;
 
 export const susHero = {
-  eyebrow: "Our approach", name: "Sustainability", line: "Designed for a coast that lasts generations.",
-  photo: s("hero.jpg"), alt: "A swimmer in clear lagoon water",
+  eyebrow: "Our approach", name: "Sustainability", line: "Designed for a coast that lasts generations: native habitats protected, every drop of water managed, and streets shaped for sun, shade and breeze.",
+  photo: s("hero.webp"), alt: "A swimmer in clear lagoon water",
 };
 
 export const susOverview = {
   tag: "Our approach", title: "Embedded in every plan",
   body: "Sustainability is embedded into the planning of Alam Al Roum through climate-responsive design, nature-led infrastructure and long-term environmental stewardship. Every aspect of the destination is designed to balance human experience with ecological resilience.",
+  photo: "/images/photo/ui-sea-6.webp", alt: "Clear shallows off the coast",
+  points: [["Open space first", "Most of the city stays open: parks, dunes, beaches and lagoons. Buildings take a small share of the land, so nature and public space come first."], ["Every drop managed", "Water is recycled and reused, from the lagoons to the landscape. One connected network serves homes, gardens and public spaces with as little waste as possible."],
+    ["Shaped by the climate", "Streets and buildings use shade, sun and sea breeze to keep cool. Colonnades, courtyards and planting cut the need for cooling through the year."]] as [string, string][],
 };
 
 export const commitments = {
@@ -21,16 +24,15 @@ export const commitments = {
     ["Walkability", "Neighbourhoods planned so daily life is a short walk away."],
     ["Active mobility", "Cycling routes and promenades make moving part of living."],
     ["Coastal resilience", "A shoreline designed to adapt over generations."],
-  ].map(([title, body], k) => ({ title, body, large: s(`c${k + 1}-large.jpg`), inset: s(`c${k + 1}-inset.jpg`) })),
+  ].map(([title, body], k) => ({ title, body, large: s(`c${k + 1}-large.webp`), inset: s(`c${k + 1}-inset.webp`) })),
 };
 
 export const waterTrack = {
   statement1: { tag: "Water strategy", text: "Lagoons to swim in, canals to walk along, a harbour to come home to.", accent: "A city shaped by water." },
-  living: { photo: s("water-living.jpg"), title: ["Water you", "can live in"],
+  living: { photo: s("water-living.webp"), title: ["Water you", "can live in"],
     features: [["Swimmable lagoons", "Calm, clean water for everyday swimming."], ["Canal promenade", "Walkable edges along the waterways."], ["Marina basin", "A sheltered harbour at the heart of the city."]] },
-  statement2: { text: "Clean by nature.", accent: "Calm by design.", body: "The water system keeps the landscape, the lagoons and the public spaces working together.",
-    cups: s("cups-clinking.png"), martini: s("cup-martini.png") },
-  systems: { photo: s("water-systems.jpg"), title: ["Water that looks after itself"],
+  statement2: { text: "Clean by nature.", accent: "Calm by design.", body: "The water system keeps the landscape, the lagoons and the public spaces working together." },
+  systems: { photo: s("water-systems.webp"), title: ["Water that looks", "after itself"],
     features: [["Ecological water", "Natural filtration that keeps the lagoons healthy."], ["Greener landscape", "Water that supports the planting and public spaces."], ["Resilient community", "A system built to keep the city running well, season after season."]] },
 };
 

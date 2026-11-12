@@ -1,9 +1,9 @@
-# Builds the static export (npm run build:pages) and publishes it to GitHub Pages on every push to main.
+# Builds the static export (npm run build:pages) and publishes it to GitHub Pages on every push to main or Preview.
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, Preview]
   workflow_dispatch:
 
 permissions:
@@ -40,3 +40,5 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          timeout: 1800000   # 30 min: the site carries ~300 MB of film, past the 10 min default

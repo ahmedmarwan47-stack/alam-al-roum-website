@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Navbar from "@/components/sections/Navbar";
 import Button from "@/components/ui/Button";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 import RevealText from "@/components/reveal/RevealText";
 import Cta from "@/components/sections/Cta";
 import Footer from "@/components/sections/Footer";
@@ -38,9 +39,9 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
   return (
     <main>
       <Navbar />
-      <section className="mt-[76px] flex flex-col items-center gap-6 bg-white px-[var(--gutter)] py-[60px] text-center text-black">
-        <span className="t-label l-12 text-black/60">Careers</span>
-        <RevealText as="h1" text={r.title} onLoad delay={0.15} className="t-body capitalize [font-size:clamp(44px,4.5vw,68px)] leading-[1]" />
+      <section className="mt-[76px] flex flex-col items-center gap-6 bg-limestone-50 px-[var(--gutter)] py-[60px] text-center text-black">
+        <Breadcrumb parent="Careers" href="/careers" current={r.title} />
+        <RevealText as="h1" text={r.title} onLoad delay={0.15} className="t-serif capitalize d-68 leading-[1]" />
         <RevealText text={r.lede} onLoad delay={0.3} className="t-body b-18 text-black/70" />
       </section>
       <section className="flex flex-col gap-16 bg-terracotta-500 py-20 text-white container-x">
@@ -51,10 +52,11 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
           </div>
           <Button label="Apply For This Role" href={apply} variant="light" className="self-start lg:self-auto" />
         </div>
-        <dl className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <dl className="grid grid-cols-2 gap-x-4 gap-y-6 md:gap-x-6 lg:grid-cols-4">
           {r.facts.map(([k, v]) => (
-            <div key={k} className="flex flex-col gap-3 border-t border-white/40 pt-6">
-              <dt className="t-heading hd-20">{k}</dt><dd className="t-body b-16 text-white/80">{v}</dd>
+            // two by two below lg, phones included (9 Nov): rules only between the rows; one row from lg, each fact under its cap
+            <div key={k} className="flex min-w-0 flex-col gap-1 border-t border-white/40 pt-6 max-lg:[&:nth-child(-n+2)]:border-t-0 max-lg:[&:nth-child(-n+2)]:pt-0 md:gap-3">
+              <dt className="t-heading hd-20 max-md:text-[16px]! max-md:leading-6!">{k}</dt><dd className="t-body b-16 text-white/80 max-md:text-[14px]! max-md:leading-5!">{v}</dd>
             </div>))}
         </dl>
       </section>

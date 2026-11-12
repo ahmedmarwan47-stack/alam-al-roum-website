@@ -4,29 +4,35 @@ import { waterStrategy as W } from "@/lib/destination";
 
 /**
  * Environment · Water strategy (Figma 10999:13971): Figma's 1512 × 1100 proportions (never shorter than the
- * screen), so the shore film is framed as designed; the shore loop fills it and the content
+ * screen; wider than 1512 it stays 1100 tall, or one screen, rather than growing past the copy; a height, not an
+ * aspect-ratio box, so the box keeps the full width and the column stays on the right content edge), so the shore film is
+ * framed as designed; the shore loop fills it and the content
  * column (776 wide) sits top-right, 80 px from the top: Environment / A CITY SHAPED BY *Water* / body (16 · 16),
  * then 40 px down the six facts (two 376 columns, 24 apart, each a Limestone 300 hairline, 24 px padding,
  * Heading/24 over Body/16, 12 apart), then 40 px down the 54 px outline button. A 166 px Deep Sea fade closes it.
+ * Below lg (9 Nov) it keeps the desktop idea rather than a card over the film: the copy sits straight on the sand,
+ * the film framed so the wave curls in from the lower left, and the facts stay in two columns (16/24 over 14/20 on
+ * phones, so a two-word title such as "Swimmable lagoons" fits its column on one line).
  */
 export default function WaterStrategy() {
   return (
     <section className="relative overflow-hidden bg-limestone-50">
-      <video className="absolute inset-0 h-full w-full object-cover object-left" src={W.video} poster={W.poster} autoPlay muted loop playsInline aria-hidden />
+      <video className="absolute inset-0 h-full w-full object-cover object-[40%_50%] lg:object-left" src={W.video} poster={W.poster} autoPlay muted loop playsInline aria-hidden />
       {/* the 166 px Deep Sea fade sits behind the copy, as in Figma */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[166px] bg-gradient-to-t from-[#043447] to-[rgb(4_52_71/0)]" />
-      <div className="relative flex justify-end px-[var(--gutter)] pb-[166px] pt-20 lg:aspect-[1512/1100] lg:min-h-svh">
-        <div className="flex w-full max-w-[776px] flex-col items-start gap-10 rounded-2xl bg-limestone-500/85 p-6 text-deepsea-500 backdrop-blur-sm lg:rounded-none lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
+      <div className="relative flex justify-end px-[var(--gutter)] pb-[166px] pt-20 lg:min-h-[max(100svh,min(72.75vw,1100px))]">
+        <div className="flex w-full max-w-[776px] flex-col items-start gap-8 text-deepsea-500 lg:gap-10">
           <div className="flex w-full flex-col gap-4">
-            <span className="t-label l-16">{W.tag}</span>
+            <span className="t-label l-tag">{W.tag}</span>
             <RevealText as="h2" segs={W.title} className="t-heading hd-56" delay={0.05} />
             <p className="t-body b-18 text-limestone-800">{W.body}</p>
           </div>
-          <div className="grid w-full gap-x-6 sm:grid-cols-2">
+          <div className="grid w-full grid-cols-2 gap-x-4 lg:gap-x-6">
             {W.facts.map(([h, b]) => (
-              <div key={h} className="flex flex-col gap-3 border-t border-limestone-300 py-6">
-                <span className="t-heading hd-24">{h}</span>
-                <span className="t-body b-16 text-limestone-800">{b}</span>
+              // rules only between the rows: the first row (two cells) has none
+              <div key={h} className="flex flex-col gap-1 border-t border-limestone-300 py-4 [&:nth-child(-n+2)]:border-t-0 [&:nth-child(-n+2)]:pt-0 lg:gap-3 lg:py-6">
+                <span className="t-heading hd-24 max-md:text-[16px]! max-md:leading-6!">{h}</span>
+                <span className="t-body b-16 text-limestone-800 max-md:text-[14px]! max-md:leading-5!">{b}</span>
               </div>))}
           </div>
           <Button label={W.cta} href={W.href} size={54} variant="outline" />

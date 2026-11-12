@@ -1,11 +1,12 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
+import { srcSet } from "@/lib/img";
 
 const STATS = [
-  { n: "20", title: ["20 Years", "of building"], body: "Two decades of landmark destinations, built across five continents and backed by the Qatar Investment Authority.", cta: "About Qatari Diar", photo: "/images/photo/ui-expcenter-day.jpg" },
-  { n: "42", title: ["42 Investment", "projects"], body: "Cities, districts and resorts delivered or underway, from Lusail to the Mediterranean shore of Alam Al Roum.", cta: "Our projects", photo: "/images/photo/ui-pm-visit.jpg" },
-  { n: "35", title: ["$35Bn Global", "portfolio"], body: "A portfolio exceeding USD 35 billion, with over two decades of investment in Egypt.", cta: "Investment in Egypt", photo: "/images/photo/ui-g-coast.jpg" },
+  { n: "20", title: ["20 Years", "of building"], body: "Two decades of landmark destinations, built across five continents and backed by the Qatar Investment Authority.", cta: "About Qatari Diar", photo: "/images/photo/ui-expcenter-day.webp" },
+  { n: "42", title: ["42 Investment", "projects"], body: "Cities, districts and resorts delivered or underway, from Lusail to the Mediterranean shore of Alam Al Roum.", cta: "Our projects", photo: "/images/photo/ui-pm-visit.webp" },
+  { n: "35", title: ["$35Bn Global", "portfolio"], body: "A portfolio exceeding USD 35 billion, with over two decades of investment in Egypt.", cta: "Investment in Egypt", photo: "/images/photo/ui-g-coast.webp" },
 ];
 const REPS = 3;                  // each column holds 0–9 three times, so a roll can spin past the target
 const JUMP = 3;                  // Möbius spins each digit ~3 places before it settles
@@ -13,9 +14,10 @@ const JUMP = 3;                  // Möbius spins each digit ~3 places before it
 /**
  * Qatari Diar in numbers. One sticky stage, a viewport of scroll per stat. Left: exactly the Figma copy block
  * (UI / Qatari Diar · Numbers: Qatari Diar logo 80, Heading/48 title, Body/18 body, centred vertically at x 60),
- * the stat's title and body swapping in place. Right: the Möbius numerals — a giant two-digit number (left digit
- * set lower); when the stat changes both digits spin ~3 places (left down, right up) and settle over 1.6 s
+ * the stat's title and body swapping in place. Right: the Möbius numerals — a giant two-digit number filling the
+ * 890 × 580 Numerals frame; when the stat changes both digits spin ~3 places (left down, right up) and settle over 1.6 s
  * (power3.out), with the photo showing through the digits (Limestone sheet + mix-blend-lighten).
+ * Phones and tablets get the same pinned stage and the same three beats, stacked: the copy, then the numerals under it.
  */
 export default function QatariDiarNumbers() {
   const [s, setS] = useState(0); const prev = useRef(0);
@@ -39,12 +41,12 @@ export default function QatariDiarNumbers() {
     });
   }, [s]);
   return (
-    <section ref={root} data-no-blur className="relative bg-limestone-50" style={{ height: `${STATS.length * 100}svh` }}>
-      <div className="sticky top-0 flex h-svh items-center container-x">
+    <section ref={root} data-no-blur className="relative h-[var(--qd-h)] bg-limestone-50" style={{ "--qd-h": `${STATS.length * 100}svh` } as CSSProperties}>
+      <div className="sticky top-0 flex h-svh flex-col justify-center gap-10 container-x lg:flex-row lg:items-center lg:justify-start lg:gap-0">
         {/* Figma "Copy" block: logo 80, 24 gap, Heading/48 (440 wide), 24 gap, Body/18 (≈405 wide) */}
         <div className="relative z-10 w-full max-w-[440px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/qatari-diar.png" alt="Qatari Diar" width={80} height={80} className="mb-6" />
+          <img src="/images/qatari-diar.png" alt="Qatari Diar" width={80} height={80} className="mb-6 h-14 w-14 lg:h-20 lg:w-20" />
           <div className="grid">
             {STATS.map((x, k) => (
               <div key={x.n} aria-hidden={k !== s} className="col-start-1 row-start-1 flex flex-col gap-6">
@@ -58,21 +60,21 @@ export default function QatariDiarNumbers() {
               </div>))}
           </div>
         </div>
-        <div className="pointer-events-none absolute inset-y-0 right-[var(--gutter)] hidden w-[min(58.9vw,890px)] items-center lg:flex">
+        <div className="pointer-events-none w-full max-w-[620px] lg:absolute lg:inset-y-0 lg:right-[var(--gutter)] lg:flex lg:w-[min(58.9vw,890px)] lg:max-w-none lg:items-center">
           <div className="flex w-full items-center justify-end">
-            <div className="relative w-full" style={{ aspectRatio: "962 / 662" }}>
+            <div className="relative w-full" style={{ aspectRatio: "890 / 580" }}>
               {STATS.map((x, k) => (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img key={x.photo} src={x.photo} alt="" className="absolute inset-[3px] h-[calc(100%-6px)] w-[calc(100%-6px)] object-cover transition-opacity duration-700" style={{ opacity: k === s ? 1 : 0 }} />))}
+                <img key={x.photo} src={x.photo} srcSet={srcSet(x.photo)} alt="" className="absolute inset-[3px] h-[calc(100%-6px)] w-[calc(100%-6px)] object-cover transition-opacity duration-700" style={{ opacity: k === s ? 1 : 0 }} />))}
               {/* Limestone sheet with black digits; lighten keeps the photo only where the digits are */}
               <div className="absolute inset-0 flex justify-between bg-limestone-50 mix-blend-lighten">
                 {[0, 1].map((k) => (
-                  <div key={k} className="relative overflow-hidden" style={{ width: "50%", height: "84.9%", marginTop: k === 0 ? "15.1%" : 0, containerType: "size" }}>
+                  <div key={k} className="relative h-full w-1/2 overflow-hidden" style={{ containerType: "size" }}>
                     <div ref={(el) => { cols.current[k] = el; }} className="absolute inset-x-0 top-0"
                       style={{ height: `${10 * REPS * 100}%` }}>
                       {Array.from({ length: 10 * REPS }, (_, d) => (
                         <span key={d} className="flex items-center justify-center font-bold text-black"
-                          style={{ height: `${100 / (10 * REPS)}%`, fontFamily: "var(--font-haas)", fontSize: "116cqh", lineHeight: 1, letterSpacing: "-0.04em" }}>{d % 10}</span>))}
+                          style={{ height: `${100 / (10 * REPS)}%`, fontFamily: "var(--font-haas)", fontSize: "123cqh", lineHeight: 1 }}>{d % 10}</span>))}
                     </div>
                   </div>))}
               </div>

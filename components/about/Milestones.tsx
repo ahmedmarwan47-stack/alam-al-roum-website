@@ -1,91 +1,188 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import { gsap, reducedMotion } from "@/lib/gsap";
 import SectionTitle from "@/components/sections/SectionTitle";
+import Icon from "@/components/ui/Icon";
 import { milestones as M } from "@/lib/about/b-content";
+import { srcSet } from "@/lib/img";
+import { MQ, matches } from "@/lib/breakpoints";
 
-/** Figma "UI / Milestone" (10979:18571…): 400 wide, 15 ticks 24 apart from x 24, ticks 56 at rest → 136 at the focus. */
-const CARD = 400, TICKS = 15, TICK_X0 = 24, TICK_GAP = 25, LOW = 56, HIGH = 136;
-/** Half-width of the tick wave (px) and the section's natural height in Figma (1076, minus nothing: it is scaled to fit). */
-const SPREAD = 190, NATURAL_H = 1076, GUTTER = 60;
+/**
+ * Figma "UI / Milestone" (10979:18571…): 400 wide, 15 ticks 24 apart from x 24, ticks 56 at rest → 136 at the focus.
+ * From lg up each milestone is 540 wide (29 Oct review), its ticks 34 apart, so the 15 still span it.
+ */
+const CARD = 400, CARD_LG = 540, TICKS = 15, TICK_X0 = 24, TICK_GAP = 25, TICK_GAP_LG = 35, LOW = 56, HIGH = 136;
+const isLg = () => matches(MQ.lg);
+/** Half-width of the tick wave (px); Figma's 60 px gutter, where 2025 starts (the content edge on wider screens). */
+const SPREAD = 190, GUTTER = 60;
+const N = M.items.length;
+
+/** The rail is drawn at zoom --z at every width, so these sizes are (size on screen) / z, landing on the 4 px grid on
+ *  screen (9 Nov: desktop too, where the zoom had left the year at 38.78 px): the year 40 / 44 (32 / 36 on phones),
+ *  its title and description 14 / 20 */
+const YEAR = "[font-size:calc(40px/var(--z,1))] [line-height:calc(44px/var(--z,1))] max-md:[font-size:calc(32px/var(--z,1))]! max-md:[line-height:calc(36px/var(--z,1))]!";
+const TEXT = "[font-size:calc(14px/var(--z,1))]! [line-height:calc(20px/var(--z,1))]!";
 
 /** One milestone: the year, the tick rhythm, then (when it is the one in focus) its long line, description and photo. */
-function Milestone({ i }: { i: number }) {
+function Milestone({ i, active, onPick }: { i: number; active: boolean; onPick: (i: number) => void }) {
   const m = M.items[i];
   return (
-    <div data-ms className="relative flex w-[400px] flex-none flex-col gap-10">
-      {/* the line: 268 tall at rest, 632 when in focus (Figma) — drawn at 632 and scaled */}
-      <span data-ms-line className="absolute left-0 top-0 h-[632px] w-px origin-top bg-deepsea-500" style={{ transform: `scaleY(${268 / 632})` }} />
+    // a click on a faded milestone brings it into focus (a pointer shortcut; the year buttons above are the keyboard way)
+    <div data-ms aria-hidden={!active} onClick={() => !active && onPick(i)}
+      className={`relative flex w-[400px] flex-none flex-col gap-10 lg:w-[540px] ${active ? "" : "cursor-pointer"}`}>
+      {/* the line: 268 tall at rest, 632 when in focus (Figma; 712 from lg, for the wider photo) — drawn full and scaled */}
+      <span data-ms-line className="absolute left-0 top-0 h-[632px] w-px lg:h-[712px] origin-top bg-deepsea-500" style={{ transform: `scaleY(${268 / 632})` }} />
       <div className="flex flex-col gap-2 pl-4">
-        <span className="t-text text-[56px] leading-[1.07] text-deepsea-500">{m.year}</span>
-        <span className="t-text x-16 text-limestone-800">{m.title}</span>
+        <span className={`t-text text-deepsea-500 ${YEAR}`}>{m.year}</span>
+        <span className={`t-text x-16 text-limestone-800 ${TEXT}`}>{m.title}</span>
       </div>
-      <div className="flex h-[136px] items-center gap-6 pl-6" aria-hidden>
+      <div className="flex h-[136px] items-center gap-6 pl-6 lg:gap-[34px]" aria-hidden>
         {Array.from({ length: TICKS }, (_, k) => <i key={k} data-ms-tick className="block h-[136px] w-px flex-none origin-center bg-deepsea-500" />)}
       </div>
       <div data-ms-detail className="flex flex-col gap-6 px-6 opacity-0">
-        <p className="t-body b-16 text-limestone-800">{m.body}</p>
+        {/* 14 / 20 on screen, however far the rail is scaled down to fit a short screen */}
+        <p className={`t-body b-16 text-limestone-800 ${TEXT}`}>{m.body}</p>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={m.photo} alt={m.title} loading="lazy" className="aspect-[352/200] w-full rounded-lg object-cover" />
+        <img src={m.photo} srcSet={srcSet(m.photo)} alt={m.title} loading="lazy" className="aspect-[352/200] w-full object-cover" />
       </div>
     </div>);
 }
 
 /**
- * Milestones · phase one (Figma 10921:8293). The section is exactly one viewport: it pins, and its Figma layout
- * is scaled to fit the screen's height. It opens as in Figma, with 2025 at the left gutter, and the scroll moves
- * the rail left until 2030 sits in the centre; the milestones take the focus one at a time (snapping to each) —
- * the one in focus is fully shown with its long line, description and photo, and the others fade away. The ticks form one wave centred on the focus, computed from the scroll position itself
- * (not from per-frame layout reads), so it glides with the smoothed scroll.
+ * Milestones · phase one (Figma 10921:8293). Click-driven at every width, nothing pinned and nothing tied to the
+ * scroll (28 Oct review): prev / next arrows step through the six milestones and each year in the row above the rail
+ * jumps straight to its milestone (a faded milestone can also be clicked, and on touch screens the rail swipes).
+ * The rail glides to the new focus (0.6–1.4 s by distance, ease in-out): the milestone in focus is fully shown with
+ * its long line, description and photo, the others fade away, and the ticks form one wave centred on the focus.
+ * From lg up it opens as in Figma, with 2025 at the left gutter, and travels left until 2030 sits in the centre;
+ * below lg the rail is scaled to the screen's width and the milestone in focus stays centred.
+ * Keyboard: Tab reaches the arrows and the years (44 px targets); ← / → (and Home / End) move between the years.
  */
 export default function Milestones() {
-  const root = useRef<HTMLElement>(null), rail = useRef<HTMLDivElement>(null), frame = useRef<HTMLDivElement>(null);
-  const [zoom, setZoom] = useState(1);
+  const root = useRef<HTMLElement>(null), rail = useRef<HTMLDivElement>(null), track = useRef<HTMLDivElement>(null);
+  const years = useRef<(HTMLButtonElement | null)[]>([]);
+  const [railZoom, setRailZoom] = useState(1), [focus, setFocus] = useState(0);
+  const go = useRef<(i: number) => void>(() => {});
 
   useEffect(() => {
-    const fit = () => setZoom(Math.min(1, window.innerHeight / NATURAL_H));
+    // below lg only the rail is scaled, to the screen's width (one 400 px milestone and a sliver of the next),
+    // so its copy never drops under 12 px; from lg the section is one screen tall and the rail is scaled to the height
+    // left under the title and the years (its tallest state is the 712 px line of the milestone in focus)
+    const fit = () => {
+      const lg = matches(MQ.lg), gut = Math.min(60, Math.max(20, window.innerWidth * 0.0397));
+      if (!lg) { setRailZoom(Math.min(1, (window.innerWidth - 2 * gut) / CARD)); return; }
+      const t = track.current!, pad = parseFloat(getComputedStyle(t.parentElement!).paddingBottom) || 0;
+      // the rail's top on screen (offsetTop would be in its own zoomed pixels)
+      const top = t.getBoundingClientRect().top - root.current!.getBoundingClientRect().top;
+      setRailZoom(Math.min(1, Math.max(0.45, (window.innerHeight - top - pad) / 712)));
+    };
     fit(); window.addEventListener("resize", fit);
-    return () => window.removeEventListener("resize", fit);
+    // the title's height moves the rail (its font arriving, its reveal, a rewrap): fit again whenever it changes
+    const ro = new ResizeObserver(fit); ro.observe(track.current!.parentElement!.firstElementChild!);
+    document.fonts?.ready.then(fit);
+    return () => { window.removeEventListener("resize", fit); ro.disconnect(); };
   }, []);
 
   useEffect(() => {
-    const el = root.current!, r = rail.current!, n = M.items.length;
+    const el = root.current!, r = rail.current!, t = track.current!;
     const cards = gsap.utils.toArray<HTMLElement>("[data-ms]", el);
     const ticks = cards.map((c) => gsap.utils.toArray<HTMLElement>("[data-ms-tick]", c));
-    const state = { f: 0 };   // the milestone in focus, as a float 0 … n-1
+    const state = { f: 0 };   // the milestone in focus, as a float 0 … n-1 while the rail glides
     const paint = () => {
-      const f = state.f, fx = f * CARD + CARD / 2;
-      // the rail starts as in Figma (2025 at the 60 px gutter) and travels left until 2030 sits in the centre
-      const W = frame.current!.clientWidth, x0 = GUTTER, x1 = W / 2 - ((n - 1) * CARD + CARD / 2);
-      r.style.transform = `translate3d(${x0 + (x1 - x0) * (f / (n - 1))}px,0,0)`;
+      const lg = isLg(), full = lg ? 712 : 632, C = lg ? CARD_LG : CARD, gap = lg ? TICK_GAP_LG : TICK_GAP, spread = SPREAD * C / CARD;
+      const f = state.f, fx = f * C + C / 2;
+      // lg: 2025 at the 60 px gutter (wider than 1512, on the 1392 content edge like every section) → 2030 in the
+      // centre; where only one milestone fits (phones, tablets) the one in focus stays centred the whole way
+      // W in the rail's own (zoomed) pixels, from its width on screen; z turns the gutter and content edge into them
+      const z = parseFloat(t.style.zoom) || 1, Wv = t.getBoundingClientRect().width, W = Wv / z;
+      const x0 = W < 2.5 * C ? W / 2 - C / 2 : Math.max(GUTTER, (Wv - 1392) / 2) / z, x1 = W / 2 - ((N - 1) * C + C / 2);
+      r.style.transform = `translate3d(${x0 + (x1 - x0) * (f / (N - 1))}px,0,0)`;
       cards.forEach((c, i) => {
         const near = Math.max(0, 1 - Math.abs(i - f));                 // 1 in focus → 0 one step away
         c.style.opacity = String(0.08 + 0.92 * near);
         const det = c.querySelector<HTMLElement>("[data-ms-detail]")!, line = c.querySelector<HTMLElement>("[data-ms-line]")!;
         const d = Math.max(0, 1 - Math.abs(i - f) * 2);                 // the detail only for the one in focus
         det.style.opacity = String(d); det.style.transform = `translateY(${(1 - d) * 24}px)`;
-        line.style.transform = `scaleY(${(268 + (632 - 268) * d) / 632})`;
-        ticks[i].forEach((t, k) => {
-          const x = i * CARD + TICK_X0 + k * TICK_GAP, q = (x - fx) / SPREAD;
-          t.style.transform = `scaleY(${(LOW + (HIGH - LOW) * Math.exp(-q * q)) / HIGH})`;
+        line.style.transform = `scaleY(${(268 + (full - 268) * d) / full})`;
+        ticks[i].forEach((tk, k) => {
+          const x = i * C + TICK_X0 + k * gap, q = (x - fx) / spread;
+          tk.style.transform = `scaleY(${(LOW + (HIGH - LOW) * Math.exp(-q * q)) / HIGH})`;
         });
       });
     };
-    if (reducedMotion()) { paint(); return; }
-    const tw = gsap.to(state, { f: n - 1, ease: "none", onUpdate: paint,
-      scrollTrigger: { trigger: el, start: "top top", end: () => `+=${window.innerHeight * (n - 1) * 0.9}`, pin: true, scrub: 1.2,
-        snap: { snapTo: 1 / (n - 1), duration: { min: 0.3, max: 0.8 }, ease: "power2.inOut" }, invalidateOnRefresh: true, onRefresh: paint } });
+    const rm = reducedMotion();
+    let idx = 0;
+    go.current = (i: number) => {
+      const to = Math.min(N - 1, Math.max(0, i)); if (to === idx && Math.abs(state.f - to) < 1e-3) return;
+      idx = to; setFocus(to);
+      const dist = Math.abs(state.f - to);
+      gsap.to(state, { f: to, duration: rm ? 0 : Math.min(1.4, 0.6 + 0.2 * dist), ease: "power2.inOut", onUpdate: paint, overwrite: true });
+    };
+    // touch: a sideways swipe on the rail steps the focus; a vertical drag stays the page's scroll (touch-action: pan-y)
+    let sx = 0, sy = 0, on = false;
+    const down = (e: PointerEvent) => { if (e.pointerType === "mouse") return; sx = e.clientX; sy = e.clientY; on = true; };
+    const up = (e: PointerEvent) => {
+      if (!on) return; on = false;
+      const dx = e.clientX - sx, dy = e.clientY - sy;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.2) go.current(idx + (dx < 0 ? 1 : -1));
+    };
+    const cancel = () => { on = false; };
+    t.addEventListener("pointerdown", down); t.addEventListener("pointerup", up); t.addEventListener("pointercancel", cancel);
+    const ro = new ResizeObserver(paint); ro.observe(t);
     paint();
-    return () => { tw.scrollTrigger?.kill(); tw.kill(); };
+    return () => {
+      t.removeEventListener("pointerdown", down); t.removeEventListener("pointerup", up); t.removeEventListener("pointercancel", cancel);
+      ro.disconnect(); gsap.killTweensOf(state); go.current = () => {};
+    };
   }, []);
 
+  // ← / → / Home / End inside the year row move the focus and the keyboard focus together
+  const onKeys = (e: KeyboardEvent) => {
+    const k = { ArrowLeft: focus - 1, ArrowRight: focus + 1, Home: 0, End: N - 1 }[e.key];
+    if (k === undefined) return;
+    e.preventDefault();
+    const to = Math.min(N - 1, Math.max(0, k));
+    go.current(to); years.current[to]?.focus();
+  };
+
+  const arrow = "grid h-11 w-11 flex-none place-items-center rounded-full border border-deepsea-500/30 text-deepsea-500 transition-[opacity,border-color] duration-300 hover:border-deepsea-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deepsea-500 disabled:pointer-events-none disabled:opacity-30";
+  const prev = <button type="button" aria-label="Previous milestone" onClick={() => go.current(focus - 1)} disabled={focus === 0} className={arrow}><Icon name="arrow-left-01-sharp" /></button>;
+  const next = <button type="button" aria-label="Next milestone" onClick={() => go.current(focus + 1)} disabled={focus === N - 1} className={arrow}><Icon name="arrow-right-01-sharp" /></button>;
   return (
-    <section ref={root} className="relative h-svh overflow-hidden bg-limestone-50">
-      {/* the Figma frame (1076 tall) scaled to the viewport's height */}
-      <div ref={frame} className="flex h-full flex-col gap-20 pt-20" style={{ zoom, height: `${100 / zoom}%` }}>
-        <SectionTitle tag={M.tag} title={M.title} body={M.body} className="mx-auto max-w-[920px] container-x" />
-        <div ref={rail} className="flex w-max items-start will-change-transform">
-          {M.items.map((m, i) => <Milestone key={m.year} i={i} />)}
+    // from lg one screen tall: the padding and gaps follow the screen's height and the rail is scaled to the rest
+    <section ref={root} aria-label="Phase one timeline" className="relative overflow-hidden bg-limestone-50 lg:h-svh">
+      <div className="flex flex-col gap-8 py-20 lg:gap-[clamp(16px,3.5svh,48px)] lg:py-[clamp(28px,6svh,96px)]">
+        {/* 920 wide less the side padding (800 of copy at 1512); the padding stops at Figma's 60 px, so on wider screens
+            the larger gutter does not squeeze the copy */}
+        <SectionTitle tag={M.tag} title={M.title} body={M.body} className="mx-auto max-w-[920px] px-[min(var(--gutter),60px)]" />
+
+        {/* the controls: lg up the arrows flank the years; below lg the years fill the row and the arrows sit under the rail */}
+        <div className="flex items-center justify-center gap-2 container-x lg:gap-4">
+          <div className="hidden lg:block">{prev}</div>
+          <div role="group" aria-label="Choose a year" onKeyDown={onKeys} className="grid w-full grid-cols-6 lg:flex lg:w-auto lg:gap-2">
+            {M.items.map((m, i) => (
+              <button key={m.year} ref={(b) => { years.current[i] = b; }} type="button" onClick={() => go.current(i)}
+                aria-current={i === focus ? "step" : undefined} aria-label={`${m.year}: ${m.title}`}
+                className={`group relative h-11 rounded-lg t-text x-16 tabular-nums transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deepsea-500 lg:px-4 ${i === focus ? "text-deepsea-500" : "text-limestone-800 hover:text-deepsea-500"}`}>
+                {m.year}
+                {/* the active year's underline */}
+                <span aria-hidden className={`absolute inset-x-2 bottom-1 h-px origin-center bg-deepsea-500 transition-transform duration-500 [transition-timing-function:var(--ease-site)] lg:inset-x-4 ${i === focus ? "scale-x-100" : "scale-x-0 group-hover:scale-x-50"}`} />
+              </button>))}
+          </div>
+          <div className="hidden lg:block">{next}</div>
+        </div>
+        <p aria-live="polite" className="sr-only">{M.items[focus].year}: {M.items[focus].title}. {M.items[focus].body}</p>
+
+        <div ref={track} className="touch-pan-y max-lg:select-none" style={{ zoom: railZoom, "--z": railZoom } as CSSProperties}>
+          <div ref={rail} className="flex w-max items-start will-change-transform">
+            {M.items.map((m, i) => <Milestone key={m.year} i={i} active={i === focus} onPick={(k) => go.current(k)} />)}
+          </div>
+        </div>
+
+        <div className="-mt-2 flex items-center justify-center gap-[14px] lg:hidden">
+          {prev}
+          <span aria-hidden className="t-text x-14 w-[56px] text-center tabular-nums text-limestone-800">{focus + 1} / {N}</span>
+          {next}
         </div>
       </div>
     </section>

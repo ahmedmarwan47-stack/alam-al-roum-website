@@ -1,12 +1,12 @@
 /** Contact copy, from Figma "Contact • Desktop": Say hello 10921:9490, Book a Call 10921:9540, Locations 10921:9743. */
 export const sayHello = {
-  title: "Let’s talk about what’s next",
+  title: "Let’s talk about what’s next.",
   body: "Tell us what you’re looking for, and we’ll help you find the right next step at Alam Al Roum.",
-  image: "/images/contact/contact-faded.jpg",
+  image: "/images/contact/say-hello.webp",
   email: "info@alamalroumegypt.com",
   rows: [
-    [["call", "Hotline", "16922", "tel:16922"], ["whatsapp", "WhatsApp", "+20 120 001 6922", "https://wa.me/201200016922"], ["mail-01", "Email", "info@alamalroumegypt.com", "mailto:info@alamalroumegypt.com"]],
-    [["building-03", "Sales Office", "Qatari Diar Egypt, New Cairo"], ["location-01", "Site Office", "Alam Al Roum, North Coast, Egypt"]],
+    [["call", "HOTLINE", "16922", "tel:16922"], ["whatsapp", "WHATSAPP", "+20 120 001 6922", "https://wa.me/201200016922"], ["mail-01", "Email", "info@alamalroumegypt.com", "mailto:info@alamalroumegypt.com"]],
+    [["building-03", "SALES OFFICE", "Qatari Diar Egypt, New Cairo"], ["location-01", "SITE OFFICE", "Alam Al Roum, North Coast, Egypt"]],
   ] as [string, string, string, string?][][],
   form: {
     title: "Send us a message",
@@ -28,10 +28,11 @@ export const bookCall = {
 };
 
 export const locations = {
-  tag: "Find us", title: "Locations", map: "/images/contact/map.jpg",
+  tag: "Find us", title: "Locations", map: "/images/contact/map.webp",
   credit: "Sources: Esri, HERE, Garmin, USGS, Intermap, INCREMENT P, NRCan, Esri Japan, METI, Esri China (Hong Kong), Esri Korea, Esri (Thailand), NGCC, © OpenStreetMap contributors, and the GIS User Community",
-  // pin anchors as % of the map image, measured on the Figma frame
-  pins: [["North Coast", 19.3, 26.8], ["Cairo", 31.5, 37.8], ["Doha", 86.6, 74]] as [string, number, number][],
+  // each office's point as % of the map: the site on the coast, and the basemap's own Cairo and Doha city dots
+  // (the pill's icon sits on the point, so the pill covers the basemap's printed name)
+  pins: [["North Coast", 20.33, 27.3], ["Cairo", 31.14, 37.5], ["Doha", 87.54, 75.73]] as [string, number, number][],
   offices: [
     { label: "Sales office", city: "Cairo", address: "Qatari Diar Egypt, New Cairo, Egypt", phone: "Phone to be confirmed" },
     { label: "Site office & visits", city: "North Coast", address: "Alam Al Roum site office, North Coast, Egypt", phone: "16922" },

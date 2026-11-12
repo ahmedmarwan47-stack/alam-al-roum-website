@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# assets the site no longer uses (sources, retired cuts): kept on this machine only, out of git and the Pages deploy
+/local-assets/

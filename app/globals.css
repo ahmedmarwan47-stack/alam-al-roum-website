@@ -13,7 +13,9 @@
   --font-immortel: var(--font-immortel), Georgia, serif;
 }
 
-:root { --gutter: clamp(20px, 3.97vw, 60px); --ease-site: cubic-bezier(.16,1,.3,1); --ease-btn: cubic-bezier(.32,.72,0,1);
+/* --gutter: Figma's 60 px side margin (scaled down on small screens); on screens wider than Figma's 1512 frame the
+   content keeps Figma's 1392 px measure and the margins grow, so every section lines up on the same edges */
+:root { --gutter: max(clamp(20px, 3.97vw, 60px), calc((100vw - 1392px) / 2)); --ease-site: cubic-bezier(.16,1,.3,1); --ease-btn: cubic-bezier(.32,.72,0,1);
   /* Figma prototype presets, so each section moves the way its Figma prototype (and its reference) does */
   --ease-fig-out: cubic-bezier(0,0,.58,1); --ease-fig-inout: cubic-bezier(.42,0,.58,1);
   /* Figma custom spring (mass 1, stiffness 160, damping 15), sampled over 0.8 s */
@@ -22,80 +24,247 @@ html { background: var(--color-limestone-50); color: var(--color-deepsea-500); }
 body { font-family: var(--font-haas); -webkit-font-smoothing: antialiased; }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
-img, video, canvas { display: block; }
+@layer base { img, video, canvas { display: block; } }
 
-/* ── Type scale (Figma text styles) ── */
-.t-heading { font-family: var(--font-haas); font-weight: 500; text-transform: uppercase; }
-.hd-80 { font-size: clamp(44px, 5.3vw, 80px); line-height: 1.1; }
-.hd-56 { font-size: clamp(34px, 3.7vw, 56px); line-height: 1.143; }
-.hd-48 { font-size: clamp(30px, 3.17vw, 48px); line-height: 1.167; }
-.hd-40 { font-size: clamp(28px, 2.65vw, 40px); line-height: 1.2; }
-.hd-32 { font-size: clamp(22px, 2.12vw, 32px); line-height: 1.25; }
-.hd-24 { font-size: 24px; line-height: 32px; }
-.hd-20 { font-size: 20px; line-height: 28px; }
-.hd-16 { font-size: 16px; line-height: 24px; }
+/* ── No orphans (as in Figma): no word left alone on a block's last line. RevealText also ties each block's last
+   two words with a no-break space, for browsers without text-wrap: pretty ──
+   Owner rule (9 Nov): never an orphan anywhere on the site, so it is set on body and inherited by every element (spans,
+   buttons, card captions, labels included); blocks that ask for even lines (.wrap-balance) keep balance. */
+body, :is(p, li, dt, dd, blockquote, figcaption, label, h1, h2, h3, h4, h5, h6, [data-reveal]) { text-wrap: pretty; }
+/* hero subtitles: even lines (a Tailwind [text-wrap:balance] would lose to the unlayered rule above) */
+.wrap-balance { text-wrap: balance; }
+
+/* ── Type scale (Figma text styles) ──
+   Each size is fluid from a phone (390 px wide) to the Figma desktop frame (1512 px): Figma's size at 1512 and up,
+   the phone size at 390 and below, a straight line in between. Line heights are Figma's, as ratios: Headings/ have their own, every body/ size is 1.5.
+   .t-text, .t-label and .t-body are body/<size>/reg and /med in Haas; .t-serif is for the Immortel titles that have no style in Figma. */
+.t-heading { font-family: var(--font-haas); font-weight: 400; text-transform: capitalize; }
+.hd-80 { font-size: 36px; line-height: 40px; }
+.hd-56 { font-size: 28px; line-height: 32px; }
+/* a long statement set at Heading/56: smaller on a phone, where it would otherwise run to six lines */
+.hd-56l { font-size: 24px; line-height: 28px; }
+.hd-48 { font-size: 24px; line-height: 28px; }
+.hd-40 { font-size: 24px; line-height: 28px; }
+.hd-32 { font-size: 20px; line-height: 24px; }
+.hd-24 { font-size: 18px; line-height: 24px; }
+.hd-20 { font-size: 16px; line-height: 24px; }
+.hd-16 { font-size: 16px; line-height: 1.5; }
 .hd-14 { font-size: 14px; line-height: 20px; }
 .t-text { font-family: var(--font-haas); font-weight: 400; }
-.x-80 { font-size: clamp(44px, 5.3vw, 80px); line-height: 1.075; letter-spacing: -0.02em; }
-.x-28 { font-size: clamp(22px, 1.85vw, 28px); line-height: 1.286; }
-.x-20 { font-size: 20px; line-height: 28px; }
-.x-18 { font-size: 18px; line-height: 28px; }
-.x-16 { font-size: 16px; line-height: 24px; }
+.x-80 { font-size: 36px; line-height: 40px; }
+.x-28 { font-size: 18px; line-height: 28px; }
+.x-20 { font-size: 16px; line-height: 24px; }
+.x-18 { font-size: 16px; line-height: 24px; }
+.x-16 { font-size: 16px; line-height: 1.5; }
 .x-14 { font-size: 14px; line-height: 20px; }
-.x-12 { font-size: 12px; line-height: 16px; }
+.x-12 { font-size: 12px; line-height: 1.5; }
 .t-label { font-family: var(--font-haas); font-weight: 500; }
-.l-18 { font-size: 18px; line-height: 28px; } .l-16 { font-size: 16px; line-height: 24px; }
-.l-14 { font-size: 14px; line-height: 20px; } .l-12 { font-size: 12px; line-height: 16px; }
-.t-body { font-family: var(--font-immortel); font-weight: 400; }
-.b-20 { font-size: 20px; line-height: 32px; } .b-18 { font-size: 18px; line-height: 28px; }
-.b-16 { font-size: 16px; line-height: 24px; } .b-14 { font-size: 14px; line-height: 20px; } .b-12 { font-size: 12px; line-height: 20px; }
+.l-24 { font-size: 18px; line-height: 28px; } .l-18 { font-size: 16px; line-height: 24px; } .l-16 { font-size: 16px; line-height: 1.5; }
+.l-14 { font-size: 14px; line-height: 20px; }   /* 20, not 1.5 × 14 = 21: on the 4 px grid */ .l-12 { font-size: 12px; line-height: 1.5; }
+/* Section taglines (eyebrows): 16 / 24 from tablet up; 14 / 20 on phones, where the headings shrink to ~24 px and a 16 px
+   medium tagline would sit almost as heavy as the title. Stepped, not fluid, so it stays on the 4 px grid (14 / 16 only). */
+.l-tag { font-size: 16px; line-height: 24px; }
+@media (width < 48rem) { .l-tag { font-size: 14px; line-height: 20px; } }
+/* Hero type on phones (9 Nov): every page hero's title 32/36 and description 14/20, on the 4 px grid, so the opening
+   screen is the photo, not the paragraph. Set with !important to win over the fluid sizes and per-hero leadings. */
+@media (width < 48rem) {
+  .hero-t { font-size: 32px !important; line-height: 36px !important; }
+  .hero-b { font-size: 14px !important; line-height: 20px !important; }
+}
+.t-body { font-family: var(--font-haas); font-weight: 400; }
+.t-serif { font-family: var(--font-immortel); font-weight: 400; }
+.b-20 { font-size: 18px; line-height: 28px; } .b-18 { font-size: 16px; line-height: 24px; }
+.b-16 { font-size: 16px; line-height: 1.5; } .b-14 { font-size: 14px; line-height: 20px; }   /* 20, not 21: on the 4 px grid */ .b-12 { font-size: 12px; line-height: 1.5; }
+/* Display sizes used once or twice (page titles in Immortel / Haas), on the same phone-to-desktop line */
+.d-120 { font-size: 44px; } .d-68 { font-size: 32px; } .d-60 { font-size: 28px; }
+.d-56 { font-size: 32px; } .d-36 { font-size: 24px; } .d-32 { font-size: 24px; }
+
+/* ── Type steps (9 Nov, owner's 4 px rule): every size and line height sits on the 4 px grid (14 and 18 the only
+   sizes off it). Each class keeps its phone and desktop sizes and steps between them at 768 / 1024 / 1280 / 1440 px,
+   instead of scaling fluidly (which rendered at fractions such as 19.29 or 54.07 px between the ends). ── */
+@media (width >= 48rem) {
+  .hd-80 { font-size: 48px; line-height: 52px; }
+  .hd-56 { font-size: 36px; line-height: 40px; }
+  .hd-56l { font-size: 32px; line-height: 36px; }
+  .hd-48 { font-size: 32px; line-height: 36px; }
+  .hd-40 { font-size: 28px; line-height: 32px; }
+  .hd-32 { font-size: 24px; line-height: 28px; }
+  .hd-24 { font-size: 20px; line-height: 28px; }
+  .hd-20 { font-size: 18px; line-height: 24px; }
+  .x-80 { font-size: 48px; line-height: 52px; }
+  .x-28 { font-size: 20px; line-height: 28px; }
+  .x-20 { font-size: 18px; line-height: 28px; }
+  .l-24 { font-size: 20px; line-height: 28px; }
+  .d-120 { font-size: 68px; }
+  .d-68 { font-size: 44px; }
+  .d-60 { font-size: 40px; }
+  .d-56 { font-size: 40px; }
+  .d-36 { font-size: 28px; }
+}
+@media (width >= 64rem) {
+  .hd-80 { font-size: 60px; line-height: 64px; }
+  .hd-56 { font-size: 44px; line-height: 52px; }
+  .hd-56l { font-size: 40px; line-height: 44px; }
+  .hd-48 { font-size: 36px; line-height: 44px; }
+  .hd-40 { font-size: 32px; line-height: 40px; }
+  .hd-32 { font-size: 28px; line-height: 36px; }
+  .x-80 { font-size: 60px; line-height: 64px; }
+  .x-28 { font-size: 24px; line-height: 36px; }
+  .x-18 { font-size: 18px; line-height: 28px; }
+  .l-18 { font-size: 18px; line-height: 28px; }
+  .b-20 { font-size: 20px; line-height: 28px; }
+  .b-18 { font-size: 18px; line-height: 28px; }
+  .d-120 { font-size: 88px; }
+  .d-68 { font-size: 52px; }
+  .d-60 { font-size: 48px; }
+  .d-56 { font-size: 44px; }
+  .d-36 { font-size: 32px; }
+  .d-32 { font-size: 28px; }
+}
+@media (width >= 80rem) {
+  .hd-80 { font-size: 72px; line-height: 80px; }
+  .hd-56 { font-size: 48px; line-height: 56px; }
+  .hd-56l { font-size: 48px; line-height: 56px; }
+  .hd-48 { font-size: 44px; line-height: 52px; }
+  .hd-40 { font-size: 36px; line-height: 44px; }
+  .hd-24 { font-size: 24px; line-height: 32px; }
+  .hd-20 { font-size: 20px; line-height: 28px; }
+  .x-80 { font-size: 72px; line-height: 80px; }
+  .x-20 { font-size: 20px; line-height: 28px; }
+  .l-24 { font-size: 24px; line-height: 36px; }
+  .d-120 { font-size: 104px; }
+  .d-68 { font-size: 60px; }
+  .d-60 { font-size: 52px; }
+  .d-56 { font-size: 52px; }
+}
+@media (width >= 90rem) {
+  .hd-80 { font-size: 80px; line-height: 88px; }
+  .hd-56 { font-size: 56px; line-height: 64px; }
+  .hd-56l { font-size: 56px; line-height: 64px; }
+  .hd-48 { font-size: 48px; line-height: 56px; }
+  .hd-40 { font-size: 40px; line-height: 48px; }
+  .hd-32 { font-size: 32px; line-height: 40px; }
+  .x-80 { font-size: 80px; line-height: 88px; }
+  .x-28 { font-size: 28px; line-height: 40px; }
+  .d-120 { font-size: 120px; }
+  .d-68 { font-size: 68px; }
+  .d-60 { font-size: 60px; }
+  .d-56 { font-size: 56px; }
+  .d-36 { font-size: 36px; }
+  .d-32 { font-size: 32px; }
+}
 .t-accent { font-family: var(--font-immortel); font-style: italic; font-weight: 400; text-transform: none; letter-spacing: -0.02em; }
 
 /* ── Icons as masks so they take currentColor ── */
 .icon { display: inline-block; width: 20px; height: 20px; background: currentColor; -webkit-mask: var(--src) center / contain no-repeat; mask: var(--src) center / contain no-repeat; flex: none; }
 
-/* ── Text reveal (Hassan Allam: lines rise out of a mask) ── */
-.rt-line { display: block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
-.rt-inner { display: block; will-change: transform; }
+/* ── Text reveal: blocks blur in whole (RevealText); hidden from first paint on scripted pages ── */
+html.js [data-reveal] { opacity: 0; }
+@media (prefers-reduced-motion: reduce) { html.js [data-reveal] { opacity: 1; } }
 
-/* ── Image reveal (Hassan Allam: counter-sliding masks) ── */
-.ri-outer, .ri-inner { overflow: hidden; width: 100%; height: 100%; will-change: transform; }
-.ri-outer img, .ri-outer video { width: 100%; height: 100%; object-fit: cover; }
+/* ── Photo reveal (RevealImage / RevealMask): frames hidden from first paint until their wipe plays ── */
+.ri-inner { overflow: hidden; width: 100%; height: 100%; }
+.ri-inner > img, .ri-inner > video { width: 100%; height: 100%; object-fit: cover; }
+html.js [data-reveal-img] { visibility: hidden; }
+@media (prefers-reduced-motion: reduce) { html.js [data-reveal-img] { visibility: visible; } }
 
 /* ── Button (UI / Button: fill rises, label recolours, arrow slides through) ── */
 .btn { position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: space-between; border-radius: 8px; border: 1px solid transparent; cursor: pointer; white-space: nowrap; }
 .btn .btn-fill { position: absolute; inset: 0; transform: translateY(101%); transition: transform .5s var(--ease-btn); }
-.btn .btn-label { position: relative; transition: color .3s ease-out .15s; }
-.btn .btn-chip { position: relative; overflow: hidden; border-radius: 6px; display: grid; place-items: center; transition: background-color .3s ease-out .15s, color .3s ease-out .15s; }
+.btn .btn-label { position: relative; text-transform: capitalize; transition: color .3s ease-out .15s; }
+.btn .btn-chip { position: relative; flex: none; overflow: hidden; border-radius: 6px; display: grid; place-items: center; transition: background-color .3s ease-out .15s, color .3s ease-out .15s; }
 .btn .btn-chip .icon { position: absolute; transition: transform .5s var(--ease-btn); }
 .btn .btn-chip .icon.b { transform: translate(-150%, 150%); }
-.btn:hover .btn-fill { transform: translateY(0); }
-.btn:hover .btn-chip .icon.a { transform: translate(150%, -150%); }
-.btn:hover .btn-chip .icon.b { transform: translate(0, 0); }
+/* Hover states only on devices that hover (as Tailwind v4's hover: does), so a tapped button on a phone doesn't stay filled */
+@media (hover: hover) { .btn:hover .btn-fill { transform: translateY(0); } }
+@media (hover: hover) { .btn:hover .btn-chip .icon.a { transform: translate(150%, -150%); } }
+@media (hover: hover) { .btn:hover .btn-chip .icon.b { transform: translate(0, 0); } }
 .btn-48 { height: 48px; padding: 0 8px 0 24px; gap: 20px; } .btn-48 .btn-chip { width: 32px; height: 32px; }
 .btn-54 { height: 54px; padding: 0 8px 0 26px; gap: 44px; } .btn-54 .btn-chip { width: 38px; height: 38px; }
 .btn-64 { height: 64px; padding: 0 8px 0 32px; gap: 18px; } .btn-64 .btn-chip { width: 48px; height: 48px; }
 .btn-64 .btn-chip .icon { width: 24px; height: 24px; }
+/* Below lg: one size for every variant (44 px), the same label-left / chip-right layout; on phones (below md) full
+   width too. `.btn-keep` (Button `compact`) keeps the desktop size for a button that shares a row with other controls */
+@media (width < 64rem) {
+  .btn:not(.btn-keep) { height: 44px; padding: 0 5px 0 20px; gap: 16px; font-size: 16px; line-height: 1.5; }
+  .btn:not(.btn-keep) .btn-chip { width: 32px; height: 32px; }
+  .btn:not(.btn-keep) .btn-chip .icon { width: 20px !important; height: 20px !important; }   /* over Icon's inline size */
+}
+@media (width < 48rem) { .btn:not(.btn-keep) { width: 100%; } }
 /* Primary Dark: Deep Sea → Limestone rises */
 .btn-primary { background: var(--color-deepsea-500); color: var(--color-limestone-500); }
 .btn-primary .btn-fill { background: var(--color-limestone-500); } .btn-primary .btn-chip { background: var(--color-limestone-500); color: var(--color-deepsea-500); }
-.btn-primary:hover { border-color: var(--color-limestone-500); } .btn-primary:hover .btn-label { color: var(--color-deepsea-500); }
-.btn-primary:hover .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); }
+@media (hover: hover) { .btn-primary:hover { border-color: var(--color-limestone-500); } .btn-primary:hover .btn-label { color: var(--color-deepsea-500); } }
+@media (hover: hover) { .btn-primary:hover .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); } }
 /* Primary Light (on dark): Deep Sea/50 → Limestone rises */
 .btn-light { background: var(--color-deepsea-50); color: var(--color-deepsea-500); border-color: var(--color-deepsea-200); }
 .btn-light .btn-fill { background: var(--color-deepsea-500); } .btn-light .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); }
-.btn-light:hover { border-color: var(--color-deepsea-500); } .btn-light:hover .btn-label { color: var(--color-limestone-500); }
-.btn-light:hover .btn-chip { background: var(--color-limestone-500); color: var(--color-deepsea-500); }
+@media (hover: hover) { .btn-light:hover { border-color: var(--color-deepsea-500); } .btn-light:hover .btn-label { color: var(--color-limestone-500); } }
+@media (hover: hover) { .btn-light:hover .btn-chip { background: var(--color-limestone-500); color: var(--color-deepsea-500); } }
+/* Two buttons on pictures (10 Nov review).
+   Hero, on the dark film (`btn-on-film`): the default stays; on hover a white fill rises (no stroke), so it lightens
+   rather than sinking into the film. Label and chip stay Deep Sea.
+   CTA, on the pale film (`btn-on-pale`): a slightly lighter Deep Sea at rest (halfway to Deep Sea 400) that darkens
+   to Deep Sea 800 on hover; label and chip keep their colours */
+/* at rest a touch darker than Deep Sea 50 (halfway to Deep Sea 100), so the white hover reads as a change */
+.btn-light.btn-on-film { background: color-mix(in srgb, var(--color-deepsea-50), var(--color-deepsea-100)); }
+.btn-light.btn-on-film .btn-fill { background: #fff; }
+@media (hover: hover) {
+  .btn-light.btn-on-film:hover { border-color: #fff; }
+  .btn-light.btn-on-film:hover .btn-label { color: var(--color-deepsea-500); }
+  .btn-light.btn-on-film:hover .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); }
+}
+.btn-primary.btn-on-pale { background: color-mix(in srgb, var(--color-deepsea-500), var(--color-deepsea-400)); }
+.btn-primary.btn-on-pale .btn-fill { background: var(--color-deepsea-800); }
+@media (hover: hover) {
+  .btn-primary.btn-on-pale:hover { border-color: var(--color-deepsea-800); }
+  .btn-primary.btn-on-pale:hover .btn-label { color: var(--color-limestone-500); }
+  .btn-primary.btn-on-pale:hover .btn-chip { background: var(--color-limestone-500); color: var(--color-deepsea-500); }
+}
+
 /* Secondary on light: Deep Sea outline → Deep Sea rises */
 .btn-outline { background: transparent; color: var(--color-deepsea-500); border-color: var(--color-deepsea-500); }
 .btn-outline .btn-fill { background: var(--color-deepsea-500); } .btn-outline .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); }
-.btn-outline:hover .btn-label { color: var(--color-limestone-500); } .btn-outline:hover .btn-chip { background: var(--color-limestone-500); color: var(--color-deepsea-500); }
+@media (hover: hover) { .btn-outline:hover .btn-label { color: var(--color-limestone-500); } .btn-outline:hover .btn-chip { background: var(--color-limestone-500); color: var(--color-deepsea-500); } }
 /* Secondary on dark: Limestone outline → Limestone rises */
 .btn-outline-light { background: transparent; color: var(--color-limestone-500); border-color: rgb(244 234 221 / .8); }
 .btn-outline-light .btn-fill { background: var(--color-limestone-500); } .btn-outline-light .btn-chip { background: var(--color-limestone-500); color: var(--color-deepsea-500); }
-.btn-outline-light:hover .btn-label { color: var(--color-deepsea-500); } .btn-outline-light:hover .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); }
+@media (hover: hover) { .btn-outline-light:hover .btn-label { color: var(--color-deepsea-500); } .btn-outline-light:hover .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); } }
 
 .container-x { padding-left: var(--gutter); padding-right: var(--gutter); }
+
+/* ── Navbar glass: a Limestone gradient over a backdrop blur, so the hero's photo or film shows through the bar.
+   Measured, not guessed: the band the logo and MENU sit in (26–50 px of 76) keeps at least 62 % Limestone, which holds
+   Deep Sea text above 5:1 even over a black frame; the foot thins to 30 % so the bar settles into the photo. ── */
+.nav-glass {
+  background: linear-gradient(180deg, rgb(251 250 248 / .8) 0%, rgb(251 250 248 / .68) 34%, rgb(251 250 248 / .62) 66%, rgb(251 250 248 / .3) 100%);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4);
+}
+
+/* Over a photo, a film or a dark band the bar is all but clear: a whisper of Deep Sea 950 over a deep blur, just
+   enough to seat the Limestone MENU and logo (29 Oct review). */
+.nav-veil {
+  background: linear-gradient(180deg, rgb(1 15 26 / .3) 0%, rgb(1 15 26 / .14) 70%, rgb(1 15 26 / 0) 100%);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2); backdrop-filter: blur(16px) saturate(1.2);
+}
+
+/* ── Glass card on a hero photo (SingleHero facts): Limestone at 74 % over a 20 px blur, Deep Sea text. Even over a
+   black photo the card stays light enough for Deep Sea at 7:1 (labels at 85 %, 5.6:1). ── */
+.glass-card {
+  background: rgb(251 250 248 / .74); border: 1px solid rgb(255 255 255 / .5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.3); backdrop-filter: blur(20px) saturate(1.3);
+}
+
+/* ── Hero foot shade (SingleHero): Deep Sea 950 rising from the foot under the copy, deep enough for Limestone text
+   at AA on a white photo across the copy's band; clear at the top, so the photo shows through the bar. ── */
+.hero-foot-shade { background: linear-gradient(0deg, rgb(1 15 26 / .8) 0%, rgb(1 15 26 / .62) 50%, rgb(1 15 26 / 0) 84%); }
+/* Home film: a foot shade plus a left one, so the copy (bottom left) holds AA on the film's brightest frames while the
+   top and right of the film stay clear */
+.hero-film-shade { background: linear-gradient(0deg, rgb(1 15 26 / .74) 0%, rgb(1 15 26 / .52) 36%, rgb(1 15 26 / 0) 64%),
+  linear-gradient(90deg, rgb(1 15 26 / .38) 0%, rgb(1 15 26 / .26) 45%, rgb(1 15 26 / 0) 72%); }
+/* PageHero at full bleed: the shade is held across the copy column (gutter + 600 px) and clears to the right */
+.hero-side-shade { background: linear-gradient(90deg, rgb(1 15 26 / .86) 0, rgb(1 15 26 / .66) calc(var(--gutter) + 600px), rgb(1 15 26 / 0) calc(var(--gutter) + 1000px)); }
+@media (width < 48rem) { .hero-foot-shade { background: linear-gradient(0deg, rgb(1 15 26 / .82) 0%, rgb(1 15 26 / .64) 64%, rgb(1 15 26 / 0) 94%); } }
 
 @media (prefers-reduced-motion: reduce) { .btn * { transition: none !important; } }
 

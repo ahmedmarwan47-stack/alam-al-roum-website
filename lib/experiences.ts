@@ -1,16 +1,16 @@
 /** Experiences & Lifestyle copy, from the Figma UI Design page (Experiences & Lifestyle • Desktop, 10921:7596). */
-const e = (f: string) => `/images/experiences/${f}.jpg`;
+const e = (f: string) => `/images/experiences/${f}.webp`;
 
 export const expHero = {
   pre: "Experiences & Lifestyle",
-  title: [{ t: "Built for" }, { t: "The Long Return", i: true }, { t: "Year after year", br: true }],
+  title: [{ t: "Built for" }, { t: "The Long Return", i: true }, { t: "and the years that follow", br: true }],
   body: "Life here is measured in seasons, not weekends. It is a place you come back to because it was always yours.",
   photo: e("hero"), alt: "A family on a hillside at sunset",
 };
 
 export const track = {
   tag: "Lifestyle & Experiences",
-  title: [{ t: "Ways to live" }, { t: "greatness", i: true }],
+  title: [{ t: "Ways to live" }, { t: "Greatness", i: true }],
   body: "A diverse mix of residential, hospitality, cultural, recreational and wellness experiences creates an active and enriching environment that extends beyond traditional resort living.",
   cta: "Explore",
 };

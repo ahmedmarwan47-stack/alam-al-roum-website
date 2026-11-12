@@ -34,7 +34,7 @@ export default async function NeighbourhoodPage({ params }: { params: Promise<{ 
       {x.facilities && <Landmarks data={x.facilities} />}
       <Gallery data={x.gallery} />
       <OtherCommunities exclude={x.slug} />
-      <Cta />
+      <Cta form={x.hero.name} />
       <Footer />
     </main>
   );
