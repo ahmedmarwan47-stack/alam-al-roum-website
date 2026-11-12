@@ -15,9 +15,11 @@ export const track = {
   cta: "Explore",
 };
 
-/** The nine experiences; `body` is the one-line description used on Home (Ways to live). */
+/** The ten experiences; `body` is the one-line description used on Home (Ways to live). Lagoon added 12 Nov (Leila's
+ *  comment on Home: "Add Lagoon in the Experiences & Lifestyle"); its copy is draft, from the site's own lagoon facts. */
 export const experiences = [
   { slug: "beach", title: "Beach", note: "7.2 km of shore", photo: e("beach"), body: "7.2 kilometres of Mediterranean shore and swimmable lagoons." },
+  { slug: "lagoon", title: "Lagoon", note: "Swimmable lagoons", photo: "/images/destination/transport-water-taxi.webp", body: "Swimmable seawater lagoons woven through the city, with water taxis to the marina." },
   { slug: "marina", title: "Marina", note: "International marina", photo: e("marina"), body: "The social heart of the city: boating, dining and public life on the water." },
   { slug: "golf", title: "Golf", note: "18 holes by the sea", photo: e("golf"), body: "An 18-hole championship course by the sea, green all year." },
   { slug: "sports", title: "Sports", note: "Courts, trails & open sea", photo: e("sports"), body: "Courts, cycling routes and the open sea for an active life." },

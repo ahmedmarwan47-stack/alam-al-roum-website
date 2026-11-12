@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 /**
- * Experience detail: one template for all nine experiences, every section a shared component (a change to one applies
+ * Experience detail: one template for all ten experiences, every section a shared component (a change to one applies
  * on every experience page): hero, overview, what's here (Landmarks), the community, life in the community, gallery,
  * events, the other experiences, CTA. Hotels adds its hotel directory (list + drawer) after what's here.
  */

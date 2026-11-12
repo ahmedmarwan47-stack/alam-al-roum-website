@@ -6,7 +6,6 @@ import Masterplan from "@/components/sections/Masterplan";
 import WaysToLive from "@/components/sections/WaysToLive";
 import Connectivity from "@/components/sections/Connectivity";
 import QatariDiarNumbers from "@/components/sections/QatariDiarNumbers";
-import Landmarks from "@/components/sections/Landmarks";
 import Events from "@/components/sections/Events";
 import Gallery from "@/components/sections/Gallery";
 import News from "@/components/sections/News";
@@ -32,11 +31,12 @@ export default function Home() {
       <Masterplan />
       <WaysToLive />
       <Connectivity />
-      <QatariDiarNumbers />
-      <Landmarks />
       <Events hrefs={eventHrefs} />
       <Gallery />
       <News />
+      {/* 12 Nov review: "20 Years of Building" (Qatari Diar) moves to the end of the page, before the FAQ (#53);
+          Landmarks and Leisure is removed from Home (#54) */}
+      <QatariDiarNumbers />
       <Faq />
       <Cta />
       <Footer />

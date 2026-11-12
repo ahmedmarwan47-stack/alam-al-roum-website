@@ -72,6 +72,7 @@ export const waysToLive = {
   body: "A single city holds many different mornings. Each experience is part of daily life here, not a weekend escape.",
   rows: [
     ["Beach", "7.2 kilometres of Mediterranean shore and swimmable lagoons.", "ui-g-beach"],
+    ["Lagoon", "Swimmable seawater lagoons woven through the city, with water taxis to the marina.", "/images/destination/transport-water-taxi.webp"],
     ["Marina", "The social heart of the city: boating, dining and public life on the water.", "ui-g-boardwalk"],
     ["Golf", "An 18-hole championship course by the sea, green all year.", "ui-g-terraces"],
     ["Sports", "Courts, cycling routes and the open sea for an active life.", "ui-lagoon-clear"],
@@ -80,7 +81,7 @@ export const waysToLive = {
     ["Wellness", "Wellness and longevity by the sea: spa, coastal trails and yoga.", "ui-g-pool"],
     ["Education", "Schools and a dedicated learning hub for families who stay.", "ui-expcenter-lobby"],
     ["Culture", "Arts, performance and community events all year round.", "ui-g-music"],
-  ].map(([title, body, p]) => ({ title, body, photo: ph(p) })),
+  ].map(([title, body, p]) => ({ title, body, photo: p.startsWith("/") ? p : ph(p) })),
 };
 
 export const connectivity = {

@@ -1,7 +1,7 @@
 /**
  * Experience detail pages. The Marina and Hotels pages follow their Figma frames
  * ("Experience Detail (template · Marina)" 10921:10415 and "Experience · Hotels (list + drawer)" 10921:10489);
- * the other seven experiences use the same template filled from their own card copy.
+ * the other eight experiences (Lagoon added 12 Nov) use the same template filled from their own card copy.
  */
 import type { SingleHeroData } from "@/components/sections/SingleHero";
 import type { OverviewData } from "@/components/sections/Overview";
@@ -105,6 +105,7 @@ const hotels: ExperienceDetail = { ...hotelsBase, highlights: {
 /** Each experience's own photos for its gallery carousel (pageGallery adds the shared pool after them). */
 const shots: Record<string, string[]> = {
   beach: [ph("ui-g-beach"), ph("ui-v-turq"), ph("ui-v-lounger"), ph("ui-sea-wide"), ph("ui-g-coast")],
+  lagoon: [ph("ui-lagoon-clear"), "/images/masterplan/lagoon.webp", "/images/destination/transport-water-taxi.webp", "/images/units/apartment-marina.webp", "/images/about/b-ms-lagoons.webp"],
   golf: [h("golf-spa"), ph("ui-g-terraces")],
   sports: ["/images/sustainability/c2-large.webp", "/images/sustainability/c5-large.webp", ph("ui-lagoon-clear")],
   "retail-dining": [ph("ui-g-table"), h("ev-chef"), ph("ui-g-boardwalk"), ph("ui-g-music")],
@@ -116,6 +117,7 @@ const shots: Record<string, string[]> = {
 /** Hero lines for the seven built from their card (client edit 28 Oct): two even lines from the card's own description and site facts. */
 const heroLine: Record<string, string> = {
   beach: "7.2 kilometres of Mediterranean shore and 850,000 square metres of swimmable lagoons, with a promenade along the sand.",
+  lagoon: "850,000 square metres of swimmable seawater lagoons woven through the neighbourhoods, with water taxis across to the marina.",
   golf: "An 18-hole championship course by the sea, green all year, with homes framed by its fairways.",
   sports: "Courts, cycling routes and the open sea for an active life, with promenades that make moving part of living.",
   "retail-dining": "Walkable town centres, a commercial boulevard and waterfront tables, with shops and cafés below the homes.",
@@ -127,6 +129,7 @@ const heroLine: Record<string, string> = {
 /** Each of the seven card-built experiences: the events closest to it first, then the next upcoming ones (four in all). */
 const related: Record<string, { tag: string; title: [string, string]; first: string[] }> = {
   beach: { tag: "On the shore", title: ["Events on", "the shore"], first: ["Full moon beach festival", "Coastal 10K run", "Seaside sculpture unveiling"] },
+  lagoon: { tag: "On the water", title: ["Events on", "the lagoons"], first: ["Coastal wellness retreat", "Coastal 10K run", "Full moon beach festival"] },
   golf: { tag: "At the club", title: ["Events at", "the club"], first: ["Coastal open championship", "Grand hotel opening gala"] },
   sports: { tag: "On the move", title: ["Events in", "sport"], first: ["Coastal 10K run", "Marina regatta weekend", "Coastal open championship"] },
   "retail-dining": { tag: "Around the table", title: ["Events around", "the table"], first: ["Waterfront food market", "Music by the sea", "Grand hotel opening gala"] },

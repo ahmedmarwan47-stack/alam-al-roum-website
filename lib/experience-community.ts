@@ -56,6 +56,38 @@ export const experienceCommunity: Record<string, ExperienceCommunityData> = {
         { title: "Shore care", body: "Residents join shore clean-ups and dune planting with the beach team, keeping the coast as clean as the day it opened.", photo: md("m05"), alt: "Sand ripples under clear water" },
       ] },
   },
+  // Lagoon (12 Nov): draft copy from the site's own lagoon facts (850K sqm swimmable lagoons, 22 km lagoon promenade,
+  // water taxis to the marina), for the client to review; photos are the project's existing lagoon images and the draft
+  // unit images (Figma AI, placeholders like the community pages' units)
+  lagoon: {
+    overview: { title: "Calm water through the city",
+      body: "Seawater lagoons run through the neighbourhoods, joined to the sea and kept clear by natural filtration. 850,000 square metres of them are swimmable, so calm water is a few steps from the door rather than a trip to the beach.",
+      photo: "/images/masterplan/lagoon.webp", alt: "Lagoons winding through the neighbourhoods, seen from above",
+      points: [["Swimmable at the door", "Sheltered seawater lagoons, shallow at the edges and clear to the bottom, for children, lap swimmers and an evening dip."], ["A city joined by water", "The lagoons link the neighbourhoods to the marina and the town centres, with water taxis and bridges between them."], ["Promenades on the water", "A 22 km promenade follows the lagoons, with shade, benches and cafés along the way."]] },
+    here: { tag: "On the water", title: "What's on the lagoons", body: "Calm water, a promenade around it and boats to the rest of the city.",
+      photo: ph("ui-lagoon-clear"), alt: "Clear, shallow lagoon water",
+      rows: [
+        ["Swimmable lagoons", "Shallow, sheltered seawater for children, lap swimmers and recovery."],
+        ["Lagoon promenade", "22 km of walking and cycling paths along the water's edge."],
+        ["Water taxis", "Boats from the neighbourhoods to the marina and the town centres."],
+        ["Paddle and sail", "Paddleboards, kayaks and small boats from the lagoon docks."],
+        ["Homes on the water", "Decks and gardens that step down into the lagoon."],
+      ],
+      // one photo per row, for the shared Landmarks section (lib/experience-detail: what's here)
+      photos: [ph("ui-lagoon-clear"), ph("ui-g-boardwalk"), "/images/destination/transport-water-taxi.webp", "/images/communities/lagoon.webp", "/images/units/apartment-marina.webp"] },
+    community: { tag: "The lagoon community", title: "Neighbours on the water",
+      body: ["The lagoon neighbourhoods are built around the water: homes open onto decks and gardens at its edge, and the promenade is where neighbours meet on the way to the marina or the town centre.",
+        "Swim groups, paddle clubs and water-taxi routes give the lagoons a daily rhythm that carries on through every season."],
+      photos: ["/images/sustainability/water-living.webp", "/images/units/apartment-marina.webp"], alt: ["A swimmer in still water between columns", "Homes with balconies over the water"],
+      points: [["Swim groups", "Sessions for every age and level"], ["Paddle club", "Boards, kayaks and lessons"], ["Water taxis", "Across to the marina and the town"], ["Lagoon care", "Natural filtration, kept clear all year"]] },
+    week: { tag: "On the water", title: WEEK, body: "Lengths before work, a boat to lunch, and the promenade at sunset.",
+      items: [
+        { title: "Morning lengths", body: "Lap swimmers have the calm water to themselves early, with lifeguards on the swimming stretches from first light.", photo: x("sports-swim"), alt: "A swimmer in clear water" },
+        { title: "By boat to lunch", body: "Water taxis run from the lagoon docks to the marina and the town centres, so lunch on the quay is a short ride.", photo: "/images/destination/transport-water-taxi.webp", alt: "A water taxi on the lagoon" },
+        { title: "Afternoon paddles", body: "Paddleboards and kayaks leave the lagoon docks, with lessons for beginners and children.", photo: "/images/communities/lagoon.webp", alt: "A small boat on turquoise water" },
+        { title: "Evenings on the deck", body: "As the light goes the decks and the promenade fill, with cafés open along the water late into the evening.", photo: "/images/units/villa-pool.webp", alt: "A terrace and pool facing the sea at golden hour" },
+      ] },
+  },
   marina: {
     community: { tag: "The marina community", title: "A harbour with a crew",
       body: ["The marina is where the city meets: owners and crews, diners and walkers, early swimmers and late-evening strollers. Its 370 international berths and the local marina sit at the head of the central axis, beside the lighthouse.",

@@ -1,79 +1,26 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { onceInView } from "@/components/reveal/letters";
-import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
+import { ScrollTrigger } from "@/lib/gsap";
 import Button from "@/components/ui/Button";
 import RevealText from "@/components/reveal/RevealText";
-import { grandeur, lighthouse, type GrandeurCard } from "@/lib/content";
-import { srcSet } from "@/lib/img";
+import { grandeur, lighthouse } from "@/lib/content";
 import { frameLoader } from "@/lib/frames";
-import { MQ } from "@/lib/breakpoints";
 
 const FRAMES = 229;
 /** 1920 × 1080 WebP frames on every screen, at 30 fps (the 24 fps film with in-between frames made by motion
  *  interpolation, so each frame covers less scroll): held decoded, a 4K set would be ~6 GB, enough for Safari to
  *  reload the page (a 4K AVIF set of the 24 fps film is kept in docs/upscale/4k/seq-avif). */
 const src = (i: number) => `/seq/marina-30/${String(i + 1).padStart(4, "0")}.webp`;
-const pct = (v: number, of: number) => `${(v / of) * 100}%`;
-const Bars = () => (
-  <span className="flex h-7 items-end gap-[3px]">{[9, 15, 12, 20, 27].map((h, k) => <i key={k} className="block w-[6px] rounded-[1px] bg-deepsea-300" style={{ height: h }} />)}</span>
-);
-/** One constellation card: a photo, a Figma stat tile ($29.7Bn, 22 km …) or a chip */
-const Card = ({ c, fill = false }: { c: GrandeurCard; fill?: boolean }) =>
-  c.kind === "image" ? (
-    <div className="overflow-hidden" style={{ aspectRatio: `${c.w} / ${c.h}` }}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={c.src} srcSet={srcSet(c.src)} alt="" className="h-full w-full object-cover" />
-    </div>
-  ) : c.kind === "stat" ? (
-    // a container: a narrow tile (the phone side columns) drops its bars and note and keeps its value on one line;
-    // `fill` stretches it to its slot (a phone band sizes it to match the photo beside it)
-    <div className={`@container flex flex-col gap-3 ${fill ? "h-full justify-between" : ""} rounded-lg bg-deepsea-500 px-4 py-[14px] text-left max-lg:gap-2 max-lg:px-3 max-lg:py-[10px]`}>
-      <span className="t-label l-12 text-deepsea-200">{c.label}</span>
-      <span className="flex items-end justify-between"><span className="whitespace-nowrap t-text x-28 text-limestone-50">{c.value}</span><span className="hidden @min-[100px]:block"><Bars /></span></span>
-      <span className="t-text x-12 text-deepsea-200 @max-[120px]:hidden">{c.note}</span>
-    </div>
-  ) : (
-    <span className={`inline-flex items-center gap-2 whitespace-nowrap rounded px-[14px] py-2 t-label l-12 ${c.dark ? "bg-deepsea-500 text-limestone-50" : "bg-limestone-100 text-deepsea-500"}`}>
-      <i className={`block h-2 w-2 rounded-full ${c.dark ? "bg-limestone-50" : "bg-deepsea-600"}`} />{c.label}
-    </span>
-  );
-/** Parallax speed per card (px of drift over the section's pass): each card rises at its own pace. */
-const SPEED = [140, 90, 170, 110, 60, 150, 80, 190, 70, 130, 100, 160];
-
-/**
- * Phones and tablets: the constellation in two bands, one above the copy and one below, so no card ever crosses the
- * text (no chips on phones: photos and numbers only). Positions are px on a 350-wide band (scaled with the band),
- * each band as tall as BH; `k` is the card in grandeur.cards, `v` its upward drift in px over the section's pass
- * (always up, and less than the band's gap to the copy, so the lower band never reaches the body and no card ever
- * moves down towards the lighthouse). The drifts differ only a little, so the cards keep their alignment as they
- * rise. Both bands share the same edges: a 104 left column at x 0 and a right edge at 350, tops aligned per row,
- * and a stat tile with `h` takes that height, so it lines up with the photo beside it.
- * The lower band is still on screen when the film's lighthouse tower rises into the middle of the frame, so it
- * keeps a clear centre (x 104–246): two side columns, with the tower between them.
- */
-const BW = 350, BH = [134, 208];
-const BANDS: { k: number; x: number; y: number; w: number; h?: number; v: number }[][] = [
-  [ // above the copy, tops aligned: facade | $29.7Bn | lounge
-    { k: 0, x: 0, y: 0, w: 104, v: 22 },
-    { k: 1, x: 116, y: 0, w: 152, h: 134, v: 18 },   // as tall as the facade
-    { k: 2, x: 280, y: 0, w: 70, v: 26 },
-  ],
-  [ // below the copy, two 104 columns clear of the tower: court over colonnade | 22 km over pool
-    { k: 7, x: 0, y: 0, w: 104, v: 20 },
-    { k: 3, x: 246, y: 0, w: 104, h: 90, v: 24 },    // as tall as the court
-    { k: 9, x: 0, y: 104, w: 104, v: 16 },
-    { k: 4, x: 246, y: 104, w: 104, v: 20 },
-  ],
-];
+/** The four Grandeur figures ($29.7Bn, 22 km, Minutes, 2–5 hrs), as one calm row under the intro (12 Nov review, #51:
+ *  the scattered photo and stat cards read as cluttered; the film and the lighthouse are unchanged). */
+const stats = grandeur.cards.filter((c) => c.kind === "stat");
 
 /**
  * Grandeur + Lighthouse as one tall section over a single scroll-scrubbed film:
  * the camera tilts down and descends, so the picture rises with the scroll.
  * The film is drawn from a frame sequence on a sticky canvas (smooth in every browser).
- * Grandeur is the Figma "UI / Grandeur Constellation" (10921:28032): the cards start stacked behind the headline,
- * scatter outward as the section comes in (Smart animate 1.4 s, cubic-bezier(.16,1,.3,1)), then drift upward
- * at different speeds with the scroll. Below lg the same three beats play on the two bands (BANDS).
+ * Grandeur is the headline, its intro and the four figures in one row over the paused first frame (12 Nov review:
+ * the Figma constellation of scattered photo and stat cards was removed as too cluttered).
  */
 export default function ScrollStory() {
   const wrap = useRef<HTMLElement>(null), canvas = useRef<HTMLCanvasElement>(null), stageRef = useRef<HTMLDivElement>(null);
@@ -96,65 +43,8 @@ export default function ScrollStory() {
       trigger: wrap.current, start: "top top", end: "bottom bottom",
       onUpdate: (self) => { const i = Math.round(self.progress * (FRAMES - 1)); if (i !== cur) { cur = i; draw(i); } },
     });
-    // constellation: stacked behind the headline → scattered (once, as it comes in) → parallax drift (scrubbed)
-    const stage = stageRef.current!;
-    // the drift stops 40 px short of the hero (10 Nov review: the top cards rose over the hero): a card's upward travel
-    // is capped at its resting distance from the stage's top edge (the hero's foot) less 40 px, measured without
-    // its own drift, so it holds on every refresh and resize
-    const GAP = 40;
-    const room = (el: HTMLElement) => {
-      const top = el.getBoundingClientRect().top - stage.getBoundingClientRect().top - Number(gsap.getProperty(el, "y"));
-      return Math.max(0, top - GAP);
-    };
-    const mm = gsap.matchMedia();
-    if (!reducedMotion()) {
-      mm.add(MQ.lg, () => {
-        const cards = gsap.utils.toArray<HTMLElement>("[data-card]", stage);
-        const unit = () => stage.offsetWidth / 1512;
-        cards.forEach((el, k) => {
-          const c = grandeur.cards[k];
-          gsap.set(el.firstElementChild, { x: () => (c.sx - c.x) * unit(), y: () => (c.sy - c.y) * unit() });
-          gsap.fromTo(el, { y: 0 }, { y: () => -Math.min(SPEED[k] * unit() * 1.5, room(el)), ease: "none",
-            scrollTrigger: { trigger: stage, start: "top bottom", end: "bottom top", scrub: 1, invalidateOnRefresh: true } });
-        });
-        gsap.to(cards.map((el) => el.firstElementChild), { x: 0, y: 0, duration: 1.4, ease: "siteOut", stagger: 0.03,
-          scrollTrigger: { trigger: stage, start: "top 80%", toggleActions: "play none none none" } });
-      });
-      mm.add(MQ.belowLg, () => {
-        const copy = copyRef.current!;
-        const cards = gsap.utils.toArray<HTMLElement>("[data-pcard]", stage);
-        // gathered: each card pulled most of the way to the copy's centre, small and clear, so the scatter reads as
-        // the cards flying out from behind the headline (measured at play time, after the layout has settled)
-        const gather = (el: HTMLElement) => {
-          const a = el.getBoundingClientRect(), b = copy.getBoundingClientRect();
-          return { x: (b.left + b.width / 2 - (a.left + a.width / 2)) * 0.6, y: (b.top + b.height / 2 - (a.top + a.height / 2)) * 0.6 };
-        };
-        gsap.set(cards.map((el) => el.firstElementChild), { opacity: 0, scale: 0.8 });
-        cards.forEach((el) => {
-          gsap.fromTo(el, { y: 0 }, { y: () => -Math.min(Number(el.dataset.v), room(el)), ease: "none",
-            scrollTrigger: { trigger: stage, start: "top bottom", end: "bottom top", scrub: 1, invalidateOnRefresh: true } });
-        });
-        // the cards start hidden, so this goes through onceInView (a ScrollTrigger plus a visibility fail-safe)
-        return onceInView(stage, "top 75%", () => {
-          const inner = cards.map((el) => el.firstElementChild as HTMLElement);
-          inner.forEach((el, k) => gsap.set(el, gather(cards[k])));
-          gsap.to(inner, { x: 0, y: 0, opacity: 1, scale: 1, duration: 1.4, ease: "siteOut", stagger: 0.04, delay: 0.2 });
-        });
-      });
-    }
-    return () => { mm.revert(); stopLoading(); st.kill(); window.removeEventListener("resize", size); };
+    return () => { stopLoading(); st.kill(); window.removeEventListener("resize", size); };
   }, []);
-
-  const band = (i: number) => (
-    <div className={`relative z-0 mx-auto w-[min(calc(100%-2*var(--gutter)),440px)] lg:hidden ${i ? "mt-12" : "mb-8"}`} style={{ aspectRatio: `${BW} / ${BH[i]}` }}>
-      {BANDS[i].map(({ k, x, y, w, h, v }) => (
-        // outer: the band slot + upward drift; inner: offset to the gathered slot, released on scroll-in
-        <div key={k} data-pcard data-v={v} className="absolute" style={{ left: pct(x, BW), top: pct(y, BH[i]), width: pct(w, BW) }}>
-          <div style={h ? { aspectRatio: `${w} / ${h}` } : undefined}><Card c={grandeur.cards[k]} fill={!!h} /></div>
-        </div>
-      ))}
-    </div>
-  );
 
   return (
     <section ref={wrap} className="relative">
@@ -165,24 +55,26 @@ export default function ScrollStory() {
         </div>
       </div>
 
-      {/* Grandeur · the constellation over the sky (laptops: the Figma scatter around the headline; phones and
-          tablets: two bands of cards, above and below the copy) */}
-      <div ref={stageRef} className="relative flex min-h-svh w-full flex-col justify-center pb-8 pt-16 lg:block lg:min-h-0 lg:aspect-[1512/1080] lg:p-0">
-        {/* Figma fill over the paused film: Limestone/50 solid to halfway, clearing to the sunrise at the bottom */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-limestone-50 via-limestone-50 via-50% to-limestone-50/0" />
-        {grandeur.cards.map((c, k) => (
-          // outer: scattered slot + parallax; inner: offset to the stacked slot, released on scroll-in
-          <div key={k} data-card className="absolute hidden lg:block" style={{ left: pct(c.x, 1512), top: pct(c.y, 1080), width: pct(c.w, 1512) }}>
-            <div><Card c={c} /></div>
-          </div>
-        ))}
-        {band(0)}
-        <div ref={copyRef} className="relative z-10 mx-auto flex w-[min(760px,90%)] flex-col items-center gap-6 text-center lg:absolute lg:left-1/2 lg:top-[34.8%] lg:-translate-x-1/2">
+      {/* Grandeur · the headline, its intro and the four figures over the sky (12 Nov review: one row of numbers in
+          place of the scattered photo and stat cards); the film beneath is untouched */}
+      <div ref={stageRef} className="relative flex min-h-svh w-full flex-col justify-center pb-40 pt-24 lg:block lg:min-h-0 lg:aspect-[1512/1080] lg:p-0">
+        {/* Figma fill over the paused film: Limestone/50 solid, clearing to the sunrise at the bottom; held solid a
+            little lower than before (60 %), so the figures under the intro stay on Limestone */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-limestone-50 via-limestone-50 via-72% to-limestone-50/0 lg:via-60%" />
+        <div ref={copyRef} className="relative z-10 mx-auto flex w-[min(1040px,calc(100%-2*var(--gutter)))] flex-col items-center gap-6 text-center lg:absolute lg:left-1/2 lg:top-[22%] lg:-translate-x-1/2">
           <span className="rounded bg-limestone-100 px-[10px] py-1 t-label l-12">{grandeur.tag}</span>
-          <RevealText as="h2" text={grandeur.title} className="t-heading hd-56 text-deepsea-500" />
+          <RevealText as="h2" text={grandeur.title} className="t-heading hd-56 max-w-[760px] text-deepsea-500" />
           <RevealText text={grandeur.body} className="t-body b-18 max-w-[620px] text-limestone-800" delay={0.15} />
+          {/* phones: two by two; from lg one row of four, hairlines between */}
+          <dl className="mt-6 grid w-full grid-cols-2 gap-x-6 gap-y-8 lg:mt-10 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-deepsea-500/15">
+            {stats.map((c, k) => (
+              <div key={c.label} className="flex flex-col items-center gap-2 lg:px-6">
+                <RevealText as="dd" text={c.value!} className="order-2 t-heading hd-40 normal-case! text-deepsea-500" delay={0.2 + k * 0.06} />
+                <dt className="order-1 t-label l-12 uppercase text-limestone-800">{c.label}</dt>
+                <RevealText as="dd" text={c.note!} className="order-3 t-body b-14 text-limestone-800" delay={0.26 + k * 0.06} />
+              </div>))}
+          </dl>
         </div>
-        {band(1)}
       </div>
 
       {/* Lighthouse · the film arrives at the boardwalk */}

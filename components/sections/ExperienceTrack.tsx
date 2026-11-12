@@ -14,7 +14,7 @@ type X = (typeof experiences)[number];
 function Card({ x, delay, num, grid = false, className = "" }: { x: X; delay: number; num?: number; grid?: boolean; className?: string }) {
   return (
     <Link href={`/experiences/${x.slug}`} className={`group flex flex-col ${grid ? "gap-3 md:gap-4" : "gap-4"} ${className}`}>
-      <div className="relative aspect-[448/587] overflow-hidden">
+      <div className={`relative overflow-hidden ${grid ? "aspect-[448/587] lg:aspect-[4/3]" : "aspect-[448/587]"}`}>
         <RevealImage src={x.photo} alt={x.title} delay={delay} className="h-full w-full"
           imgClassName="transition-transform duration-[1.2s] [transition-timing-function:var(--ease-site)] group-hover:scale-[1.06]" />
         {num !== undefined && <span className="absolute left-4 top-4 t-label l-12 text-black">{String(num).padStart(2, "0")}</span>}
@@ -39,7 +39,8 @@ function Card({ x, delay, num, grid = false, className = "" }: { x: X; delay: nu
 /**
  * Detail pages (Figma 11128:14102): the same cards on one horizontal track, 440 px wide, with a progress bar
  * (the visible share of the track, moving with it) and round prev / next controls that step one card at a time.
- * `grid` (the Experiences page): a grid at every size (9 Nov), two columns below lg and three from lg, with no
+ * `grid` (the Experiences page): a grid at every size (9 Nov), two columns at every size since the Lagoon made ten
+ * (12 Nov: five even rows, no card left alone), the photos landscape (4:3) from lg so a row stays under a screen; no
  * controls; the detail pages keep the swipe track.
  */
 function Slider({ grid = false, exclude }: { grid?: boolean; exclude?: string }) {
@@ -62,7 +63,7 @@ function Slider({ grid = false, exclude }: { grid?: boolean; exclude?: string })
   return (
     <>
       <div ref={rail} onScroll={update}
-        className={grid ? "grid grid-cols-2 gap-x-3 gap-y-8 md:gap-x-6 md:gap-y-10 lg:grid-cols-3 lg:gap-6"
+        className={grid ? "grid grid-cols-2 gap-x-3 gap-y-8 md:gap-x-6 md:gap-y-10 lg:gap-x-6 lg:gap-y-12"
           : "-mx-[var(--gutter)] flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-px-[var(--gutter)] px-[var(--gutter)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"}>
         {list.map((x, k) => grid
           ? <Card key={x.slug} x={x} grid delay={(k % 2) * 0.08} className="min-w-0" />
@@ -82,7 +83,7 @@ function Slider({ grid = false, exclude }: { grid?: boolean; exclude?: string })
 }
 
 /**
- * Experiences · Track (Figma 10921:7608, "The Drop" style). The Experiences page lays the nine tall cards
+ * Experiences · Track (Figma 10921:7608, "The Drop" style). The Experiences page lays the ten tall cards
  * out as a 3-column grid (a swipe track below lg); detail pages pass `slider` for the horizontal track. Each photo opens with the
  * mask reveal, then slowly scales on hover while the Explore chip lifts.
  */
