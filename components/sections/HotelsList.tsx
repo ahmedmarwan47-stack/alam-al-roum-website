@@ -5,12 +5,15 @@ import Drawer from "@/components/ui/Drawer";
 import Icon from "@/components/ui/Icon";
 import RevealImage from "@/components/reveal/RevealImage";
 import SectionTitle from "./SectionTitle";
+import MasterplanMap from "./MasterplanMap";
+import { SegmentedToggle } from "./CommunitiesExplorer";
+import { planViews } from "@/lib/masterplan";
 import { srcSet } from "@/lib/img";
 
 /** A drawer spec row: icon name, label, value. */
 export type Spec = [string, string, string];
-export type Hotel = { name: string; type: string; photo: string; card: { w: number; h: number }; body?: string; specs?: Spec[] };
-export type HotelsData = { tag: string; title: string; body: string; items: Hotel[]; cols?: string; bodyWidth?: number; kind?: "hotel" | "unit"; extra?: string[] };
+export type Hotel = { name: string; type: string; photo: string; card: { w: number; h: number }; body?: string; specs?: Spec[]; at?: { x: number; y: number } };
+export type HotelsData = { tag: string; title: string; body: string; items: Hotel[]; cols?: string; bodyWidth?: number; kind?: "hotel" | "unit"; extra?: string[]; map?: boolean };
 
 /** Phones: the unit cards (equal columns) sit on one swipe row running to the screen edges. */
 const swipe = "max-sm:-mx-[var(--gutter)] max-sm:w-auto max-sm:self-stretch max-sm:snap-x max-sm:snap-mandatory max-sm:auto-cols-[72vw] max-sm:grid-flow-col max-sm:overflow-x-auto max-sm:scroll-px-[var(--gutter)] max-sm:px-[var(--gutter)] max-sm:[scrollbar-width:none] max-sm:[&::-webkit-scrollbar]:hidden max-sm:[&>button]:snap-start";
@@ -31,10 +34,18 @@ export default function HotelsList({ data: D, flushTop = false }: { data: Hotels
   const shots = [...[h, ...D.items.filter((_, k) => k !== last)].map((x) => x.photo), ...(D.extra ?? [])].slice(0, 4);
   const close = useCallback(() => setOpen(false), []);
   const show = (k: number) => { setShot(0); setLast(k); setOpen(true); };
+  // 15 Nov: the Hotels page gets the Communities page's Grid / Map switch (Grid first, as there): the map is the same
+  // crop of the masterplan, with one pin per hotel at its place in the city
+  const VIEWS = ["Grid", "Map"] as const;
+  const [view, setView] = useState(0);
+  const pins = D.map ? D.items.filter((it) => it.at).map((it) => ({ title: it.name, body: it.type, x: it.at!.x, y: it.at!.y, photo: it.photo })) : [];
   return (
     <section className={`flex flex-col items-center gap-10 bg-limestone-50 container-x ${flushTop ? "pb-12 lg:pb-20" : "py-12 lg:py-20"}`}>
       <SectionTitle tag={D.tag} title={D.title} body={D.body} bodyWidth={D.bodyWidth} className="max-w-[870px]" />
-      <div className={`grid w-full gap-x-3 gap-y-14 ${D.cols ? `${swipe} ${D.cols}` : "grid-cols-2 max-sm:gap-y-8 max-md:auto-rows-fr lg:grid-cols-[492fr_380fr_496fr]"}`}>
+      {pins.length > 0 && <SegmentedToggle options={VIEWS} value={view} onChange={setView} />}
+      {pins.length > 0 && view === 1
+        ? <div className="-mx-[var(--gutter)] w-[calc(100%+2*var(--gutter))]"><MasterplanMap image={planViews.communities.src} view={planViews.communities} pins={pins} initial={-1} labels /></div>
+        : <div className={`grid w-full gap-x-3 gap-y-14 ${D.cols ? `${swipe} ${D.cols}` : "grid-cols-2 max-sm:gap-y-8 max-md:auto-rows-fr lg:grid-cols-[492fr_380fr_496fr]"}`}>
         {D.items.map((it, k) => (
           <button key={it.name} onClick={() => show(k)} className={`group flex flex-col gap-[10px] self-start text-left ${D.cols ? "" : "max-md:gap-0 max-md:self-stretch"}`}>
             {/* the two-column phone grid: every photo one 4:5 frame and every card its row's height, as the communities */}
@@ -46,7 +57,7 @@ export default function HotelsList({ data: D, flushTop = false }: { data: Hotels
             <span className={`t-heading hd-24 text-deepsea-500 ${D.cols ? "" : "max-md:mt-3 max-md:text-[14px]! max-md:leading-5! max-sm:break-words"}`}>{it.name}</span>
             <span className={`t-body b-14 text-deepsea-500/60 ${D.cols ? "" : "max-md:mt-1 max-md:text-[12px]! max-md:leading-[18px]!"}`}>{it.type}</span>
           </button>))}
-      </div>
+      </div>}
       {/* Drawer (Figma 11128:14825 hotel · 11128:14826 unit type) */}
       <Drawer open={open} onClose={close} label={h.name}
         footer={D.kind === "unit"
