@@ -45,23 +45,25 @@ export default function RomansIntro() {
     return () => { track?.removeEventListener("track-ready", build); rise.scrollTrigger?.kill(); rise.kill(); titleIn(); title.kill(); drift?.scrollTrigger?.kill(); drift?.kill(); };
   }, []);
   const R = H.romans;
-  // below lg the title stands above the mosaic (no overlap at phone size) and the flower sits on the mosaic's lower corner
+  // below lg the title stands above the mosaic (no overlap at phone size), both centred (15 Nov), and the flower sits on
+  // the mosaic's lower corner, still reaching the screen's left edge (the mosaic's 8 % inset is 9.52 % of its width)
   return (
     <div ref={root} className="relative flex flex-col gap-8 lg:h-[min(844px,calc(100svh-160px))] lg:w-[1392px] lg:flex-row lg:items-end lg:gap-[30px]">
       {/* Figma columns: 1041 for the title over the mosaic (the mosaic at 419–1041), 30 gap, 321 for the statement */}
       <div className="relative flex flex-col gap-6 lg:block lg:h-full lg:w-[1041px] lg:flex-none">
         {/* 15 Nov: all three lines right-aligned on one edge (Romans was centred), and the block sits at the top of its column
             (was centred), so "Romans" stays clear of the bougainvillea in the column's lower corner */}
-        <h2 data-title data-reveal className="relative z-10 flex w-[4.6em] flex-col gap-[7px] t-serif text-right capitalize leading-none d-120 lg:absolute lg:left-0 lg:top-0">
-          <span>{R.title[0]}</span><span>{R.title[1]}</span><span>{R.title[2]}</span>
+        <h2 data-title data-reveal className="relative z-10 flex w-[4.6em] flex-col max-lg:w-auto gap-[7px] t-serif text-right capitalize leading-none d-120 max-lg:mx-auto max-lg:text-center lg:absolute lg:left-0 lg:top-0">
+          {/* below lg "Since The" is one line (15 Nov); from lg the wrapper dissolves and the three lines stack as before */}
+          <span className="lg:contents"><span>{R.title[0]}</span>{" "}<span>{R.title[1]}</span></span><span>{R.title[2]}</span>
         </h2>
-        <div className="relative ml-auto h-[58svh] max-h-[560px] w-[84%] lg:absolute lg:left-[419px] lg:top-0 lg:ml-0 lg:h-full lg:max-h-none lg:w-[622px]">
+        <div className="relative mx-auto h-[58svh] max-h-[560px] w-[84%] lg:absolute lg:left-[419px] lg:top-0 lg:mx-0 lg:h-full lg:max-h-none lg:w-[622px]">
           <div data-mosaic className="h-full w-full overflow-hidden">
             <img src={R.photo} srcSet={srcSet(R.photo)} alt="A Roman mosaic of a ship" className="h-full w-full object-cover" />
           </div>
           {/* 15 Nov: from lg the flower is sized to the screen's height (its 0.93 aspect), so on a short screen its top stays
               below the title's last line ("Romans") instead of running into it; 344 px once there is room */}
-          <div data-flower-drift className="pointer-events-none absolute -bottom-6 left-[calc(-19.05%-var(--gutter))] w-[200px] origin-bottom-left lg:-bottom-20 lg:left-[calc(-419px-var(--gutter))] lg:w-[min(344px,calc((100svh-470px)*1.07))] lg:max-w-[60vw]">
+          <div data-flower-drift className="pointer-events-none absolute -bottom-6 left-[calc(-9.52%-var(--gutter))] w-[200px] origin-bottom-left lg:-bottom-20 lg:left-[calc(-419px-var(--gutter))] lg:w-[min(344px,calc((100svh-470px)*1.07))] lg:max-w-[60vw]">
             <img data-flower src={R.flower} srcSet={srcSet(R.flower)} alt="" className="w-full origin-bottom-left animate-[sway_6s_ease-in-out_infinite]" />
           </div>
         </div>

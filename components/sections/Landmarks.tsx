@@ -75,8 +75,8 @@ export default function Landmarks({ data = landmarks }: { data?: LandmarksData }
             const on = k === open;
             return (
               <div key={r.title}>
+                {/* no row numbers below lg (15 Nov); desktop keeps them */}
                 <button onClick={() => setOpen(on ? -1 : k)} aria-expanded={on} className="flex w-full items-start gap-5 py-5 text-left">
-                  <span className="w-8 flex-none tabular-nums t-label l-12 pt-1.5">({String(k + 1).padStart(2, "0")})</span>
                   <span className="flex flex-1 flex-col gap-1.5">
                     <RevealText text={r.title} className="t-heading hd-24" />
                     <span className="t-body b-14 text-deepsea-500/60">{r.body}</span>
