@@ -5,8 +5,8 @@ export const sayHello = {
   image: "/images/contact/say-hello.webp",
   email: "info@alamalroumegypt.com",
   rows: [
-    [["call", "HOTLINE", "16922", "tel:16922"], ["whatsapp", "WHATSAPP", "+20 120 001 6922", "https://wa.me/201200016922"], ["mail-01", "Email", "info@alamalroumegypt.com", "mailto:info@alamalroumegypt.com"]],
-    [["building-03", "SALES OFFICE", "Qatari Diar Egypt, New Cairo"], ["location-01", "SITE OFFICE", "Alam Al Roum, North Coast, Egypt"]],
+    [["call", "Hotline", "16922", "tel:16922"], ["whatsapp", "WhatsApp", "+20 120 001 6922", "https://wa.me/201200016922"], ["mail-01", "Email", "info@alamalroumegypt.com", "mailto:info@alamalroumegypt.com"]],
+    [["building-03", "Sales Office", "Qatari Diar Egypt, New Cairo"], ["location-01", "Site Office", "Alam Al Roum, North Coast, Egypt"]],
   ] as [string, string, string, string?][][],
   form: {
     title: "Send us a message",
@@ -20,11 +20,12 @@ export const bookCall = {
   tag: "Talk With The Team", title: "Schedule Consultation Call",
   host: "Ahmed Hassan", event: "Consultation Call", body: "A relaxed first conversation about your space, goals and budget.",
   meta: [["clock-01", "30m"], ["video-01", "Google Meet"], ["globe", "Africa/Cairo"]],
-  year: 2026, month: 9, // October (0-based)
-  open: [15, 16, 18, 19, 20, 21, 22, 25, 26, 27, 28, 29],
-  initial: 15,
+  // 15 Nov: the coming month (was October, already past at handover); open Sunday to Thursday, Egypt's working week
+  year: 2026, month: 11, // December (0-based)
+  open: [1, 2, 3, 6, 7, 8, 9, 10, 13, 14, 15, 16, 17, 20, 21, 22, 23, 24],
+  initial: 1,
   times: ["10:00am", "11:00am", "12:30pm", "2:00pm", "3:30pm", "5:00pm", "6:30pm"],
-  tz: "Times shown in Africa/Cairo (GMT+3)",
+  tz: "Times shown in Africa/Cairo (GMT+2)",
 };
 
 export const locations = {

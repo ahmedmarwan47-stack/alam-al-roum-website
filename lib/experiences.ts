@@ -9,7 +9,7 @@ export const expHero = {
 };
 
 export const track = {
-  tag: "Lifestyle & Experiences",
+  tag: "Experiences & Lifestyle",
   title: [{ t: "Ways to live" }, { t: "Greatness", i: true }],
   body: "A diverse mix of residential, hospitality, cultural, recreational and wellness experiences creates an active and enriching environment that extends beyond traditional resort living.",
   cta: "Explore",

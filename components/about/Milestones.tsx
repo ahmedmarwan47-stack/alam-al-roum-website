@@ -9,9 +9,9 @@ import { MQ, matches } from "@/lib/breakpoints";
 
 /**
  * Figma "UI / Milestone" (10979:18571…): 400 wide, 15 ticks 24 apart from x 24, ticks 56 at rest → 136 at the focus.
- * From lg up each milestone is 540 wide (29 Oct review), its ticks 34 apart, so the 15 still span it.
+ * From lg up each milestone is 600 wide (15 Nov, was 540 since the 29 Oct review), its ticks 38 apart, so the 15 still span it.
  */
-const CARD = 400, CARD_LG = 540, TICKS = 15, TICK_X0 = 24, TICK_GAP = 25, TICK_GAP_LG = 35, LOW = 56, HIGH = 136;
+const CARD = 400, CARD_LG = 600, TICKS = 15, TICK_X0 = 24, TICK_GAP = 25, TICK_GAP_LG = 39, LOW = 56, HIGH = 136;
 const isLg = () => matches(MQ.lg);
 /** Half-width of the tick wave (px); Figma's 60 px gutter, where 2025 starts (the content edge on wider screens). */
 const SPREAD = 190, GUTTER = 60;
@@ -29,15 +29,15 @@ function Milestone({ i, active, onPick }: { i: number; active: boolean; onPick: 
   return (
     // a click on a faded milestone brings it into focus (a pointer shortcut; the year buttons above are the keyboard way)
     <div data-ms aria-hidden={!active} onClick={() => !active && onPick(i)}
-      className={`relative flex w-[400px] flex-none flex-col gap-10 lg:w-[540px] ${active ? "" : "cursor-pointer"}`}>
+      className={`relative flex w-[400px] flex-none flex-col gap-10 lg:w-[600px] ${active ? "" : "cursor-pointer"}`}>
       {/* the line: 268 tall at rest, 632 when in focus (Figma; 712 from lg, for the wider photo) — drawn full and scaled */}
-      <span data-ms-line className="absolute left-0 top-0 h-[632px] w-px lg:h-[712px] origin-top bg-deepsea-500" style={{ transform: `scaleY(${268 / 632})` }} />
+      <span data-ms-line className="absolute left-0 top-0 h-[632px] w-px lg:h-[712px] origin-top-left bg-deepsea-500" style={{ transform: `scaleY(${268 / 632})` }} />
       <div className="flex flex-col gap-2 pl-4">
         <span className={`t-text text-deepsea-500 ${YEAR}`}>{m.year}</span>
         <span className={`t-text x-16 text-limestone-800 ${TEXT}`}>{m.title}</span>
       </div>
-      <div className="flex h-[136px] items-center gap-6 pl-6 lg:gap-[34px]" aria-hidden>
-        {Array.from({ length: TICKS }, (_, k) => <i key={k} data-ms-tick className="block h-[136px] w-px flex-none origin-center bg-deepsea-500" />)}
+      <div className="flex h-[136px] items-center gap-6 pl-6 lg:gap-[38px]" aria-hidden>
+        {Array.from({ length: TICKS }, (_, k) => <i key={k} data-ms-tick className="block h-[136px] w-px flex-none origin-left bg-deepsea-500" />)}
       </div>
       <div data-ms-detail className="flex flex-col gap-6 px-6 opacity-0">
         {/* 14 / 20 on screen, however far the rail is scaled down to fit a short screen */}
@@ -67,14 +67,24 @@ export default function Milestones() {
   useEffect(() => {
     // below lg only the rail is scaled, to the screen's width (one 400 px milestone and a sliver of the next),
     // so its copy never drops under 12 px; from lg the section is one screen tall and the rail is scaled to the height
-    // left under the title and the years (its tallest state is the 712 px line of the milestone in focus)
+    // left under the title and the years (to the tallest milestone, measured)
     const fit = () => {
       const lg = matches(MQ.lg), gut = Math.min(60, Math.max(20, window.innerWidth * 0.0397));
       if (!lg) { setRailZoom(Math.min(1, (window.innerWidth - 2 * gut) / CARD)); return; }
       const t = track.current!, pad = parseFloat(getComputedStyle(t.parentElement!).paddingBottom) || 0;
       // the rail's top on screen (offsetTop would be in its own zoomed pixels)
       const top = t.getBoundingClientRect().top - root.current!.getBoundingClientRect().top;
-      setRailZoom(Math.min(1, Math.max(0.45, (window.innerHeight - top - pad) / 712)));
+      // 15 Nov: scale to the tallest milestone as it really is (the line, or its copy and photo, whichever is longer:
+      // ~750 px), not a fixed 712, or the photo of the one in focus ran past the section's foot into the next section
+      // (the copy is sized against the zoom, so the milestones grow as the rail shrinks: settle it in a few passes)
+      const room = window.innerHeight - top - pad;
+      let z = parseFloat(t.style.zoom) || 1;
+      for (let k = 0; k < 4; k++) {
+        t.style.zoom = String(z); t.style.setProperty("--z", String(z));
+        const tallest = Math.max(712, ...[...t.querySelectorAll<HTMLElement>("[data-ms]")].map((c) => c.offsetHeight));
+        z = Math.min(1, Math.max(0.45, room / tallest));
+      }
+      setRailZoom(z);
     };
     fit(); window.addEventListener("resize", fit);
     // the title's height moves the rail (its font arriving, its reveal, a rewrap): fit again whenever it changes
@@ -87,27 +97,42 @@ export default function Milestones() {
     const el = root.current!, r = rail.current!, t = track.current!;
     const cards = gsap.utils.toArray<HTMLElement>("[data-ms]", el);
     const ticks = cards.map((c) => gsap.utils.toArray<HTMLElement>("[data-ms-tick]", c));
-    const state = { f: 0 };   // the milestone in focus, as a float 0 … n-1 while the rail glides
+    const state = { f: 0, p: 1 };   // the milestone in focus, as a float 0 … n-1 while the rail glides; p: the switch's progress
+    // 15 Nov: only the milestone being left and the one arriving raise their long line and copy (by the switch's progress),
+    // so a jump of several years no longer flicks up the lines of the ones the rail glides past
+    const sw = { to: 0, start: Array.from({ length: N }, (_, i): number => (i === 0 ? 1 : 0)) };
+    const raise = (i: number) => sw.start[i] * (1 - state.p) + (i === sw.to ? 1 : 0) * state.p;   // 0 … 1, per milestone
     const paint = () => {
       const lg = isLg(), full = lg ? 712 : 632, C = lg ? CARD_LG : CARD, gap = lg ? TICK_GAP_LG : TICK_GAP, spread = SPREAD * C / CARD;
       const f = state.f, fx = f * C + C / 2;
-      // lg: 2025 at the 60 px gutter (wider than 1512, on the 1392 content edge like every section) → 2030 in the
-      // centre; where only one milestone fits (phones, tablets) the one in focus stays centred the whole way
+      // lg: 2025 at the 60 px gutter (wider than 1512, on the 1392 content edge like every section) → 2030 on the right
+      // gutter; where only one milestone fits (phones, tablets) the one in focus stays centred the whole way
       // W in the rail's own (zoomed) pixels, from its width on screen; z turns the gutter and content edge into them
       const z = parseFloat(t.style.zoom) || 1, Wv = t.getBoundingClientRect().width, W = Wv / z;
-      const x0 = W < 2.5 * C ? W / 2 - C / 2 : Math.max(GUTTER, (Wv - 1392) / 2) / z, x1 = W / 2 - ((N - 1) * C + C / 2);
+      // 15 Nov: the rail ends with 2030 on the right gutter, as 2025 starts on the left one (its last tick on the edge),
+      // not in the centre; phones and tablets keep the one in focus centred
+      const edge = Math.max(GUTTER, (Wv - 1392) / 2) / z, one = W < 2.5 * C;
+      const x0 = one ? W / 2 - C / 2 : edge;
+      const x1 = one ? W / 2 - ((N - 1) * C + C / 2) : W - edge - ((N - 1) * C + TICK_X0 + (TICKS - 1) * gap + 1);
       r.style.transform = `translate3d(${x0 + (x1 - x0) * (f / (N - 1))}px,0,0)`;
+      // 15 Nov, strokes: the rail is drawn at zoom z, so a 1 px line came out ~0.5 px and fell between screen pixels at a
+      // different spot each time (some lines crisp and dark, others faint). Each line is now an exact width on screen
+      // (scaleX) and snapped to the pixel grid (translateX), so every stroke has the same weight
+      const rl = r.getBoundingClientRect().left;
+      // 15 Nov: every stroke half a screen pixel wide (one device pixel on a retina screen), snapped to the device grid
+      const dpr = window.devicePixelRatio || 1, W1 = 0.5 / z;
+      const snap = (x: number) => { const sx = rl + x * z; return (Math.round(sx * dpr) / dpr - sx) / z; };   // in the rail's units
       cards.forEach((c, i) => {
         const near = Math.max(0, 1 - Math.abs(i - f));                 // 1 in focus → 0 one step away
         c.style.opacity = String(0.08 + 0.92 * near);
         const det = c.querySelector<HTMLElement>("[data-ms-detail]")!, line = c.querySelector<HTMLElement>("[data-ms-line]")!;
-        const d = Math.max(0, 1 - Math.abs(i - f) * 2);                 // the detail only for the one in focus
+        const d = raise(i);                                               // the detail only for the one in focus
         det.style.opacity = String(d); det.style.transform = `translateY(${(1 - d) * 16}px)`;   // the site's text motion: blur, 16 px
         det.style.filter = d < 1 ? `blur(${(1 - d) * 12}px)` : "";
-        line.style.transform = `scaleY(${(268 + (full - 268) * d) / full})`;
+        line.style.transform = `translateX(${snap(i * C)}px) scaleX(${W1}) scaleY(${(268 + (full - 268) * d) / full})`;
         ticks[i].forEach((tk, k) => {
           const x = i * C + TICK_X0 + k * gap, q = (x - fx) / spread;
-          tk.style.transform = `scaleY(${(LOW + (HIGH - LOW) * Math.exp(-q * q)) / HIGH})`;
+          tk.style.transform = `translateX(${snap(x)}px) scaleX(${W1}) scaleY(${(LOW + (HIGH - LOW) * Math.exp(-q * q)) / HIGH})`;
         });
       });
     };
@@ -115,9 +140,11 @@ export default function Milestones() {
     let idx = 0;
     go.current = (i: number) => {
       const to = Math.min(N - 1, Math.max(0, i)); if (to === idx && Math.abs(state.f - to) < 1e-3) return;
+      // each milestone starts from where it is now, so a switch interrupted mid-way carries on without a snap
+      sw.start = sw.start.map((_, k) => raise(k)); sw.to = to; state.p = 0;
       idx = to; setFocus(to);
       const dist = Math.abs(state.f - to);
-      gsap.to(state, { f: to, duration: rm ? 0 : Math.min(1.4, 0.6 + 0.2 * dist), ease: "power2.inOut", onUpdate: paint, overwrite: true });
+      gsap.to(state, { f: to, p: 1, duration: rm ? 0 : Math.min(1.4, 0.6 + 0.2 * dist), ease: "power2.inOut", onUpdate: paint, overwrite: true });
     };
     // touch: a sideways swipe on the rail steps the focus; a vertical drag stays the page's scroll (touch-action: pan-y)
     let sx = 0, sy = 0, on = false;
@@ -150,9 +177,10 @@ export default function Milestones() {
   const prev = <button type="button" aria-label="Previous milestone" onClick={() => go.current(focus - 1)} disabled={focus === 0} className={arrow}><Icon name="arrow-left-01-sharp" /></button>;
   const next = <button type="button" aria-label="Next milestone" onClick={() => go.current(focus + 1)} disabled={focus === N - 1} className={arrow}><Icon name="arrow-right-01-sharp" /></button>;
   return (
-    // from lg one screen tall: the padding and gaps follow the screen's height and the rail is scaled to the rest
-    <section ref={root} aria-label="Phase one timeline" className="relative overflow-hidden bg-limestone-50 lg:h-svh">
-      <div className="flex flex-col gap-8 py-20 lg:gap-[clamp(16px,3.5svh,48px)] lg:py-[clamp(28px,6svh,96px)]">
+    // from lg one screen tall (at least: on a very short screen it grows rather than cut the photo off): the padding and
+    // gaps follow the screen's height and the rail is scaled to the rest
+    <section ref={root} aria-label="Phase one timeline" className="relative overflow-hidden bg-limestone-50 lg:min-h-svh">
+      <div className="flex flex-col gap-8 py-12 lg:gap-[clamp(16px,3.5svh,48px)] lg:py-20">
         {/* 920 wide less the side padding (800 of copy at 1512); the padding stops at Figma's 60 px, so on wider screens
             the larger gutter does not squeeze the copy */}
         <SectionTitle tag={M.tag} title={M.title} body={M.body} className="mx-auto max-w-[920px] px-[min(var(--gutter),60px)]" />

@@ -29,8 +29,8 @@ export default async function NeighbourhoodPage({ params }: { params: Promise<{ 
       <Navbar />
       <SingleHero data={x.hero} />
       <Overview data={x.overview} />
-      {x.units && <HotelsList data={x.units} />}
-      <CommunityOnMasterplan slug={x.slug} title={x.masterplan.title} body={x.masterplan.body} />
+      {x.units && <HotelsList data={x.units} flushTop />}
+      <CommunityOnMasterplan slug={x.slug} title={x.masterplan.title} body={x.masterplan.body} flushTop={!!x.units} />
       {x.facilities && <Landmarks data={x.facilities} />}
       <Gallery data={x.gallery} />
       <OtherCommunities exclude={x.slug} />

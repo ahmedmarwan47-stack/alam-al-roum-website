@@ -33,6 +33,8 @@ html.lenis, html.lenis body { height: auto; }
 body, :is(p, li, dt, dd, blockquote, figcaption, label, h1, h2, h3, h4, h5, h6, [data-reveal]) { text-wrap: pretty; }
 /* hero subtitles: even lines (a Tailwind [text-wrap:balance] would lose to the unlayered rule above) */
 .wrap-balance { text-wrap: balance; }
+/* 15 Nov: and one-line truncation (the breadcrumb's page name) must win over it too, or `truncate` wraps instead */
+.truncate { text-wrap: nowrap; }
 
 /* ── Type scale (Figma text styles) ──
    Each size is fluid from a phone (390 px wide) to the Figma desktop frame (1512 px): Figma's size at 1512 and up,
@@ -63,7 +65,7 @@ body, :is(p, li, dt, dd, blockquote, figcaption, label, h1, h2, h3, h4, h5, h6, 
 .l-14 { font-size: 14px; line-height: 20px; }   /* 20, not 1.5 × 14 = 21: on the 4 px grid */ .l-12 { font-size: 12px; line-height: 1.5; }
 /* Section taglines (eyebrows): 16 / 24 from tablet up; 14 / 20 on phones, where the headings shrink to ~24 px and a 16 px
    medium tagline would sit almost as heavy as the title. Stepped, not fluid, so it stays on the 4 px grid (14 / 16 only). */
-.l-tag { font-size: 16px; line-height: 24px; }
+.l-tag { font-size: 16px; line-height: 24px; text-transform: capitalize; }   /* 15 Nov: every eyebrow in title case, as the headings */
 @media (width < 48rem) { .l-tag { font-size: 14px; line-height: 20px; } }
 /* Hero type on phones (9 Nov): every page hero's title 32/36 and description 14/20, on the 4 px grid, so the opening
    screen is the photo, not the paragraph. Set with !important to win over the fluid sizes and per-hero leadings. */

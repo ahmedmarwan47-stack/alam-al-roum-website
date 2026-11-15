@@ -19,7 +19,7 @@ const coastPath = readFileSync(path.join(process.cwd(), "public", H.line.svg), "
  */
 export default function HistoryTrack() {
   return (
-    <PinnedTrack className="bg-limestone-50 text-deepsea-900" trackClassName="gap-24 py-20 lg:h-svh lg:gap-[94px]">
+    <PinnedTrack className="bg-limestone-50 text-deepsea-900" trackClassName="gap-24 py-12 lg:h-svh lg:gap-[94px] lg:py-20">
         {/* 1 · Since the Romans: the mosaic rises in, the title writes in, the flower grows and sways */}
         <RomansIntro />
         {/* 2 · The coast that guided the Romans: the line draws itself, the 3D coin turns */}

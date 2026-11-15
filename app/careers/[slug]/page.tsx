@@ -42,13 +42,13 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
   return (
     <main>
       <Navbar />
-      <section className="mt-[76px] flex flex-col items-center gap-6 bg-limestone-50 px-[var(--gutter)] py-[60px] text-center text-deepsea-500">
+      <section className="mt-[76px] flex flex-col items-center gap-6 bg-limestone-50 px-[var(--gutter)] py-12 lg:py-20 text-center text-deepsea-500">
         <Breadcrumb parent="Careers" href="/careers" current={r.title} />
         {/* 12 Nov review: the site's heading face in Deep Sea (as the listing heroes), not black Immortel */}
         <RevealText as="h1" text={r.title} onLoad delay={0.15} className="t-heading capitalize hd-56" />
         <RevealText text={r.lede} onLoad delay={0.3} className="t-body b-18 text-limestone-800" />
       </section>
-      <section className="flex flex-col gap-16 bg-deepsea-500 py-20 text-white container-x">
+      <section className="flex flex-col gap-16 bg-deepsea-500 py-12 text-white container-x lg:py-20">
         <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-center">
           <div className="flex max-w-[460px] flex-col gap-6">
             <RevealText as="h2" text="Position details" className="t-heading hd-48" />
@@ -65,7 +65,7 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
             </div>))}
         </dl>
       </section>
-      <section className="flex flex-col gap-20 bg-limestone-50 py-20 container-x">
+      <section className="flex flex-col gap-20 bg-limestone-50 py-12 container-x lg:py-20">
         {r.responsibilities && <Numbered title="Responsibilities" items={r.responsibilities} />}
         {r.requirements && <Numbered title="Requirements" items={r.requirements} />}
         <div className="flex flex-col gap-6 lg:flex-row lg:gap-0">

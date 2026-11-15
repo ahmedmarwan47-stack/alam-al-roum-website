@@ -49,7 +49,7 @@ export default function Landmarks({ data = landmarks }: { data?: LandmarksData }
     {/* desktop: one screen tall (12 Nov review: it ran taller than the viewport at 1024 px), at most Figma's 1024; the
         padding, the gap and the rows tighten with the screen height so the copy fits, and it only grows if it can't */}
     <div className="flex flex-col bg-limestone-50 lg:min-h-[min(100svh,1024px)] lg:flex-row">
-      <div className="flex flex-col justify-center gap-10 py-16 pl-[var(--gutter)] pr-[var(--gutter)] lg:w-1/2 lg:gap-[clamp(24px,4.5svh,60px)] lg:py-[clamp(40px,7svh,80px)] lg:pr-24">
+      <div className="flex flex-col justify-center gap-10 py-12 pl-[var(--gutter)] pr-[var(--gutter)] lg:w-1/2 lg:gap-[clamp(24px,4.5svh,60px)] lg:py-20 lg:pr-24">
         <div className="flex flex-col gap-2">
           <RevealText as="h2" text={L.title} className="t-heading hd-40" />
           <RevealText text={L.body} className="t-body b-16 max-w-[460px] text-deepsea-500/70" delay={0.08} />

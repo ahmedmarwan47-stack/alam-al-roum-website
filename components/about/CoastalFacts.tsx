@@ -6,10 +6,10 @@ import RevealText from "@/components/reveal/RevealText";
 import { facts as F } from "@/lib/about/a-content";
 import { srcSet } from "@/lib/img";
 
-/** The two photos: the Experience Centre's courtyard and its lobby. */
+/** The two photos: the Experience Center's courtyard and its lobby. */
 const PHOTOS = [
-  { src: F.image, alt: "The Experience Centre courtyard" },
-  { src: "/images/photo/ui-expcenter-lobby.webp", alt: "The Experience Centre lobby and lounge" },
+  { src: F.image, alt: "The Experience Center courtyard" },
+  { src: "/images/photo/ui-expcenter-lobby.webp", alt: "The Experience Center lobby and lounge" },
 ];
 
 /**
@@ -43,7 +43,7 @@ export default function CoastalFacts() {
     return () => { stop(); ctx.revert(); gsap.set(frames, { clearProps: "clipPath,filter" }); };
   }, []);
   return (
-    <section ref={root} className="overflow-hidden bg-limestone-50 py-20 text-deepsea-500 container-x lg:py-[120px]">
+    <section ref={root} className="overflow-hidden bg-limestone-50 py-12 text-deepsea-500 container-x lg:py-20">
       <div className="mx-auto flex max-w-[600px] flex-col items-center text-center">
         <RevealText as="h2" segs={[{ t: "A fully integrated" }, { t: "coastal city", br: true }]} className="t-heading hd-56" />
         <RevealText text={F.body} className="mt-6 t-body b-18 text-limestone-800" delay={0.1} />

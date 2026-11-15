@@ -8,7 +8,7 @@ export const faqPage = {
     { cat: "General", q: "Who is developing it?", a: "Qatari Diar, the real estate developer backed by the Qatar Investment Authority. It has 20 years in business, more than 50 projects in 20 countries and a portfolio exceeding USD 35 billion, including USD 7 billion invested in Egypt." },
     { cat: "General", q: "Is it a resort?", a: "No. It is a functioning city with homes, businesses, schools, and infrastructure. The masterplan supports life throughout the entire year." },
     { cat: "Location & Access", q: "Where is Alam Al Roum?", a: "On Egypt's North Coast, around a rare natural Mediterranean bay with 7.2 kilometers of shoreline." },
-    { cat: "Location & Access", q: "How do I get there?", a: "Ras El Hekma Airport is minutes away, and the city sits within a two to five hour flight of Europe and the GCC." },
+    { cat: "Location & Access", q: "How do I get there?", a: "Marsa Matrouh International Airport is about 6 km away, and the city sits within a two to five hour flight of Europe and the GCC." },
     { cat: "Location & Access", q: "Can I visit?", a: "Yes. The site is accessible from the North Coast road network. Contact our team to arrange a visit or to receive the latest updates." },
     { cat: "Homes & Investment", q: "How do I register my interest?", a: "Register through the form on this site or call 16922. Our team will contact you with launch details and available homes." },
     { cat: "Homes & Investment", q: "Is there a business or Free Zone?", a: "Yes. A Free Zone and business district, with commercial offices and an Expo centre, sits inside the city." },

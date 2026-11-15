@@ -16,7 +16,7 @@ import { cta as C } from "@/lib/content";
  */
 export default function Cta({ form }: { form?: string }) {
   return (
-    <section className={`relative overflow-hidden bg-limestone-50 ${form ? "pb-20 lg:flex lg:h-svh lg:min-h-[680px] lg:items-center lg:py-[clamp(24px,6svh,80px)]" : "h-[720px] max-lg:h-auto"}`}>
+    <section className={`relative overflow-hidden bg-limestone-50 ${form ? "pb-12 lg:flex lg:h-svh lg:min-h-[680px] lg:items-center lg:py-20" : "h-[720px] max-lg:h-auto"}`}>
       {/* below lg the film sits on top, framed on the portal, and melts into the Limestone under the copy (a soft fade
           in, a longer one out), so film and copy read as one block as on desktop, where the copy sits on the film;
           the crop is held at 80 % across, so the portal stands in the middle of the frame with both pillars whole */}

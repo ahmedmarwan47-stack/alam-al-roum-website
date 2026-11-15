@@ -21,7 +21,8 @@ const swipe = "max-sm:-mx-[var(--gutter)] max-sm:w-auto max-sm:self-stretch max-
  * name at Heading/16 there); Unit types (Figma 10921:9816) pass `cols` for equal columns (a swipe row on a phone) and
  * `kind: "unit"` for the unit drawer's two actions (Register Interest, Download Brochure); hotels get Visit Website.
  */
-export default function HotelsList({ data: D }: { data: HotelsData }) {
+/** `flushTop`: no top padding where the section above ends on the same background (a community's Overview). */
+export default function HotelsList({ data: D, flushTop = false }: { data: HotelsData; flushTop?: boolean }) {
   // `last` keeps the drawer's content in place while it slides out
   const [open, setOpen] = useState(false), [last, setLast] = useState(0);
   const [shot, setShot] = useState(0);
@@ -31,7 +32,7 @@ export default function HotelsList({ data: D }: { data: HotelsData }) {
   const close = useCallback(() => setOpen(false), []);
   const show = (k: number) => { setShot(0); setLast(k); setOpen(true); };
   return (
-    <section className="flex flex-col items-center gap-10 bg-limestone-50 py-20 container-x">
+    <section className={`flex flex-col items-center gap-10 bg-limestone-50 container-x ${flushTop ? "pb-12 lg:pb-20" : "py-12 lg:py-20"}`}>
       <SectionTitle tag={D.tag} title={D.title} body={D.body} bodyWidth={D.bodyWidth} className="max-w-[870px]" />
       <div className={`grid w-full gap-x-3 gap-y-14 ${D.cols ? `${swipe} ${D.cols}` : "grid-cols-2 max-sm:gap-y-8 max-md:auto-rows-fr lg:grid-cols-[492fr_380fr_496fr]"}`}>
         {D.items.map((it, k) => (

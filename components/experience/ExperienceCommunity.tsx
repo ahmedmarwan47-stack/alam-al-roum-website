@@ -11,7 +11,7 @@ export type CommunityData = { tag: string; title: string; body: string[]; photos
  */
 export default function ExperienceCommunity({ data: C }: { data: CommunityData }) {
   return (
-    <section className="bg-limestone-500 py-20 text-deepsea-500 container-x lg:py-[120px]">
+    <section className="bg-limestone-500 py-12 text-deepsea-500 container-x lg:py-20">
       <div className="mx-auto grid max-w-[1392px] items-center gap-12 lg:grid-cols-2 lg:gap-24">
         <div className="relative pb-[14%]">
           <RevealImage src={C.photos[0]} alt={C.alt[0]} className="aspect-[4/5] w-[78%]" imgClassName={C.focus?.[0]} />

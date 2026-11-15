@@ -34,14 +34,14 @@ function Panel({ photo, title, features }: { photo: string; title: string[]; fea
 export default function WaterTrack() {
   const s1 = W.statement1, s2 = W.statement2;
   return (
-    <PinnedTrack className="bg-limestone-500 text-deepsea-500" trackClassName="gap-6 py-20 lg:h-screen lg:max-h-[920px] lg:[@media(min-height:1000px)]:max-h-none">
-      <div className="flex flex-col items-center justify-center gap-6 py-16 text-center lg:h-[min(760px,calc(100svh-160px))] lg:w-[1392px] lg:flex-none">
+    <PinnedTrack className="bg-limestone-500 text-deepsea-500" trackClassName="gap-6 py-12 lg:py-20 lg:h-screen lg:max-h-[920px] lg:[@media(min-height:1000px)]:max-h-none">
+      <div className="flex flex-col items-center justify-center gap-6 py-12 text-center lg:h-[min(760px,calc(100svh-160px))] lg:w-[1392px] lg:flex-none lg:py-20">
         <span className="t-label l-tag">{s1.tag}</span>
         <p className="max-w-[1100px] t-heading hd-56l">{s1.text} {s1.accent}</p>
       </div>
       <Panel photo={W.living.photo} title={W.living.title} features={W.living.features} />
       {/* the second statement stands on the Limestone alone (the cut-out glasses were removed, client edit 28 Oct) */}
-      <div className="flex flex-col items-center justify-center gap-6 py-16 text-center lg:h-[min(760px,calc(100svh-160px))] lg:w-[1392px] lg:flex-none lg:py-24">
+      <div className="flex flex-col items-center justify-center gap-6 py-12 text-center lg:h-[min(760px,calc(100svh-160px))] lg:w-[1392px] lg:flex-none lg:py-20">
         <p className="max-w-[1100px] t-heading hd-56l">{s2.text} {s2.accent}</p>
         <RevealText text={s2.body} className="t-body b-18 max-w-[720px]" />
       </div>

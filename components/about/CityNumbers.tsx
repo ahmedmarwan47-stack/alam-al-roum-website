@@ -23,7 +23,7 @@ export default function CityNumbers() {
     return whenSectionEnters(el, () => blurIn(blocks, { delay: 0.25, stagger: 0.12 }));
   }, []);
   return (
-    <section ref={root} aria-labelledby="city-numbers-title" className="bg-limestone-50 pt-20 container-x lg:pt-[120px]">
+    <section ref={root} aria-labelledby="city-numbers-title" className="bg-limestone-50 py-12 container-x lg:py-20">
       <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
         <div className="flex flex-col gap-4">
           <RevealText text={N.tag} className="t-label l-tag text-deepsea-500" />

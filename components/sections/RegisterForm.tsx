@@ -7,7 +7,7 @@ import { sayHello } from "@/lib/contact";
 const UNIT_TYPES = ["Standalone Villa", "Townhouse", "Apartment"];
 // phones: 4 px from label to field, 12 px under it (inputs stay 16 px, so iOS does not zoom on focus)
 const line = "flex flex-col gap-1 border-b border-deepsea-500/20 pb-3 lg:gap-[clamp(6px,1.2svh,12px)] lg:pb-[clamp(8px,1.6svh,16px)]";
-const label = "t-label l-12 uppercase text-deepsea-950";
+const label = "t-label l-12 capitalize text-deepsea-950";
 const input = "w-full bg-transparent t-text x-20 text-deepsea-950 outline-none placeholder:text-deepsea-950/60";
 
 /**

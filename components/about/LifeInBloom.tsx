@@ -43,7 +43,7 @@ export default function LifeInBloom() {
     return () => { stop(); ctx.revert(); gsap.set([...ins, ...phs], { clearProps: "all" }); };
   }, []);
   return (
-    <section ref={root} className="bg-limestone-50 py-20 text-deepsea-500 container-x lg:py-[120px]">
+    <section ref={root} className="bg-limestone-50 py-12 text-deepsea-500 container-x lg:py-20">
       <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
         <div className="flex flex-col gap-10 lg:justify-between lg:gap-12">
           <div className="flex flex-col items-start gap-6">

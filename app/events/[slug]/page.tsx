@@ -35,10 +35,10 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
         {/* phones: a 4:3 crop, as the 1392 × 640 banner would be a thin strip there */}
         <div className="aspect-[4/3] overflow-hidden sm:aspect-[1392/640]"><RevealImage src={e.hero} alt={e.title} onLoad className="h-full w-full" /></div>
       </div>
-      <section className="px-[var(--gutter)] py-[60px]">
+      <section className="px-[var(--gutter)] py-12 lg:py-20">
         <ArticleBody a={e} />
       </section>
-      <section className="flex flex-col items-center gap-10 bg-limestone-50 py-20 container-x">
+      <section className="flex flex-col items-center gap-10 bg-limestone-50 pb-12 container-x lg:pb-20">
         <SectionTitle title={e.past ? "More moments" : "More events"} body="A calendar of culture, sport, and conversation." />
         {/* phones: one swipe row to the screen edges (as Events here and Groupe Montoni's cards); a column per card keeps the subgrid rows */}
         <div className="grid w-full gap-6 sm:grid-cols-2 md:grid-cols-3 max-sm:-mx-[var(--gutter)] max-sm:w-auto max-sm:self-stretch max-sm:snap-x max-sm:snap-mandatory max-sm:auto-cols-[72vw] max-sm:grid-flow-col max-sm:grid-rows-[auto_auto_auto] max-sm:gap-4 max-sm:overflow-x-auto max-sm:scroll-px-[var(--gutter)] max-sm:px-[var(--gutter)] max-sm:[scrollbar-width:none] max-sm:[&::-webkit-scrollbar]:hidden max-sm:[&>a]:snap-start">

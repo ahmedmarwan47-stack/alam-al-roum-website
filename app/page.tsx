@@ -28,7 +28,7 @@ export default function Home() {
       <Hero />
       <ScrollStory />
       <Communities />
-      <Masterplan />
+      <Masterplan flushTop />
       <WaysToLive />
       <Connectivity />
       <Events hrefs={eventHrefs} />

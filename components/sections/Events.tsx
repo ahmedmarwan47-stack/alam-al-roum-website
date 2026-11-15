@@ -10,7 +10,7 @@ export default function Events({ hrefs = {} }: { hrefs?: Record<string, string> 
   const [past, setPast] = useState(false);
   const list = past ? E.past : E.upcoming;
   return (
-    <section className="flex flex-col items-center gap-10 bg-deepsea-800 py-20 text-limestone-50 container-x">
+    <section className="flex flex-col items-center gap-10 bg-deepsea-800 py-12 text-limestone-50 lg:py-20 container-x">
       <div className="flex flex-col items-center gap-4 max-md:w-full">
         <SectionTitle tag={E.tag} title={E.title} dark />
         {/* each half is 180px, narrowed below lg so the pill never runs past a phone's gutters (2 × 180 + 8 > 350);

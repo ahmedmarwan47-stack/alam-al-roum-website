@@ -70,7 +70,7 @@ export default function ScrollStory() {
             {stats.map((c, k) => (
               <div key={c.label} className="flex flex-col items-center gap-2 lg:px-6">
                 <RevealText as="dd" text={c.value!} className="order-2 t-heading hd-40 normal-case! text-deepsea-500" delay={0.2 + k * 0.06} />
-                <dt className="order-1 t-label l-12 uppercase text-limestone-800">{c.label}</dt>
+                <dt className="order-1 t-label l-12 capitalize text-limestone-800">{c.label}</dt>
                 <RevealText as="dd" text={c.note!} className="order-3 t-body b-14 text-limestone-800" delay={0.26 + k * 0.06} />
               </div>))}
           </dl>

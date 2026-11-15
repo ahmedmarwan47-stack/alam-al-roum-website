@@ -14,10 +14,11 @@ const hrefFor = (title: string) => {
  * Home: the communities. About (`places`): the client's USP board — twelve numbered highlights and the seven gates,
  * at the board's positions projected onto the render (lib/masterplan.ts, cityPlaces).
  */
-export default function Masterplan({ places = false }: { places?: boolean }) {
+/** Top padding: the site's 48 / 80 (15 Nov spacing sheet); `flushTop` (Home) drops it where the section above ends on the same background. */
+export default function Masterplan({ places = false, flushTop = false }: { places?: boolean; flushTop?: boolean }) {
   const pins = places ? cityPlaces : masterplan.pins.map((p) => ({ ...p, href: hrefFor(p.title) }));
   return (
-    <section className="flex flex-col gap-10 bg-limestone-50 pt-20">
+    <section className={`flex flex-col gap-10 bg-limestone-50 ${flushTop ? "pt-0" : "pt-12 lg:pt-20"}`}>
       <SectionTitle tag={masterplan.tag} title={masterplan.title} body={masterplan.body} bodyWidth={704} className="container-x" />
       <MasterplanMap image={fullPlan.src} pins={pins} initial={places ? -1 : 0} phoneScale={places ? 1.8 : 1} />
     </section>

@@ -7,7 +7,7 @@ import { sayHello } from "@/lib/contact";
 
 const F = sayHello.form;
 const line = "flex flex-col gap-3 border-b border-white/30 pb-4";
-const label = "t-label l-12 uppercase text-white";
+const label = "t-label l-12 capitalize text-white";
 const input = "w-full bg-transparent t-text x-20 text-white outline-none placeholder:text-white/80";
 
 /**

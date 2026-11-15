@@ -32,7 +32,7 @@ export default function About() {
       <TheStory />
       {/* 12 Nov review (#66): Since the Romans, moved here from Destination, after the shoreline's story */}
       <HistoryTrack />
-      <Masterplan places />
+      <Masterplan places flushTop />
       <Milestones />
       <Nearby />
       <Faq data={visaFaq} />

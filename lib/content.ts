@@ -19,7 +19,7 @@ export type GrandeurCard = { kind: "image" | "stat" | "chip"; src?: string; labe
   x: number; y: number; sx: number; sy: number; w: number; h: number };
 
 export const grandeur = {
-  tag: "GRANDEUR RESTORED",
+  tag: "Grandeur Restored",
   title: "A year-round city, not a seasonal resort",
   body: "Alam Al Roum is built for those who return. A place of permanence, rooted in the history of a coastline that once guided sailors home.",
   /**
@@ -28,16 +28,16 @@ export const grandeur = {
    */
   cards: [
     { kind: "image", src: ph("ui-expcenter-facade"), x: 150, y: 110, sx: 481, sy: 95, w: 210, h: 270 },
-    { kind: "stat", label: "INVESTMENT", value: "$29.7Bn", note: "Total investment in the city", x: 395, y: 190, sx: 572, sy: 120, w: 249, h: 120 },
+    { kind: "stat", label: "Investment", value: "$29.7Bn", note: "Total investment in the city", x: 395, y: 190, sx: 572, sy: 120, w: 249, h: 120 },
     { kind: "image", src: ph("ui-v-lounge"), x: 990, y: 80, sx: 746, sy: 85, w: 240, h: 230 },
-    { kind: "stat", label: "LAGOONS", value: "22 km", note: "Seawater-connected lagoons", x: 1250, y: 210, sx: 838, sy: 190, w: 216, h: 120 },
+    { kind: "stat", label: "Lagoons", value: "22 km", note: "Seawater-connected lagoons", x: 1250, y: 210, sx: 838, sy: 190, w: 216, h: 120 },
     { kind: "image", src: ph("ui-g-pool"), x: 1240, y: 470, sx: 816, sy: 220, w: 180, h: 180 },
     { kind: "image", src: ph("ui-v-lounger"), x: 110, y: 520, sx: 486, sy: 240, w: 160, h: 160 },
     { kind: "chip", label: "Year-round · 365 days", dark: true, x: 1170, y: 410, sx: 753, sy: 144, w: 167, h: 32 },
     { kind: "image", src: ph("ui-expcenter-court"), x: 260, y: 800, sx: 521, sy: 250, w: 230, h: 200 },
-    { kind: "stat", label: "TO THE AIRPORT", value: "Minutes", note: "Ras El Hekma International", x: 590, y: 860, sx: 671, sy: 300, w: 210, h: 120 },
+    { kind: "stat", label: "To The Airport", value: "Minutes", note: "Marsa Matrouh International", x: 590, y: 860, sx: 671, sy: 300, w: 210, h: 120 },
     { kind: "image", src: ph("ui-g-colonnade"), x: 1010, y: 790, sx: 741, sy: 235, w: 210, h: 210 },
-    { kind: "stat", label: "FLIGHT RADIUS", value: "2–5 hrs", note: "From Europe and the GCC", x: 1250, y: 730, sx: 866, sy: 270, w: 200, h: 120 },
+    { kind: "stat", label: "Flight Radius", value: "2–5 hrs", note: "From Europe and the GCC", x: 1250, y: 730, sx: 866, sy: 270, w: 200, h: 120 },
     { kind: "chip", label: "Since the Romans", dark: false, x: 150, y: 720, sx: 463, sy: 154, w: 146, h: 32 },
   ] as GrandeurCard[],
 };
@@ -94,7 +94,7 @@ export const connectivity = {
     // cabinet, opening date not announced; the high-speed Green Line (Ain Sokhna – Alamein – Marsa Matrouh) targets
     // passenger service from July 2027 on its first phase, Matrouh in the second. To be confirmed by Qatari Diar.
     ["International Coastal Road", "Direct access from Cairo and the wider Egyptian network.", "road", "440 km to Cairo"],
-    ["Ras El Hekma Airport", "The nearest international gateway.", "airplane-landing-01", "50 km"],
+    ["Ras El Hekma Airport", "The region's new international gateway, under construction.", "airplane-landing-01", "50 km"],
     ["Marsa Matrouh International Airport", "Established regional air access.", "airplane-take-off-01", "6 km"],
     ["Future High-Speed Rail", "Integration into the national rail network under development.", "train-01", "Planned"],
     ["Integrated Marina", "International yachting access connecting the Mediterranean network.", "sailboat-offshore", "In the city"],
@@ -165,7 +165,7 @@ export const news = {
   tag: "News & Blogs", title: "Media Center", body: "Updates from Alam Al Roum and its progress", cta: "View all",
   items: [
     ["News", "3 min read", "Phase one construction begins on the coast", "ui-pm-visit", "/media-center/phase-1-construction-begins-august-2026"],
-    ["Blog", "5 min read", "Lighthouse that guided the romans", "ui-lighthouse-aerial", "/media-center/the-lighthouse-that-guided-rome-home"],
+    ["Blog", "5 min read", "Lighthouse that guided the Romans", "ui-lighthouse-aerial", "/media-center/the-lighthouse-that-guided-rome-home"],
     ["News", "4 min read", "Drawing a city from the coastline", "ui-g-coast", "/media-center/masterplan-unveiled-with-som"],
   ].map(([tag, read, title, p, href]) => ({ tag, read, title, photo: ph(p), href })),
 };

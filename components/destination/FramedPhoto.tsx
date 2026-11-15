@@ -40,8 +40,10 @@ export default function FramedPhoto({ photo }: { photo: string }) {
   }, []);
   /* eslint-disable @next/next/no-img-element */
   return (
-    <div ref={root} className="relative lg:h-[min(844px,calc(100svh-160px))] lg:w-[596px]">
-      <div data-photo className="h-[60vh] w-full overflow-hidden lg:h-full">
+    // 15 Nov: the frame keeps the photo's own portrait proportions (1530 × 2400), so the whole picture shows, the
+    // reflection included; it was 596 px wide at any height, which cropped the top and bottom away on most screens
+    <div ref={root} className="relative aspect-[1530/2400] w-full lg:h-[min(844px,calc(100svh-160px))] lg:w-auto">
+      <div data-photo className="h-full w-full overflow-hidden">
         <img src={photo} srcSet={srcSet(photo)} alt="Life on the coast" className="h-full w-full object-cover" />
       </div>
     </div>

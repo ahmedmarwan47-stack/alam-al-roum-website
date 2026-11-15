@@ -15,7 +15,7 @@ export type OverviewData = { tag: string; title: string | Seg[]; body: string; f
 export default function Overview({ data: O }: { data: OverviewData }) {
   const facts = O.facts ?? [];
   return (
-    <section className="flex flex-col justify-center bg-limestone-50 py-20 container-x lg:min-h-[70svh] lg:py-24">
+    <section className="flex flex-col justify-center bg-limestone-50 py-12 container-x lg:min-h-[70svh] lg:py-20">
       <div className="grid gap-x-6 gap-y-8 lg:grid-cols-12 lg:items-start">
         <div className="flex flex-col gap-4 lg:col-span-7">
           <RevealText text={O.tag} className="t-label l-tag" />
@@ -41,7 +41,7 @@ export default function Overview({ data: O }: { data: OverviewData }) {
           {facts.map(([v, l], k) => (
             // below lg the facts run two by two: rules only between the rows; from lg one row, each fact under its cap
             <div key={l} className="flex flex-col gap-2 border-t border-limestone-300 pb-2 pt-5 max-lg:[&:nth-child(-n+2)]:border-t-0 max-lg:[&:nth-child(-n+2)]:pt-0">
-              <RevealText text={v} className="t-heading hd-32" delay={0.18 + k * 0.05} />
+              <RevealText text={v} className={`t-heading hd-32 ${/^\d/.test(v) ? "normal-case!" : ""}`} delay={0.18 + k * 0.05} />
               <RevealText text={l} className="t-body b-16 text-limestone-800" delay={0.24 + k * 0.05} />
             </div>))}
         </div>)}

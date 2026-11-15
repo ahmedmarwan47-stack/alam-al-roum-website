@@ -18,7 +18,7 @@ const m = (f: string) => `/images/marina/${f}.webp`;
 const h = (f: string) => `/images/hotels/${f}.webp`;
 const ex = (f: string) => `/images/experiences/${f}.webp`;
 const ph = (f: string) => `/images/photo/${f}.webp`;
-const EYEBROW = "Lifestyle & Experiences";
+const EYEBROW = "Experiences & Lifestyle";
 
 /**
  * Every experience page has the same sections, in the same order (app/experiences/[slug]/page.tsx): hero, overview,

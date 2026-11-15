@@ -23,7 +23,7 @@ export default function BookCall() {
   const weekday = new Date(B.year, B.month, day).toLocaleString("en", { weekday: "short" });
   const to24 = (t: string) => { const [, h, m, ap] = t.match(/(\d+):(\d+)(am|pm)/)!; return `${(+h % 12) + (ap === "pm" ? 12 : 0)}:${m}`; };
   return (
-    <section className="flex flex-col items-center gap-12 bg-limestone-50 py-[60px] container-x">
+    <section className="flex flex-col items-center gap-12 bg-limestone-50 py-12 container-x lg:py-20">
       <SectionTitle tag={B.tag} title={B.title} />
       {/* below lg the three panes stack: event info, the month, then the day's slots two by two */}
       <div className="w-full max-w-[890px] overflow-hidden rounded-lg border border-deepsea-500/10 bg-white text-deepsea-500 shadow-[0_24px_60px_-30px_rgba(7,41,60,0.25)]">

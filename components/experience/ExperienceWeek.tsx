@@ -11,7 +11,7 @@ export type WeekData = { tag: string; title: string; body: string; items: { titl
  */
 export default function ExperienceWeek({ data: W }: { data: WeekData }) {
   return (
-    <section className="bg-limestone-50 py-20 container-x lg:py-[120px]">
+    <section className="bg-limestone-50 py-12 container-x lg:py-20">
       <div className="mx-auto flex max-w-[1392px] flex-col gap-12">
         <div className="grid gap-4 lg:grid-cols-2 lg:items-end lg:gap-24">
           <div className="flex flex-col gap-4">

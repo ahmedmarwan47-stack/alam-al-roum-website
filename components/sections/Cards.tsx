@@ -2,9 +2,13 @@ import Link from "next/link";
 import RevealImage from "@/components/reveal/RevealImage";
 import RevealText from "@/components/reveal/RevealText";
 
-/** An event card shows the short date: no weekday and a two-digit year ("Wed 10 Feb 2027" → "10 Feb 27",
- *  "Aug 2026" → "Aug 26"); the event page keeps the full date */
-export const cardDate = (d: string) => d.replace(/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s+/, "").replace(/\b(?:19|20)(\d{2})$/, "$1");
+/** An event card shows the short date: no weekday and a two-digit year ("Wed 10 Feb 2027" → "10 Feb 27"); a date
+ *  with no day keeps its full year ("Aug 2026", not "Aug 26", which read as the 26th, 15 Nov); the event page keeps
+ *  the full date */
+export const cardDate = (d: string) => {
+  const s = d.replace(/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\s+/, "");
+  return /^\d/.test(s) ? s.replace(/\b(?:19|20)(\d{2})$/, "$1") : s;
+};
 /** The place / date row: one line; the place ends in "…" when the two don't fit side by side, the date never shrinks.
  *  (The card itself is min-w-0, or the unwrappable row would widen its grid column past the screen.) */
 export const EVENT_PLACE = "min-w-0 truncate", EVENT_DATE = "flex-none whitespace-nowrap";

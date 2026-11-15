@@ -13,7 +13,7 @@ import { srcSet } from "@/lib/img";
  */
 export default function Communities() {
   return (
-    <section className="flex flex-col items-center gap-10 bg-limestone-50 py-20 container-x">
+    <section className="flex flex-col items-center gap-10 bg-limestone-50 py-12 container-x lg:py-20">
       <SectionTitle tag={communities.tag} title={communities.title} />
       <div className="grid w-full grid-cols-2 gap-6 lg:grid-cols-4">
         {communities.items.map((c, k) => (

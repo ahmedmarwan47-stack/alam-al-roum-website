@@ -14,7 +14,7 @@ export type EventsHereData = { tag: string; title: string[]; items: EventCard[] 
  *  grid (a column per card, three shared rows) so the subgrid alignment holds. */
 export default function EventsHere({ data: E }: { data: EventsHereData }) {
   return (
-    <section className="flex flex-col items-center gap-10 bg-[#0e0e0e] py-20 text-white container-x">
+    <section className="flex flex-col items-center gap-10 bg-deepsea-800 py-12 text-white container-x lg:py-20">
       <div className="flex flex-col items-center gap-4 text-center">
         <RevealText text={E.tag} className="t-label l-tag" />
         <h2 className="t-heading hd-48">{E.title.join(" ")}</h2>

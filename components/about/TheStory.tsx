@@ -8,7 +8,7 @@ import { srcSet } from "@/lib/img";
 /**
  * The Story. 15 Nov, "sticky chapters" (chosen from three previews; the 12 Nov version, three full-screen blocks with
  * arched tops, is in git history): one photo holds still while two chapters (the shoreline's history, then the
- * Experience Centre) scroll past, and it crossfades to each chapter's picture as that chapter reaches the middle of
+ * Experience Center) scroll past, and it crossfades to each chapter's picture as that chapter reaches the middle of
  * the screen. No chapter labels or numbers, and the third chapter ("Greatness Is What Remains") is gone (15 Nov).
  * From lg the photo fills the left half, the full height of the screen; on phones and tablets it is a strip across
  * the top (40 % of the screen) with the chapters scrolling up beneath it, each only as tall as its copy (no
@@ -56,7 +56,7 @@ function StoryA() {
         </div>
         <div>
           {CH.map((c) => (
-            <article key={c.k} data-ch className="flex flex-col justify-center gap-6 px-[var(--gutter)] py-14 lg:min-h-svh lg:px-[clamp(40px,6vw,104px)] lg:py-24">
+            <article key={c.k} data-ch className="flex flex-col justify-center gap-6 px-[var(--gutter)] py-12 lg:min-h-svh lg:px-[clamp(40px,6vw,104px)] lg:py-20">
               <Heading c={c} />
               {c.body && <RevealText text={c.body} className="t-body b-18 max-w-[480px] text-limestone-800" delay={0.1} />}
             </article>))}

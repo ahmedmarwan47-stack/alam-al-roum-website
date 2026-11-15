@@ -34,7 +34,7 @@ export const waterStrategy = {
 
 export const history = {
   romans: { title: ["Since", "the", "Romans"], photo: d("romans-mosaic.webp"), flower: d("bougainvillea.png"),
-    side: { title: "A Year-Around City", body: "A place of permanence, rooted in the history of a coastline that once guided sailors home." } },
+    side: { title: "A Year-Round City", body: "A place of permanence, rooted in the history of a coastline that once guided sailors home." } },
   coast: { title: "The coast that guided the Romans", photo: d("coast-guided.webp") },
   photo: d("terracotta-photo.webp"),
   // stops on the 1218 × 273 coastline drawing (Figma 11134:16026)
@@ -55,12 +55,13 @@ export const archSea = {
 };
 
 export const destFaq = {
-  title: "FAQs", body: "How sustainability works in Alam Al Roum, in practice.", cta: "Read All FAQs", href: "/faq",
+  // 15 Nov: the Destination's own questions (it carried the Sustainability FAQ by mistake): getting here and around
+  title: "FAQs", body: "Getting here, getting around and visiting the coast.", cta: "Read All FAQs", href: "/faq",
   items: [
-    ["Is the city certified?", "Certification targets are being set with the masterplan partners and will be shared per phase."],
-    ["How is water used?", "Lagoons, landscape and buildings share one managed network, with natural filtration."],
-    ["Can residents take part?", "Yes. Community programmes cover planting, beach care and shared mobility."],
-    ["How do you protect the shoreline?", "The coast is designed to adapt over generations, with protected habitats and setbacks."],
+    ["Where is Alam Al Roum?", "On Egypt's North Coast, around a rare natural Mediterranean bay with 7.2 kilometers of shoreline, about 12 km east of Marsa Matrouh."],
+    ["How do I get there?", "Marsa Matrouh International Airport is about 6 km away and Cairo about 440 km along the International Coastal Road; the new Ras El Hekma airport is under construction."],
+    ["How far is it from Europe and the Gulf?", "The city sits within a two to five hour flight of Europe and the GCC."],
     ["How do people move around?", "The Loop links every district, the marina and the town centres, with water taxis across the lagoons."],
+    ["Can I visit?", "Yes. The site is accessible from the North Coast road network. Contact our team to arrange a visit or to receive the latest updates."],
   ] as [string, string][],
 };

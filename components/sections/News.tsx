@@ -7,7 +7,7 @@ const card = (it: (typeof N.items)[number]) => ({ tag: it.tag, meta: it.read, ti
 
 export default function News() {
   return (
-    <section className="flex flex-col items-center gap-10 bg-limestone-200 py-20 container-x">
+    <section className="flex flex-col items-center gap-10 bg-limestone-200 py-12 container-x lg:py-20">
       <SectionTitle tag={N.tag} title={N.title} body={N.body} />
       <div className="grid w-full gap-6 lg:grid-cols-2">
         <StoryCard {...card(N.items[0])} big ratio="aspect-[684/456]" />

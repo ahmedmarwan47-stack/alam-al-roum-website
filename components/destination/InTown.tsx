@@ -56,7 +56,7 @@ export default function InTown() {
   const mask = { WebkitMaskImage: `url(${T.mask})`, maskImage: `url(${T.mask})`, WebkitMaskSize: "93.4% 92.5%", maskSize: "93.4% 92.5%",
     WebkitMaskPosition: "center", maskPosition: "center", WebkitMaskRepeat: "no-repeat", maskRepeat: "no-repeat" } as const;
   return (
-    <section className="flex flex-col items-center gap-20 overflow-x-clip bg-limestone-50 py-[120px] container-x">
+    <section className="flex flex-col items-center gap-20 overflow-x-clip bg-limestone-50 py-12 container-x lg:py-20">
       <SectionTitle tag={T.tag} title={T.title} body={T.body} className="max-w-[900px]" />
       <div ref={wrap} className="relative grid w-full max-w-[1392px] gap-10 lg:grid-cols-[min(656px,45%)_1fr] lg:gap-20">
         {/* below lg the coin sits centred above the text, the pair pinned in the middle of the screen */}

@@ -8,10 +8,11 @@ import { districtPins, planViews } from "@/lib/masterplan";
  * "<Name> on the masterplan" (Figma 10921:9835): the community's own masterplan, a crop of the master around the
  * district (scripts/masterplan-crops.py) with pins for the places inside it, named on the map.
  */
-export function CommunityOnMasterplan({ slug, title, body }: { slug: string; title: string; body: string }) {
+/** `flushTop`: no top padding where the section above (the unit types) ends on the same background. */
+export function CommunityOnMasterplan({ slug, title, body, flushTop = false }: { slug: string; title: string; body: string; flushTop?: boolean }) {
   const view = planViews[slug] ?? planViews.communities;
   return (
-    <section className="flex flex-col gap-10 bg-limestone-50 pt-20">
+    <section className={`flex flex-col gap-10 bg-limestone-50 ${flushTop ? "pt-0" : "pt-12 lg:pt-20"}`}>
       <SectionTitle tag="Masterplan" title={title} body={body} className="container-x" />
       <MasterplanMap image={view.src} view={view} pins={districtPins[slug] ?? []} initial={-1} labels />
     </section>

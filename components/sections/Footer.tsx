@@ -59,7 +59,7 @@ export default function Footer() {
             <p className="t-text x-28">{F.address.map((l) => <span key={l} className="block">{l}</span>)}</p>
             <span className="t-label l-12">{F.live}</span>
             {/* below lg the three links wrap whole, with room between them, instead of breaking inside a name */}
-            <div className="flex flex-wrap gap-[6px] t-text x-16 max-lg:gap-x-5 max-lg:gap-y-0">{F.legal.map((l) => <a key={l} href="#" className="max-lg:whitespace-nowrap max-lg:py-2">{l}</a>)}</div>
+            <div className="flex flex-wrap gap-x-6 gap-y-1 t-text x-16 max-lg:gap-x-5 max-lg:gap-y-0">{F.legal.map((l) => <a key={l} href="#" className="max-lg:whitespace-nowrap max-lg:py-2">{l}</a>)}</div>
           </div>
           {/* phones: the three groups stack as accordion rows (the Contact column used to run off-screen), with rules
               only between the rows */}

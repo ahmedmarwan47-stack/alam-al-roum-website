@@ -41,10 +41,11 @@ export function FaqList({ items, first = 0 }: { items: string[][] | [string, str
  * of that line in Figma). Below lg the section stacks and the button goes last, under the questions (the left column
  * dissolves, display: contents, and its two blocks are ordered around the accordion).
  */
-export default function Faq({ data = faq }: { data?: FaqData }) {
+/** `pad`: the section's vertical padding — the site's 48 / 80 (15 Nov spacing sheet) unless a page overrides it. */
+export default function Faq({ data = faq, pad = "py-12 lg:py-20" }: { data?: FaqData; pad?: string }) {
   const F = data;
   return (
-    <section className="flex flex-col gap-10 bg-limestone-50 py-20 container-x lg:grid lg:grid-cols-2 lg:gap-0">
+    <section className={`flex flex-col gap-10 bg-limestone-50 container-x lg:grid lg:grid-cols-2 lg:gap-0 ${pad}`}>
       <div className="flex flex-col gap-10 max-lg:contents lg:max-w-[456px]">
         <div className="flex flex-col gap-3 max-lg:order-1">
           <RevealText as="h2" {...(typeof F.title === "string" ? { text: F.title } : { segs: F.title })} className="t-heading hd-48" />

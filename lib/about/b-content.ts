@@ -19,7 +19,7 @@ export const story = {
   culture: {
     word: "Architecture",
     lines: ["Built In Limestone,", "Open To The Sea,", "Made To Be Lived In."],
-    body: "The Experience Centre is the first part of the city to stand: limestone walls, shaded courtyards and rooms that open onto the sea, built to be lived in every month of the year.",
+    body: "The Experience Center is the first part of the city to stand: limestone walls, shaded courtyards and rooms that open onto the sea, built to be lived in every month of the year.",
     photos: [
       { src: img("b-story-table.webp"), alt: "A woman in a white dress walking barefoot on stone", x: 60, y: 300, w: 300, h: 400 },
       { src: img("b-story-craft.webp"), alt: "A man in a linen shirt aboard a boat", x: 1152, y: 200, w: 300, h: 400 },
@@ -38,7 +38,7 @@ export const story = {
 /** Milestones — About frame 10921:8293, six "UI / Milestone" instances (10979:18569) with their swapped photos. */
 export const milestones = {
   tag: "Timeline",
-  title: "Phase one from agreement to handover",
+  title: "Phase one, 2025–2030",   // 15 Nov: one line (was "Phase one from agreement to handover")
   body: "The first phase is underway. Construction begins in 2026 and the first residents arrive in 2030.",
   items: [
     { year: "2025", title: "Agreement signed", photo: img("b-ms-agreement.webp"),

@@ -35,7 +35,8 @@ export default function BlurInOut() {
         return false;
       };
       for (const el of gsap.utils.toArray<HTMLElement>(SEL)) {
-        if (el.closest("header, [data-no-blur], [data-reveal], [data-reveal-img], [aria-hidden=true]")) continue;
+        // [data-hydrate-late]: a part React hydrates later (the contact form): styling it first is a hydration mismatch
+        if (el.closest("header, [data-no-blur], [data-reveal], [data-reveal-img], [aria-hidden=true], [data-hydrate-late]:not([data-hydrated])")) continue;
         if (el.closest("[class*=mix-blend], [style*=mask]")) continue;
         if (el.tagName === "IMG" && (el.closest("footer") || /\.svg($|\?)/.test((el as HTMLImageElement).src))) continue;   // logos are not photos: no wipe
         const inTrack = !!el.closest("[data-track]");

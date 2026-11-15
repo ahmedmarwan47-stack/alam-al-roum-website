@@ -92,7 +92,7 @@ export default function WaysToLive() {
     return () => mm.revert();
   }, []);
   return (
-    <section className="flex flex-col gap-10 bg-limestone-50 py-20 container-x">
+    <section className="flex flex-col gap-10 bg-limestone-50 py-12 container-x lg:py-20">
       <SectionTitle tag={waysToLive.tag} title={waysToLive.title} body={waysToLive.body} />
       <div ref={list} className="relative flex flex-col">
         {/* rules only between the rows: none above the first, none under the last */}
