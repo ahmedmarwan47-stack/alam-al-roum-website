@@ -67,7 +67,7 @@ export default function Footer() {
             <Group title="Discover"><Links items={F.discover} /></Group>
             <Group title="More"><Links items={F.more} /></Group>
             <Group title="Contact">
-              {F.contact.map(([ic, t]) => { const h = contactHref(ic, t), C = h.startsWith("/") ? Link : "a"; return <C key={t} href={h} className="flex items-center gap-2 t-text x-16">{ic && ic !== "call" && ic !== "mail-01" && <Icon name={ic} size={18} />}{t}</C>; })}
+              {F.contact.map(([ic, t]) => { const h = contactHref(ic, t), C = h.startsWith("/") ? Link : "a"; return <C key={t} href={h} className="flex items-center gap-2 t-text x-16">{ic && ic !== "call" && ic !== "mail-01" && <Icon name={ic} size={18} className="max-lg:hidden!" />}{t}</C>; })}
               {/* touch screens: 40 px targets round each icon, the first glyph still on the column edge */}
               <div className="flex gap-2 max-lg:-ml-[10px] max-lg:gap-0">{["whatsapp", "facebook-01", "instagram", "tiktok"].map((i) => <a key={i} href="#" aria-label={i.replace("-01", "")} className="max-lg:grid max-lg:size-10 max-lg:place-items-center"><Icon name={i} size={20} /></a>)}</div>
             </Group>
