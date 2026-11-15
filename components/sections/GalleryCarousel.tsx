@@ -51,10 +51,10 @@ export default function GalleryCarousel({ tag, title, photos }: { tag: string; t
     if (to === null) return;
     e.preventDefault(); go(to);
   };
-  const btn = "grid h-11 w-11 place-items-center rounded-full border border-limestone-50/40 text-limestone-50 transition-[background-color,color,opacity] duration-300 hover:bg-limestone-50 hover:text-deepsea-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-limestone-50 disabled:pointer-events-none disabled:opacity-30";
+  const btn = "grid h-11 w-11 place-items-center rounded-full border border-limestone-50/40 text-limestone-50 transition-[background-color,color,opacity] duration-300 hover:bg-limestone-50 hover:text-deepsea-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-limestone-50 disabled:pointer-events-none disabled:opacity-30";
   const pos = (k: number) => String(k).padStart(2, "0");
   return (
-    <section className="flex flex-col gap-10 overflow-hidden bg-deepsea-600 py-12 text-limestone-50 lg:gap-12 lg:py-20">
+    <section className="flex flex-col gap-10 overflow-hidden bg-deepsea-800 py-12 text-limestone-50 lg:gap-12 lg:py-20">
       <div className="flex flex-col gap-4 container-x">
         <RevealText text={tag} className="t-label l-tag" />
         <RevealText as="h2" segs={title} className="t-heading hd-48" delay={0.1} />
