@@ -1,176 +1,71 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
-import { BLOCK_FROM, BLOCK_TO } from "@/components/reveal/letters";
+import RevealText from "@/components/reveal/RevealText";
 import { story as S } from "@/lib/about/b-content";
 import { srcSet } from "@/lib/img";
-import { MQ, matches } from "@/lib/breakpoints";
-
-const FW = 1512, FH = 1024;                 // the motion-study frame
-const fy = (y: number) => `${(y / FH) * 100}%`;
-/** The three Culture photos: one scale for their size and spacing, the smaller of the width's and the height's and never
- * above Figma's pixels, so a wide but short screen can't stack them into each other. They sit on the content edges,
- * centred on the height. */
-const K = `min(100vw / ${FW}, 100svh / ${FH}, 1px)`;
-const photoBox = ({ x, y, w, h }: { x: number; y: number; w: number; h: number }): React.CSSProperties => ({
-  [x < FW / 2 ? "left" : "right"]: "var(--gutter)", top: `calc(50% + ${y - FH / 2} * ${K})`, width: `calc(${w} * ${K})`, aspectRatio: `${w} / ${h}`,
-});
-/**
- * The two domes are clip-path circles driven by two CSS variables: --t is the dome's top edge (% of the
- * stage height), --r its radius. Figma: a 2400 circle rises from y 1100 to 560, then grows to 4400 at
- * y −1700 and covers the frame. Radii are in vmax so a portrait phone is still fully covered.
- * As in the ERA Residence reference, the dome is born as a small arc at the bottom centre and widens as it rises
- * (its radius grows from 14 to 79 vmax on the way up), rather than a full-size circle sliding in.
- */
-const DOME = { below: { "--t": fy(1060), "--r": "14vmax" }, risen: { "--t": fy(560), "--r": "79.37vmax" }, cover: { "--t": fy(-1700), "--r": "145.5vmax" } };
-const domeStyle = { ...DOME.below, clipPath: "circle(var(--r) at 50% calc(var(--t) + var(--r)))" } as React.CSSProperties;
-/**
- * The Greatness dome in one continuous move (29 Oct review: the two linear legs, rise then cover, met with a sudden
- * change of speed). Its top edge and radius follow one quadratic curve from below the frame, past the risen state,
- * to covering it, driven by a single eased progress, so the expansion only ever speeds up and slows down smoothly.
- */
-const T0 = 1060 / FH * 100, T1 = 560 / FH * 100, T2 = -1700 / FH * 100, R0 = 14, R1 = 79.37, R2 = 145.5;
-const bez = (a: number, b: number, c: number, p: number) => (1 - p) * (1 - p) * a + 2 * (1 - p) * p * b + p * p * c;
-const domeAt = (el: HTMLElement, p: number) => {
-  el.style.setProperty("--t", `${bez(T0, T1, T2, p)}%`);
-  el.style.setProperty("--r", `${bez(R0, R1, R2, p)}vmax`);
-};
-/** Each state change in the Figma prototype: Smart Animate 1.2 s on the slideWipe curve. */
-// each move overlaps the next a little (STEP < MOVE) and runs linear with the scroll; HOLD is a reading rest
-// (timeline seconds ≈ viewports of scroll) on the two states that carry copy
-const STEP = 1.0, MOVE = 1.2, HOLD = 0.6;
-
 
 /**
- * The Story, after the Figma component set "Motion Study · The Story (dome + scattered words)" (10673:8318):
- * one pinned stage, one scroll-scrubbed timeline.
- *  1 History — the shoreline photo with "This Shoreline Guided Sailors Home".
- *  2 Culture Rises — a Limestone dome rises from below carrying the word "Architecture"; the history copy dims.
- *  3 Culture — the dome swells over the frame; as it settles, the headline and then the paragraph blur in, each as
- *    one block (the site's text entrance), and the three photos rise a little into place. The Figma study's scattered
- *    words, flying in from every side before gathering, were dropped (28 Oct review: too much movement), and with
- *    them one viewport of the pin.
- *  4 Greatness — a second dome, cut from the Greatness photo, rises and widens until it covers the frame in one smooth
- *    move; only then does the copy blur in, in place: the word "The Sea", "Greatness Is What Remains" and the body
- *    (29 Oct review: the word no longer rides the dome or travels across the frame).
- * Replaces the static About frames "The Story · Culture" and "The Story · About greatness".
+ * The Story. 15 Nov, "sticky chapters" (chosen from three previews; the 12 Nov version, three full-screen blocks with
+ * arched tops, is in git history): one photo holds still while two chapters (the shoreline's history, then the
+ * Experience Centre) scroll past, and it crossfades to each chapter's picture as that chapter reaches the middle of
+ * the screen. No chapter labels or numbers, and the third chapter ("Greatness Is What Remains") is gone (15 Nov).
+ * From lg the photo fills the left half, the full height of the screen; on phones and tablets it is a strip across
+ * the top (40 % of the screen) with the chapters scrolling up beneath it, each only as tall as its copy (no
+ * blank band between the strip and the text). The copy blurs in (the site's entrance);
+ * with reduced motion the first photo simply stays.
  */
-export default function TheStory() {
-  const stage = useRef<HTMLDivElement>(null);
+
+const C = S.culture;
+const CH = [
+  // the same type as the next chapter (15 Nov): the whole title in the heading face (no italic accent line), then a paragraph
+  { k: "history", lines: ["This Shoreline Guided", "Sailors Home For", "Two Thousand Years."], accent: "", body: S.history.body,
+    photo: S.history.photo, alt: "The shoreline at Alam Al Roum" },
+  { k: "culture", lines: C.lines, accent: "", body: C.body,
+    photo: C.photos[0].src, alt: C.photos[0].alt },
+];
+
+/** A chapter's heading: its lines, then the italic accent if it has one. */
+const Heading = ({ c, className = "" }: { c: (typeof CH)[number]; className?: string }) => (
+  <h2 className={`flex flex-col ${className}`}>
+    {c.lines.map((l) => <span key={l} className="t-heading hd-48">{l}</span>)}
+    {c.accent && <span className="t-accent hd-48">{c.accent}</span>}
+  </h2>
+);
+
+/** A · sticky chapters. */
+function StoryA() {
+  const root = useRef<HTMLElement>(null);
   useEffect(() => {
-    const st = stage.current!;
-    const $ = <T extends Element = HTMLElement>(s: string) => st.querySelector<T & HTMLElement>(s)!;
-    const $$ = (s: string) => gsap.utils.toArray<HTMLElement>(s, st);
-    const photos = $$("[data-photo]");
-    const rm = reducedMotion(), D = rm ? 0.001 : MOVE, ease = "none";
-    const H = () => st.clientHeight;
-    const gDome = $("[data-dome=greatness]"), gDome$ = { p: 0 };
-    // each dome's word blurs in as one block while its dome rises (opacity and blur only: its position is the dome's)
-    const WORD_FROM = { opacity: 0, filter: "blur(12px)" }, WORD_TO = { opacity: 1, filter: "blur(0px)" };
-
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { duration: D, ease } });
-      // state 1, set inside the timeline so a resize (invalidateOnRefresh) re-measures from a clean start
-      tl.set($("[data-dome=culture]"), { ...DOME.below }, 0)
-        .set(gDome$, { p: 0, onComplete: () => domeAt(gDome, 0) }, 0)
-        .set($("[data-c-word]"), { top: fy(1180) }, 0)
-        .set($("[data-h-text]"), { y: 0, autoAlpha: 1 }, 0)
-        .set([$("[data-c-head]"), $("[data-c-body]")], { ...BLOCK_FROM }, 0)
-        .set(photos, { y: 60, autoAlpha: 0 }, 0)
-        .set($$("[data-g-text]"), { ...BLOCK_FROM }, 0)
-        .set($("[data-g-dim]"), { autoAlpha: 0 }, 0);
-      let t = 0;
-      // 1 → 2 · Culture rises
-      tl.to($("[data-dome=culture]"), { ...DOME.risen }, t)
-        .to($("[data-c-word]"), { top: fy(640) }, t)
-        .fromTo($("[data-c-word]"), WORD_FROM, { ...WORD_TO, duration: D * 0.5 }, t + D * 0.3)
-        .to($("[data-h-text]"), { y: -60, autoAlpha: 0.4 }, t);
-      // 2 → 3 · Culture covers and its word rises to the top; once the word has cleared the middle of the frame, the
-      // headline and then the paragraph blur in (one block each, the site's text entrance) and the photos rise into place
-      t += STEP;
-      const IN = rm ? 0 : 0.55, BLOCK = rm ? 0.001 : 0.8;
-      tl.to($("[data-dome=culture]"), { ...DOME.cover }, t)
-        .to($("[data-c-word]"), { top: fy(210), duration: D * 0.7 }, t)
-        .to($("[data-h-text]"), { y: -80, autoAlpha: 0 }, t)
-        .to($("[data-c-head]"), { ...BLOCK_TO, duration: BLOCK }, t + IN)
-        .to($("[data-c-body]"), { ...BLOCK_TO, duration: BLOCK }, t + IN + (rm ? 0 : 0.15))
-        // (spread over 0.16 s in all: the tablet row repeats the three photos, so a per-photo stagger would lengthen the pin)
-        .to(photos, { y: 0, autoAlpha: 1, duration: BLOCK, stagger: { amount: rm ? 0 : 0.16 } }, t + IN);
-      // reading hold: the headline, paragraph and photos rest, fully in place, before Greatness rises
-      t = tl.duration() + (rm ? 0 : HOLD);
-      // 3 → 4 · Greatness: the dome rises and covers in one eased move, the shade deepens over its second half, then the
-      // word, headline and body blur in where they rest
-      const GD = rm ? 0.001 : STEP + D;
-      tl.to(gDome$, { p: 1, duration: GD, ease: "sine.inOut", onUpdate: () => domeAt(gDome, gDome$.p) }, t)
-        .to($("[data-g-dim]"), { autoAlpha: 1, duration: GD * 0.5 }, t + GD * 0.5)
-        .to($$("[data-g-text]"), { ...BLOCK_TO, duration: BLOCK, stagger: rm ? 0 : 0.12 }, t + GD - (rm ? 0 : 0.1))
-        .to({}, { duration: rm ? 0.15 : HOLD });     // reading hold on the closing copy before the pin releases
-
-      // about one viewport of scroll per timeline second; below lg 36 % of that (~2.1 screens rather than 5.9), so a phone
-      // is not held long on one section
-      const per = () => (matches(MQ.lg) ? 1 : 0.36);
-      ScrollTrigger.create({ trigger: st, start: "top top", end: () => `+=${H() * tl.duration() * per()}`, pin: true, scrub: rm ? true : 1,
-        animation: tl, invalidateOnRefresh: true });
-    }, st);
-    return () => ctx.revert();
+    const el = root.current; if (!el || reducedMotion()) return;
+    const pics = el.querySelectorAll<HTMLElement>("[data-pic]");
+    const show = (i: number) => pics.forEach((p, j) => gsap.to(p, { opacity: j === i ? 1 : 0, scale: j === i ? 1 : 1.04, duration: 0.9, ease: "power2.out", overwrite: true }));
+    const sts = [...el.querySelectorAll("[data-ch]")].map((ch, i) =>
+      ScrollTrigger.create({ trigger: ch, start: "top 70%", end: "bottom 70%", onToggle: (s) => { if (s.isActive) show(i); } }));
+    return () => sts.forEach((s) => s.kill());
   }, []);
-
-  const C = S.culture, G = S.greatness;
   return (
-    <section aria-label="The Story" className="bg-limestone-500">
-      <div ref={stage} className="relative h-svh w-full overflow-hidden bg-limestone-500">
-        {/* 1 · History */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={S.history.photo} srcSet={srcSet(S.history.photo)} alt="" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-deepsea-950/60" />
-        <div data-h-text className="absolute bottom-20 left-[var(--gutter)] right-[var(--gutter)] flex flex-col gap-4 text-limestone-50">
-          <span className="t-label l-14">{S.history.label}</span>
-          <h2 className="flex flex-col">
-            <span className="t-heading hd-56">{S.history.line}</span>
-            <span className="t-accent hd-56 [line-height:round(nearest,1.071em,4px)]!">{S.history.accent}</span>
-          </h2>
+    <section ref={root} className="relative bg-limestone-500 text-deepsea-500">
+      <div className="lg:grid lg:grid-cols-2">
+        {/* the photo holds still while the chapters scroll: a strip across the top on phones, the left half from lg */}
+        <div className="sticky top-0 z-10 h-[40svh] self-start overflow-hidden lg:h-svh">
+          {CH.map((c, i) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img key={c.k} data-pic data-no-blur src={c.photo} srcSet={srcSet(c.photo)} alt={c.alt}
+              className="absolute inset-0 h-full w-full object-cover" style={{ opacity: i ? 0 : 1 }} />))}
         </div>
-
-        {/* 2–4 · Culture: the Limestone dome, its word, the three photos and the gathered headline */}
-        <div data-dome="culture" className="absolute inset-0 bg-limestone-500" style={domeStyle} />
-        <span data-c-word data-no-blur className="absolute left-1/2 -translate-x-1/2 t-accent hd-56 text-deepsea-500" style={{ top: fy(1180) }}>{C.word}</span>
-        {C.photos.map((p) => (
-          <div key={p.src} data-photo className="absolute hidden overflow-hidden lg:block"
-            style={photoBox(p)}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={p.src} srcSet={srcSet(p.src)} alt={p.alt} loading="lazy" className="h-full w-full object-cover" />
-          </div>))}
-        <div className="absolute inset-x-0 flex flex-col items-center gap-14 px-[var(--gutter)] text-center text-deepsea-500" style={{ top: fy(360) }}>
-          <h3 data-c-head className="t-heading hd-56 [line-height:round(nearest,1.25em,4px)]!">
-            {C.lines.map((line) => <span key={line} className="block">{line}</span>)}
-          </h3>
-          <p data-c-body className="max-w-[560px] t-body b-18">{C.body}</p>
-          {/* tablets: the three photos as a row under the paragraph (at Figma's scattered spots they crowd the headline
-              on a portrait screen); phones and short screens leave them out */}
-          <div className="hidden w-full max-w-[560px] grid-cols-3 gap-4 [@media(min-width:768px)_and_(max-width:1023.98px)_and_(min-height:800px)]:grid">
-            {C.photos.map((p) => (
-              <div key={p.src} data-photo className="aspect-[3/4] overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={p.src} srcSet={srcSet(p.src)} alt={p.alt} loading="lazy" className="h-full w-full object-cover" />
-              </div>))}
-          </div>
-        </div>
-
-        {/* 5–6 · Greatness: a dome cut from the photo, the word, then the headline and body */}
-        <div data-dome="greatness" className="absolute inset-0" style={domeStyle}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={G.photo} srcSet={srcSet(G.photo)} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
-          <div data-g-dim className="absolute inset-0 bg-gradient-to-b from-deepsea-950/15 to-deepsea-950/70" />
-        </div>
-        <div className="absolute left-[var(--gutter)] right-[var(--gutter)] flex flex-col text-limestone-50" style={{ top: fy(430) }}>
-          <span data-g-text data-no-blur className="self-start t-accent hd-56">{G.word}</span>
-          <h2 className="mt-[30px] flex flex-col">
-            <span data-g-text className="t-heading hd-56">{G.line}</span>   {/* Heading/56, as the Shoreline beat (9 Nov) */}
-            {G.accent && <span data-g-text className="t-accent hd-56">{G.accent}</span>}
-          </h2>
-          <p data-g-text className="mt-8 max-w-[520px] t-body b-18">{G.body}</p>
+        <div>
+          {CH.map((c) => (
+            <article key={c.k} data-ch className="flex flex-col justify-center gap-6 px-[var(--gutter)] py-14 lg:min-h-svh lg:px-[clamp(40px,6vw,104px)] lg:py-24">
+              <Heading c={c} />
+              {c.body && <RevealText text={c.body} className="t-body b-18 max-w-[480px] text-limestone-800" delay={0.1} />}
+            </article>))}
         </div>
       </div>
     </section>
   );
+}
+
+export default function TheStory() {
+  return <StoryA />;
 }

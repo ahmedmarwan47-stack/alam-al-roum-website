@@ -46,6 +46,8 @@ export const coin = {
   // the display word under the coin, one entry per line (set in capitals): what lies behind the name Alam Al Roum,
   // "the landmark of the Romans"; it replaced "GRANDEUR", a word the audience didn't know
   word: ["Behind", "the name"],
+  // 15 Nov: one line under the word, so the name is explained before the coin turns
+  subtitle: "Alam Al Roum means \u201cthe landmark of the Romans\u201d: the name sailors gave this headland when its light guided them home.",
   title: "A landmark restored",
   body: "Long before the first stone was laid, this coast was a landmark for those crossing the sea. The lighthouse stands again, not as a monument but as a signal. A city built for permanence, not for seasons.",
   points: [

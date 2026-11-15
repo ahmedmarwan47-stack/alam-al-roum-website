@@ -51,13 +51,19 @@ export default function Connectivity({ tag, compact = false, visa = !compact }: 
           <div className="flex flex-col">
             {c.items.map((it, k) => (
               <div key={it.title} className={`flex gap-6 py-5 lg:py-[clamp(8px,1.5svh,20px)] ${k ? (compact ? "border-t border-deepsea-500/15" : "border-t border-deepsea-500/15") : ""}`}>
-                <span className={`t-label l-14 ${compact ? "" : "text-deepsea-500/50"}`}>{String(k + 1).padStart(2, "0")}</span>
-                <Icon name={it.icon} size={24} />
-                <div className="flex flex-col gap-[6px] lg:gap-1"><RevealText text={it.title} className="t-heading hd-14" /><RevealText text={it.body} className={`t-body b-16 ${compact ? "" : "text-deepsea-500/70"}`} delay={0.06} /></div>
+                <span className={`w-6 flex-none tabular-nums t-label l-14 ${compact ? "" : "text-deepsea-500/50"}`}>{String(k + 1).padStart(2, "0")}</span>
+                <span className="flex-none"><Icon name={it.icon} size={24} /></span>
+                <div className="flex min-w-0 flex-1 flex-col gap-[6px] lg:gap-1">
+                  <RevealText text={it.title} className="t-heading hd-14" />
+                  {/* how far it is (15 Nov), leading the description in regular weight, set apart by full Deep Sea; the line blurs in with the page */}
+                  <p className={`t-body b-16 ${compact ? "" : "text-deepsea-500/70"}`}>
+                    {it.dist && <><span className="text-deepsea-500">{it.dist}</span> · </>}{it.body}
+                  </p>
+                </div>
               </div>))}
           </div>
         </div>
-        {!compact && <div className="max-lg:order-6"><Button label={c.cta} href="/destination" variant="primary" /></div>}
+        {!compact && <div className="max-lg:order-6"><Button label={c.cta} href="/destination" variant="outline" /></div>}
       </div>
     </section>
   );

@@ -48,7 +48,7 @@ export default function Footer() {
             <form className="flex h-16 items-center gap-2 rounded-lg border border-limestone-50/25 bg-deepsea-600 py-2 pl-5 pr-2">
               {/* min-w-0: the field gives way on a phone, so the Subscribe button keeps its chip inside the box */}
               <input type="email" aria-label={F.placeholder} placeholder={F.placeholder} className="min-w-0 flex-1 bg-transparent t-text x-16 text-limestone-50 outline-none placeholder:text-limestone-50/60" />
-              <Button label={F.subscribe} variant="light" compact />
+              <Button label={F.subscribe} variant="outline-light" compact />
             </form>
             <span className="t-text x-12">{F.consent}</span>
           </div>

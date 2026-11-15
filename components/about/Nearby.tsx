@@ -81,9 +81,9 @@ export default function Nearby() {
     // pathLength="1" on both halves, so dashoffset 1 → 0 draws them from Alam Al Roum outward
     gsap.set([west, east], { attr: { "stroke-dasharray": 1, "stroke-dashoffset": 1 } });
     gsap.set(roadClip, { attr: { height: 0 } });
-    pins.forEach((p) => { gsap.set(p.dot, { scale: 0, transformOrigin: "50% 50%" }); gsap.set(p.tick, { scaleY: 0, transformOrigin: "50% 100%" }); gsap.set(p.label, { autoAlpha: 0, y: 10 }); });
+    pins.forEach((p) => { gsap.set(p.dot, { scale: 0, transformOrigin: "50% 50%" }); gsap.set(p.tick, { scaleY: 0, transformOrigin: "50% 100%" }); gsap.set(p.label, { autoAlpha: 0, y: 16, filter: "blur(12px)" }); });
     gsap.set(q("[data-origin]"), { autoAlpha: 0, scale: 0.6, transformOrigin: "50% 50%" });
-    gsap.set(q("[data-badge]"), { autoAlpha: 0, y: 16 });
+    gsap.set(q("[data-badge]"), { autoAlpha: 0, y: 16, filter: "blur(12px)" });   // text: the site's blur-in
 
     // timeline seconds: the east coast (the long half) draws over EAST at one even speed, the west half at the same speed
     const T0 = 0.5, EAST = 2.5, ROAD = 1.1;
@@ -91,7 +91,7 @@ export default function Nearby() {
     const tl = gsap.timeline({ paused: true, defaults: { ease: "none" } });
     // the origin: the ring and the "You are here" badge
     tl.to(q("[data-origin]"), { autoAlpha: 1, scale: 1, duration: 0.5, ease: "power2.out", stagger: 0.08 }, 0)
-      .to(q("[data-badge]"), { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out" }, 0.2)
+      .to(q("[data-badge]"), { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.9, ease: "siteOut" }, 0.2)
       .to(east, { attr: { "stroke-dashoffset": 0 }, duration: EAST }, T0)
       .to(west, { attr: { "stroke-dashoffset": 0 }, duration: WEST }, T0)
       // the desert road to Cairo (Figma reveals it with a box that grows downward)
@@ -102,7 +102,7 @@ export default function Nearby() {
       const t = timeOf(N.places[k].side, N.places[k].at);
       tl.to(p.dot, { scale: 1, duration: 0.25, ease: "back.out(2)" }, t)
         .to(p.tick, { scaleY: 1, duration: 0.3, ease: "power2.out" }, t + 0.05)
-        .to(p.label, { autoAlpha: 1, y: 0, duration: 0.4, ease: "power2.out" }, t + 0.15);
+        .to(p.label, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 0.9, ease: "siteOut" }, t + 0.15);
     });
 
     // below lg: the strip keeps the line's head at ~60 % of its width, then rests centred on REST_X, until it is touched

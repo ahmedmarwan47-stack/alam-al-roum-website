@@ -89,12 +89,16 @@ export const connectivity = {
   body: "The city moves at its own pace, yet the world remains close. The coastal road, two airports and a marina link it to the rest of Egypt and beyond.",
   listLabel: "Connected to Egypt",
   items: [
-    ["International Coastal Road", "Direct access from Cairo and the wider Egyptian network.", "road"],
-    ["Ras El Hekma Airport", "The nearest international gateway.", "airplane-landing-01"],
-    ["Marsa Matrouh International Airport", "Established regional air access.", "airplane-take-off-01"],
-    ["Future High-Speed Rail", "Integration into the national rail network under development.", "train-01"],
-    ["Integrated Marina", "International yachting access connecting the Mediterranean network.", "sailboat-offshore"],
-  ].map(([title, body, icon]) => ({ title, body, icon })),
+    // 15 Nov: how far each one is from Alam Al Roum, as published (Nov 2026): Cairo ~440 km by the coastal road and
+    // Matrouh Airport ~6 km (Nawy, iPG Egypt listings); Ras El Hekma ~50 km, its new airport on land allocated by the
+    // cabinet, opening date not announced; the high-speed Green Line (Ain Sokhna – Alamein – Marsa Matrouh) targets
+    // passenger service from July 2027 on its first phase, Matrouh in the second. To be confirmed by Qatari Diar.
+    ["International Coastal Road", "Direct access from Cairo and the wider Egyptian network.", "road", "440 km to Cairo"],
+    ["Ras El Hekma Airport", "The nearest international gateway.", "airplane-landing-01", "50 km"],
+    ["Marsa Matrouh International Airport", "Established regional air access.", "airplane-take-off-01", "6 km"],
+    ["Future High-Speed Rail", "Integration into the national rail network under development.", "train-01", "Planned"],
+    ["Integrated Marina", "International yachting access connecting the Mediterranean network.", "sailboat-offshore", "In the city"],
+  ].map(([title, body, icon, dist]) => ({ title, body, icon, dist })),
   visa: { label: "Visiting Egypt", points: [["On Arrival", "Many nationalities get a visa on arrival, or apply online for an e-visa."], ["6 Months", "Minimum passport validity from your arrival date."]] },
   cta: "Explore The Destination",
 };

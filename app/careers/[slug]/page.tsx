@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Navbar from "@/components/sections/Navbar";
 import Button from "@/components/ui/Button";
+import Icon from "@/components/ui/Icon";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import RevealText from "@/components/reveal/RevealText";
 import Cta from "@/components/sections/Cta";
@@ -8,6 +9,8 @@ import Footer from "@/components/sections/Footer";
 import { offer, roleDetail, roles } from "@/lib/careers";
 
 export const dynamicParams = false;
+/** 15 Nov: each fact in the Position details band leads with its icon (the site's Huge icons, Figma 10261:675), no rules */
+const FACT_ICON: Record<string, string> = { Location: "location-01", Department: "briefcase-01", Type: "clock-01", Posted: "calendar-03" };
 export const generateStaticParams = () => roles.map((r) => ({ slug: r.slug }));
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
@@ -51,12 +54,13 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
             <RevealText as="h2" text="Position details" className="t-heading hd-48" />
             <p className="t-body b-16 text-white/80">{r.body}</p>
           </div>
-          <Button label="Apply For This Role" href={apply} variant="light" className="self-start lg:self-auto" />
+          <Button label="Apply For This Role" href={apply} variant="outline-light" className="self-start lg:self-auto" />
         </div>
         <dl className="grid grid-cols-2 gap-x-4 gap-y-6 md:gap-x-6 lg:grid-cols-4">
           {r.facts.map(([k, v]) => (
-            // two by two below lg, phones included (9 Nov): rules only between the rows; one row from lg, each fact under its cap
-            <div key={k} className="flex min-w-0 flex-col gap-1 border-t border-white/40 pt-6 max-lg:[&:nth-child(-n+2)]:border-t-0 max-lg:[&:nth-child(-n+2)]:pt-0 md:gap-3">
+            // two by two below lg, phones included (9 Nov); one row from lg. 15 Nov: no rules, an icon above each fact
+            <div key={k} className="flex min-w-0 flex-col gap-1 md:gap-3">
+              {FACT_ICON[k] && <Icon name={FACT_ICON[k]} size={28} className="mb-2 text-limestone-500 max-md:mb-1 max-md:h-6! max-md:w-6!" />}
               <dt className="t-heading hd-20 max-md:text-[16px]! max-md:leading-6!">{k}</dt><dd className="t-body b-16 text-white/80 max-md:text-[14px]! max-md:leading-5!">{v}</dd>
             </div>))}
         </dl>
@@ -66,7 +70,7 @@ export default async function JobPage({ params }: { params: Promise<{ slug: stri
         {r.requirements && <Numbered title="Requirements" items={r.requirements} />}
         <div className="flex flex-col gap-6 lg:flex-row lg:gap-0">
           <RevealText as="h2" text="What we offer" className="t-heading hd-32 text-deepsea-500 lg:w-[480px] lg:flex-none" />
-          <div className="flex flex-col items-start gap-8"><p className="t-body b-18 text-deepsea-500/70">{offer}</p><Button label="Apply For This Role" href={apply} /></div>
+          <div className="flex flex-col items-start gap-8"><p className="t-body b-18 text-deepsea-500/70">{offer}</p><Button label="Apply For This Role" href={apply} variant="outline" /></div>
         </div>
       </section>
       <Cta />

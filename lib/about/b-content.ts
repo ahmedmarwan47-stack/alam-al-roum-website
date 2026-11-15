@@ -11,6 +11,8 @@ export const story = {
     label: "The Story · History",
     line: "This Shoreline Guided Sailors Home",
     accent: "For Two Thousand Years.",
+    // 15 Nov: the sticky chapters set every chapter the same way (a Haas title, then a paragraph), so this one gains a body
+    body: "Ships crossing the Mediterranean steered by this headland long before there was a city here. The name Alam Al Roum keeps that memory, and the coast becomes a landmark again: a place people come home to.",
   },
   // UI / Motion Study · The Story (11027:19127), as placed on About (11027:19600): copy and photos from the instance.
   // The headline blurs in as one block (the site's text entrance); its words no longer fly in from scattered spots.

@@ -32,7 +32,7 @@ export default function InTown() {
     if (phone && !reducedMotion()) {
       const imgs = [...photos.current!.querySelectorAll("img")], texts = zones.current.filter(Boolean) as HTMLDivElement[];
       gsap.set(imgs, { opacity: (k) => (k ? 0 : 1), scale: (k) => (k ? 1.08 : 1) });
-      gsap.set(texts.slice(1), { opacity: 0, y: 16, filter: "blur(8px)" });
+      gsap.set(texts.slice(1), { opacity: 0, y: 16, filter: "blur(12px)" });   // the site's text motion
       scene = gsap.timeline({ defaults: { ease: "power1.inOut" },
         scrollTrigger: { trigger: wrap.current, start: "center center", end: `+=${(texts.length - 1) * 90 + 40}%`, pin: true,
           pinSpacing: true,   // explicit: the section is a flex column, where ScrollTrigger would otherwise leave it off
@@ -41,7 +41,7 @@ export default function InTown() {
         const t = k - 0.5;   // each switch takes the middle half of its step, so every mode rests in view
         scene.to(imgs[k - 1], { opacity: 0, duration: 0.5 }, t)
           .fromTo(imgs[k], { opacity: 0, scale: 1.08 }, { opacity: 1, scale: 1, duration: 0.5 }, t)
-          .to(texts[k - 1], { opacity: 0, y: -16, filter: "blur(8px)", duration: 0.3 }, t)
+          .to(texts[k - 1], { opacity: 0, y: -16, filter: "blur(12px)", duration: 0.3 }, t)
           .to(texts[k], { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.3 }, t + 0.2);
       }
       scene.to({}, { duration: 0.4 });   // a short rest on the last mode before the pin lets go

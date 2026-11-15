@@ -40,9 +40,9 @@ export default function CoastHistory({ path }: { path: string }) {
     };
     const stops = q("[data-stop]");
     gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
-    gsap.set(stops, { opacity: 0, y: 12 });
+    gsap.set(stops, { opacity: 0, y: 16, filter: "blur(12px)" });   // the site's text motion
     if (reducedMotion()) {
-      gsap.set(p, { strokeDashoffset: 0 }); gsap.set(stops, { opacity: 1, y: 0 });
+      gsap.set(p, { strokeDashoffset: 0 }); gsap.set(stops, { opacity: 1, y: 0, filter: "none" });
       // phones: the captions share one cell, so without the scene only the last one ("Today") shows
       gsap.set(q("[data-cap]"), { opacity: (k: number, _: unknown, all: unknown[]) => (k === all.length - 1 ? 1 : 0) });
       return;
@@ -70,12 +70,12 @@ export default function CoastHistory({ path }: { path: string }) {
         scrollTrigger: { trigger: pin, start: "center center", end: "+=160%", pin: true, scrub: 1, invalidateOnRefresh: true,
           onUpdate: (s) => { pose.current.rotY = s.progress * Math.PI * 2; } } })
         .to(p, { strokeDashoffset: 0, duration: 1 }, 0);
-      gsap.set(caps, { opacity: 0, y: 8 });
+      gsap.set(caps, { opacity: 0, y: 16, filter: "blur(12px)" });
       const times = stops.map((s) => Math.max(0, atDrawn(+s.dataset.x!) - 0.04));
       stops.forEach((s, k) => {
-        ph.to(s, { opacity: 1, y: 0, duration: 0.08, ease: "power2.out" }, times[k])
-          .to(caps[k], { opacity: 1, y: 0, duration: 0.06, ease: "power2.out" }, times[k] + 0.02);
-        if (k > 0) ph.to(caps[k - 1], { opacity: 0, y: -8, duration: 0.05, ease: "power2.in" }, times[k] - 0.03);
+        ph.to(s, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.08, ease: "power2.out" }, times[k])
+          .to(caps[k], { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.06, ease: "power2.out" }, times[k] + 0.02);
+        if (k > 0) ph.to(caps[k - 1], { opacity: 0, y: -16, filter: "blur(12px)", duration: 0.05, ease: "power2.in" }, times[k] - 0.03);
       });
       ph.to({}, { duration: 0.15 });   // rest on "Today" before the pin lets go
       return () => { ph.scrollTrigger?.kill(); ph.kill(); };
@@ -88,7 +88,7 @@ export default function CoastHistory({ path }: { path: string }) {
         scrollTrigger: { trigger: el, containerAnimation: track.track, start: "left 80%", end: "left 5%", scrub: 1,
           onUpdate: (s) => { pose.current.rotY = s.progress * Math.PI * 2; } } })
         .to(p, { strokeDashoffset: 0, duration: 1 }, 0);
-      stops.forEach((s) => tl!.to(s, { opacity: 1, y: 0, duration: 0.16, ease: "power2.out" }, Math.max(0, at(+s.dataset.x!) - 0.04)));
+      stops.forEach((s) => tl!.to(s, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.16, ease: "power2.out" }, Math.max(0, at(+s.dataset.x!) - 0.04)));
     };
     const track = el.closest("[data-track]");
     build();

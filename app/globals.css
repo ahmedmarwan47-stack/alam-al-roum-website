@@ -193,9 +193,9 @@ html.js [data-reveal-img] { visibility: hidden; }
 @media (width < 48rem) { .btn:not(.btn-keep) { width: 100%; } }
 /* Primary Dark: Deep Sea → Limestone rises */
 .btn-primary { background: var(--color-deepsea-500); color: var(--color-limestone-500); }
-.btn-primary .btn-fill { background: var(--color-limestone-500); } .btn-primary .btn-chip { background: var(--color-limestone-500); color: var(--color-deepsea-500); }
-@media (hover: hover) { .btn-primary:hover { border-color: var(--color-limestone-500); } .btn-primary:hover .btn-label { color: var(--color-deepsea-500); } }
-@media (hover: hover) { .btn-primary:hover .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); } }
+/* 15 Nov: on hover a darker Deep Sea rises (was Limestone, made for the burgundy sections: on the Limestone sections that
+   replaced them the button vanished). No stroke; the label and the Limestone chip keep their colours, the arrow slides */
+.btn-primary .btn-fill { background: var(--color-deepsea-800); } .btn-primary .btn-chip { background: var(--color-limestone-500); color: var(--color-deepsea-500); }
 /* Primary Light (on dark): Deep Sea/50 → Limestone rises */
 .btn-light { background: var(--color-deepsea-50); color: var(--color-deepsea-500); border-color: var(--color-deepsea-200); }
 .btn-light .btn-fill { background: var(--color-deepsea-500); } .btn-light .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); }
@@ -272,6 +272,10 @@ html.js [data-reveal-img] { visibility: hidden; }
 @media (prefers-reduced-motion: reduce) { .btn * { transition: none !important; } }
 
 /* Masterplan pin card opens like the Figma Active variant (0.3 s ease-out) */
+/* 15 Nov, one text motion site-wide: a text block swapped by state (not GSAP) blurs in and out like BLOCK_FROM / BLOCK_TO */
+.t-swap { transition: opacity .9s var(--ease-site), filter .9s var(--ease-site), transform .9s var(--ease-site); }
+.t-swap[data-off] { opacity: 0; filter: blur(12px); transform: translateY(16px); pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .t-swap { transition: opacity .3s linear; } .t-swap[data-off] { filter: none; transform: none; } }
 @keyframes pinCard { from { opacity: 0; scale: .96; } to { opacity: 1; scale: 1; } }
 
 /* ── Breeze sway for the bougainvillea cut-outs (uses `rotate`, so it composes with GSAP transforms) ── */

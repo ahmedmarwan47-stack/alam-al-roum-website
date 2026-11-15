@@ -31,7 +31,7 @@ export default function PageHero({ data: H }: { data: PageHeroData }) {
           <span data-pre data-reveal className="t-label l-tag">{H.pre}</span>
           <h1 data-reveal className="t-heading hd-56 hero-t max-w-[1000px]">
             {H.title.map((s, k) => (
-              <Fragment key={k}>{s.br && <br />}{k > 0 && !s.br && " "}{s.i ? <span className="t-accent">{s.t}</span> : s.t}</Fragment>))}
+              <Fragment key={k}>{s.br && <br />}{k > 0 && !s.br && " "}{s.i ? <span className="t-accent" style={{ textTransform: "capitalize" }}>{s.t}</span> : s.t}</Fragment>))}
           </h1>
           <div data-body data-reveal className="text-limestone-50/90">
             <p className="t-body b-18 hero-b wrap-balance max-w-[520px]">{H.body}</p></div>

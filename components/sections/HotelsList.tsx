@@ -50,10 +50,10 @@ export default function HotelsList({ data: D }: { data: HotelsData }) {
       <Drawer open={open} onClose={close} label={h.name}
         footer={D.kind === "unit"
           ? <div className="flex flex-col gap-3 sm:flex-row">
-              <Button label="Register Interest" href="/contact" size={54} variant="primary" className="gap-5! sm:flex-1" />
+              <Button label="Register Interest" href="/contact" size={54} variant="outline" className="gap-5! sm:flex-1" />
               <Button label="Download Brochure" href="#" size={54} variant="outline" icon="download-04" className="gap-5! sm:flex-1" />
             </div>
-          : <div><Button label="Visit Website" href="#" size={54} variant="primary" /></div>}>
+          : <div><Button label="Visit Website" href="#" size={54} variant="outline" /></div>}>
         <div className="flex flex-col gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={shots[shot]} srcSet={srcSet(shots[shot])} alt={h.name} loading="lazy" className="h-[260px] w-full object-cover" />

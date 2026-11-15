@@ -61,7 +61,7 @@ export default function Landmarks({ data = landmarks }: { data?: LandmarksData }
             return (
               <button key={r.title} onClick={() => { clearTimeout(intent.current); setA(k); }} onMouseEnter={() => hoverRow(k)} onMouseLeave={leaveRow} aria-pressed={on}
                 className={`flex items-center gap-10 px-6 py-[clamp(12px,2.2svh,24px)] text-left [&:not(:last-child)]:border-b transition-colors duration-500 ${on ? "border-deepsea-500 bg-deepsea-500 text-limestone-50" : "border-limestone-600 hover:bg-limestone-100"}`}>
-                <span className={`t-label l-12 ${on ? "text-deepsea-200" : ""}`}>({String(k + 1).padStart(2, "0")})</span>
+                <span className={`w-8 flex-none tabular-nums t-label l-12 ${on ? "text-deepsea-200" : ""}`}>({String(k + 1).padStart(2, "0")})</span>
                 <span className="flex flex-1 flex-col gap-2">
                   <RevealText text={r.title} className="t-heading hd-24" />
                   <span className={`t-body b-14 ${on ? "text-deepsea-200" : "text-deepsea-500/60"}`}>{r.body}</span>
@@ -76,7 +76,7 @@ export default function Landmarks({ data = landmarks }: { data?: LandmarksData }
             return (
               <div key={r.title}>
                 <button onClick={() => setOpen(on ? -1 : k)} aria-expanded={on} className="flex w-full items-start gap-5 py-5 text-left">
-                  <span className="t-label l-12 pt-1.5">({String(k + 1).padStart(2, "0")})</span>
+                  <span className="w-8 flex-none tabular-nums t-label l-12 pt-1.5">({String(k + 1).padStart(2, "0")})</span>
                   <span className="flex flex-1 flex-col gap-1.5">
                     <RevealText text={r.title} className="t-heading hd-24" />
                     <span className="t-body b-14 text-deepsea-500/60">{r.body}</span>

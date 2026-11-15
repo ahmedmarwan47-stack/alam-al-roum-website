@@ -43,7 +43,13 @@ export const mediaBlurIn = (el: Element, { delay = 0 } = {}) =>
  * viewport), so every block of a section is in place together by the time you reach it, rather than each one
  * waiting for its own spot on screen. Plays at once if the page is already past that point.
  */
-export const whenSectionEnters = (el: Element, play: () => void) => onceInView(el.closest("section, header, footer") ?? el, "top 85%", play);
+export const whenSectionEnters = (el: Element, play: () => void) => {
+  const sec = el.closest("section, header, footer") ?? el;
+  // 15 Nov: in a tall section (a long list, a grid of cards) what sits more than most of a screen below the section's
+  // top waits for its own arrival (more than half a screen down), or it would play before you reach it and look static
+  const deep = el.getBoundingClientRect().top - sec.getBoundingClientRect().top > innerHeight * 0.5;
+  return deep ? onceInView(el, "top 90%", play) : onceInView(sec, "top 85%", play);
+};
 
 /**
  * Plays `play` once, when `trigger` reaches `start` (a ScrollTrigger start such as "top 80%"). Every entrance that
@@ -60,9 +66,14 @@ export const onceInView = (trigger: Element, start: string, play: () => void) =>
   // while the page was still settling (pinned scenes, fonts, a restored scroll position) can miss its moment, and a
   // `once` trigger never fires again. The browser's own visibility check plays the entrance whenever the section is
   // actually on screen, so text can never stay hidden in view.
+  let whole: IntersectionObserver | undefined;
   if (!done) {
     io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) go(); }, { rootMargin: "0px 0px -15% 0px" });
     io.observe(sec);
+    // 15 Nov: and whenever it is wholly on screen, wherever that is: something at the very foot of the page (the
+    // footer's wordmark on a phone) can never scroll up to the start line, and would otherwise stay hidden for good
+    whole = new IntersectionObserver((es) => { if (es.some((e) => e.intersectionRatio >= 0.98)) { go(); whole?.disconnect(); } }, { threshold: [0.98] });
+    whole.observe(sec);
   }
-  return () => { cancelAnimationFrame(id); st.kill(); io?.disconnect(); };
+  return () => { cancelAnimationFrame(id); st.kill(); io?.disconnect(); whole?.disconnect(); };
 };

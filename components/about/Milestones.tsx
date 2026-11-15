@@ -102,7 +102,8 @@ export default function Milestones() {
         c.style.opacity = String(0.08 + 0.92 * near);
         const det = c.querySelector<HTMLElement>("[data-ms-detail]")!, line = c.querySelector<HTMLElement>("[data-ms-line]")!;
         const d = Math.max(0, 1 - Math.abs(i - f) * 2);                 // the detail only for the one in focus
-        det.style.opacity = String(d); det.style.transform = `translateY(${(1 - d) * 24}px)`;
+        det.style.opacity = String(d); det.style.transform = `translateY(${(1 - d) * 16}px)`;   // the site's text motion: blur, 16 px
+        det.style.filter = d < 1 ? `blur(${(1 - d) * 12}px)` : "";
         line.style.transform = `scaleY(${(268 + (full - 268) * d) / full})`;
         ticks[i].forEach((tk, k) => {
           const x = i * C + TICK_X0 + k * gap, q = (x - fx) / spread;

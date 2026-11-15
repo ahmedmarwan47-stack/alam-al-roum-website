@@ -63,7 +63,7 @@ export default function RadiusMap() {
       tl.to(l, { strokeDashoffset: 0, duration: 0.6, ease: "power2.inOut" }, k * 0.45)
         .fromTo(dots[k], { attr: { cx: CITIES[k].x, cy: CITIES[k].y }, opacity: 1 }, { attr: { cx: C.x, cy: C.y }, duration: 0.6, ease: "power2.inOut" }, k * 0.45)
         .to(dots[k], { opacity: 0, duration: 0.2 }, k * 0.45 + 0.6)
-        .to(labels[k], { opacity: 1, duration: 0.4 }, k * 0.45 + 0.1);
+        .fromTo(labels[k], { opacity: 0, y: 16, filter: "blur(12px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.9, ease: "siteOut" }, k * 0.45 + 0.1);   // the site's text blur-in
     });
     tl.to(el.querySelector("[data-halo]"), { attr: { r: 34 }, opacity: 0.35, duration: 0.6, ease: "power2.out" }, ">-0.2");
     const off = whenSectionEnters(el, () => tl.play(0));   // draws once, as its section arrives, and stays

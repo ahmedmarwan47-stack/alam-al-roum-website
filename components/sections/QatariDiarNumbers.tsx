@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 import { srcSet } from "@/lib/img";
+import { onceInView } from "@/components/reveal/letters";
 
 const STATS = [
   { n: "20", title: ["20 Years", "of building"], body: "Two decades of landmark destinations, built across five continents and backed by the Qatar Investment Authority.", cta: "About Qatari Diar", photo: "/images/photo/ui-expcenter-day.webp" },
@@ -21,7 +22,10 @@ const JUMP = 3;                  // Möbius spins each digit ~3 places before it
  */
 export default function QatariDiarNumbers() {
   const [s, setS] = useState(0); const prev = useRef(0);
+  // the first stat's copy blurs in as the section arrives, like all text (15 Nov); until then every stat is "off"
+  const [shown, setShown] = useState(false);
   const root = useRef<HTMLElement>(null), cols = useRef<(HTMLDivElement | null)[]>([]);
+  useEffect(() => onceInView(root.current!, "top 85%", () => setShown(true)), []);
   // position = index into the repeated column; the middle copy holds the resting digits
   const idx = (d: string) => 10 + Number(d);
   useEffect(() => {   // GSAP owns the column transforms from the start
@@ -50,13 +54,13 @@ export default function QatariDiarNumbers() {
           <div className="grid">
             {STATS.map((x, k) => (
               <div key={x.n} aria-hidden={k !== s} className="col-start-1 row-start-1 flex flex-col gap-6">
-                <h2 className="overflow-hidden t-heading hd-48 text-deepsea-500">
-                  {x.title.map((l, j) => (
-                    <span key={l} className="block transition-[transform,opacity] duration-700 [transition-timing-function:var(--ease-site)]"
-                      style={{ transform: k === s ? "translateY(0)" : `translateY(${k < s ? -105 : 105}%)`, opacity: k === s ? 1 : 0, transitionDelay: k === s ? `${j * 70}ms` : "0ms" }}>{l}</span>))}
+                {/* the site's one text motion (15 Nov): the copy blurs out and the next blurs in, no line slides */}
+                <h2 className="t-swap t-heading hd-48 text-deepsea-500" data-off={!shown || k !== s || undefined}
+                  style={{ transitionDelay: k === s ? "120ms" : "0ms" }}>
+                  {x.title.map((l) => <span key={l} className="block">{l}</span>)}
                 </h2>
-                <p className="max-w-[405px] t-body b-18 text-limestone-800 transition-[transform,opacity] duration-700 [transition-timing-function:var(--ease-site)]"
-                  style={{ transform: k === s ? "translateY(0)" : "translateY(16px)", opacity: k === s ? 1 : 0, transitionDelay: k === s ? "160ms" : "0ms" }}>{x.body}</p>
+                <p className="t-swap max-w-[405px] t-body b-18 text-limestone-800" data-off={!shown || k !== s || undefined}
+                  style={{ transitionDelay: k === s ? "240ms" : "0ms" }}>{x.body}</p>
               </div>))}
           </div>
         </div>

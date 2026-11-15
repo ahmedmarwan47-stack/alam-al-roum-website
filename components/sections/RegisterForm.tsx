@@ -40,7 +40,7 @@ export default function RegisterForm({ about }: { about: string }) {
           <textarea name="message" rows={4} placeholder="Homes, visits, investment…" className={`${input} h-20 resize-none lg:h-[clamp(44px,9.8svh,96px)]`} />
         </label>
       </div>
-      <Button label="Submit" submit className="self-start" />
+      <Button label="Submit" submit variant="outline" className="self-start" />
     </form>
   );
 }

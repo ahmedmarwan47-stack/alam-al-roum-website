@@ -5,7 +5,7 @@ import { idlePose, COIN_FILL, type CoinPose } from "@/components/ui/Coin3D";
 import { gsap, ScrollTrigger, reducedMotion, withHold } from "@/lib/gsap";
 import "@/lib/about/a-motion";
 import { coin as C } from "@/lib/about/a-content";
-import { BLOCK_FROM, BLOCK_TO } from "@/components/reveal/letters";
+import { BLOCK_FROM, BLOCK_TO, blurIn, whenSectionEnters } from "@/components/reveal/letters";
 import { frameLoader } from "@/lib/frames";
 import { MQ, matches } from "@/lib/breakpoints";
 
@@ -13,8 +13,11 @@ import { MQ, matches } from "@/lib/breakpoints";
 const FW = 1512, FH = 1024;
 const MASK = `url(${C.mask}) no-repeat`;
 const Coin3D = dynamic(() => import("@/components/ui/Coin3D"), { ssr: false });
-/** Radians: edge-on on the last half turn, where the gold is replaced by the window, and face-on as the window. */
-const EDGE_ON = Math.PI * 3.5, TURNED = Math.PI * 4;
+/** Radians: edge-on on the last half turn, where the gold is replaced by the window, and face-on as the window.
+ *  12 Nov review (#61, "slow down the rotation of the coin"): one turn with the scroll instead of two. */
+const EDGE_ON = Math.PI * 1.5, TURNED = Math.PI * 2;
+/** The idle turn at rest, in revolutions per second: about 2.5 × slower than the landing page's (0.18). */
+const IDLE_SPIN = 0.07;
 /** Timeline seconds: the flip ends, the window starts to grow. */
 const FLIP_END = 1.4;
 /** Coin centre at rest: Figma's 379.5 raised by 20 so the turning coin keeps ~40 px clear of the display word. */
@@ -27,8 +30,8 @@ const frameSrc = (i: number) => `/seq/skyfall-30/${String(i + 1).padStart(4, "0"
 /**
  * UI / Section / Landmark Reveal (10979:18395), pinned and scrubbed as ONE continuous move (linear with the scroll,
  * smoothed scrub, no holds — Figma's pauses only existed because a prototype can't scroll):
- * 1 Spin: the landing page's 3D gold coin idles and bobs over the display word (BEHIND / THE NAME, two lines at the
- *   Display/172 size; it replaced GRANDEUR); scrolling turns it in place.
+ * 1 Spin: the landing page's 3D gold coin idles (slowly) and bobs over the display word ("Behind the name", the
+ *   site's heading face since the 12 Nov review); scrolling turns it once in place.
  * 2 Reveal: the last half turn opens the window, at the coin's size, with no fade: the gold goes as the coin passes
  *   edge-on, so its back never shows, and the coin-shaped window turns on with the same angle. Only then does it grow (260 → 900).
  *   The word fades and blurs out as the window's edge approaches it, so the two never overlap.
@@ -42,8 +45,15 @@ const frameSrc = (i: number) => `/seq/skyfall-30/${String(i + 1).padStart(4, "0"
  */
 export default function CoinStage({ poster }: { poster?: string }) {
   const [coinLive, setCoinLive] = useState(true);   // stop rendering the 3D coin once the window has taken its place
-  const root = useRef<HTMLElement>(null), win = useRef<HTMLDivElement>(null), filmRef = useRef<HTMLCanvasElement>(null), canvas = useRef<HTMLDivElement>(null), word = useRef<HTMLParagraphElement>(null);
-  const pose = useRef<CoinPose>(idlePose());
+  const root = useRef<HTMLElement>(null), win = useRef<HTMLDivElement>(null), filmRef = useRef<HTMLCanvasElement>(null), canvas = useRef<HTMLDivElement>(null), word = useRef<HTMLDivElement>(null);
+  const pose = useRef<CoinPose>({ ...idlePose(), spin: IDLE_SPIN });
+  // the word and its description blur in as the section arrives (the pinned stage is outside the site-wide entrance)
+  useEffect(() => {
+    const el = root.current; if (!el || reducedMotion()) return;
+    const ins = el.querySelectorAll("[data-word-in]");
+    gsap.set(ins, { ...BLOCK_FROM });
+    return whenSectionEnters(el, () => blurIn(ins, { delay: 0.15, stagger: 0.15 }));
+  }, []);
   useEffect(() => {
     const el = root.current!, w = win.current!, v = filmRef.current!, cv = canvas.current!, wd = word.current!, q = gsap.utils.selector(el);
 
@@ -74,7 +84,7 @@ export default function CoinStage({ poster }: { poster?: string }) {
       // the word fades (and blurs) out from the coin's first growth, gone before its edge would touch it
       const r = rest(), restGap = Math.max(wd.offsetTop - ((COIN_CY / FH) * H + (r * (259.04 / 260)) / 2), 1);
       const gap = wd.offsetTop - (cy + sh / 2), o = s > r + 0.5 ? Math.min(Math.max(gap / Math.min(0.07 * H, restGap), 0), 1) : 1;
-      wd.style.opacity = String(o); wd.style.filter = o < 1 ? `blur(${(1 - o) * 14}px)` : "";
+      wd.style.opacity = String(o); wd.style.filter = o < 1 ? `blur(${(1 - o) * 12}px)` : "";   // the site's 12 px text blur
     };
 
     // the film is scrubbed by the scroll: it starts when the flip ends and reaches its last frame at the end
@@ -98,13 +108,13 @@ export default function CoinStage({ poster }: { poster?: string }) {
     const stopLoading = frames.startWhenNear(el);
     size(); window.addEventListener("resize", size);
     const tl = gsap.timeline({ paused: true, defaults: { ease: "none" }, onUpdate: () => {
-      pose.current.spin = tl.time() < 0.02 ? idlePose().spin : 0;   // idle turn at rest, the scroll drives it after
+      pose.current.spin = tl.time() < 0.02 ? IDLE_SPIN : 0;   // idle turn at rest (slow, #61), the scroll drives it after
       pose.current.bob = tl.time() < 0.02 ? idlePose().bob : 0;
       draw(); film(tl.time());
       setCoinLive(tl.time() < FLIP_END);
     } })
-      // 1 · Spin: two turns in place, the last half opening the window (draw() swaps the coin for it at edge-on)
-      .fromTo(pose.current, { rotY: 0 }, { rotY: TURNED, duration: FLIP_END, ease: "power1.inOut" }, 0)
+      // 1 · Spin: one turn in place (#61), the last half opening the window (draw() swaps the coin for it at edge-on)
+      .fromTo(pose.current, { rotY: 0 }, { rotY: TURNED, duration: FLIP_END, ease: "sine.inOut" }, 0)
       // 2 · Reveal: the window, now face-on, grows
       .fromTo(P, { size: rest, cy: COIN_CY / FH }, { size: () => coinAt(900, 0.92, Infinity, 0.8), cy: 512.5 / FH, duration: 2.4 - FLIP_END }, FLIP_END)
       .fromTo(v, { y: () => (-132 / FH) * el.offsetHeight }, { y: 0, duration: 2.4 - FLIP_END }, FLIP_END)
@@ -134,10 +144,14 @@ export default function CoinStage({ poster }: { poster?: string }) {
     <section ref={root} className="relative h-svh min-h-[600px] overflow-hidden bg-deepsea-700 text-limestone-50">
       {/* Beat 1 word · Display/172 (scales with the frame like the coin, so the 24px gap under the coin holds), on two
           lines so the longer phrase keeps GRANDEUR's size: the wider line, THE NAME, is no wider than GRANDEUR was */}
-      <p ref={word} data-word aria-hidden className="absolute inset-x-0 top-[52.05%] text-center font-bold uppercase [line-height:round(nearest,0.94em,4px)]"
-        style={{ fontSize: "clamp(56px, min(11.38vw, 16.8svh), 172px)", letterSpacing: "0.02em" }}>
-        {C.word.map((l) => <span key={l} className="block whitespace-nowrap">{l}</span>)}
-      </p>
+      {/* 12 Nov review (#59, "change the typography style, font is too big"): the site's heading face, regular weight,
+          title case, in the H1 style (Headings/80, `hd-80`) on one line (was 172 px bold capitals on two) */}
+      {/* 15 Nov: a one-line description under it (what the name means); the two fade out together as the coin grows,
+          and blur in, one after the other, as the section arrives (the site's text motion) */}
+      <div ref={word} data-word className="absolute inset-x-0 top-[52.05%] flex flex-col items-center gap-5 px-[var(--gutter)] text-center">
+        <p data-word-in aria-hidden className="t-heading hd-80">{C.word.join(" ")}</p>
+        <p data-word-in className="max-w-[560px] t-body b-18 text-limestone-50/80 text-balance">{C.subtitle}</p>
+      </div>
 
       {/* coin window: the film, cut to the coin's silhouette */}
       <div ref={win} className="absolute inset-0" style={{ mask: MASK, WebkitMask: MASK, opacity: 0 }}>
