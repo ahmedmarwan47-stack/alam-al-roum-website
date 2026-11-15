@@ -36,7 +36,7 @@ const contactHref = (icon: string, t: string) =>
 /**
  * Footer (Figma "Footer" 10921:11186 · Home 10970:12490): newsletter row, links, legal row, wordmark.
  * 12 Nov review: on Deep Sea with Limestone type; the wordmark smaller, with the brand's coin pair on its right; the
- * phone and e-mail lines without their icons (only the social icons stay).
+ * phone, WhatsApp and e-mail lines without their icons (only the social icons stay; 15 Nov: the WhatsApp line's went too).
  */
 export default function Footer() {
   return (
@@ -67,7 +67,7 @@ export default function Footer() {
             <Group title="Discover"><Links items={F.discover} /></Group>
             <Group title="More"><Links items={F.more} /></Group>
             <Group title="Contact">
-              {F.contact.map(([ic, t]) => { const h = contactHref(ic, t), C = h.startsWith("/") ? Link : "a"; return <C key={t} href={h} className="flex items-center gap-2 t-text x-16">{ic && ic !== "call" && ic !== "mail-01" && <Icon name={ic} size={18} className="max-lg:hidden!" />}{t}</C>; })}
+              {F.contact.map(([ic, t]) => { const h = contactHref(ic, t), C = h.startsWith("/") ? Link : "a"; return <C key={t} href={h} className="flex items-center gap-2 t-text x-16">{t}</C>; })}
               {/* touch screens: 40 px targets round each icon, the first glyph still on the column edge */}
               <div className="flex gap-2 max-lg:-ml-[10px] max-lg:gap-0">{["whatsapp", "facebook-01", "instagram", "tiktok"].map((i) => <a key={i} href="#" aria-label={i.replace("-01", "")} className="max-lg:grid max-lg:size-10 max-lg:place-items-center"><Icon name={i} size={20} /></a>)}</div>
             </Group>
