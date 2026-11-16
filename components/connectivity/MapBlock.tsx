@@ -4,7 +4,7 @@ import Icon from "@/components/ui/Icon";
 import { MQ } from "@/lib/breakpoints";
 import { gsap, reducedMotion } from "@/lib/gsap";
 import FlatMap from "./FlatMap";
-import { AAR, COUNTRIES, byKey, fmtFlight, fmtKm, type Country } from "./geo";
+import { AAR, PLACES, byKey, fmtFlight, fmtKm, type Country } from "./geo";
 import { BLOCK, GLASS, SEA } from "./shared";
 
 /**
@@ -46,7 +46,7 @@ export default function MapBlock() {
           {hovered && (
             <div className={`flex flex-col whitespace-nowrap rounded-lg px-3 py-2 text-deepsea-500 ${GLASS}`}>
               <span className="t-label text-[14px] leading-5">{hovered.name}</span>
-              <span className="t-label text-[12px] leading-4 text-deepsea-400">{hovered.key === selected ? fmtKm(hovered.km) : hovered.home ? "Home of Alam Al Roum" : "Click to see how far"}</span>
+              <span className="t-label text-[12px] leading-4 text-deepsea-400">{hovered.home ? (selected === "Egypt" ? "Pick a city on the map" : "Click to see its cities") : hovered.key === selected ? fmtKm(hovered.km) : "Click to see how far"}</span>
             </div>)}
         </div>
       </div>
@@ -76,14 +76,22 @@ function InfoCard({ selected, onSelect, follow }: { selected: string | null; onS
   const [q, setQ] = useState("");
   const results = useMemo(() => {
     const s = q.trim().toLowerCase(); if (!s) return [];
-    const all = COUNTRIES.filter((x) => !x.inert && (x.name.toLowerCase().includes(s) || x.city?.toLowerCase().includes(s)));
+    const all = PLACES.filter((x) => !x.inert && x.name.toLowerCase().includes(s));
     return all.sort((a, b) => Number(!a.name.toLowerCase().startsWith(s)) - Number(!b.name.toLowerCase().startsWith(s)) || a.km - b.km).slice(0, 5);
   }, [q]);
   const pick = (k: string) => { onSelect(k); setQ(""); };
 
   return (
     <div className={`relative z-20 flex flex-col gap-4 rounded-lg p-5 text-deepsea-500 ${GLASS} max-lg:-mt-16 max-md:mx-[var(--gutter)] max-md:mb-[var(--gutter)] md:max-lg:mx-6 md:max-lg:mb-6 lg:absolute lg:bottom-6 lg:left-6 lg:w-[340px]`}>
-      {sel ? <Route key={sel.key} c={sel} onClear={() => onSelect(null)} follow={follow} /> : (
+      {sel?.home ? (
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex flex-col gap-1">
+            <span className="t-label text-[12px] leading-4 text-deepsea-400">Egypt</span>
+            <h3 className="t-heading text-[20px] leading-7">Pick a city on the map</h3>
+          </div>
+          <CloseButton onClick={() => onSelect(null)} label="Back to the world map" />
+        </div>
+      ) : sel ? <Route key={sel.key} c={sel} onClear={() => onSelect(sel.kind === "city" ? "Egypt" : null)} follow={follow} /> : (
         <div className="flex flex-col gap-1">
           <span className="t-label text-[12px] leading-4 text-deepsea-400">Distance to Alam Al Roum</span>
           <h3 className="t-heading text-[20px] leading-7">Where are you travelling from?</h3>
@@ -99,8 +107,8 @@ function InfoCard({ selected, onSelect, follow }: { selected: string | null; onS
           <ul className="-mx-2 flex flex-col">
             {results.length ? results.map((r) => (
               <li key={r.key}><button onClick={() => pick(r.key)} className="flex w-full items-center justify-between gap-4 rounded-lg px-2 py-2 text-left transition-colors hover:bg-white/70">
-                <span className="t-label l-14">{r.name}{r.city && r.city !== r.name && <span className="text-deepsea-400"> · {r.city}</span>}</span>
-                <span className="t-label text-[12px] leading-4 tabular-nums text-deepsea-400">{fmtKm(r.km)}</span></button></li>))
+                <span className="t-label l-14">{r.name}{r.country && <span className="text-deepsea-400"> · {r.country}</span>}</span>
+                <span className="t-label text-[12px] leading-4 tabular-nums text-deepsea-400">{r.home ? "Its cities" : fmtKm(r.km)}</span></button></li>))
               : <li className="px-2 py-2 t-body b-14 text-deepsea-400">No country by that name</li>}
           </ul>)}
       </div>
@@ -114,39 +122,51 @@ function InfoCard({ selected, onSelect, follow }: { selected: string | null; onS
  */
 function Route({ c, onClear, follow }: { c: Country; onClear: () => void; follow: Follow }) {
   const num = useRef<HTMLSpanElement>(null), head = useRef<HTMLDivElement>(null), trail = useRef<HTMLSpanElement>(null), plane = useRef<HTMLSpanElement>(null), end = useRef<HTMLSpanElement>(null);
-  // the card's line, plane and count follow the map's route frame by frame (see `follow`); at the end the plane
-  // lands and Alam Al Roum's dot pops
+  // the card's line, plane and count follow the map's route frame by frame (see `follow`); once the line is drawn,
+  // Alam Al Roum's dot pops and the plane keeps flying the route, destination to Alam Al Roum, again and again
+  // (fading in at the start, out on arrival, a breath between flights; hidden with reduced motion)
   useEffect(() => {
-    const el = num.current!, tr = trail.current!, pl = plane.current!, en = end.current!;
-    if (!reducedMotion()) gsap.fromTo(head.current, { opacity: 0, y: 8, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "siteOut" });
-    let landed = false;
+    const el = num.current!, tr = trail.current!, pl = plane.current!, en = end.current!, still = reducedMotion();
+    if (!still) gsap.fromTo(head.current, { opacity: 0, y: 8, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.6, ease: "siteOut" });
+    let landed = false, loop: gsap.core.Timeline | null = null;
     gsap.set(en, { scale: 0 });
-    return follow((t) => {
+    const off = follow((t) => {
       el.textContent = fmtKm(c.km * t);
-      tr.style.transform = `scaleX(${t})`; pl.style.left = `${t * 100}%`; pl.style.opacity = t >= 0.999 ? "0" : "1";
-      if (t >= 0.999 && !landed) { landed = true; gsap.fromTo(en, { scale: 0 }, { scale: 1, duration: 0.35, ease: "back.out(2)" }); }
-      if (t < 0.999 && landed) { landed = false; gsap.set(en, { scale: 0 }); }
+      tr.style.transform = `scaleX(${t})`;
+      if (t >= 0.999) {
+        if (landed) return;   // the loop has the plane now
+        landed = true;
+        gsap.fromTo(en, { scale: 0 }, { scale: 1, duration: 0.35, ease: "back.out(2)" });
+        pl.style.left = "100%"; pl.style.opacity = "0";
+        if (!still) loop = gsap.timeline({ repeat: -1, repeatDelay: 0.6, delay: 0.5 })
+          .fromTo(pl, { left: "0%", opacity: 0 }, { left: "100%", duration: 2.4, ease: "power1.inOut" }, 0)
+          .to(pl, { opacity: 1, duration: 0.3 }, 0)
+          .to(pl, { opacity: 0, duration: 0.3 }, 2.1);
+        return;
+      }
+      if (landed) { landed = false; loop?.kill(); loop = null; gsap.set(en, { scale: 0 }); }
+      pl.style.left = `${t * 100}%`; pl.style.opacity = "1";
     });
+    return () => { off(); loop?.kill(); };
   }, [c, follow]);
-  const facts: [string, string][] = [[fmtFlight(c.flightMin), "Est. flight"], [fmtMi(c.km), "Miles"], [direction(c.to), "Direction"]];
+  const city = c.kind === "city";
+  const facts: [string, string][] = [city ? [fmtFlight(c.driveMin!), "Est. drive"] : [fmtFlight(c.flightMin), "Est. flight"], [fmtMi(c.km), "Miles"], [direction(c.to), "Direction"]];
+  // what the distance is measured to: a country's capital (or its middle, where none is set), a city itself
+  const caption = city ? "Straight-line distance" : c.capital ? "Straight line to the capital" : "Straight line to the country's centre";
   return (
     <div ref={head} className="flex flex-col gap-4">
       <div className="flex items-start justify-between gap-4">
         <div className="flex flex-col">
           <span ref={num} className="t-heading normal-case! text-[32px] leading-9 tabular-nums">0 km</span>
-          <span className="t-label text-[12px] leading-4 text-deepsea-400">Straight-line distance</span>
+          <span className="t-label text-[12px] leading-4 text-deepsea-400">{caption}</span>
         </div>
-        <button onClick={onClear} aria-label="Clear the route" className="grid h-8 w-8 flex-none place-items-center rounded-lg border border-deepsea-500/15 bg-white/50 transition-colors hover:bg-white/90">
-          <svg width="10" height="10" viewBox="0 0 10 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M1 1l8 8M9 1l-8 8" /></svg>
-        </button>
+        <CloseButton onClick={onClear} label={city ? "Back to Egypt's cities" : "Clear the route"} />
       </div>
-      {/* the two ends, read left to right as the journey: the destination, then Alam Al Roum; the line between them on
-          the names' middle (14 / 20 type: 10 px down), a small plane flying it towards Alam Al Roum */}
+      {/* the two ends, read left to right as the journey: the destination, then Alam Al Roum, one line each (16 Nov: no
+          "Egypt" under either); the line between them on the names' middle (14 / 20 type: 10 px down), a small plane
+          flying it towards Alam Al Roum */}
       <div className="flex items-start gap-3">
-        <div className="flex min-w-0 max-w-[45%] flex-col">
-          <span className="t-label l-14">{c.city ?? c.name}</span>
-          {c.city && c.city !== c.name && <span className="t-label text-[12px] leading-4 text-deepsea-400">{c.name}</span>}
-        </div>
+        <span className="min-w-0 max-w-[45%] t-label l-14">{c.name}</span>
         <div className="relative mt-2.5 min-w-8 flex-1">
           <span className="absolute inset-x-0 top-0 border-t border-dashed border-deepsea-500/30" />
           <span ref={trail} className="absolute inset-x-0 top-0 h-px origin-left bg-deepsea-500" style={{ transform: "scaleX(0)" }} />
@@ -156,7 +176,7 @@ function Route({ c, onClear, follow }: { c: Country; onClear: () => void; follow
             <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden><path d="M15 8 10.4 6.7 7.4 1.6H6.1l1.3 4.8-3.7-.2-1.2-1.8h-1l.6 3.6-.6 3.6h1l1.2-1.8 3.7-.2-1.3 4.8h1.3l3-5.1z" /></svg>
           </span>
         </div>
-        <div className="flex flex-none flex-col items-end text-right"><span className="t-label l-14">Alam Al Roum</span><span className="t-label text-[12px] leading-4 text-deepsea-400">Egypt</span></div>
+        <span className="flex-none text-right t-label l-14">Alam Al Roum</span>
       </div>
       {/* each fact as wide as its words (never "North-" / "west"), the hairlines between them */}
       <dl className="flex divide-x divide-deepsea-500/10 border-t border-deepsea-500/10 pt-3">
@@ -171,3 +191,10 @@ function Route({ c, onClear, follow }: { c: Country; onClear: () => void; follow
   );
 }
 
+function CloseButton({ onClick, label }: { onClick: () => void; label: string }) {
+  return (
+    <button onClick={onClick} aria-label={label} className="grid h-8 w-8 flex-none place-items-center rounded-lg border border-deepsea-500/15 bg-white/50 transition-colors hover:bg-white/90">
+      <svg width="10" height="10" viewBox="0 0 10 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M1 1l8 8M9 1l-8 8" /></svg>
+    </button>
+  );
+}

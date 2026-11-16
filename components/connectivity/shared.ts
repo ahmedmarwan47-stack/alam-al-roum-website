@@ -35,7 +35,7 @@ export const PIN_SIDE: Record<string, "l" | "r" | "t" | "b"> = {
   Qatar: "t", Italy: "r", "United Arab Emirates": "r", "Saudi Arabia": "b", "United Kingdom": "l", France: "r",
 };
 /** each side's offset from the pin */
-export const PIN_TR = { l: "translate(calc(-100% - 10px), -50%)", r: "translate(10px, -50%)", t: "translate(-50%, calc(-100% - 10px))", b: "translate(-50%, 10px)" } as const;
+export const PIN_TR = { l: "translate(calc(-100% - 13px), -50%)", r: "translate(13px, -50%)", t: "translate(-50%, calc(-100% - 12px))", b: "translate(-50%, 12px)" } as const;
 /** a name that would run off the map's edge moves: off the left to the right (London), off the right to below (Dubai: on its left sits Doha) */
 export const flipNearEdge = (side: "l" | "r" | "t" | "b", x: number, w: number) => (side === "l" && x < 72 ? "r" : side === "r" && x > w - 72 ? "b" : side);
 
