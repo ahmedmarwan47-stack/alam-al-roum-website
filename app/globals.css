@@ -283,3 +283,8 @@ html.js [data-reveal-img] { visibility: hidden; }
 /* ── Breeze sway for the bougainvillea cut-outs (uses `rotate`, so it composes with GSAP transforms) ── */
 @keyframes sway { 0%, 100% { rotate: -2.5deg; } 50% { rotate: 3deg; } }
 @media (prefers-reduced-motion: reduce) { [class*="animate-[sway"] { animation: none !important; } }
+
+/* ── Connectivity map (components/connectivity): the small entrances its overlays use ── */
+@keyframes fm-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fm-pop { from { transform: scale(0); } to { transform: scale(1); } }
+@keyframes fm-label { from { opacity: 0; filter: blur(8px); translate: 0 6px; } to { opacity: 1; filter: blur(0); translate: 0 0; } }
