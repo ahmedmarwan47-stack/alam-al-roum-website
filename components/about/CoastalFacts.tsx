@@ -15,11 +15,11 @@ const PHOTOS = [
 /**
  * "A Fully Integrated Coastal City" (UI / Section / Split Merge). 15 Nov: after the client's reference (Brand Intro,
  * 1512 frame): the title and the paragraph centred at the top (no rule and no button, 15 Nov), then two tall photos
- * side by side, 564 × 630 in an 1188 column with a 60 gap, the right one 117 lower.
+ * side by side, 564 × 630 in an 1188 column with a 60 gap, the right one 56 lower (17 Nov: was 117, too far apart).
  * Motion: the copy blurs in (the site's entrance); each photo opens with the site's photo sweep (a wipe up out of a
  * blur) as the section arrives, the right one a beat later. The pair arrives with twice the stagger and, as it
  * scrolls up to the middle of the screen, the two move vertically towards each other until they settle on the Figma
- * stagger (never aligned); each picture also drifts inside its frame (120 % tall, ±8 %: no edge shows).
+ * stagger, about half the Figma one (never aligned); each picture also drifts inside its frame (120 % tall, ±8 %: no edge shows).
  * Phones: the copy, then the photos side by side, smaller, with the same motion.
  */
 export default function CoastalFacts() {
@@ -29,9 +29,9 @@ export default function CoastalFacts() {
     const frames = el.querySelectorAll<HTMLElement>("[data-frame]");
     gsap.set(frames, { ...PHOTO_FROM });
     const st = { trigger: el, start: "top bottom", end: "bottom top", scrub: true };
-    // the pair rests staggered as in Figma (the right one 117 lower at 1512, set in the markup); it arrives with twice
+    // the pair rests staggered (the right one 56 lower at 1512, half the Figma 117, set in the markup); it arrives with twice
     // that stagger (the extra shared out between the two) and closes in on the Figma stagger as it rises, never aligning
-    const off = () => Math.min(117, Math.max(32, innerWidth * 0.077));
+    const off = () => Math.min(56, Math.max(16, innerWidth * 0.037));
     const meet = { trigger: el.querySelector("[data-pair]"), start: "top bottom", end: "center center", scrub: true, invalidateOnRefresh: true };
     const ctx = gsap.context(() => {
       frames.forEach((f, k) => {
@@ -50,7 +50,7 @@ export default function CoastalFacts() {
       </div>
       <div data-pair className="mx-auto mt-14 grid max-w-[1188px] grid-cols-2 items-start gap-3 md:gap-6 lg:mt-[60px] lg:gap-[60px]">
         {PHOTOS.map((p, k) => (
-          <div key={p.src} className={k === 1 ? "mt-[clamp(32px,7.7vw,117px)]" : ""}>
+          <div key={p.src} className={k === 1 ? "mt-[clamp(16px,3.7vw,56px)]" : ""}>
             <div data-frame className="relative aspect-[564/630] overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img data-no-blur src={p.src} srcSet={srcSet(p.src)} alt={p.alt} loading="lazy"
