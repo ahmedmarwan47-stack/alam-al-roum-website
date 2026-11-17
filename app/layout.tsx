@@ -3,6 +3,7 @@ import { haas, immortel } from "./fonts";
 import SmoothScroll from "@/components/SmoothScroll";
 import NoOrphans from "@/components/NoOrphans";
 import BlurInOut from "@/components/BlurInOut";
+import ImagePlaceholders from "@/components/ImagePlaceholders";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <NoOrphans />
         {children}
         <BlurInOut />
+        <ImagePlaceholders />
       </body>
     </html>
   );

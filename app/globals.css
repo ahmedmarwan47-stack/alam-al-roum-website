@@ -288,3 +288,11 @@ html.js [data-reveal-img] { visibility: hidden; }
 @keyframes fm-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes fm-pop { from { transform: scale(0); } to { transform: scale(1); } }
 @keyframes fm-label { from { opacity: 0; filter: blur(8px); translate: 0 6px; } to { opacity: 1; filter: blur(0); translate: 0 0; } }
+
+/* Photo placeholder (17 Nov): while a photo loads, or if it never does, its box shows a pale limestone ground with the
+   two-coin mark pulsing in the middle (ph-loading.svg animates itself). Opaque photos paint straight over it, so it
+   works before the page is scripted; ImagePlaceholders then marks each photo loaded ([data-loaded]) to drop it, and
+   swaps a failed photo for a blank so the browser's broken-image icon never shows ([data-ph-error]). */
+img:is([src$=".webp"], [src$=".jpg"], [src$=".jpeg"]):not([data-loaded]), img[data-ph-error] {
+  background: url(/images/ph-loading.svg) center / clamp(40px, 22%, 96px) auto no-repeat, var(--color-limestone-300);
+}
