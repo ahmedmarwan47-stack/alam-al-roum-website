@@ -1,9 +1,9 @@
-# Builds the static export (npm run build:pages) and publishes it to GitHub Pages on every push to main or Preview.
+# Builds the static export (npm run build:pages) and publishes it to GitHub Pages on every push to main.
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main, Preview]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
