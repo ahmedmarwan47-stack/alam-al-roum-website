@@ -78,7 +78,7 @@ export default function Footer() {
           <span className="t-body b-12 text-limestone-50/70">{F.credit}</span>
           <div className="flex flex-col items-end gap-4 max-md:items-start">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/qatari-diar-reverse.png" alt="Qatari Diar" width={64} height={64} />
+            <img src="/images/qatari-diar-white.svg" alt="Qatari Diar" width={63} height={64} />
             <span className="t-body b-12 text-limestone-50/70 max-md:text-pretty">{F.copyright}</span>
           </div>
         </div>
