@@ -11,10 +11,10 @@ type X = (typeof experiences)[number];
 /** One tall card: photo (mask reveal, slow hover zoom) with the Explore chip, then name + fact. `num` adds the slider's index. */
 /** `grid`: a card of the Experiences page grid, which is two columns below lg, so the phone card rules apply there
  *  (name 14/20 over the note 12/18, photo → name 12 px, 4 px between the lines). */
-function Card({ x, delay, num, grid = false, className = "" }: { x: X; delay: number; num?: number; grid?: boolean; className?: string }) {
+function Card({ x, delay, num, grid = false, wide = false, className = "" }: { x: X; delay: number; num?: number; grid?: boolean; wide?: boolean; className?: string }) {
   return (
     <Link href={`/experiences/${x.slug}`} className={`group flex flex-col ${grid ? "gap-3 md:gap-4" : "gap-4"} ${className}`}>
-      <div className={`relative overflow-hidden ${grid ? "aspect-[448/587] lg:aspect-[4/3]" : "aspect-[448/587]"}`}>
+      <div className={`relative overflow-hidden ${wide ? "aspect-[4/3] md:aspect-[2/1] lg:aspect-[8/3]" : grid ? "aspect-[448/587] lg:aspect-[4/3]" : "aspect-[448/587]"}`}>
         <RevealImage src={x.photo} alt={x.title} delay={delay} className="h-full w-full"
           imgClassName="transition-transform duration-[1.2s] [transition-timing-function:var(--ease-site)] group-hover:scale-[1.06]" />
         {num !== undefined && <span className="absolute left-4 top-4 t-label l-12 text-deepsea-500">{String(num).padStart(2, "0")}</span>}
@@ -40,7 +40,8 @@ function Card({ x, delay, num, grid = false, className = "" }: { x: X; delay: nu
  * Detail pages (Figma 11128:14102): the same cards on one horizontal track, 440 px wide, with a progress bar
  * (the visible share of the track, moving with it) and round prev / next controls that step one card at a time.
  * `grid` (the Experiences page): a grid at every size (9 Nov), two columns at every size since the Lagoon made ten
- * (12 Nov: five even rows, no card left alone), the photos landscape (4:3) from lg so a row stays under a screen; no
+ * (12 Nov: even rows, no card left alone; with an odd count, eleven since Hospitality on 18 Nov, the last card spans
+ * both columns, wide), the photos landscape (4:3) from lg so a row stays under a screen; no
  * controls; the detail pages keep the swipe track.
  */
 function Slider({ grid = false, exclude }: { grid?: boolean; exclude?: string }) {
@@ -66,7 +67,9 @@ function Slider({ grid = false, exclude }: { grid?: boolean; exclude?: string })
         className={grid ? "grid grid-cols-2 gap-x-3 gap-y-8 md:gap-x-6 md:gap-y-10 lg:gap-x-6 lg:gap-y-12"
           : "-mx-[var(--gutter)] flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-px-[var(--gutter)] px-[var(--gutter)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"}>
         {list.map((x, k) => grid
-          ? <Card key={x.slug} x={x} grid delay={(k % 2) * 0.08} className="min-w-0" />
+          // an odd count (eleven since Hospitality, 18 Nov): the last card spans both columns, wide, so none is left alone
+          ? <Card key={x.slug} x={x} grid wide={list.length % 2 === 1 && k === list.length - 1} delay={(k % 2) * 0.08}
+              className={`min-w-0 ${list.length % 2 === 1 && k === list.length - 1 ? "col-span-2" : ""}`} />
           : <div key={x.slug} className="w-[min(440px,78vw)] flex-none snap-start"><Card x={x} delay={Math.min(k, 3) * 0.08} num={k + 1} /></div>)}
       </div>
       {!grid && <div className="flex items-center gap-10">

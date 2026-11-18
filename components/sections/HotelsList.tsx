@@ -25,7 +25,8 @@ const swipe = "max-sm:-mx-[var(--gutter)] max-sm:w-auto max-sm:self-stretch max-
  * `kind: "unit"` for the unit drawer's two actions (Register Interest, Download Brochure); hotels get Visit Website.
  */
 /** `flushTop`: no top padding where the section above ends on the same background (a community's Overview). */
-export default function HotelsList({ data: D, flushTop = false }: { data: HotelsData; flushTop?: boolean }) {
+/** `cta` (community pages, 18 Nov review #84): a shortcut at the end of the section, e.g. Register Interest → the form. */
+export default function HotelsList({ data: D, flushTop = false, cta }: { data: HotelsData; flushTop?: boolean; cta?: { label: string; href: string } }) {
   // `last` keeps the drawer's content in place while it slides out
   const [open, setOpen] = useState(false), [last, setLast] = useState(0);
   const [shot, setShot] = useState(0);
@@ -58,6 +59,7 @@ export default function HotelsList({ data: D, flushTop = false }: { data: Hotels
             <span className={`t-body b-14 text-deepsea-500/60 ${D.cols ? "" : "max-md:mt-1 max-md:text-[12px]! max-md:leading-[18px]!"}`}>{it.type}</span>
           </button>))}
       </div>}
+      {cta && <div><Button label={cta.label} href={cta.href} size={48} variant="primary" className="btn-classic" /></div>}
       {/* Drawer (Figma 11128:14825 hotel · 11128:14826 unit type) */}
       <Drawer open={open} onClose={close} label={h.name}
         footer={D.kind === "unit"

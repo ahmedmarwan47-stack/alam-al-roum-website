@@ -20,6 +20,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 /** Neighbourhood detail, in the order of the Figma frame "Neighbourhood Detail • Desktop" (10921:9807). */
+/** Register Interest shortcuts (18 Nov review #84): hero, end of Unit Types, under Landmarks and Leisure → the form. */
+const REGISTER = { label: "Register Interest", href: "#register-interest" };
+
 export default async function NeighbourhoodPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const x = neighbourhoods.find((e) => e.slug === slug);
@@ -27,11 +30,11 @@ export default async function NeighbourhoodPage({ params }: { params: Promise<{ 
   return (
     <main>
       <Navbar />
-      <SingleHero data={x.hero} />
+      <SingleHero data={x.hero} cta={REGISTER} />
       <Overview data={x.overview} />
-      {x.units && <HotelsList data={x.units} flushTop />}
+      {x.units && <HotelsList data={x.units} flushTop cta={REGISTER} />}
       <CommunityOnMasterplan slug={x.slug} title={x.masterplan.title} body={x.masterplan.body} flushTop={!!x.units} />
-      {x.facilities && <Landmarks data={x.facilities} />}
+      {x.facilities && <Landmarks data={x.facilities} cta={REGISTER} />}
       <Gallery data={x.gallery} />
       <OtherCommunities exclude={x.slug} />
       <Cta form={x.hero.name} />

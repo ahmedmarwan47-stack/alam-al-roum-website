@@ -1,4 +1,5 @@
 "use client";
+import Button from "@/components/ui/Button";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/gsap";
 import Icon from "@/components/ui/Icon";
@@ -18,7 +19,8 @@ export type LandmarksData = { title: string; body: string; rows: { title: string
  * photo and closes the one that was open (one at a time; tapping the open row closes it).
  * Used on Home, Destination, Sustainability (commitments), the neighbourhoods (facilities) and the experiences.
  */
-export default function Landmarks({ data = landmarks }: { data?: LandmarksData }) {
+/** `cta` (community pages, 18 Nov review #84): a shortcut under the last row, e.g. Register Interest → the page's form. */
+export default function Landmarks({ data = landmarks, cta }: { data?: LandmarksData; cta?: { label: string; href: string } }) {
   const L = data;
   const [a, setA] = useState(0); const prev = useRef(0);
   // phones and tablets: one row open at a time, the first one from the start
@@ -94,6 +96,7 @@ export default function Landmarks({ data = landmarks }: { data?: LandmarksData }
               </div>);
           })}
         </div>
+        {cta && <div><Button label={cta.label} href={cta.href} size={48} variant="primary" className="btn-classic" /></div>}
       </div>
       <RevealMask className="relative hidden lg:block lg:w-1/2">
         <div className="absolute inset-0">

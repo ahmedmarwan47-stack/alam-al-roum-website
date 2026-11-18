@@ -1,7 +1,7 @@
 import Button from "@/components/ui/Button";
 import RevealImage from "@/components/reveal/RevealImage";
 import RevealText from "@/components/reveal/RevealText";
-import RegisterForm from "./RegisterForm";
+import { LeadForm } from "./RegisterForm";
 import { cta as C } from "@/lib/content";
 
 /**
@@ -13,10 +13,12 @@ import { cta as C } from "@/lib/content";
  * the screen height, so the whole form fits the viewport (80 px above and below at 1512 × 982).
  * Below lg (9 Nov) the photo is a band of its own on top (the children in view) and the card rises 64 px over its
  * lower edge, rather than a full-height card leaving the photo as a thin frame around it.
+ * `lead` (Home only, 18 Nov review; Figma 11694:7857): the same portal photo, with the title and line inside the lead
+ * form's glass card (LeadForm) in place of the copy and the Register Interest button, so visitors register on the page.
  */
-export default function Cta({ form }: { form?: string }) {
+export default function Cta({ form, lead = false }: { form?: string; lead?: boolean }) {
   return (
-    <section className={`relative overflow-hidden bg-limestone-50 ${form ? "pb-12 lg:flex lg:h-svh lg:min-h-[680px] lg:items-center lg:py-20" : "h-[720px] max-lg:h-auto"}`}>
+    <section id={form ? "register-interest" : undefined} className={`relative overflow-hidden bg-limestone-50 ${form ? "pb-12 lg:flex lg:h-svh lg:min-h-[680px] lg:items-center lg:py-20" : "h-[720px] max-lg:h-auto"}`}>
       {/* below lg the photo sits on top, the gate in the middle of the frame with both pillars whole, and melts into
           the Limestone under the copy, so photo and copy read as one block as on desktop, where the copy sits on it */}
       <div className={`absolute inset-0 ${form ? "max-lg:relative max-lg:h-[min(100vw,480px)]" : "max-lg:relative max-lg:h-[min(125vw,560px)]"}`}>
@@ -36,7 +38,22 @@ export default function Cta({ form }: { form?: string }) {
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[28%] max-sm:h-[12%] bg-gradient-to-b from-limestone-50/0 via-limestone-50/70 via-60% to-limestone-50 lg:hidden" />
         </>}
       </div>
-      {form ? <div className="relative w-full container-x max-lg:-mt-16"><RegisterForm about={form} /></div> : (
+      {/* community pages (18 Nov): the homepage's lead form card, keeping its own "Register Interest" heading, one field a row */}
+      {form ? <div className="relative w-full container-x max-lg:-mt-16">
+          <LeadForm about={form} stacked><span className="t-heading text-deepsea-950 d-32 [line-height:round(nearest,1.25em,4px)]">Register Interest</span></LeadForm>
+        </div>
+        : lead ? (
+          // Home (`lead`, Figma 11694:7857): the title and line move into the lead form's card, centred in the section's
+          // height at the left gutter; below lg the card rides up over the photo's foot
+          <div className="relative flex h-full flex-col justify-center container-x max-lg:-mt-16 max-lg:pb-12">
+            <LeadForm about="Home">
+              <div className="flex flex-col gap-3">
+                <RevealText as="h2" segs={C.title} className="t-heading text-[32px] leading-9 lg:text-[36px] lg:leading-10" />
+                <RevealText text={C.body} className="t-body b-16 max-w-[420px] text-limestone-800" delay={0.1} />
+              </div>
+            </LeadForm>
+          </div>
+        ) : (
         <div className="relative flex h-full flex-col justify-center gap-10 container-x max-lg:-mt-24 max-sm:-mt-4 max-lg:gap-8 max-lg:pb-8">
           <div className="flex max-w-[768px] flex-col gap-6">
             <RevealText as="h2" segs={C.title} className="t-heading hd-80 [&_.t-accent]:[font-size:round(nearest,.95em,4px)]" />

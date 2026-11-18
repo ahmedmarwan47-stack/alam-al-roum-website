@@ -7,7 +7,7 @@ import { gsap, ScrollTrigger, reducedMotion } from "@/lib/gsap";
 export default function SmoothScroll() {
   useEffect(() => {
     if (reducedMotion()) return;
-    const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+    const lenis = new Lenis({ lerp: 0.1, smoothWheel: true, anchors: true })   // anchors: in-page links (#register-interest, #contact-form) glide;
     lenis.on("scroll", ScrollTrigger.update);
     const tick = (t: number) => lenis.raf(t * 1000);
     gsap.ticker.add(tick);

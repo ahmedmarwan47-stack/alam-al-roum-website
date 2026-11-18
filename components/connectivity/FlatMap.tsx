@@ -3,7 +3,7 @@ import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { geoAzimuthalEquidistant, geoGraticule10, geoPath } from "d3-geo";
 import { gsap, reducedMotion } from "@/lib/gsap";
 import { whenSectionEnters } from "@/components/reveal/letters";
-import { AAR, CITIES, COUNTRIES, EGYPT, PICKS, SEAS, byKey, fmtKm, isEgypt } from "./geo";
+import { AAR, CITIES, COUNTRIES, EGYPT, GULF, PICKS, PINNED, SEAS, byKey, fmtKm, isEgypt } from "./geo";
 import { CLICK_SLOP, PIN_SIDE, PIN_TR, SEA, BORDER, drawTime, flipNearEdge, landClass, useSize, useTrackpad, type MapProps } from "./shared";
 import ZoomControls from "./controls";
 
@@ -193,12 +193,25 @@ export default function FlatMap({ selected, onSelect, onHover, inset, onProgress
   // dot sizes (16 Nov, accessibility): pins 12 px across on desktop, 14 px below md; every dot takes a tap the size of
   // a fingertip, 32 px on desktop and 44 px below md (the WCAG target size), though only its dot shows
   const touch = w < 768;
+  // named pins: the six markets and the rest of the Gulf; below md the Gulf is too small on screen for six names, so
+  // there only the six markets keep theirs (Qatar's above its pin, as before) and Kuwait, Bahrain and Oman are dots
+  const named = touch ? PICKS : PINNED;
+  const sideOf = (k: string) => (touch && k === "Qatar" ? "t" : PIN_SIDE[k]);
   const DOT = touch ? { pin: 7, small: 4, hit: 22 } : { pin: 6, small: 3, hit: 16 };
   const v = view;
   const S = (p: [number, number]): [number, number] => (v ? [cx + (p[0] - v.fx) * v.k, cy + (p[1] - v.fy) * v.k] : [0, 0]);
   const [ox, oy] = S([0, 0]);
   const { d } = paths();
   const inFrame = (p: [number, number], m = 0) => p[0] > -m && p[0] < w + m && p[1] > -m && p[1] < h + m;
+  // the phone's extra dots stay clear of the named pins and their names (a name's box from its side, ~7 px a letter);
+  // Kuwait, Bahrain and Oman always keep theirs, so every Gulf country shows it can be tapped
+  const pinBoxes = touch && v ? named.map((k) => {
+    const c = byKey.get(k)!, [x, y] = S(toKm(c.to)), n = (c.short ?? c.name).length * 7, side = flipNearEdge(sideOf(k), x, w);
+    const b = side === "r" ? [x - 12, y - 12, x + 15 + n, y + 12] : side === "l" ? [x - 15 - n, y - 12, x + 12, y + 12]
+      : side === "t" ? [x - n / 2 - 4, y - 30, x + n / 2 + 4, y + 12] : [x - n / 2 - 4, y - 12, x + n / 2 + 4, y + 30];
+    return b;
+  }) : [];
+  const underPin = (p: [number, number]) => pinBoxes.some(([x0, y0, x1, y1]) => p[0] > x0 && p[0] < x1 && p[1] > y0 && p[1] < y1);
 
   // rings: at least 100 px apart, out to the farthest corner
   const step = v ? (RING_STEPS.find((s) => s * v.k >= 100) ?? 5000) : 1000;
@@ -236,18 +249,24 @@ export default function FlatMap({ selected, onSelect, onHover, inset, onProgress
           {/* distance rings: exact on this projection */}
           {rings.map((r) => <circle key={r} cx={ox} cy={oy} r={r * v.k} fill="none" className="pointer-events-none stroke-deepsea-500/30" strokeWidth={1} strokeDasharray="2 5" />)}
           {/* countries too small to point at: a dot of their own */}
-          {COUNTRIES.filter((c) => c.small).map((c) => {
-            const p = S(toKm(c.to)); if (!inFrame(p, 10)) return null;
+          {COUNTRIES.filter((c) => c.small && !named.includes(c.key)).map((c) => {
+            const p = S(toKm(c.to)); if (!inFrame(p, 10) || (!GULF.includes(c.key) && underPin(p))) return null;
             return <g key={c.key} data-k={c.key} className="cursor-pointer"><circle cx={p[0]} cy={p[1]} r={DOT.hit} fill="transparent" />
               <circle cx={p[0]} cy={p[1]} r={hover === c.key || selected === c.key ? DOT.small + 1.5 : DOT.small} className={selected === c.key ? "fill-rust-500 stroke-white" : "fill-deepsea-500/50"} strokeWidth={1} /></g>;
+          })}
+          {/* every other country, below md only (18 Nov review): a phone has no hover to show what can be tapped, so each
+              country gets a small dot at its capital (or its middle); the country's own shape takes the tap */}
+          {touch && COUNTRIES.filter((c) => !c.inert && !c.home && !c.small && !named.includes(c.key)).map((c) => {
+            const p = S(toKm(c.to)); if (!inFrame(p, 4) || (!GULF.includes(c.key) && underPin(p))) return null;
+            return <circle key={c.key} data-k={c.key} cx={p[0]} cy={p[1]} r={selected === c.key ? DOT.small + 1 : 2.5} className={selected === c.key ? "fill-rust-500 stroke-white" : "fill-deepsea-500/45"} strokeWidth={1} />;
           })}
           {/* the route: one plain line */}
           {tip && route && route.t > 0 && <>
             <line x1={dest![0]} y1={dest![1]} x2={tip[0]} y2={tip[1]} className="pointer-events-none stroke-deepsea-500" strokeWidth={2} strokeLinecap="round" />
             {!done && <circle cx={tip[0]} cy={tip[1]} r={DOT.pin - 1} className="pointer-events-none fill-deepsea-500" stroke={SEA} strokeWidth={1.5} />}
           </>}
-          {/* the six markets: plain pins */}
-          {PICKS.map((k) => {
+          {/* the six markets and (from md) the rest of the Gulf: plain pins */}
+          {named.map((k) => {
             const p = S(toKm(byKey.get(k)!.to)); if (!inFrame(p, 10)) return null;
             const on = selected === k;
             return <g key={k} data-k={k} className="cursor-pointer">
@@ -264,7 +283,7 @@ export default function FlatMap({ selected, onSelect, onHover, inset, onProgress
               <circle cx={p[0]} cy={p[1]} r={on ? DOT.pin + 1.5 : hover === c.key ? DOT.pin + 1 : DOT.pin} className={`transition-[r] duration-200 ${on ? "fill-rust-500 stroke-white" : "fill-deepsea-500 stroke-white"}`} strokeWidth={1.5} />
             </g>;
           })}
-          {dest && route && route.t > 0 && !PICKS.includes(route.key) && sel?.kind !== "city" && <circle cx={dest[0]} cy={dest[1]} r={DOT.pin + 1.5} className="pointer-events-none fill-rust-500 stroke-white animate-[fm-pop_.4s_cubic-bezier(.34,1.56,.64,1)]" strokeWidth={1.5} style={{ transformOrigin: `${dest[0]}px ${dest[1]}px` }} />}
+          {dest && route && route.t > 0 && !named.includes(route.key) && sel?.kind !== "city" && <circle cx={dest[0]} cy={dest[1]} r={DOT.pin + 1.5} className="pointer-events-none fill-rust-500 stroke-white animate-[fm-pop_.4s_cubic-bezier(.34,1.56,.64,1)]" strokeWidth={1.5} style={{ transformOrigin: `${dest[0]}px ${dest[1]}px` }} />}
         </svg>
       )}
       {v && <>
@@ -273,9 +292,9 @@ export default function FlatMap({ selected, onSelect, onHover, inset, onProgress
           <span key={s.n} className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap t-label text-[12px] leading-4 tracking-[0.04em] text-deepsea-400 max-md:hidden" style={{ left: p[0], top: p[1] }}>{s.n}</span>); })}
         {rings.map((r) => { const p: [number, number] = [ox + Math.cos(A) * r * v.k, oy + Math.sin(A) * r * v.k];
           return inFrame(p, -24) && !(p[0] > w - 90 && p[1] < 190) && !(dest && Math.hypot(p[0] - dest[0], p[1] - dest[1]) < 70) && <span key={r} className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 rounded-[4px] px-1 t-label text-[12px] leading-4 tabular-nums text-deepsea-400" style={{ left: p[0], top: p[1], background: SEA }}>{r.toLocaleString("en-US")} km</span>; })}
-        {/* the six markets' names */}
-        {PICKS.map((k) => {
-          const c = byKey.get(k)!, p = S(toKm(c.to)), side = flipNearEdge(PIN_SIDE[k], p[0], w);
+        {/* the pinned countries' names */}
+        {named.map((k) => {
+          const c = byKey.get(k)!, p = S(toKm(c.to)), side = flipNearEdge(sideOf(k), p[0], w);
           if (!inFrame(p, 10) || (selected === k && route) || (dest && route && route.t > 0 && Math.hypot(p[0] - dest[0], p[1] - dest[1]) < 90)) return null;
           const tr = PIN_TR[side];
           return <span key={k} className={`pointer-events-none absolute whitespace-nowrap t-label text-[12px] leading-4 transition-colors duration-300 ${selected ? "text-deepsea-400" : "text-deepsea-500"}`} style={{ left: p[0], top: p[1], transform: tr }}>{c.short ?? c.name}</span>;

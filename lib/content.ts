@@ -74,6 +74,7 @@ export const waysToLive = {
     ["Beach", "7.2 kilometres of Mediterranean shore and swimmable lagoons.", "ui-g-beach"],
     ["Lagoon", "Swimmable seawater lagoons woven through the city, with water taxis to the marina.", "/images/destination/transport-water-taxi.webp"],
     ["Marina", "The social heart of the city: boating, dining and public life on the water.", "ui-g-boardwalk"],
+    ["Hospitality", "Beach clubs, serviced residences and a concierge for every home.", "ui-expcenter-lounge"],
     ["Golf", "An 18-hole championship course by the sea, green all year.", "ui-g-terraces"],
     ["Sports", "Courts, cycling routes and the open sea for an active life.", "ui-lagoon-clear"],
     ["Retail & Dining", "Walkable town centres, commercial boulevard and waterfront tables.", "ui-g-table"],

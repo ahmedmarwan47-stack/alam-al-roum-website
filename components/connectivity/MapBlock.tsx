@@ -41,6 +41,11 @@ export default function MapBlock() {
     <div className={BLOCK} style={{ background: SEA }}>
       <div ref={stage} className="relative max-md:aspect-[4/5] md:max-lg:aspect-[4/3] lg:absolute lg:inset-0">
         <FlatMap selected={selected} onSelect={setSelected} onHover={onHover} inset={inset} onProgress={onProgress} />
+        {/* the hint (18 Nov review, Omnia #76): one line at the map's top left saying a country can be chosen ("Tap" on
+            a touch screen); it fades away once one is, and comes back when the map is cleared */}
+        <p className={`pointer-events-none absolute left-4 top-4 z-10 rounded-lg px-3 py-2 text-deepsea-500 transition-opacity duration-300 md:left-6 md:top-6 ${GLASS} ${selected ? "opacity-0" : "opacity-100"}`}>
+          <span className="t-label text-[12px] leading-4 md:text-[14px] md:leading-5"><span className="pointer-coarse:hidden">Click</span><span className="hidden pointer-coarse:inline">Tap</span> a country to see how far it is</span>
+        </p>
         {/* the hover name: follows the pointer (mouse and pen only) */}
         <div ref={tip} aria-hidden className={`pointer-events-none absolute left-0 top-0 z-10 transition-opacity duration-150 ${hovered ? "opacity-100" : "opacity-0"}`}>
           {hovered && (

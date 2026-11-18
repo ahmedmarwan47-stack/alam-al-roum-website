@@ -15,12 +15,14 @@ export const track = {
   cta: "Explore",
 };
 
-/** The ten experiences; `body` is the one-line description used on Home (Ways to live). Lagoon added 12 Nov (Leila's
+/** The eleven experiences (Hospitality added 18 Nov); `body` is the one-line description used on Home (Ways to live). Lagoon added 12 Nov (Leila's
  *  comment on Home: "Add Lagoon in the Experiences & Lifestyle"); its copy is draft, from the site's own lagoon facts. */
 export const experiences = [
   { slug: "beach", title: "Beach", note: "7.2 km of shore", photo: e("beach"), body: "7.2 kilometres of Mediterranean shore and swimmable lagoons." },
   { slug: "lagoon", title: "Lagoon", note: "Swimmable lagoons", photo: "/images/destination/transport-water-taxi.webp", body: "Swimmable seawater lagoons woven through the city, with water taxis to the marina." },
   { slug: "marina", title: "Marina", note: "International marina", photo: e("marina"), body: "The social heart of the city: boating, dining and public life on the water." },
+  // 18 Nov review (Omnia #81): Hospitality after Marina, an experience of its own beside Hotels; draft copy for the client
+  { slug: "hospitality", title: "Hospitality", note: "Service across the city", photo: "/images/photo/ui-expcenter-lounge.webp", body: "Beach clubs, serviced residences and a concierge for every home, for residents and guests." },
   { slug: "golf", title: "Golf", note: "18 holes by the sea", photo: e("golf"), body: "An 18-hole championship course by the sea, green all year." },
   { slug: "sports", title: "Sports", note: "Courts, trails & open sea", photo: e("sports"), body: "Courts, cycling routes and the open sea for an active life." },
   { slug: "retail-dining", title: "Retail & Dining", note: "Waterfront town centres", photo: e("dining"), body: "Walkable town centres, commercial boulevard and waterfront tables." },

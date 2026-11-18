@@ -15,7 +15,8 @@ import { connectivity as c } from "@/lib/content";
 export default function Connectivity({ tag, compact = false, visa = !compact }: { tag?: string; compact?: boolean; visa?: boolean }) {
   return (
     <section className="bg-limestone-500 py-12 text-deepsea-500 lg:py-20">
-      <div className="container-x flex flex-col gap-10 lg:gap-14">
+      {/* 40 px between the header, the map, the list and the button at every size (18 Nov review; was 56 from lg) */}
+      <div className="container-x flex flex-col gap-10">
         <header className="grid gap-4 lg:grid-cols-2 lg:items-end lg:gap-14">
           <div className="flex flex-col gap-4 lg:gap-3">
             <RevealText text={tag ?? c.tag} className="t-label l-tag" />
@@ -43,7 +44,8 @@ export default function Connectivity({ tag, compact = false, visa = !compact }: 
         </div>
 
         {(visa || !compact) && (
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          // with the visa facts the button sits at their right; alone (Home, 18 Nov review) it is centred
+          <div className={visa ? "flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between" : "flex flex-col items-center"}>
             {visa && (
               <div className="flex flex-col gap-4 lg:gap-3">
                 <span className="t-label l-16 capitalize text-deepsea-500/70">{c.visa.label}</span>

@@ -224,6 +224,15 @@ html.js [data-reveal-img] { visibility: hidden; }
   .btn-primary.btn-on-pale:hover .btn-chip { background: var(--color-limestone-500); color: var(--color-deepsea-500); }
 }
 
+/* `btn-classic` (18 Nov, the community pages' Register Interest shortcuts only): the Primary's original hover, from
+   before the 15 Nov change: Limestone rises, the label turns Deep Sea, the chip turns Deep Sea with a Limestone arrow */
+.btn-primary.btn-classic .btn-fill { background: var(--color-limestone-500); }
+@media (hover: hover) {
+  .btn-primary.btn-classic:hover { border-color: var(--color-limestone-500); }
+  .btn-primary.btn-classic:hover .btn-label { color: var(--color-deepsea-500); }
+  .btn-primary.btn-classic:hover .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); }
+}
+
 /* Secondary on light: Deep Sea outline → Deep Sea rises */
 .btn-outline { background: transparent; color: var(--color-deepsea-500); border-color: var(--color-deepsea-500); }
 .btn-outline .btn-fill { background: var(--color-deepsea-500); } .btn-outline .btn-chip { background: var(--color-deepsea-500); color: var(--color-limestone-500); }

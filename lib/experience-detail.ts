@@ -1,7 +1,7 @@
 /**
  * Experience detail pages. The Marina and Hotels pages follow their Figma frames
  * ("Experience Detail (template · Marina)" 10921:10415 and "Experience · Hotels (list + drawer)" 10921:10489);
- * the other eight experiences (Lagoon added 12 Nov) use the same template filled from their own card copy.
+ * the other nine experiences (Lagoon added 12 Nov, Hospitality 18 Nov) use the same template filled from their own card copy.
  */
 import type { SingleHeroData } from "@/components/sections/SingleHero";
 import type { OverviewData } from "@/components/sections/Overview";
@@ -110,6 +110,7 @@ const shots: Record<string, string[]> = {
   lagoon: [ph("ui-lagoon-clear"), "/images/masterplan/lagoon.webp", "/images/destination/transport-water-taxi.webp", "/images/units/apartment-marina.webp", "/images/about/b-ms-lagoons.webp"],
   golf: [h("golf-spa"), ph("ui-g-terraces")],
   sports: ["/images/sustainability/c2-large.webp", "/images/sustainability/c5-large.webp", ph("ui-lagoon-clear")],
+  hospitality: [ph("ui-expcenter-lounge"), ph("ui-v-parasol"), h("beachfront-resort"), ph("ui-v-pavilion-dusk"), h("town-centre-suites")],
   "retail-dining": [ph("ui-g-table"), h("ev-chef"), ph("ui-g-boardwalk"), ph("ui-g-music")],
   wellness: [h("ev-yoga"), ph("ui-g-pool"), ph("ui-v-ripples")],
   education: [ph("ui-expcenter-lobby"), ph("ui-expcenter-court"), "/images/sustainability/c1-large.webp"],
@@ -122,10 +123,29 @@ const heroLine: Record<string, string> = {
   lagoon: "850,000 square metres of swimmable seawater lagoons woven through the neighbourhoods, with water taxis across to the marina.",
   golf: "An 18-hole championship course by the sea, green all year, with homes framed by its fairways.",
   sports: "Courts, cycling routes and the open sea for an active life, with promenades that make moving part of living.",
+  hospitality: "Beach clubs, serviced residences and a concierge for every home: hotel-grade service woven through the city.",
   "retail-dining": "Walkable town centres, a commercial boulevard and waterfront tables, with shops and cafés below the homes.",
   wellness: "Wellness and longevity by the sea: a spa, coastal trails, and yoga on the beach at sunrise.",
   education: "Schools and a dedicated learning hub for families who stay, in a city built to be lived in all year.",
   culture: "Arts, performance and community events all year round, from regattas and markets to evenings on the quay.",
+};
+
+/**
+ * Quick facts for the hero's fact card (18 Nov review, Omnia #85: every experience, as Marina and Hotels have). From
+ * figures already on the site and the factsheet (7.2 km shore, 1.4M m² beach, 850K m² swimmable lagoons, 22 km lagoon
+ * promenade, 980K m² golf course, 370 + 120 berths, 85 % open space, 3,500+ hotel rooms); DRAFT for the client to confirm,
+ * the softer ones especially (Retail & Dining, Education, Culture, Hospitality).
+ */
+const facts: Record<string, [string, string][]> = {
+  beach: [["7.2 km", "Of shoreline"], ["1.4M m²", "Of beach"], ["850K m²", "Swimmable lagoons"]],
+  lagoon: [["850K m²", "Swimmable lagoons"], ["22 km", "Lagoon promenade"], ["5 min", "By boat to the marina"]],
+  hospitality: [["3,500+", "Hotel rooms planned"], ["7.2 km", "Of beachfront"], ["24/7", "Resident concierge"]],
+  golf: [["18", "Championship holes"], ["980K m²", "Golf course"], ["All year", "Green by the sea"]],
+  sports: [["7.2 km", "Beach promenade"], ["22 km", "Lagoon promenade"], ["490", "Marina berths"]],
+  "retail-dining": [["5 min", "To the town centre"], ["1", "Commercial boulevard"], ["Weekly", "Market on the quay"]],
+  wellness: [["85 %", "Open space"], ["7.2 km", "Coastal trails"], ["850K m²", "Swimmable lagoons"]],
+  education: [["1", "Learning hub"], ["3,000", "Years of history"], ["All year", "Schools for residents"]],
+  culture: [["2", "Major venues"], ["3,000", "Years of history"], ["All year", "Events calendar"]],
 };
 
 /** Each of the seven card-built experiences: the events closest to it first, then the next upcoming ones (four in all). */
@@ -134,6 +154,7 @@ const related: Record<string, { tag: string; title: [string, string]; first: str
   lagoon: { tag: "On the water", title: ["Events on", "the lagoons"], first: ["Coastal wellness retreat", "Coastal 10K run", "Full moon beach festival"] },
   golf: { tag: "At the club", title: ["Events at", "the club"], first: ["Coastal open championship", "Grand hotel opening gala"] },
   sports: { tag: "On the move", title: ["Events in", "sport"], first: ["Coastal 10K run", "Marina regatta weekend", "Coastal open championship"] },
+  hospitality: { tag: "Hosted here", title: ["Events with", "our hosts"], first: ["Grand hotel opening gala", "Waterfront food market", "Music by the sea"] },
   "retail-dining": { tag: "Around the table", title: ["Events around", "the table"], first: ["Waterfront food market", "Music by the sea", "Grand hotel opening gala"] },
   wellness: { tag: "A slower pace", title: ["Events for", "body and mind"], first: ["Coastal wellness retreat", "Coastal 10K run", "Full moon beach festival"] },
   education: { tag: "Learning", title: ["Events for", "curious minds"], first: ["Roman coast symposium", "Seaside sculpture unveiling"] },
@@ -149,7 +170,7 @@ const fromCard = (slug: string): ExperienceDetail => {
   const x = experiences.find((e) => e.slug === slug)!, here = experienceCommunity[slug].here!;
   return {
     slug,
-    hero: { eyebrow: EYEBROW, name: x.title, line: heroLine[slug] ?? x.note, photo: x.photo, alt: x.title },
+    hero: { eyebrow: EYEBROW, name: x.title, line: heroLine[slug] ?? x.note, photo: x.photo, alt: x.title, facts: facts[slug] },
     overview: { tag: "Overview", title: x.title, body: x.body },
     highlights: { title: here.title, body: here.body,
       rows: here.rows.map(([title, body], k) => ({ title, body, large: here.photos[k], inset: here.photos[k] })) },

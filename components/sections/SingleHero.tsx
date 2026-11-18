@@ -4,6 +4,7 @@ import { gsap, reducedMotion } from "@/lib/gsap";
 import RevealText from "@/components/reveal/RevealText";
 import { photoIn, PHOTO_FROM } from "@/components/reveal/letters";
 import { srcSet } from "@/lib/img";
+import Button from "@/components/ui/Button";
 
 export type SingleHeroData = { eyebrow: string; name: string; line: string; photo: string; alt?: string; video?: string; facts?: [string, string][] };
 
@@ -13,7 +14,8 @@ export type SingleHeroData = { eyebrow: string; name: string; line: string; phot
  * the copy sits at the foot of the photo on the left, level with the fact card on the right. The photo opens with the
  * site's photo entrance as the page loads, then drifts slower than the page on scroll.
  */
-export default function SingleHero({ data: H }: { data: SingleHeroData }) {
+/** `cta` (community pages, 18 Nov review #84): a shortcut under the line, e.g. Register Interest → the page's form. */
+export default function SingleHero({ data: H, cta }: { data: SingleHeroData; cta?: { label: string; href: string } }) {
   const media = useRef<HTMLDivElement>(null), wrap = useRef<HTMLElement>(null);
   useEffect(() => {
     if (reducedMotion()) return;
@@ -39,6 +41,7 @@ export default function SingleHero({ data: H }: { data: SingleHeroData }) {
           <RevealText text={H.eyebrow} onLoad delay={0.2} className="t-label l-tag" />
           <RevealText as="h1" text={H.name} onLoad delay={0.3} className="t-heading hd-80 hero-t" />
           <RevealText text={H.line} onLoad delay={0.55} className="t-body b-20 hero-b wrap-balance max-w-[640px]" />
+          {cta && <div className="pt-3"><Button label={cta.label} href={cta.href} size={48} variant="light" /></div>}
         </div>
         {H.facts && (
           // Figma Fact card: frosted glass, 300 px, three stacked facts with hairline dividers; phones: one strip,

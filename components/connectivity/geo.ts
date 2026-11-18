@@ -123,6 +123,13 @@ export const estDriveMin = (km: number) => Math.round(((km * 1.2) / 90) * 60 / 5
 export const fmtFlight = (min: number) => `≈ ${Math.floor(min / 60) ? `${Math.floor(min / 60)} h ` : ""}${min % 60 ? `${min % 60} min` : ""}`.trim();
 /** The six markets pinned on the map, by country. */
 export const PICKS = ["Qatar", "Italy", "United Arab Emirates", "Saudi Arabia", "United Kingdom", "France"];
+/**
+ * The rest of the Gulf, pinned like the six markets (18 Nov review, Omnia #76: show that the Gulf countries can be
+ * clicked). Kept apart from PICKS, which also frames the map's opening view.
+ */
+export const GULF = ["Kuwait", "Bahrain", "Oman"];
+/** every country with a named pin */
+export const PINNED = [...PICKS, ...GULF];
 /** Pin names that would not fit written out. */
 const SHORT: Record<string, string> = { "United Arab Emirates": "UAE", "United Kingdom": "UK" };
 

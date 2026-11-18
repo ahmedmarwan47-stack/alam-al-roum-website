@@ -30,15 +30,18 @@ export default function Home() {
       <Communities />
       <Masterplan flushTop />
       <WaysToLive />
-      <Connectivity />
-      <Events hrefs={eventHrefs} />
-      <Gallery />
+      {/* 18 Nov review (Omnia #78): no Visiting Egypt facts on Home; Destination keeps them */}
+      <Connectivity visa={false} />
+      {/* 18 Nov review (Omnia #79): News and Events switch places, so the Deep Sea events band now follows the gallery */}
       <News />
+      <Gallery />
+      <Events hrefs={eventHrefs} />
       {/* 12 Nov review: "20 Years of Building" (Qatari Diar) moves to the end of the page, before the FAQ (#53);
           Landmarks and Leisure is removed from Home (#54) */}
       <QatariDiarNumbers />
       <Faq />
-      <Cta />
+      {/* Omnia #77: the lead form on the page itself */}
+      <Cta lead />
       <Footer />
     </main>
   );

@@ -190,6 +190,38 @@ export const experienceCommunity: Record<string, ExperienceCommunityData> = {
         { title: "Long lunches", body: "Slow, seasonal lunches on shaded terraces along the boulevard, in every season of the year.", photo: x("dining"), alt: "A table set for lunch" },
       ] },
   },
+  // 18 Nov review (Omnia #81): Hospitality, after Marina. Draft copy for the client to review: the service around the
+  // hotels (beach clubs, serviced residences, concierge, hosting); the hotels themselves are on the Hotels page
+  hospitality: {
+    overview: { title: "Service that runs through the city",
+      body: "Hospitality here is not kept behind a hotel's doors. Beach clubs, serviced residences, restaurants and a concierge for every home bring hotel-grade service into daily life, for residents and their guests, in every season.",
+      photo: ph("ui-v-lounge"), alt: "A woman walking through a calm lounge",
+      points: [["Beach clubs", "Clubs along the shore with pools, cabanas and dining on the sand, open to residents as well as hotel guests, from the first swim to sunset."], ["Serviced living", "Serviced residences and homes with hotel services, from housekeeping to in-home dining, so a home is ready whenever its owners arrive."], ["A concierge for every home", "One team for bookings, deliveries, home care and plans for visiting family, so time at Alam Al Roum is spent on the coast, not on arrangements."]] },
+    here: { tag: "Services", title: "Where service meets you", body: "From the sand to the front door, hospitality is part of every district.",
+      photo: ph("ui-v-parasol"), alt: "A striped parasol against a blue sky",
+      rows: [
+        ["Beach clubs", "Pools, cabanas and dining on the sand along the shore."],
+        ["Serviced residences", "Homes with hotel services, in the town centre and by the hotels."],
+        ["Resident concierge", "Bookings, deliveries and home care, one call away."],
+        ["Restaurants and lounges", "Hotel dining and lounges open to the whole city."],
+        ["Private events", "Dinners, celebrations and gatherings, hosted at home or by the water."],
+        ["Guest stays", "Rooms close to home for visiting family and friends."],
+      ],
+      // one photo per row, for the shared Landmarks section (lib/experience-detail: what's here)
+      photos: [ph("ui-v-parasol"), "/images/hotels/town-centre-suites.webp", ph("ui-expcenter-lobby"), "/images/hotels/beachfront-resort.webp", ph("ui-v-pavilion-dusk"), "/images/hotels/lighthouse-hotel.webp"] },
+    community: { tag: "The hospitality community", title: "Hosts as well as neighbours",
+      body: ["Hotels, clubs and residences share the same streets, so the people who run them are part of the neighbourhood. Residents use the beach clubs and lounges as their own, and the city's hosts know them by name.",
+        "When family and friends come to stay, there is a room close by and a table ready, so the whole household can be together on the coast."],
+      photos: [ph("ui-v-parasol"), "/images/hotels/town-centre-suites.webp"], alt: ["A striped parasol against a blue sky", "Arches and a curved stair in pale plaster"],
+      points: [["Club membership", "Beach clubs and lounges for homeowners"], ["Concierge", "Bookings, deliveries and home care"], ["Hosting", "Private dining and events at home"], ["Guest stays", "Rooms close by for visiting family"]] },
+    week: { tag: "Every day", title: WEEK, body: "A day at the club, a dinner at home cooked by someone else, a room ready for the guests: service fits around the week.",
+      items: [
+        { title: "Club mornings", body: "A swim and breakfast at the beach club, with towels, shade and the day's papers waiting by the pool.", photo: ph("ui-v-turq"), alt: "Clear turquoise water" },
+        { title: "Home, ready", body: "Homes opened, aired and stocked before their owners arrive, and looked after while they are away.", photo: ph("ui-expcenter-lobby"), alt: "A calm lobby in pale stone" },
+        { title: "Dinner at home", body: "Private chefs and in-home dining from the hotels' kitchens, for a quiet evening or a long table of friends.", photo: "/images/hotels/beachfront-resort.webp", alt: "A dining room open to the sea under arches" },
+        { title: "Evenings out", body: "Lounges and terraces at the hotels stay open to residents late into the evening, all through the year.", photo: ph("ui-v-pavilion-dusk"), alt: "A pavilion lit at dusk" },
+      ] },
+  },
   hotels: {
     community: { tag: "Hospitality", title: "Service that stays all year",
       body: ["Hotels and residences share the same streets, so hospitality is part of the neighbourhood rather than set apart from it. Hotel restaurants, spas and beach clubs are planned to be open to residents as well as guests.",

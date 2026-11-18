@@ -30,9 +30,11 @@ export const drawTime = (km: number) => 0.9 + Math.min(km / 9000, 1) * 0.7;
 /** Pointer travel (px) under which a press counts as a click, not a drag. */
 export const CLICK_SLOP = 5;
 
-/** The quick-pick pins: which side of the pin each name sits on, clear of its neighbours (Doha, Dubai and Riyadh are close). */
+/** The quick-pick pins: which side of the pin each name sits on, clear of its neighbours (Doha, Dubai and Riyadh are close;
+ *  18 Nov: Qatar's name moved under its pin, as Bahrain's pin now sits just above Doha). */
 export const PIN_SIDE: Record<string, "l" | "r" | "t" | "b"> = {
-  Qatar: "t", Italy: "r", "United Arab Emirates": "r", "Saudi Arabia": "b", "United Kingdom": "l", France: "r",
+  Qatar: "b", Italy: "r", "United Arab Emirates": "r", "Saudi Arabia": "b", "United Kingdom": "l", France: "r",
+  Kuwait: "l", Bahrain: "l", Oman: "b",
 };
 /** each side's offset from the pin */
 export const PIN_TR = { l: "translate(calc(-100% - 13px), -50%)", r: "translate(13px, -50%)", t: "translate(-50%, calc(-100% - 12px))", b: "translate(-50%, 12px)" } as const;

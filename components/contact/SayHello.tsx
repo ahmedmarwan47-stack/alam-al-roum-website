@@ -19,18 +19,21 @@ export default function SayHello() {
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgb(1_15_26/.66)_0%,rgb(1_15_26/.58)_52%,rgb(1_15_26/.42)_100%)] max-md:bg-[linear-gradient(0deg,rgb(1_15_26/.64),rgb(1_15_26/.64))]" />
       <div className="relative flex flex-col gap-10 lg:flex-row lg:items-stretch">
         <div className="flex flex-col justify-between gap-16 text-white lg:flex-1">
-          <div className="flex flex-col gap-10">
-            <RevealText as="h1" text={S.title} onLoad delay={0.15} className="t-label capitalize d-68 [line-height:round(nearest,0.94em,4px)] max-w-[525px]" />
-            <RevealText text={S.body} onLoad delay={0.3} className="t-text x-18 wrap-balance max-w-[504px]" />
+          <div className="flex flex-col gap-3">
+            {/* 18 Nov: the site's hero type (as PageHero / ListingHero): Heading/56 regular, Body/18, not the bold label face;
+                12 px from the title to the line */}
+            <RevealText as="h1" text={S.title} onLoad delay={0.15} className="t-heading capitalize hd-56 hero-t max-w-[560px]" />
+            <RevealText text={S.body} onLoad delay={0.3} className="t-body b-18 hero-b wrap-balance max-w-[504px]" />
           </div>
-          {/* Figma "Contact grid": the first row holds three cells, then one full-width row per office; rules only between
-              the rows (none above the first row; on phones, where its cells stack, between them) */}
+          {/* Figma "Contact grid" (11697:7868, 18 Nov): three cells in the first row (12 px apart), then the two offices side by
+              side, each with a hairline above; no rule above the first row (on phones, where the cells stack, between them);
+              labels Haas Md 12 in pure white (owner's call, 18 Nov), values 18 / 28 */}
           <div className="flex flex-col">
             {S.rows.map((row, r) => (
-              <div key={r} className={r === 0 ? "grid gap-x-3 sm:grid-cols-3 sm:py-5" : "flex flex-col"}>
+              <div key={r} className={r === 0 ? "grid gap-x-3 sm:grid-cols-3" : "grid sm:grid-cols-2"}>
                 {row.map(([icon, k, v, href], c) => (
                   <div key={k} className={`flex flex-col gap-2 py-5 ${r > 0 ? "border-t border-white/20" : c > 0 ? "border-t border-white/20 sm:border-t-0" : ""}`}>
-                    <span className="flex items-center gap-2"><Icon name={icon} size={18} /><span className="t-label l-12 opacity-90">{k}</span></span>
+                    <span className="flex items-center gap-2"><Icon name={icon} size={18} /><span className="t-label l-12 text-white">{k}</span></span>
                     {href ? <a href={href} className="t-text x-18 break-words hover:opacity-60">
                       {/* an email may wrap only after the @, never mid-word */}
                       {v.includes("@") ? <>{v.split("@")[0]}@<wbr />{v.split("@")[1]}</> : v}
