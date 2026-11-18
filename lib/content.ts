@@ -106,9 +106,9 @@ export const connectivity = {
 
 export const scale = {
   photo: ph("ui-expcenter-day"),
-  title: "Twenty years of building across twenty countries",
-  body: "Backed by the Qatar Investment Authority, Qatari Diar delivers landmark destinations across 20 countries, with a portfolio exceeding USD 35 billion and over two decades of investment in Egypt.",
-  stats: [["50+", "Projects"], ["20+", "Cities Worldwide"]],
+  title: "Twenty years of building across fifteen countries",
+  body: "Backed by the Qatar Investment Authority, Qatari Diar delivers landmark destinations in 15 countries, with around USD 39 billion of investment and assets under management and USD 3.1 billion invested in Egypt since 2006.",
+  stats: [["41", "Investment projects"], ["15", "Countries"]],
 };
 
 export const landmarks = {
@@ -175,7 +175,7 @@ export const faq = {
   title: "FAQs", body: "Direct answers about the city, the investment, and the life that awaits at Alam Al Roum.", cta: "Read All FAQs",
   items: [
     ["What is Alam Al Roum?", "Alam Al Roum is a year-round coastal city on Egypt's North Coast. It spans 20.58 million square meters with a 7.2 kilometer shoreline. It is built for permanence, not for a season."],
-    ["Who is developing it?", "Qatari Diar, backed by the Qatar Investment Authority, with landmark destinations across 20 countries."],
+    ["Who is developing it?", "Qatari Diar, backed by the Qatar Investment Authority, with landmark destinations in 15 countries."],
     ["Is it a resort?", "No. It is a year-round city, not a seasonal resort: homes, hotels, schools and a town centre that stay open all year."],
     ["What is the timeline?", "Phase one construction has begun on the coast. Follow the Media Center for each milestone."],
     ["Can I visit?", "Register your interest and the team will arrange a visit to the Experience Center."],

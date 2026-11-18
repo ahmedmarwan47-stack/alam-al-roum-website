@@ -5,7 +5,7 @@ export const faqPage = {
   categories: ["All", "General", "Location & Access", "Homes & Investment", "Lifestyle", "Construction & Handover"] as const,
   items: [
     { cat: "General", q: "What is Alam Al Roum?", a: "Alam Al Roum is a year-round coastal city on Egypt's North Coast. It spans 20.58 million square meters with a 7.2 kilometer shoreline. It is built for permanence, not for a season." },
-    { cat: "General", q: "Who is developing it?", a: "Qatari Diar, the real estate developer backed by the Qatar Investment Authority. It has 20 years in business, more than 50 projects in 20 countries and a portfolio exceeding USD 35 billion, including USD 7 billion invested in Egypt." },
+    { cat: "General", q: "Who is developing it?", a: "Qatari Diar, the real estate developer backed by the Qatar Investment Authority. Established in 2005, it has 41 investment projects in 15 countries, around USD 39 billion of investment and assets under management, and USD 3.1 billion invested in Egypt since 2006." },
     { cat: "General", q: "Is it a resort?", a: "No. It is a functioning city with homes, businesses, schools, and infrastructure. The masterplan supports life throughout the entire year." },
     { cat: "Location & Access", q: "Where is Alam Al Roum?", a: "On Egypt's North Coast, around a rare natural Mediterranean bay with 7.2 kilometers of shoreline." },
     { cat: "Location & Access", q: "How do I get there?", a: "Marsa Matrouh International Airport is about 6 km away, and the city sits within a two to five hour flight of Europe and the GCC." },

@@ -50,7 +50,7 @@ export const writtenStories: Record<string, Written> = {
       { img: md("m04"), caption: "The bay at Alam Al Roum, seen from the air." },
       ...ps("Qatari Diar and the Egyptian government have signed the agreement that sets aside the land for Alam Al Roum, a fully integrated coastal city on Egypt's North Coast, 14 kilometres from Marsa Matrouh.",
         "The agreement moves the project from intention to commitment. It defines a city of 20.58 million square metres, planned to bring residential, hospitality, commercial, cultural and recreational life together in one place, and to keep evolving across generations.",
-        "For Qatari Diar, it adds to more than two decades of investment in Egypt. The developer, backed by the Qatar Investment Authority, has delivered landmark destinations across five continents."),
+        "For Qatari Diar, it adds to more than two decades of investment in Egypt. The developer, backed by the Qatar Investment Authority, has delivered landmark destinations in 15 countries."),
       { h: "Why this coast" },
       { p: "The site holds one of the most remarkable stretches of the Mediterranean in Egypt: 7.2 kilometres of open shoreline, water that turns from turquoise to deep blue within a few hundred metres, and a history that reaches back to the sailors who once used this coast to find their way home." },
       { img: ph("ui-g-coast"), caption: "The North Coast west of Marsa Matrouh, where the city will meet the sea." },

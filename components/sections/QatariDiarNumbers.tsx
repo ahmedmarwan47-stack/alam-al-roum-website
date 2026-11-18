@@ -5,10 +5,11 @@ import { onceInView } from "@/components/reveal/letters";
 import { gsap, reducedMotion } from "@/lib/gsap";
 import { srcSet } from "@/lib/img";
 
+// Qatari Diar's own figures, as of 2025 (qataridiar.com/about-us and /egypt; updated 18 Nov from 42 projects and $35Bn)
 const STATS = [
-  { n: "20", title: ["20 Years", "of building"], body: "Two decades of landmark destinations, built across five continents and backed by the Qatar Investment Authority.", cta: "About Qatari Diar", photo: "/images/photo/ui-expcenter-day.webp" },
-  { n: "42", title: ["42 Investment", "projects"], body: "Cities, districts and resorts delivered or underway, from Lusail to the Mediterranean shore of Alam Al Roum.", cta: "Our projects", photo: "/images/photo/ui-pm-visit.webp" },
-  { n: "35", title: ["$35Bn Global", "portfolio"], body: "A portfolio exceeding USD 35 billion, with over two decades of investment in Egypt.", cta: "Investment in Egypt", photo: "/images/photo/ui-g-coast.webp" },
+  { n: "20", title: ["20 Years", "of building"], body: "Established in 2005 by the Qatar Investment Authority, with landmark destinations in 15 countries.", cta: "About Qatari Diar", photo: "/images/photo/ui-expcenter-day.webp" },
+  { n: "41", title: ["41 Investment", "projects"], body: "Cities, districts and resorts delivered or underway, from Lusail to the Mediterranean shore of Alam Al Roum.", cta: "Our projects", photo: "/images/photo/ui-pm-visit.webp" },
+  { n: "39", title: ["$39Bn Global", "portfolio"], body: "Around USD 39 billion of investment and assets under management, with USD 3.1 billion invested in Egypt since 2006.", cta: "Investment in Egypt", photo: "/images/photo/ui-g-coast.webp" },
 ];
 const INTRO = {
   title: "Built by Qatari Diar",
