@@ -35,9 +35,10 @@ export default function Connectivity({ tag, compact = false, visa = !compact }: 
               <div key={it.title} className="flex gap-4 py-4 lg:flex-col lg:gap-3 lg:py-0">
                 <span className="flex-none"><Icon name={it.icon} size={24} /></span>
                 <div className="flex min-w-0 flex-1 flex-col gap-1">
-                  <RevealText text={it.title} className="t-heading hd-14 lg:text-[16px] lg:leading-6" delay={k * 0.04} />
-                  {it.dist && <span className="t-label l-14 text-deepsea-500">{it.dist}</span>}
-                  <p className="t-body b-14 text-deepsea-500/70">{it.body}</p>
+                  {/* 18 Nov review (Omnia #78): one step larger — titles 16 → 18/28, distance and line 14 → 16/24 */}
+                  <RevealText text={it.title} className="t-heading text-[16px] leading-6 lg:text-[18px] lg:leading-7" delay={k * 0.04} />
+                  {it.dist && <span className="t-label text-[16px] leading-6 text-deepsea-500">{it.dist}</span>}
+                  <p className="t-body text-[16px] leading-6 text-deepsea-500/70">{it.body}</p>
                 </div>
               </div>))}
           </div>
