@@ -40,8 +40,8 @@ export default function Home() {
           Landmarks and Leisure is removed from Home (#54) */}
       <QatariDiarNumbers />
       <Faq />
-      {/* Omnia #77: the lead form on the page itself */}
-      <Cta lead />
+      {/* Omnia #77: the lead form on the page itself (the site-wide CTA since 18 Nov) */}
+      <Cta />
       <Footer />
     </main>
   );

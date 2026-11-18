@@ -16,7 +16,8 @@ import { cta as C } from "@/lib/content";
  * `lead` (Home only, 18 Nov review; Figma 11694:7857): the same portal photo, with the title and line inside the lead
  * form's glass card (LeadForm) in place of the copy and the Register Interest button, so visitors register on the page.
  */
-export default function Cta({ form, lead = false }: { form?: string; lead?: boolean }) {
+/** 18 Nov: the lead form version is the site-wide default; `lead={false}` keeps the old button, `form` is the community one. */
+export default function Cta({ form, lead = true }: { form?: string; lead?: boolean }) {
   return (
     <section id={form ? "register-interest" : undefined} className={`relative overflow-hidden bg-limestone-50 ${form ? "pb-12 lg:flex lg:h-svh lg:min-h-[680px] lg:items-center lg:py-20" : "h-[720px] max-lg:h-auto"}`}>
       {/* below lg the photo sits on top, the gate in the middle of the frame with both pillars whole, and melts into
@@ -46,7 +47,7 @@ export default function Cta({ form, lead = false }: { form?: string; lead?: bool
           // Home (`lead`, Figma 11694:7857): the title and line move into the lead form's card, centred in the section's
           // height at the left gutter; below lg the card rides up over the photo's foot
           <div className="relative flex h-full flex-col justify-center container-x max-lg:-mt-16 max-lg:pb-12">
-            <LeadForm about="Home">
+            <LeadForm about="Website">
               <div className="flex flex-col gap-3">
                 <RevealText as="h2" segs={C.title} className="t-heading text-[32px] leading-9 lg:text-[36px] lg:leading-10" />
                 <RevealText text={C.body} className="t-body b-16 max-w-[420px] text-limestone-800" delay={0.1} />
