@@ -1,4 +1,4 @@
-/** About copy for The Story, Milestones, Nearby and the visa FAQ, taken from the Figma UI Design page (About • Desktop). */
+/** Copy for The Story (on Destination since 19 Nov), the About timeline, Nearby and the visa FAQ, from the Figma UI Design page. */
 const img = (f: string) => `/images/about/${f}`;
 
 /**
@@ -35,22 +35,25 @@ export const story = {
   },
 };
 
-/** Milestones — About frame 10921:8293, six "UI / Milestone" instances (10979:18569) with their swapped photos. */
+/**
+ * Timeline · Qatari Diar since 2005 (Figma 11705:10710, 19 Nov): five milestones, opening on the first (2005).
+ * Figma writes out only 2025 (its line and the signing photo); 2026 and 2030 keep the phase-one lines and photos they had,
+ * and 2005 and 2006 are drafts from the Qatari Diar figures used on this page. PLACEHOLDER photos on 2005 and 2006
+ * (two of the old phase-one milestone photos) until the real ones arrive.
+ */
 export const milestones = {
   tag: "Timeline",
-  title: "Phase one, 2025–2030",   // 15 Nov: one line (was "Phase one from agreement to handover")
-  body: "The first phase is underway. Construction begins in 2026 and the first residents arrive in 2030.",
+  title: "Qatari Diar since 2005",
+  body: "From its founding by the Qatar Investment Authority to the first residents of Alam Al Roum.",
   items: [
-    { year: "2025", title: "Agreement signed", photo: img("b-ms-agreement.webp"),
-      body: "Qatari Diar and the Government of Egypt sign the agreement to develop 4,902 feddan of Mediterranean coast." },
-    { year: "2026", title: "Construction launches", photo: img("b-ms-construction.webp"),
-      body: "Phase one begins and breaks ground. Site works begin along the 7.2 km shoreline as the first district takes shape." },
-    { year: "2027", title: "Lagoons & infrastructure", photo: img("b-ms-lagoons.webp"),
-      body: "Roads, utilities and the swimmable lagoons advance, linking every district to the coast and the airport." },
-    { year: "2028", title: "Marina & golf", photo: img("b-ms-golf.webp"),
-      body: "The marina basin and the 18-hole championship golf course take shape along the sea, ready for first play." },
-    { year: "2029", title: "First neighbourhoods", photo: img("b-ms-neighbourhoods.webp"),
-      body: "The first residential neighbourhoods near completion, with the town centre and beachfront opening nearby." },
+    { year: "2005", title: "Qatari Diar is founded", photo: img("b-ms-lagoons.webp"),   // placeholder
+      body: "The Qatar Investment Authority establishes Qatari Diar to create and deliver real estate to the highest international standards." },
+    { year: "2006", title: "First investment in Egypt", photo: img("b-ms-neighbourhoods.webp"),   // placeholder
+      body: "Qatari Diar invests in Egypt for the first time: the start of a USD 3.1 billion portfolio across more than 40 million sqm." },
+    { year: "2025", title: "Twenty years, a new coast", photo: img("b-ms-agreement.webp"),
+      body: "Two decades on, with 41 investment projects in 15 countries, Qatari Diar signs the agreement for Alam Al Roum: 4,902 feddan of Mediterranean coast." },
+    { year: "2026", title: "Masterplan and phase one", photo: img("b-ms-construction.webp"),
+      body: "The masterplan is set and phase one breaks ground along the 7.2 km shoreline, as the first district takes shape." },
     { year: "2030", title: "First residents", photo: img("b-ms-residents.webp"),
       body: "Handover to the clients begins. The first residents arrive, and Alam Al Roum opens its doors as a living city by the sea." },
   ],

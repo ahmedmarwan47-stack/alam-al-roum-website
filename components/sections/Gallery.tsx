@@ -24,7 +24,7 @@ const COPIES = 3;              // each row repeats its tiles so the loop never s
  *    easing back to the loop speed once the page stops.
  * The whole wall blurs in as one block (no sweep); the tiles themselves don't animate in one by one.
  */
-function GalleryWall({ data: G }: { data: GalleryData }) {
+function GalleryWall({ data: G, seaFade }: { data: GalleryData; seaFade: "top" | "bottom" }) {
   const root = useRef<HTMLElement>(null);
   useEffect(() => {
     if (reducedMotion()) return;
@@ -69,8 +69,13 @@ function GalleryWall({ data: G }: { data: GalleryData }) {
       {/* exactly Figma's overlays and no more, so the photos stay visible: a 10 % dim, the left fade behind the headline (900 of 1512), the top and bottom fades */}
       <div className="pointer-events-none absolute inset-0 bg-deepsea-950/10" />
       <div className="pointer-events-none absolute inset-y-0 left-0 w-[59.5%] min-w-[min(520px,100%)] bg-[linear-gradient(to_right,rgb(17_12_7/.6),rgb(17_12_7/.3)_55%,rgb(17_12_7/0))]" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[22%] bg-gradient-to-b from-deepsea-800 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[22%] bg-[linear-gradient(to_bottom,rgb(17_12_7/0),rgb(17_12_7/.6))]" />
+      {seaFade === "top" ? <>
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[22%] bg-gradient-to-b from-deepsea-800 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[22%] bg-[linear-gradient(to_bottom,rgb(17_12_7/0),rgb(17_12_7/.6))]" />
+      </> : <>
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[22%] bg-[linear-gradient(to_top,rgb(17_12_7/0),rgb(17_12_7/.6))]" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[22%] bg-gradient-to-t from-deepsea-800 to-transparent" />
+      </>}
       <div className="absolute left-[var(--gutter)] top-1/2 flex -translate-y-1/2 flex-col gap-4 text-limestone-50">
         <RevealText text={G.tag} className="t-label l-tag" />
         <RevealText as="h2" segs={G.title} className="t-heading hd-48" delay={0.1} />
@@ -80,8 +85,11 @@ function GalleryWall({ data: G }: { data: GalleryData }) {
 }
 
 /** Home keeps the marquee wall; the inside pages (their data sets `layout: "carousel"`) get the carousel. */
-export default function Gallery({ data = gallery }: { data?: GalleryData }) {
+/** `seaFade` (the wall only): which edge melts into a Deep Sea neighbour. "top" (default) was made for the Events band
+ *  above it; since the 18 Nov swap of News and Events (#79) Home's Events band sits below, so Home passes "bottom" and
+ *  the two edge fades trade places. */
+export default function Gallery({ data = gallery, seaFade = "top" }: { data?: GalleryData; seaFade?: "top" | "bottom" }) {
   return data.layout === "carousel"
     ? <GalleryCarousel tag={data.tag} title={data.title} photos={data.photos ?? data.rows.flat()} />
-    : <GalleryWall data={data} />;
+    : <GalleryWall data={data} seaFade={seaFade} />;
 }

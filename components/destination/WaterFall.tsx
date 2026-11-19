@@ -14,9 +14,12 @@ const fig = (h: string) => (/^\d/.test(h) ? "normal-case!" : "");
  * Destination · "A city shaped by Water" (#65, 12 Nov review): the Limestone of the section above carries on and slowly gives way to a still photo of the sea seen
  * from above, as if falling from the land into the water; the copy sits on the sea, in Limestone. Nothing moves: the photo is
  * kept out of the site-wide photo sweep (data-no-blur, BlurInOut).
- * Matches the Figma section (Destination • Desktop, 11545:12304): 1294 tall at 1512, 80 px below the copy, 40 between
+ * Matches the Figma section (Destination • Desktop, 11705:10529; 19 Nov: 1090 tall, was 1294): 80 px below the copy, 40 between
  * blocks; the fade is a long, eased gradient (many stops, so it never bands) from Limestone 500 to clear over the top
  * 38 %, and a Deep Sea shade (0 → 55 → 90 %) over the lower 60 % keeps the copy legible.
+ * From lg the copy sits at the foot of the 1090 (the top padding is a fixed 200, only there for a very tall copy, so it
+ * never stretches the section on a tall screen); phones keep half a screen of sea above the copy and are 135 svh tall
+ * at least (19 Nov, from 160: shortened with the desktop).
  */
 export default function WaterFall() {
   return (
@@ -28,7 +31,7 @@ export default function WaterFall() {
         style={{ background: "linear-gradient(to bottom, #F4EADD 0%, #F4EADD 14%, rgb(244 234 221 / .94) 24%, rgb(244 234 221 / .8) 34%, rgb(244 234 221 / .6) 44%, rgb(244 234 221 / .38) 56%, rgb(244 234 221 / .18) 70%, rgb(244 234 221 / .06) 84%, rgb(244 234 221 / 0) 100%)" }} />
       {/* the deep water under the copy */}
       <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-b from-deepsea-500/0 via-deepsea-500/55 to-deepsea-500/90" />
-      <div className="relative flex min-h-[max(160svh,1100px)] flex-col justify-end gap-10 pb-20 pt-[60svh] text-limestone-50 container-x lg:min-h-[1294px]">
+      <div className="relative flex min-h-[max(135svh,930px)] flex-col justify-end gap-10 pb-20 pt-[50svh] text-limestone-50 container-x lg:min-h-[1090px] lg:pt-[200px]">
         <div className="flex max-w-[760px] flex-col gap-4">
           <span className="t-label l-tag text-limestone-50/80">{W.tag}</span>
           {/* all Neue Haas (12 Nov, as in Figma): no Immortel accent on "Water" */}

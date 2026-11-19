@@ -49,12 +49,13 @@ function Milestone({ i, active, onPick }: { i: number; active: boolean; onPick: 
 }
 
 /**
- * Milestones · phase one (Figma 10921:8293). Click-driven at every width, nothing pinned and nothing tied to the
- * scroll (28 Oct review): prev / next arrows step through the six milestones and each year in the row above the rail
+ * Timeline · Qatari Diar since 2005 (Figma 11705:10710, 19 Nov; was the phase-one milestones, 10921:8293). Click-driven
+ * at every width, nothing pinned and nothing tied to the scroll (28 Oct review): prev / next arrows step through the five
+ * milestones and each year in the row above the rail
  * jumps straight to its milestone (a faded milestone can also be clicked, and on touch screens the rail swipes).
  * The rail glides to the new focus (0.6–1.4 s by distance, ease in-out): the milestone in focus is fully shown with
  * its long line, description and photo, the others fade away, and the ticks form one wave centred on the focus.
- * From lg up it opens as in Figma, with 2025 at the left gutter, and travels left until 2030 sits in the centre;
+ * It opens on the first year, 2005, on the left gutter (19 Nov), and from lg travels until 2030 sits on the right gutter;
  * below lg the rail is scaled to the screen's width and the milestone in focus stays centred.
  * Keyboard: Tab reaches the arrows and the years (44 px targets); ← / → (and Home / End) move between the years.
  */
@@ -179,7 +180,7 @@ export default function Milestones() {
   return (
     // from lg one screen tall (at least: on a very short screen it grows rather than cut the photo off): the padding and
     // gaps follow the screen's height and the rail is scaled to the rest
-    <section ref={root} aria-label="Phase one timeline" className="relative overflow-hidden bg-limestone-50 lg:min-h-svh">
+    <section ref={root} aria-label="Qatari Diar timeline" className="relative overflow-hidden bg-limestone-50 lg:min-h-svh">
       <div className="flex flex-col gap-8 py-12 lg:gap-[clamp(16px,3.5svh,48px)] lg:py-20">
         {/* 920 wide less the side padding (800 of copy at 1512); the padding stops at Figma's 60 px, so on wider screens
             the larger gutter does not squeeze the copy */}
@@ -188,7 +189,7 @@ export default function Milestones() {
         {/* the controls: lg up the arrows flank the years; below lg the years fill the row and the arrows sit under the rail */}
         <div className="flex items-center justify-center gap-2 container-x lg:gap-4">
           <div className="hidden lg:block">{prev}</div>
-          <div role="group" aria-label="Choose a year" onKeyDown={onKeys} className="grid w-full grid-cols-6 lg:flex lg:w-auto lg:gap-2">
+          <div role="group" aria-label="Choose a year" onKeyDown={onKeys} className="grid w-full grid-cols-5 lg:flex lg:w-auto lg:gap-2">
             {M.items.map((m, i) => (
               <button key={m.year} ref={(b) => { years.current[i] = b; }} type="button" onClick={() => go.current(i)}
                 aria-current={i === focus ? "step" : undefined} aria-label={`${m.year}: ${m.title}`}

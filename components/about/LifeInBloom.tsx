@@ -5,16 +5,12 @@ import { blurIn, BLOCK_FROM, whenSectionEnters } from "@/components/reveal/lette
 import { bloom as B } from "@/lib/about/a-content";
 import { srcSet } from "@/lib/img";
 
-/** 15 Nov ("use different photos"): a city, lived in. The tall photo is a long shared table under an arch; the two
- *  smaller ones are the terraced homes above the sea and the promenade with its people. */
-const TALL = { src: "/images/photo/ui-g-table.webp", alt: "A long shared table set under the olive trees and a limestone arch" };
-const SMALL = [
-  { src: "/images/photo/ui-g-terraces.webp", alt: "Terraced homes in white limestone and bougainvillea above the sea" },
-  { src: "/images/photo/ui-g-boardwalk.webp", alt: "People walking the palm-lined promenade towards the sea" },
-];
+/** 19 Nov (Figma 11705:10599): the tall photo is the palm promenade; the two smaller ones the central boulevard and
+ *  the lighthouse towers through the palms. */
+const TALL = B.tall, SMALL = B.small;
 
 /**
- * "A city, not a resort" (was UI / Section / Botanical Frame). 15 Nov: an editorial split after the client's
+ * Who we are (19 Nov, Figma 11705:10599; was "A city, not a resort", UI / Section / Botanical Frame). 15 Nov: an editorial split after the client's
  * reference — on the left the headline, the quote (no button, 15 Nov) and two smaller photos side by side; on the right one tall
  * photo, the full height of the section. From lg the copy sits at the top and the two photos at the foot, flush with
  * the tall photo's edges (15 Nov). Phones stack it all: copy, the two photos, then the tall one.
